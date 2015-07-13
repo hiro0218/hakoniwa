@@ -92,7 +92,7 @@ END;
 <div class="row">
 	<div class="col-xs-12">
 		<footer>
-			<p>Produced by {$init->adminName} (<a href="{$init->urlTopPage}">{$init->urlTopPage}</a>)
+			<p>Produced by <a href="https://twitter.com/{$init->twitterID}">{$init->adminName}</a> (<a href="{$init->urlTopPage}">{$init->urlTopPage}</a>)
 END;
 		if($init->performance) {
 			echo '<small class="pull-right">';

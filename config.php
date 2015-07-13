@@ -20,8 +20,6 @@ define("LOCK_RETRY_INTERVAL", 1000);	// 再ロック処理実施までの時間(
 defined("DS") || define("DS", DIRECTORY_SEPARATOR);
 define("ABSOLUTE_PATH", dirname(__FILE__) . DS);
 
-//require_once ABSOLUTE_PATH.'jcode/jcode.php';
-
 //--------------------------------------------------------------------
 class Init {
 
@@ -65,10 +63,8 @@ class Init {
 	// ゲームタイトル
 	var $title        = "hako";
 	var $adminName    = "hiro";
-	var $adminEmail   = "#";
-	var $urlBbs       = "#";
 	var $urlTopPage   = "http://localhost/";
-	var $urlManu      = "#";
+	var $twitterID    = "hiro0218";
 
 	// 1ターンが何秒か
 	var $unitTime     = 10800; // 3時間（これ以上短くすることはオススメ出来ません）
