@@ -265,28 +265,6 @@ class Util {
 		}
 	}
 
-	static function euc_convert($arg) {
-		// 文字コードをEUC-JPに変換して返す
-		// 文字列の文字コードを判別
-		$code = i18n_discover_encoding("$arg");
-		// 非EUC-JPの場合のみEUC-JPに変換
-		if ( $code != "EUC-JP" ) {
-			$arg = i18n_convert("$arg","EUC-JP");
-		}
-		return $arg;
-	}
-
-	static function sjis_convert($arg) {
-		// 文字コードをSHIFT_JISに変換して返す
-		// 文字列の文字コードを判別
-		$code = i18n_discover_encoding("$arg");
-		// 非SHIFT_JISの場合のみSHIFT_JISに変換
-		if ( $code != "SJIS" ) {
-			$arg = i18n_convert("$arg","SJIS");
-		}
-		return $arg;
-	}
-
 	//---------------------------------------------------
 	// 船情報のUnpack
 	//---------------------------------------------------
@@ -358,6 +336,7 @@ class Util {
 		Error::lockFail();
 		return FALSE;
 	}
+
 	//---------------------------------------------------
 	// ファイルをアンロックする
 	//---------------------------------------------------
@@ -365,7 +344,6 @@ class Util {
 		flock($fp, LOCK_UN);
 		fclose($fp);
 	}
-
 
 	/**
 	 * アラートタグを出力する

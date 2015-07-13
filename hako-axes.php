@@ -113,9 +113,6 @@ class Main {
 		$this->mode = $_POST['mode'];
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
-				// $value = Util::sjis_convert($value);
-				// 半角カナがあれば全角に変換して返す
-				// $value = i18n_ja_jp_hantozen($value,"KHV");
 				$value = str_replace(",", "", $value);
 				$this->dataSet["{$name}"] = $value;
 			}

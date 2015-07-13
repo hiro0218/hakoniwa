@@ -51,10 +51,18 @@ END;
 	function allyInfo($hako, $num = 0) {
 		global $init;
 
+		$tag = "";
+		$allyNumber = (int)$hako->allyNumber;
+		if ( $allyNumber <= 0 ) {
+			echo "同盟がありません。";
+			return;
+		}
+
 		echo <<<END
 占有率は、同盟加盟の<b>総人口</b>により算出されたものです。
-<div id="IslandView">
+<div id="IslandView" class="table-responsive">
 <table class="table table-bordered">
+<thead>
 <tr>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}同盟{$init->_tagTH}</th>
@@ -68,9 +76,10 @@ END;
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
 </tr>
+</thead>
 END;
-		$cnt = (int)$hako->allyNumber;
-		for($i=0; $i<$cnt; $i++) {
+
+		for($i=0; $i<$allyNumber; $i++) {
 			if($num && ($i != $hako->idToAllyNumber[$num])) {
 				continue;
 			}
@@ -98,29 +107,38 @@ END;
 			$mountain  = ($mountain <= 0) ? "保有せず" : $mountain * 10 . $init->unitPop;
 			$hatuden   = ($hatuden <= 0)  ? "0kw" : $hatuden * 1000 . kw;
 
+			$ally['comment'] = isset($ally['comment']) ? $ally['comment'] : "";
+
+
 			echo <<<END
-<tr>
-	<th {$init->bgNumberCell} rowspan=2>{$init->tagNumber_}$j{$init->_tagNumber}</th>
-	<td {$init->bgNameCell} rowspan=2>{$name}</td>
-	<td {$init->bgMarkCell}><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
-	<td {$init->bgInfoCell}>{$ally['number']}島</td>
-	<td {$init->bgInfoCell}>{$pop}</td>
-	<td {$init->bgInfoCell}>{$ally['occupation']}%</td>
-	<td {$init->bgInfoCell}>{$farm}</td>
-	<td {$init->bgInfoCell}>{$factory}</td>
-	<td {$init->bgInfoCell}>{$commerce}</td>
-	<td {$init->bgInfoCell}>{$mountain}</td>
-	<td {$init->bgInfoCell}>{$hatuden}</td>
-</tr>
-<tr>
-	<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$GLOBALS['THIS_FILE']}?Allypact={$ally['id']}">{$ally['oName']}</a>：{$init->_tagTH}{$ally['comment']}</td>
-</tr>
+<tbody>
+	<tr>
+		<th {$init->bgNumberCell} rowspan=2>{$init->tagNumber_}$j{$init->_tagNumber}</th>
+		<td {$init->bgNameCell} rowspan=2>{$name}</td>
+		<td {$init->bgMarkCell}><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
+		<td {$init->bgInfoCell}>{$ally['number']}島</td>
+		<td {$init->bgInfoCell}>{$pop}</td>
+		<td {$init->bgInfoCell}>{$ally['occupation']}%</td>
+		<td {$init->bgInfoCell}>{$farm}</td>
+		<td {$init->bgInfoCell}>{$factory}</td>
+		<td {$init->bgInfoCell}>{$commerce}</td>
+		<td {$init->bgInfoCell}>{$mountain}</td>
+		<td {$init->bgInfoCell}>{$hatuden}</td>
+	</tr>
+	<tr>
+		<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$GLOBALS['THIS_FILE']}?Allypact={$ally['id']}">{$ally['oName']}</a>：{$init->_tagTH}{$ally['comment']}</td>
+	</tr>
+<tbody>
 END;
 		}
-		echo "</table>\n";
-		echo "</div>\n";
+		echo <<<END
+</table>
+</div>
+<p>※ 同盟の名前をクリックすると「同盟の情報」欄へ、盟主島の名前だと「コメント変更」欄へ移動します。</p>
+END;
 
-		echo "<b>※</b>同盟の名前をクリックすると「同盟の情報」欄へ、盟主島の名前だと「コメント変更」欄へ移動します。\n";
+
+
 	}
 	//--------------------------------------------------
 	// 同盟の情報
@@ -304,7 +322,9 @@ END;
 			$jsIslandList .= "island[$id] = '$name';\n";
 		}
 		$data['defaultID'] = isset($data['defaultID']) ? $data['defaultID'] : "";
-		$n = $hako->idToAllyNumber[$data['defaultID']];
+		$n = '';
+		$n = isset($hako->idToAllyNumber[$data['defaultID']]) ? $hako->idToAllyNumber[$data['defaultID']] : "";
+
 		if($n == '') {
 			$allyname = '';
 			$defaultMark = $hako->ally[0];
@@ -351,6 +371,7 @@ END;
 			for($i=0; $i<count($hako->ally); $i++) {
 				$s = "";
 				if($hako->ally[$i]['id'] == $defaultAllyId) $s = ' selected';
+				$allyList = "";
 				$allyList .= "<option value=\"$i\"$s>{$hako->ally[$i]['name']}</option>\n";
 				$jsAllyList .= "'{$hako->ally[$i]['name']}'";
 				$jsAllyIdList .= "{$hako->ally[$i]['id']}";
@@ -406,7 +427,7 @@ END;
 END;
 		if($hako->allyNumber) {
 			$str4 = $adminMode ? '・結成・変更' : $init->allyJoinComUse ? '' : '・加盟・脱退';
-			$str5 = ($adminMode || $init->allyJoinComUse) ? '' : '<INPUT TYPE="submit" VALUE="加盟・脱退" NAME="JoinAllyButton">';
+			$str5 = ($adminMode || $init->allyJoinComUse) ? '' : '<INPUT TYPE="submit" VALUE="加盟・脱退" NAME="JoinAllyButton" class="btn btn-default">';
 			echo <<<END
 <BR>
 <BR><B><FONT SIZE=4>［解散{$str4}］</FONT></B>
@@ -571,44 +592,48 @@ class AllySetted extends HtmlAlly {
 //------------------------------------------------------------
 class AllyError {
 	// すでにその名前の同盟がある場合
-	function newAllyAlready() {
+	static function newAllyAlready() {
 		global $init;
-		echo "{$init->tagBig_}その同盟ならすでに結成されています。\n";
+		echo "その同盟ならすでに結成されています。\n";
 	}
 	// すでにそのマークの同盟がある場合
-	function markAllyAlready() {
+	static function markAllyAlready() {
 		global $init;
-		echo "{$init->tagBig_}そのマークはすでに使用されています。\n";
+		echo "そのマークはすでに使用されています。\n";
 	}
 	// 別の同盟を結成している
-	function leaderAlready() {
+	static function leaderAlready() {
 		global $init;
-		echo "{$init->tagBig_}盟主は、自分の同盟以外には加盟できません。\n";
+		echo "盟主は、自分の同盟以外には加盟できません。\n";
 	}
 	// 別の同盟に加盟している
-	function otherAlready() {
+	static function otherAlready() {
 		global $init;
-		echo "{$init->tagBig_}ひとつの同盟にしか加盟できません。\n";
+		echo "ひとつの同盟にしか加盟できません。\n";
 	}
 	// 資金足りず
-	function noMoney() {
+	static function noMoney() {
 		global $init;
-		echo "{$init->tagBig_}資金不足です(/_<。)\n";
+		echo "資金不足です(/_<。)\n";
 	}
 	// IDチェックにひっかかる
-	function wrongAlly() {
+	static function wrongAlly() {
 		global $init;
-		echo "{$init->tagBig_}あなたは盟主ではないと思う。\n";
+		echo "あなたは盟主ではないと思う。\n";
 	}
 	// 新規で同盟がない場合
-	function newAllyNoName() {
+	static function newAllyNoName() {
 		global $init;
-		echo "{$init->tagBig_}同盟につける名前が必要です。\n";
+		echo "同盟につける名前が必要です。\n";
 	}
 	// 管理者以外結成不可
-	function newAllyForbbiden() {
+	static function newAllyForbbiden() {
 		global $init;
-		echo "{$init->tagBig_}申し訳ありません、受付を中止しています。\n";
+		echo "申し訳ありません、受付を中止しています。\n";
+	}
+	static function newIslandBadName() {
+		global $init;
+		echo ",?()&lt;&gt;\$とか入ってたり、変な名前はやめましょう。\n";
 	}
 }
 
@@ -660,7 +685,7 @@ class MakeAlly {
 		// 同盟名が正当かチェック
 		if(preg_match("/[,\?\(\)\<\>\$]|^無人|^沈没$/", $allyName)) {
 			// 使えない名前
-			Error::newIslandBadName();
+			AllyError::newIslandBadName();
 			return;
 		}
 		// 名前の重複チェック
@@ -708,7 +733,7 @@ class MakeAlly {
 					}
 				}
 				if(!$flag) {
-					echo "{$init->tagBig_}変更できません。\n";
+					echo "変更できません。\n";
 					return;
 				}
 				$hako->ally[$n]['id']       = $allyID;
@@ -832,7 +857,7 @@ class MakeAlly {
 		$allyMember = $hako->ally[$n]['memberId'];
 
 		if($adminMode && (($allyMember[0] != '') || ($n == ''))){
-			echo "{$init->tagBig_}削除できません。\n";
+			echo "削除できません。\n";
 			return;
 		}
 		foreach ($allyMember as $id) {
@@ -1242,8 +1267,12 @@ class AllyIO {
 		fputs($fp, $allymember . "\n");
 		$ext = join(",", $ally['ext']);
 		fputs($fp, $ext . "\n");
-		fputs($fp, $ally['comment'] . "\n");
-		fputs($fp, $ally['title'] . '<>' . $ally['message'] . "\n");
+		if (isset($ally['comment'])) {
+			fputs($fp, $ally['comment'] . "\n");
+		}
+		if ( isset($ally['title']) && isset($ally['message']) ) {
+			fputs($fp, $ally['title'] . '<>' . $ally['message'] . "\n");
+		}
 	}
 	//---------------------------------------------------
 	// 全島データを読み込む

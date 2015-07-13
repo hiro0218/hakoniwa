@@ -2793,11 +2793,11 @@ class Error {
 		global $init;
 		Util::makeTagMessage("パスワードが違います。", "danger");
 
-    // JavaScript error の回避【追加】
-    //HtmlJS::funcJavaDM();
+	    // JavaScript error の回避【追加】
+	    //HtmlJS::funcJavaDM();
 
-    HTML::footer();
-    exit;
+	    HTML::footer();
+	    exit;
 	}
 
 	static function wrongID() {
@@ -2831,7 +2831,7 @@ class Error {
 
 	static function newIslandBadName() {
 		global $init;
-		Util::makeTagMessage(",?()<>\$とか入ってたり、変な名前はやめましょう。", "danger");
+		Util::makeTagMessage(",?()&lt;&gt;\$とか入ってたり、変な名前はやめましょう。", "danger");
 		HTML::footer();
 		exit;
 	}

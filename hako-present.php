@@ -59,7 +59,7 @@ function targetopen() {
 }
 //-->
 </script>
-	
+
 <h1 class="title">プレゼントツール</h1>
 
 <h2>管理人からのプレゼント</h2>

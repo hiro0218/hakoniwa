@@ -3389,9 +3389,9 @@ class Turn {
 
 		// ???
 		$pop = $island['pop'];
-		
+
 		//
-		
+
 		if ( isset($island['food']) ) {}
 		if ( !isset($island['propaganda']) ) {
 			$island['propaganda'] = "";
@@ -3424,7 +3424,7 @@ class Turn {
 			$y = $this->rpy[$i];
 			$landKind = $land[$x][$y];
 			$lv = $landValue[$x][$y];
-			
+
 			switch($landKind) {
 				case $init->landWaste:
 					//荒地

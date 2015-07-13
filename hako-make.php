@@ -509,12 +509,12 @@ class Make {
 		}
 		// モードで分岐
 		$command = $island['command'];
-							
+
 
 		if(strcmp($data['COMMANDMODE'], 'delete') == 0) {
 			Util::slideFront($command, $data['NUMBER']);
 			HtmlSetted::commandDelete();
-			
+
 		} else if(($data['COMMAND'] == $init->comAutoPrepare) ||
 				  ($data['COMMAND'] == $init->comAutoPrepare2)) {
 			// フル整地、フル地ならし
@@ -555,20 +555,20 @@ class Make {
 				$j++;
 			}
 			HtmlSetted::commandAdd();
-			
+
 		} else if ($data['COMMAND'] == $init->comAutoReclaim) {
 			$r = Util::makeRandomPointArray();
 			$rpx = $r[0];
 			$rpy = $r[1];
 			$land = $island['land'];
 			$landValue = $island['landValue'];
-			
+
 			$i = $data['NUMBER'];
 			$j = 0;
 			while(($j < $init->pointNumber) && ($i < $init->commandMax)) {
 				$x = $rpx[$j];
 				$y = $rpy[$j];
-				$kind = $land[$x][$y]; 
+				$kind = $land[$x][$y];
 				$lv = $landValue[$x][$y];
 
 				if (($kind == $init->landSea) && ($lv == 1)) {
@@ -700,7 +700,7 @@ class Make {
 				'arg'    => $data['AMOUNT'],
 			);
 		}
-		
+
 		// データの書き出し
 		$island['command'] = $command;
 		$hako->islands[$num] = $island;
