@@ -590,7 +590,7 @@ class AllySetted extends HtmlAlly {
 //------------------------------------------------------------
 //
 //------------------------------------------------------------
-class AllyError {
+class AllyError extends Error {
 	// すでにその名前の同盟がある場合
 	static function newAllyAlready() {
 		global $init;
@@ -631,19 +631,23 @@ class AllyError {
 		global $init;
 		echo "申し訳ありません、受付を中止しています。\n";
 	}
+
 	static function newIslandBadName() {
 		global $init;
 		echo ",?()&lt;&gt;\$とか入ってたり、変な名前はやめましょう。\n";
 	}
 }
 
-//------------------------------------------------------------
-//
-//------------------------------------------------------------
+/**
+ *
+ */
 class MakeAlly {
-	//--------------------------------------------------
-	// 結成・変更メイン
-	//--------------------------------------------------
+	/**
+	 * 結成・変更メイン
+	 * @param  [type] $hako [description]
+	 * @param  [type] $data [description]
+	 * @return [type]       [description]
+	 */
 	function makeAllyMain($hako, $data) {
 		global $init;
 

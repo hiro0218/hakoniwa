@@ -41,12 +41,15 @@ class Init {
 	public $baseDir = "http://localhost/hakoniwa";
 
 	// 画像を置くディレクトリ
-	public $imgDir  = "http://localhost/hakoniwa/img/";
+	public $imgDir  = "img";
 
 	// CSSファイルを置くディレクトリ
-	public $cssDir  = "http://localhost/hakoniwa/css";
+	public $cssDir  = "css";
 	// CSSリスト
 	public $cssList = array('SkyBlue.css');
+
+	public $jsDir = "js";
+	public $js = "hakojima.js";
 
 	// データディレクトリの名前（必ず変更してください）
 	public $dirName = "data";

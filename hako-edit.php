@@ -492,7 +492,7 @@ class Hako extends HakoIO {
 			$naviText = "{$comStr}\\n{$naviText}";
 		}
 
-		echo "<img src=\"{$init->imgDir}{$image}\" width=\"32\" height=\"32\" alt=\"{$point} {$naviTitle} {$comStr}\" onMouseOver=\"Navi({$naviPos},'{$image}', '{$naviTitle}', '{$point}', '{$naviText}', {$naviExp});\" onMouseOut=\"NaviClose(); return false\">";
+		echo "<img src=\"{$init->imgDir}/{$image}\" width=\"32\" height=\"32\" alt=\"{$point} {$naviTitle} {$comStr}\" onMouseOver=\"Navi({$naviPos}, '{$init->imgDir}/{$image}', '{$naviTitle}', '{$point}', '{$naviText}', {$naviExp});\" onMouseOut=\"NaviClose(); return false\">";
 
 		// 座標設定閉じ
 		if($mode == 1 || $mode == 2) {
