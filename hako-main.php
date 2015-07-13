@@ -17,14 +17,11 @@ require_once ABSOLUTE_PATH.'hako-html.php';
 require_once ABSOLUTE_PATH.'hako-turn.php';
 require_once ABSOLUTE_PATH.'hako-util.php';
 
-$init = new Init;
+$init = new Init();
 
 define("READ_LINE", 1024);
 $THIS_FILE = $init->baseDir . "/hako-main.php";
-$BACK_TO_TOP = "<A HREF=\"{$THIS_FILE}?\">{$init->tagBig_}トップへ戻る{$init->_tagBig}</A>";
 $ISLAND_TURN; // ターン数
-
-$PRODUCT_VERSION = '20130519';
 
 //--------------------------------------------------------------------
 class Hako extends HakoIO {

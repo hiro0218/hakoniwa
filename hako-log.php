@@ -226,7 +226,8 @@ class Log extends LogIO {
 	}
 	function changeName($name1, $name2) {
 		global $init;
-		$this->history("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name1}島</A>{$init->_tagName}、名称を<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name2}島</A>{$init->_tagName}に変更する。");
+		//$this->history("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name1}島</A>{$init->_tagName}、名称を<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name2}島</A>{$init->_tagName}に変更する。");
+		$this->history("{$init->tagName_}{$name1}島{$init->_tagName}、名称を{$init->tagName_}{$name2}島{$init->_tagName}に変更する。");
 	}
 	// 資金をプレゼント
 	function presentMoney($id, $name, $value) {
