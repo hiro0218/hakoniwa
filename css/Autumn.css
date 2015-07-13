@@ -1,0 +1,251 @@
+/********************************************************************/
+/*  Edited By : Watson                                              */
+/********************************************************************/
+@charset "Shift_JIS";
+
+/* 基本構成 ---------------------------------------------------------*/
+body {
+	font-family	: Tahoma, "MS UI Gothic", Chicago;
+	color		: #8B0000;
+	background	: #FFF url('atm/atm_background.png') no-repeat;
+	font-size	: 10pt;
+}
+/* リンク */
+a {
+	color		: #CD5C5C;
+	text-decoration	: none;
+}
+a:visited {
+	color		: #CD5C5C;
+}
+a:active {
+	color		: #F08080;
+}
+a:hover {
+	color		: #F08080;
+	background-color: #FFDAB9;
+}
+/* 区切り線 */
+hr {
+	border		: solid #A0522D;
+	border-width	: 1px 0px 0px 0px;
+}
+/* テーブル */
+table {
+	border		: none;
+}
+th, td {
+	font-family	: "MS UI Gothic", sans-serif;
+	border		: solid #FFA07A 1px;
+	font-size	: 10pt;
+	white-space	: nowrap;
+}
+th {
+	border-color	: #A0522D;
+}
+td.M {
+	padding-top	: 10pt;
+	border		: none;
+}
+img {
+	border		: none;
+}
+/* 更新時間 */
+#lastModified {
+	font-size	: 90%;
+	background-image: none;
+	width		: 100%;
+	padding		: 0px;
+}
+option, input:focus {
+	background-color: #FFE4C4;
+}
+/* フッタ */
+#LinkFoot {
+	background-color: #FAEBD7;
+	border		: dashed #F5DEB3 1px;
+	width		: 50%;
+	margin-left	: 25%;
+	padding		: 5px;
+}
+
+/* TOPページ ---------------------------------------------------------*/
+/* タイトル */
+h1 {
+	position	: relative;
+	top		: 60px;
+	left		: 10px;
+	background	: url('atm/atm_bg_title.gif') no-repeat;
+	background-position: 96% 50%;
+	margin-bottom	: 80px;
+	font-family	: "Times New Roman", sans-serif;
+	font-size	: 38pt;
+	font-style	: italic;
+	color		: #8B0000;
+	border		: double #CD853F;
+	border-width	: 0px 0px 5px 0px;
+	width		: 500px;
+}
+.Turn {
+	position	: relative;
+	background-image: url('atm/atm_icyo.gif');
+	background-repeat: no-repeat;
+	background-position: 99% 10;
+	height		: 50px;
+	border		: dashed #F5DEB3 1px;
+	width		: 45%;
+	font-size	: 16pt;
+}
+#nexttime {
+	position	: relative;
+	top		: -50px;
+	left		: 50%;
+	padding-left	: 2em;
+}
+h2 {
+	display		: block;
+	text-align	: left;
+	text-transform	: uppercase;
+	background-image: url('atm/atm_mmji.gif');
+	background-repeat: no-repeat;
+	background-position: 0 0;
+	padding-left	: 25px;
+	font-size	: 14pt;
+	font-weight	: bold;
+	color		: #CD5C5C;
+	border		: solid #8B4513;
+	border-width	: 0px 0px 2px 0px;
+	width		: 300px;
+}
+/* 最近の出来事 */
+#HistoryLog, #RecentlyLog {
+	white-space	: nowrap;
+}
+/* 大きい文字 */
+.big {
+	font-size	: 24pt;
+}
+.new {
+	color		: #f00;
+	background-color: transparent;
+}
+
+/* Mapページ ---------------------------------------------------------*/
+/* ナビ表示 */
+#NaviView{
+	visibility	: hidden;
+	z-index		: 1;
+	position	: absolute;
+	background-color: #000000;
+	border		: solid #000000;
+	border-width	: 1px;
+	min-width	: 120px;
+	max-width	: 180px;
+	margin-top	: -224px;
+	padding		: 3px;
+	white-space	: normal;
+	filter	   	: Alpha(opacity=120);
+ 	opacity		: 0.8; /* Mozzila系 */
+}
+.NaviTitle {
+	font-size	: 9pt;
+	padding		: 5px 0;
+	color	: #ffffff;
+	border		: dotted #f0ffff;
+	border-width	: 0 0 1 0;
+}
+.NaviImg {
+	margin		: 5px;
+}
+.NaviText {
+	margin		: 5px 0 5px 0;
+	font-size	: 11px;
+	color	: #ffffff;
+}
+/* 島情報テーブル */
+#islandInfo table,
+#CommentBox table,
+#localBBS table
+{
+	width		: 100%;
+}
+#islandMap, #islandMap table {
+	margin-left	: auto;
+	margin-right	: auto;
+}
+/* 観光者通信テーブル */
+#islandInfo th,
+#CommentBox th,
+#localBBS th
+{
+	background-color: #FFA07A;
+}
+#localBBS center {
+	text-align	: left;
+}
+
+.islName, .islName2, .number, .head, .headToTo, .command, .disaster, .lbbsCell,
+.money, .food, .HCwin, .HClose, .attention, .bumon { font-weight: bold; }
+.islName   { color: #A06040;        } /* 島の名前など */
+.islName2  { color: #808080;        } /* 薄くなった島の名前 */
+.number    { color: #800000;        } /* 順位の番号など */
+.head      { color: #800000;        } /* 順位表における見だし */
+.headToTo  { color: #E9967A;        } /* toto表における見だし */
+.command   { color: #D08000;        } /* 開発計画名 */
+.disaster  { color: #FF0000;        } /* 災害 */
+.lbbsST    { color: gray;           } /* 観光者通信（極秘） */
+.money     { color: goldenrod;      } /* お金 */
+.food      { color: #8B4513;        } /* 食料 */
+.HCwin     { color: #0000FF;        } /* 箱庭カップ勝利 */
+.HClose    { color: #A06040;        } /* 箱庭カップ敗北 */
+
+.attention { color: #FF0000;        } /* 注意 */
+.bumon     { color: #FFFFFF;        } /* ランキングの部門名 */
+.point     { color: #CD853F;        } /* point */
+.unemploy1 { color: #CD853F;        } /* 失業率- */
+.unemploy2 { color: red;            } /* 失業率+ */
+.shuto     { color: #8B4513;        } /* 首都名，ユニーク地形 */
+.house     { color: salmon;         } /* 島主の家，島ID */
+.eisei     { color: #CD853F;        } /* 人工衛星 */
+.monsm     { color: #8B4513;        } /* 怪獣出現中！，成長率 */
+.normal    { color: #000000;        } /* 通常の文字色 */
+
+/* 背景色 */
+.TitleCell   { background-color: #F4A460;        } /* 順位表見出し */
+.NumberCell  { background-color: #F4A460;        } /* 順位表順位 */
+.NameCell    { background-color: #F5DEB3;        } /* 順位表島の名前 */
+.InfoCell    { background-color: #FAEBD7; text-align: right;       } /* 順位表島の情報 */
+.MarkCell    { background-color: #FAEBD7; text-align: center;       } /* 順位表島の情報 */
+.TenkiCell   { background-color: #FAEBD7; text-align: center;       } /* 順位表島の情報 */
+.ItemCell    { background-color: #FAEBD7; text-align: left;       } /* 順位表島の情報 */
+.CommentCell { background-color: #FFFFFF; text-align: left;       } /* 順位表コメント欄 */
+.InputCell   { background-color: #FFDAB9;        } /* 開発計画フォーム */
+.MapCell     { background-color: #FFFFFF;        } /* 開発計画地図 */
+.CommandCell { background-color: #FFFFFF;        } /* 開発計画入力済み計画 */
+.lbbsCell    { background-color: #FFFFFF;        } /* 観光者通信の内容 */
+.PoinCell    { background-color: moccasin;       } /* Point欄 */
+.TotoCell    { background-color: white;          } /* toto欄 */
+.RankingCell { background-color: lightsteelblue; } /* ランキング欄 */
+.PopupCell   { background-color: #FAEBD7;        } /* Popup コマンド入力欄 */
+
+/* コマンド ---------------------------------------------------------*/
+/* JSコマンド送信済み */
+.commandjs1  {
+	border-width	: 0px;
+	color		: #8B4513;
+	width		: 100%;
+	background-color: #fff;
+}
+/* JSコマンド未送信 */
+.commandjs2  {
+	border-width	: 0px;
+	color		: red;
+	width		: 100%;
+	background-color: #FFFFFF;
+}
+
+/* アクセスログ ---------------------------------------------------------*/
+/* アクセスログテーブル */
+#DATA-TABLE {
+	background-color: #ffffff;
+}

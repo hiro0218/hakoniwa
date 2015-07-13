@@ -1,0 +1,3 @@
+<Files ~ "\.(dat|his|cgi)$">
+deny from all
+</Files>

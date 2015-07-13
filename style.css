@@ -1,0 +1,216 @@
+BODY {
+	SCROLLBAR-FACE-COLOR: #ffffff; FONT-SIZE: 10pt; BACKGROUND-IMAGE: url(http://kin-kin.ddo.jp/cgiimg/ra/style/background.gif); SCROLLBAR-HIGHLIGHT-COLOR: #ffffff; SCROLLBAR-SHADOW-COLOR: #6699ff; COLOR: #333; SCROLLBAR-ARROW-COLOR: #6699ff; FONT-FAMILY: Tahoma, MS UI Gothic, Chicago; SCROLLBAR-BASE-COLOR: #ffffff; BACKGROUND-COLOR: #f0f8ff; scrollbar-3d-light-color: #6699ff; scrollbar-dark-shadow-coor: #ffffff
+}
+A {
+	COLOR: #4169e1; TEXT-DECORATION: none
+}
+A:visited {
+	COLOR: #4682b4
+}
+A:active {
+	COLOR: #008b8b
+}
+A:hover {
+	BORDER-RIGHT: #008b8b 0px dashed; BORDER-TOP: #008b8b 0px dashed; BORDER-LEFT: #008b8b 0px dashed; COLOR: #008b8b; BORDER-BOTTOM: #008b8b 1px dashed; BACKGROUND-COLOR: #99decc
+}
+HR {
+	BORDER-RIGHT: #4169e1 1px dashed; BORDER-TOP: #4169e1 1px dashed; BORDER-LEFT: #4169e1 1px dashed; BORDER-BOTTOM: #4169e1 1px dashed
+}
+TABLE {
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none
+}
+TH {
+	BORDER-RIGHT: #00bfff 1px solid; BORDER-TOP: #00bfff 1px solid; FONT-SIZE: 10pt; BORDER-LEFT: #00bfff 1px solid; BORDER-BOTTOM: #00bfff 1px solid
+}
+TD {
+	BORDER-RIGHT: #00bfff 1px solid; BORDER-TOP: #00bfff 1px solid; FONT-SIZE: 10pt; BORDER-LEFT: #00bfff 1px solid; BORDER-BOTTOM: #00bfff 1px solid
+}
+TD.M {
+	BORDER-RIGHT: medium none; BORDER-TOP: medium none; BORDER-LEFT: medium none; BORDER-BOTTOM: medium none
+}
+H1 {
+	BORDER-RIGHT: #6495ed 1px solid; BORDER-TOP: #6495ed 1px solid; PADDING-LEFT: 40px; FONT-SIZE: 14pt; BACKGROUND-IMAGE: url(http://kin-kin.ddo.jp/cgiimg/ra/style/bg_h1.png); TEXT-TRANSFORM: uppercase; BORDER-LEFT: #6495ed 1px solid; COLOR: #6495ed; BORDER-BOTTOM: #6495ed 1px solid
+}
+.title {
+	BORDER-RIGHT: #008b8b 0px solid; BACKGROUND-POSITION: 100% 100%; BORDER-TOP: #008b8b 0px solid; FONT-WEIGHT: bold; FONT-SIZE: 32pt; BACKGROUND-IMAGE: url(http://kin-kin.ddo.jp/cgiimg/ra/style/monster0.gif); MARGIN: 0.5em 0px 1em; TEXT-TRANSFORM: uppercase; BORDER-LEFT: #008b8b 0px solid; WIDTH: 500px; COLOR: #c0c0c0; BORDER-BOTTOM: #008b8b 1px solid; BACKGROUND-REPEAT: no-repeat; FONT-STYLE: italic; LETTER-SPACING: 5px
+}
+.title:first-letter {
+	FONT-SIZE: 48pt; COLOR: #4169e1
+}
+.big {
+	FONT-SIZE: 24pt
+}
+.timer {
+	FONT-WEIGHT: bold; MARGIN: 1px 0px; COLOR: #6495ed; BORDER-TOP-STYLE: none; BORDER-RIGHT-STYLE: none; BORDER-LEFT-STYLE: none; BORDER-BOTTOM-STYLE: none
+}
+.islName {
+	FONT-WEIGHT: bold
+}
+.islName2 {
+	FONT-WEIGHT: bold
+}
+.number {
+	FONT-WEIGHT: bold
+}
+.head {
+	FONT-WEIGHT: bold
+}
+.headToTo {
+	FONT-WEIGHT: bold
+}
+.command {
+	FONT-WEIGHT: bold
+}
+.disaster {
+	FONT-WEIGHT: bold
+}
+.lbbsSS {
+	FONT-WEIGHT: bold
+}
+.lbbsOW {
+	FONT-WEIGHT: bold
+}
+.money {
+	FONT-WEIGHT: bold
+}
+.food {
+	FONT-WEIGHT: bold
+}
+.HCwin {
+	FONT-WEIGHT: bold
+}
+.HClose {
+	FONT-WEIGHT: bold
+}
+.attention {
+	FONT-WEIGHT: bold
+}
+.bumon {
+	FONT-WEIGHT: bold
+}
+.islName {
+	COLOR: #a06040
+}
+.islName2 {
+	COLOR: #808080
+}
+.number {
+	COLOR: #6495ed
+}
+.head {
+	COLOR: #000080
+}
+.headToTo {
+	COLOR: royalblue
+}
+.command {
+	COLOR: #d08000
+}
+.disaster {
+	COLOR: #ff0000
+}
+.lbbsSS {
+	COLOR: #0000ff
+}
+.lbbsOW {
+	COLOR: #ff0000
+}
+.lbbsST {
+	COLOR: gray
+}
+.money {
+	COLOR: goldenrod
+}
+.food {
+	COLOR: lightseagreen
+}
+.HCwin {
+	COLOR: #0000ff
+}
+.HClose {
+	COLOR: #a06040
+}
+.attention {
+	COLOR: #ff0000
+}
+.bumon {
+	COLOR: #ffffff
+}
+.point {
+	COLOR: royalblue
+}
+.unemploy1 {
+	COLOR: royalblue
+}
+.unemploy2 {
+	COLOR: red
+}
+.shuto {
+	COLOR: mediumseagreen
+}
+.house {
+	COLOR: salmon
+}
+.eisei {
+	COLOR: lightseagreen
+}
+.monsm {
+	COLOR: hotpink
+}
+.normal {
+	COLOR: #000000
+}
+.TitleCell {
+	BACKGROUND-COLOR: #87cefa
+}
+.NumberCell {
+	BACKGROUND-COLOR: #87cefa
+}
+.NameCell {
+	BACKGROUND-COLOR: #f5fffa
+}
+.InfoCell {
+	BACKGROUND-COLOR: #ffffff
+}
+.CommentCell {
+	BACKGROUND-COLOR: #ffffff
+}
+.InputCell {
+	BACKGROUND-COLOR: #afeeee
+}
+.MapCell {
+	BACKGROUND-COLOR: #ffffff
+}
+.CommandCell {
+	BACKGROUND-COLOR: #ffffff
+}
+.PoinCell {
+	BACKGROUND-COLOR: moccasin
+}
+.TotoCell {
+	BACKGROUND-COLOR: white
+}
+.RankingCell {
+	BACKGROUND-COLOR: lightsteelblue
+}
+.PopupCell {
+	BACKGROUND-COLOR: #e0ffff
+}
+.commandjs1 {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 100%; COLOR: blue; HEIGHT: 100%; BACKGROUND-COLOR: #ccc; BORDER-RIGHT-WIDTH: 0px
+}
+.commandjs2 {
+	BORDER-TOP-WIDTH: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; WIDTH: 100%; COLOR: red; HEIGHT: 100%; BACKGROUND-COLOR: #ffffff; BORDER-RIGHT-WIDTH: 0px
+}
+#NaviView {
+	BORDER-RIGHT: #4169e1 3px groove; PADDING-RIGHT: 3px; BORDER-TOP: #4169e1 3px groove; MARGIN-TOP: -224px; PADDING-LEFT: 3px; Z-INDEX: 1; VISIBILITY: hidden; PADDING-BOTTOM: 3px; BORDER-LEFT: #4169e1 3px groove; WIDTH: 180px; PADDING-TOP: 3px; BORDER-BOTTOM: #4169e1 3px groove; POSITION: absolute; BACKGROUND-COLOR: #f0ffff
+}
+.NaviTitle {
+	BORDER-RIGHT: #000080 0px solid; BORDER-TOP: #000080 0px solid; FONT-SIZE: 12pt; BORDER-LEFT: #000080 0px solid; BORDER-BOTTOM: #000080 2px solid
+}
+.NaviImg {
+	MARGIN: 5px
+}
+.NaviText {
+	MARGIN-LEFT: 15px
+}
