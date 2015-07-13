@@ -746,7 +746,7 @@ END;
 
 		<div class="form-group">
 			<label>パスワードは？(必須)</label>
-			<input type="password" class="form-control" name="OLDPASS" size="32" maxlength="32">
+			<input type="password" class="form-control" name="OLDPASS" size="32" maxlength="32" required>
 		</div>
 		<div class="form-group">
 			<label>新しいパスワードは？(変更する時のみ)</label>
@@ -785,7 +785,7 @@ END;
 		</div>
 		<div class="form-group">
 			<label>パスワードは？</label>
-			<input type="password" name="OLDPASS" class="form-control" size="32" maxlength="32">
+			<input type="password" name="OLDPASS" class="form-control" size="32" maxlength="32" required>
 		</div>
 		<div class="form-group">
 			<input type="submit" class="btn btn-primary" value="変更する">
@@ -1862,10 +1862,10 @@ function init() {
 	str = '<font color="blue">■ 送信済み ■<\\/font><br>' + str;
 	disp(str, "");
 	document.onmousemove = Mmove;
-	if(document.layers) {
-		//document.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
-		document.addEventListener("DOMContentLoaded", Event.MOUSEMOVE | Event.MOUSEUP, false);
-	}
+	// if(document.layers) {
+	// 	//document.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+	// 	document.addEventListener("DOMContentLoaded", Event.MOUSEMOVE | Event.MOUSEUP, false);
+	// }
 	document.onmouseup = Mup;
 	document.onmousemove = Mmove;
 	document.onkeydown = Kdown;
@@ -1979,7 +1979,9 @@ function cominput(theForm, x, k, z) {
 }
 
 function plchg() {
-	strn1 = "";
+	var strn1 = "";
+	var strn2 = "";
+	var arg = "";
 	for(var i = 0; i < $init->commandMax; i++) {
 		var c = command[i];
 		var kind = '{$init->tagComName_}' + g[i] + '{$init->_tagComName}';
@@ -2160,17 +2162,8 @@ function disp(str,bgclr) {
 	if(str==null) {
 		str = "";
 	}
-
-	if(document.getElementById || document.all){
-		LayWrite('LINKMSG1', str);
-		SetBG('plan', bgclr);
-	} else if(document.layers) {
-		lay = document.layers["PARENT_LINKMSG"].document.layers["LINKMSG1"];
-		lay.document.open();
-		lay.document.write("<font style='font-size:11pt'>"+str+"<\\/font>");
-		lay.document.close();
-		SetBG("PARENT_LINKMSG", bgclr);
-	}
+	LayWrite('LINKMSG1', str);
+	SetBG('plan', bgclr);
 }
 
 function outp() {
@@ -2427,20 +2420,17 @@ function Kdown(e){
 	if(m > 9) {
 		m = 0;
 	}
-	if(document.all){
-		if (event.altKey || event.ctrlKey || event.shiftKey) return;
-		c = event.keyCode;
-		el = new String(event.srcElement.tagName);
-		el = el.toUpperCase();
-		if (el == "INPUT") return;
 
-	}else if(document.getElementById){
-		if (e.altKey || e.ctrlKey || e.shiftKey) return;
-		c = e.which;
-		el = new String(e.target.tagName);
-		el = el.toUpperCase();
-		if (el == "INPUT") return;
+	if (e.altKey || e.ctrlKey || e.shiftKey) {
+		return;
 	}
+	c = e.which;
+	el = new String(e.target.tagName);
+	el = el.toUpperCase();
+	if (el == "INPUT") {
+		return;
+	}
+
 	c = String.fromCharCode(c);
 
 	// 押されたキーに応じて計画番号を設定する
@@ -2497,44 +2487,47 @@ END;
 		$this->islandInfo($island, $number, 1);
 		echo <<<END
 <div id="menu" style="position:absolute; top:-500px;left:-500px; overflow:auto;width:360px;height:350px;">
-
-<table border=0 class="PopupCell" onClick="menuclose()">
-<tr valign=top>
-<td>
-$click_com[0]<hr>
-$click_com[1]
+	<table border=0 class="PopupCell" onClick="menuclose()">
+		<tr valign=top>
+			<td>
+				$click_com[0]
+				<hr>
+				$click_com[1]
+			</td>
+			<td>
+				$click_com[2]
+				<hr>
+				$click_com[3]
+			</td>
+		</tr>
+		<tr valign=top>
+			<td>
+				$click_com[4]
+				<hr>
+				$click_com[5]
+			</td>
+			<td>
+			$click_com[6]
+			</td>
+		</tr>
+	</table>
 </div>
-</td>
-<td>
-$click_com[2]<hr>
-$click_com[3]
-</td>
-</tr>
-<tr valign=top>
-<td>
-$click_com[4]<hr>
-$click_com[5]
-</td>
-<td>
-$click_com[6]
-</td>
-</tr>
-</table>
-</div>
 
-<div ID="mc_div" style="position:absolute;top:-50;left:-50;height:22px;">&nbsp;</div>
+<div ID="mc_div" style="position:absolute;top:-50;left:-50;height:22px;">
+&nbsp;
+</div>
 
 <div ID="ch_num" style="position:absolute;visibility:hidden;display:none">
-<form name="ch_numForm">
-	<table class="table table-bordered" bgcolor="#e0ffff" cellspacing=1>
-	<tr><td valign=top nowrap>
-	<a href="JavaScript:void(0)" onClick="hideElement('ch_num');" style="text-decoration:none"><B>×</B></a><br>
-	<select name="AMOUNT" size=13 onchange="chNumDo()">
-	</select>
-	</TD>
-	</TR>
-	</TABLE>
-</form>
+	<form name="ch_numForm">
+		<table class="table table-bordered" bgcolor="#e0ffff" cellspacing=1>
+		<tr>
+			<td valign=top nowrap>
+				<a href="JavaScript:void(0)" onClick="hideElement('ch_num');" style="text-decoration:none"><B>×</B></a><br>
+				<select name="AMOUNT" size=13 onchange="chNumDo()"></select>
+			</td>
+		</tr>
+		</table>
+	</form>
 </div>
 
 <div align="center">

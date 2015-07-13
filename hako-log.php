@@ -12,9 +12,9 @@
 
 //--------------------------------------------------------------------
 class LogIO {
-	var $logPool       = array();
-	var $secretLogPool = array();
-	var $lateLogPool   = array();
+	private $logPool       = array();
+	private $secretLogPool = array();
+	private $lateLogPool   = array();
 
 	//---------------------------------------------------
 	// ログファイルを後ろにずらす
@@ -118,6 +118,7 @@ class LogIO {
 	//---------------------------------------------------
 	function historyTrim() {
 		global $init;
+
 		$count = 0;
 		$fileName = "{$init->dirName}/hakojima.his";
 		if(is_file($fileName)) {
@@ -213,7 +214,7 @@ class LogIO {
 			echo "{$line}<br>\n";
 		}
 		fclose($fp);
-		
+
 	}
 }
 
@@ -560,7 +561,7 @@ class Log extends LogIO {
 	function msMonsCaughtS($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
 		$this->secret("-{$tPoint}の<strong>怪獣{$tLname}</strong>に叩き落とされました。",$id, $tId);
-	$this->late("-{$tPoint}の<strong>怪獣{$tLname}</strong>に叩き落とされました。",$tId);
+		$this->late("-{$tPoint}の<strong>怪獣{$tLname}</strong>に叩き落とされました。",$tId);
 	}
 	// 通常ミサイル撃ったが怪獣に叩き落とされる
 	function msMonsCaught($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {

@@ -20,9 +20,9 @@ class Util {
 
 		if($init->moneyMode) {
 			if($money < 500) {
-				return "推定500{$init->unitMoney}未満";
+				return "推定 500{$init->unitMoney}未満";
 			} else {
-				return "推定" . round($money / 1000) . "000" . $init->unitMoney;
+				return "推定 " . round($money / 1000) . "000" . $init->unitMoney;
 			}
 		} else {
 			return $money . $init->unitMoney;
@@ -66,7 +66,7 @@ class Util {
 		$name = $init->monsterName[$kind];
 		// 体力
 		$hp = $lv - ($kind * 100);
-		return array ( 'kind' => $kind, 'name' => $name, 'hp' => $hp );
+		return array( 'kind' => $kind, 'name' => $name, 'hp' => $hp );
 	}
 	//---------------------------------------------------
 	// 島の名前から番号を算出
@@ -82,9 +82,13 @@ class Util {
 		return -1;
 	}
 
-	//---------------------------------------------------
-	// 島名を返す
-	//---------------------------------------------------
+	/**
+	 * 島名を返す
+	 * @param  [type] $island         [description]
+	 * @param  [type] $ally           [description]
+	 * @param  [type] $idToAllyNumber [description]
+	 * @return [type]                 [description]
+	 */
 	static function islandName($island, $ally, $idToAllyNumber) {
 		$name = '';
 		foreach ($island['allyId'] as $id) {
@@ -97,9 +101,13 @@ class Util {
 
 		return ($name);
 	}
-	//---------------------------------------------------
-	// パスワードチェック
-	//---------------------------------------------------
+
+	/**
+	 * パスワードチェック
+	 * @param  string $p1 [description]
+	 * @param  string $p2 [description]
+	 * @return [type]     [description]
+	 */
 	static function checkPassword($p1 = "", $p2 = "") {
 		global $init;
 
@@ -119,9 +127,15 @@ class Util {
 		if(strcmp($p1, Util::encode($p2)) == 0) {
 			return true;
 		}
+
 		return false;
 	}
 
+	/**
+	 * [checkSpecialPassword description]
+	 * @param  string $p [description]
+	 * @return [type]    [description]
+	 */
 	static function checkSpecialPassword($p = "") {
 		global $init;
 
@@ -353,9 +367,12 @@ class Util {
 	}
 
 
-	//---------------------------------------------------
-	// アラートタグを出力する
-	//---------------------------------------------------
+	/**
+	 * アラートタグを出力する
+	 * @param  [type] $message [description]
+	 * @param  string $status  [description]
+	 * @return [type]          [description]
+	 */
 	static function makeTagMessage($message, $status = "success"){
 		echo '<div class="alert alert-'. $status .' role="alert">';
 		echo $message;
