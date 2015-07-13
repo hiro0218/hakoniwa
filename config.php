@@ -41,7 +41,7 @@ class Init {
 	public $baseDir = "http://localhost/hakoniwa";
 
 	// 画像を置くディレクトリ
-	public $imgDir  = "http://localhost/hakoniwa/img";
+	public $imgDir  = "http://localhost/hakoniwa/img/";
 
 	// CSSファイルを置くディレクトリ
 	public $cssDir  = "http://localhost/hakoniwa/css";

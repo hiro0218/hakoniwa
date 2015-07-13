@@ -98,13 +98,13 @@ class Hako extends HakoIO {
 			}
 		}
 		if($max != -1) {
-			$prizeList .= "<img src=\"prize0.gif\" alt=\"$nameList\" title=\"$nameList\" width=\"16\" height=\"16\"> ";
+			$prizeList .= "<img src=\"{$init->imgDir}prize0.gif\" alt=\"$nameList\" title=\"$nameList\" width=\"16\" height=\"16\"> ";
 		}
 		// 賞
 		$f = 1;
 		for($k = 1; $k < count($init->prizeName); $k++) {
 			if($flags & $f) {
-				$prizeList .= "<img src=\"prize{$k}.gif\" alt=\"{$init->prizeName[$k]}\" title=\"{$init->prizeName[$k]}\" width=\"16\" height=\"16\"> ";
+				$prizeList .= "<img src=\"{$init->imgDir}prize{$k}.gif\" alt=\"{$init->prizeName[$k]}\" title=\"{$init->prizeName[$k]}\" width=\"16\" height=\"16\"> ";
 			}
 			$f = $f << 1;
 		}
@@ -120,7 +120,7 @@ class Hako extends HakoIO {
 			$f = $f << 1;
 		}
 		if($max != -1) {
-			$prizeList .= "<img src=\"monster{$max}.gif\" alt=\"{$nameList}\" title=\"{$nameList}\" width=\"16\" height=\"16\"> ";
+			$prizeList .= "<img src=\"{$init->imgDir}monster{$max}.gif\" alt=\"{$nameList}\" title=\"{$nameList}\" width=\"16\" height=\"16\"> ";
 		}
 		return $prizeList;
 	}
@@ -592,7 +592,7 @@ class Hako extends HakoIO {
 			echo "<a href=\"javascript:void(0);\" onclick=\"ps($x,$y)\">";
 		}
 
-		echo "<img src=\"{$image}\" width=\"32\" height=\"32\" alt=\"{$point} {$naviTitle}\" onMouseOver=\"Navi({$naviPos},'{$image}', '{$naviTitle}', '{$point}', '{$naviText}', {$naviExp});\" onMouseOut=\"NaviClose(); return false\">";
+		echo "<img src=\"{$init->imgDir}{$image}\" width=\"32\" height=\"32\" alt=\"{$point} {$naviTitle}\" onMouseOver=\"Navi({$naviPos},'{$image}', '{$naviTitle}', '{$point}', '{$naviText}', {$naviExp});\" onMouseOut=\"NaviClose(); return false\">";
 
 		// 座標設定 閉じ
 		if($mode == 1 || $mode == 2) {

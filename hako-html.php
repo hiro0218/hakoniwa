@@ -29,7 +29,6 @@ class HTML {
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<base href="{$bimg}/">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="{$init->cssDir}/{$css}">
 	<link rel="shortcut icon" href="{$init->baseDir}/favicon.ico">
@@ -486,19 +485,19 @@ END;
 			$sora = "";
 			switch ($tenki) {
 				case 1:
-					$sora = "<IMG SRC=\"tenki1.gif\" ALT=\"晴れ\" title=\"晴れ\">";
+					$sora = "<IMG SRC=\"{$init->imgDir}tenki1.gif\" ALT=\"晴れ\" title=\"晴れ\">";
 					break;
 				case 2:
-					$sora = "<IMG SRC=\"tenki2.gif\" ALT=\"曇り\" title=\"曇り\">";
+					$sora = "<IMG SRC=\"{$init->imgDir}tenki2.gif\" ALT=\"曇り\" title=\"曇り\">";
 					break;
 				case 3:
-					$sora = "<IMG SRC=\"tenki3.gif\" ALT=\"雨\" title=\"雨\">";
+					$sora = "<IMG SRC=\"{$init->imgDir}tenki3.gif\" ALT=\"雨\" title=\"雨\">";
 					break;
 				case 4:
-					$sora = "<IMG SRC=\"tenki4.gif\" ALT=\"雷\" title=\"雷\">";
+					$sora = "<IMG SRC=\"{$init->imgDir}tenki4.gif\" ALT=\"雷\" title=\"雷\">";
 					break;
 				default :
-					$sora = "<IMG SRC=\"tenki5.gif\" ALT=\"雪\" title=\"雪\">";
+					$sora = "<IMG SRC=\"{$init->imgDir}tenki5.gif\" ALT=\"雪\" title=\"雪\">";
 			}
 
 
@@ -507,7 +506,7 @@ END;
 			for($e = 0; $e < $init->EiseiNumber; $e++) {
 				if (isset($eisei[$e])) {
 					if($eisei[$e] > 0) {
-						$eiseis .= "<img src=\"eisei{$e}.gif\" alt=\"{$init->EiseiName[$e]} {$eisei[$e]}%\" title=\"{$init->EiseiName[$e]} {$eisei[$e]}%\"> ";
+						$eiseis .= "<img src=\"{$init->imgDir}eisei{$e}.gif\" alt=\"{$init->EiseiName[$e]} {$eisei[$e]}%\" title=\"{$init->EiseiName[$e]} {$eisei[$e]}%\"> ";
 					} else {
 						$eiseis .= "　";
 					}
@@ -518,7 +517,7 @@ END;
 			for($z = 0; $z < $init->ZinNumber; $z++) {
 				if (isset($zin[$z])) {
 					if($zin[$z] > 0) {
-						$zins .= "<img src=\"zin{$z}.gif\" alt=\"{$init->ZinName[$z]}\" title=\"{$init->ZinName[$z]}\"> ";
+						$zins .= "<img src=\"{$init->imgDir}zin{$z}.gif\" alt=\"{$init->ZinName[$z]}\" title=\"{$init->ZinName[$z]}\"> ";
 					} else {
 						$zins .= "";
 					}
@@ -530,9 +529,9 @@ END;
 				if (isset($item[$t])) {
 					if($item[$t] > 0) {
 						if($t == 20) {
-							$items .= "<img src=\"item{$t}.gif\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"  title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
+							$items .= "<img src=\"{$init->imgDir}item{$t}.gif\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"  title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
 						} else {
-							$items .= "<img src=\"item{$t}.gif\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
+							$items .= "<img src=\"{$init->imgDir}item{$t}.gif\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
 						}
 					} else {
 						$items .= "";
@@ -542,24 +541,24 @@ END;
 
 			$lots = "";
 			if($lot > 0) {
-				$lots .= " <IMG SRC=\"lot.gif\" ALT=\"{$lot}枚\" title=\"{$lot}枚\">";
+				$lots .= " <IMG SRC=\"{$init->imgDir}lot.gif\" ALT=\"{$lot}枚\" title=\"{$lot}枚\">";
 			}
 
 			$viking = "";
 			for($v = 10; $v < 15; $v++) {
 				if($island['ship'][$v] > 0) {
-					$viking .= " <IMG SRC=\"ship{$v}.gif\" width=\"16\" height=\"16\" ALT=\"{$init->shipName[$v]}出現中\" title=\"{$init->shipName[$v]}出現中\">";
+					$viking .= " <IMG SRC=\"{$init->imgDir}ship{$v}.gif\" width=\"16\" height=\"16\" ALT=\"{$init->shipName[$v]}出現中\" title=\"{$init->shipName[$v]}出現中\">";
 				}
 			}
 
 			$start = "";
 			if(($hako->islandTurn - $island['starturn']) < $init->noAssist) {
-				$start .= " <IMG SRC=\"start.gif\" width=\"16\" height=\"16\" ALT=\"初心者マーク\" title=\"初心者マーク\">";
+				$start .= " <IMG SRC=\"{$init->imgDir}start.gif\" width=\"16\" height=\"16\" ALT=\"初心者マーク\" title=\"初心者マーク\">";
 			}
 
 			$soccer = "";
 			if($island['soccer'] > 0) {
-				$soccer .= " <IMG SRC=\"soccer.gif\" width=\"16\" height=\"16\" ALT=\"総合ポイント：{$team}　{$shiai}戦{$kachi}勝{$make}敗{$hikiwake}分　攻撃力：{$kougeki}　守備力：{$bougyo}　得点：{$tokuten}　失点：{$shitten}\" title=\"総合ポイント：{$team}　{$shiai}戦{$kachi}勝{$make}敗{$hikiwake}分　攻撃力：{$kougeki}　守備力：{$bougyo}　得点：{$tokuten}　失点：{$shitten}\">";
+				$soccer .= " <IMG SRC=\"{$init->imgDir}soccer.gif\" width=\"16\" height=\"16\" ALT=\"総合ポイント：{$team}　{$shiai}戦{$kachi}勝{$make}敗{$hikiwake}分　攻撃力：{$kougeki}　守備力：{$bougyo}　得点：{$tokuten}　失点：{$shitten}\" title=\"総合ポイント：{$team}　{$shiai}戦{$kachi}勝{$make}敗{$hikiwake}分　攻撃力：{$kougeki}　守備力：{$bougyo}　得点：{$tokuten}　失点：{$shitten}\">";
 			}
 
 			// 電力消費量
@@ -587,7 +586,7 @@ END;
 		<th {$init->bgTitleCell}>{$init->tagTH_}得点{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}天気{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameWeather}{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}失業率{$init->_tagTH}</th>
@@ -620,7 +619,7 @@ END;
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}電力供給率{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}人工衛星{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameSatellite}{$init->_tagTH}</th>
 	</tr>
 	<tr>
 		<td {$init->bgInfoCell}>$farm</td>
@@ -967,15 +966,15 @@ END;
 
 		$sora = "";
 		if($tenki == 1) {
-			$sora .= "<IMG SRC=\"tenki1.gif\" ALT=\"晴れ\" title=\"晴れ\">";
+			$sora .= "<IMG SRC=\"{$init->imgDir}tenki1.gif\" ALT=\"晴れ\" title=\"晴れ\">";
 		} elseif($tenki == 2) {
-			$sora .= "<IMG SRC=\"tenki2.gif\" ALT=\"曇り\" title=\"曇り\">";
+			$sora .= "<IMG SRC=\"{$init->imgDir}tenki2.gif\" ALT=\"曇り\" title=\"曇り\">";
 		} elseif($tenki == 3) {
-			$sora .= "<IMG SRC=\"tenki3.gif\" ALT=\"雨\" title=\"雨\">";
+			$sora .= "<IMG SRC=\"{$init->imgDir}tenki3.gif\" ALT=\"雨\" title=\"雨\">";
 		} elseif($tenki == 4) {
-			$sora .= "<IMG SRC=\"tenki4.gif\" ALT=\"雷\" title=\"雷\">";
+			$sora .= "<IMG SRC=\"{$init->imgDir}tenki4.gif\" ALT=\"雷\" title=\"雷\">";
 		} else {
-			$sora .= "<IMG SRC=\"tenki5.gif\" ALT=\"雪\" title=\"雪\">";
+			$sora .= "<IMG SRC=\"{$init->imgDir}tenki5.gif\" ALT=\"雪\" title=\"雪\">";
 		}
 
 		$eiseis = "";
@@ -984,7 +983,7 @@ END;
 			if ( isset($eisei[$e]) ) {
 				if($eisei[$e] > 0) {
 					$eiseip .= $eisei[$e];
-					$eiseis .= "<img src=\"eisei{$e}.gif\" alt=\"{$init->EiseiName[$e]} {$eiseip}%\" title=\"{$init->EiseiName[$e]} {$eiseip}%\"> ({$eiseip}%)";
+					$eiseis .= "<img src=\"{$init->imgDir}eisei{$e}.gif\" alt=\"{$init->EiseiName[$e]} {$eiseip}%\" title=\"{$init->EiseiName[$e]} {$eiseip}%\"> ({$eiseip}%)";
 				} else {
 					$eiseis .= "";
 				}
@@ -995,7 +994,7 @@ END;
 		for($z = 0; $z < $init->ZinNumber; $z++) {
 			if ( isset($zin[$z]) ) {
 				if($zin[$z] > 0) {
-					$zins .= "<img src=\"zin{$z}.gif\" alt=\"{$init->ZinName[$z]}\" title=\"{$init->ZinName[$z]}\"> ";
+					$zins .= "<img src=\"{$init->imgDir}zin{$z}.gif\" alt=\"{$init->ZinName[$z]}\" title=\"{$init->ZinName[$z]}\"> ";
 				} else {
 					$zins .= "";
 				}
@@ -1007,9 +1006,9 @@ END;
 			if ( isset($item[$t]) ) {
 				if($item[$t] > 0) {
 					if($t == 20) {
-						$items .= "<img src=\"item{$t}.gif\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\" title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
+						$items .= "<img src=\"{$init->imgDir}item{$t}.gif\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\" title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
 					} else {
-						$items .= "<img src=\"item{$t}.gif\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
+						$items .= "<img src=\"{$init->imgDir}item{$t}.gif\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
 					}
 				} else {
 					$items .= "";
@@ -1018,7 +1017,7 @@ END;
 		}
 		$lots = "";
 		if($lot > 0) {
-			$lots .= " <IMG SRC=\"lot.gif\" ALT=\"{$lot}枚\" title=\"{$lot}枚\">";
+			$lots .= " <IMG SRC=\"{$init->imgDir}lot.gif\" ALT=\"{$lot}枚\" title=\"{$lot}枚\">";
 		}
 
 		if($mode == 1) {
@@ -1078,13 +1077,13 @@ END;
 			<td {$init->bgInfoCell}>$ene</td>
 		</tr>
 		<tr>
-			<th {$init->bgTitleCell}>{$init->tagTH_}天気{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameWeather}{$init->_tagTH}</th>
 			<td class="TenkiCell">$sora</td>
-			<th {$init->bgTitleCell}>{$init->tagTH_}軍事技術{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMilitaryTechnology}{$init->_tagTH}</th>
 			<td {$init->bgInfoCell}>{$arm}</td>
-			<th {$init->bgTitleCell}>{$init->tagTH_}怪獣退治数{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMonsterExterminationNumber}{$init->_tagTH}</th>
 			<td {$init->bgInfoCell}>$taiji</td>
-			<th {$init->bgTitleCell}>{$init->tagTH_}人工衛星{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameSatellite}{$init->_tagTH}</th>
 			<td class="ItemCell" colspan="4">　$eiseis</td>
 		</tr>
 		<tr>
@@ -1150,14 +1149,14 @@ END;
 
 		for($y = 0; $y < $init->islandSize; $y++) {
 			if($y % 2 == 0) {
-				echo "<img src=\"land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
+				echo "<img src=\"{$init->imgDir}land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
 			}
 			for($x = 0; $x < $init->islandSize; $x++) {
 				//$hako->landString($land[$x][$y], $landValue[$x][$y], $x, $y, $mode, $comStr[$x][$y]);
 				$hako->landString($land[$x][$y], $landValue[$x][$y], $x, $y, $mode, $comStr);
 			}
 			if($y % 2 == 1) {
-				echo "<img src=\"land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
+				echo "<img src=\"{$init->imgDir}land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
 			}
 			echo "<br>";
 		}
