@@ -1,4 +1,5 @@
 # hakoniwa
+
 ## 概要
 [箱庭諸島 S.E ver23_r09](http://hakoniwa.symphonic-net.com/) の改造版
 
@@ -17,9 +18,9 @@
 ## 変更点
 * バグフィックス
 * その他 最適化
+ * Chrome, Firefox でも動くようにJavaScriptを修正
 
-* jcode.phps を廃止
- * マルチバイト対応のPHPの関数を利用する
+* jcode.phps を廃止 → マルチバイト対応のPHPの関数を利用する
 
 * コマンドの追加
  * 「浅瀬埋め立て自動入力」

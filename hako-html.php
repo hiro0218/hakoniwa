@@ -34,8 +34,7 @@ class HTML {
 	<link rel="stylesheet" type="text/css" href="{$init->cssDir}/{$css}">
 	<link rel="shortcut icon" href="{$init->baseDir}/favicon.ico">
 	<title>{$init->title}</title>
-	<script type="text/javascript" src="{$init->baseDir}/js/hako.js"></script>
-	<script type="text/javascript" src="{$init->baseDir}/js/auto-filter.js"></script>
+	<script type="text/javascript" src="{$init->baseDir}/js/hakojima.js"></script>
 </head>
 <body>
 
@@ -1286,9 +1285,8 @@ END;
 <select name="COMMAND">
 END;
 		// コマンド
-		//var_dump($init->comName,$init->comList);
-
-		for($i = 0; $i < count($init->comList); $i++) {
+		$comCnt = count($init->comList);
+		for($i = 0;  $i < $comCnt; $i++) {
 			$kind = $init->comList[$i];
 			$cost = $init->comCost[$kind];
 			$s = '';
@@ -1394,7 +1392,8 @@ END;
 <td {$init->bgCommandCell}>
 END;
 		$command = $island['command'];
-		for($i = 0; $i < $init->commandMax; $i++) {
+		$commandMax = $init->commandMax;
+		for($i = 0; $i < $commandMax; $i++) {
 			$this->tempCommand($i, $command[$i], $hako);
 		}
 		echo <<<END
@@ -1723,7 +1722,8 @@ class HtmlJS extends HtmlMap {
 		// コマンドセット
 		$set_com = "";
 		$com_max = "";
-		for($i = 0; $i < $init->commandMax; $i++) {
+		$commandMax = $init->commandMax;
+		for($i = 0; $i < $commandMax; $i++) {
 			// 各要素の取り出し
 			$command = $island['command'][$i];
 			$s_kind = $command['kind'];
@@ -1733,7 +1733,7 @@ class HtmlJS extends HtmlMap {
 			$s_arg = $command['arg'];
 
 			// コマンド登録
-			if($i == $init->commandMax - 1){
+			if($i == $commandMax - 1){
 				$set_com .= "[$s_kind, $s_x, $s_y, $s_arg, $s_target]\n";
 				$com_max .= "0";
 			} else {

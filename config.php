@@ -32,190 +32,190 @@ class Init {
 	// プログラムファイルに関する設定
 	//---------------------------------------------------
 	// プログラムを置くディレクトリ
-	var $baseDir = "http://localhost/hakoniwa";
+	public $baseDir = "http://localhost/hakoniwa";
 
 	// 画像を置くディレクトリ
-	var $imgDir  = "http://localhost/hakoniwa/img";
+	public $imgDir  = "http://localhost/hakoniwa/img";
 
 	// CSSファイルを置くディレクトリ
-	var $cssDir  = "http://localhost/hakoniwa/css";
+	public $cssDir  = "http://localhost/hakoniwa/css";
 	// CSSリスト
-	var $cssList = array('SkyBlue.css');
+	public $cssList = array('SkyBlue.css');
 
 	// データディレクトリの名前（必ず変更してください）
-	var $dirName = "data";
+	public $dirName = "data";
 	// ディレクトリ作成時のパーミション
-	var $dirMode = 0777;
+	public $dirMode = 0777;
 
 	//パスワードの暗号化 true: 暗号化、false: 暗号化しない
-	var $cryptOn      = true;
+	public $cryptOn      = true;
 	// パスワード・ファイル
-	var $passwordFile = "password.php";
+	public $passwordFile = "password.php";
 
 	// アクセスログファイルの名前
-	var $logname = "ip.csv";
+	public $logname = "ip.csv";
 	// アクセスログ最大記録レコード数
-	var $axesmax = 300;
+	public $axesmax = 300;
 
 	//---------------------------------------------------
 	// ゲーム全般に関する設定
 	//---------------------------------------------------
 	// ゲームタイトル
-	var $title        = "hako";
-	var $adminName    = "hiro";
-	var $urlTopPage   = "http://localhost/";
-	var $twitterID    = "hiro0218";
+	public $title        = "hako";
+	public $adminName    = "hiro";
+	public $urlTopPage   = "http://localhost/";
+	public $twitterID    = "hiro0218";
 
 	// 1ターンが何秒か
-	var $unitTime     = 10800; // 3時間（これ以上短くすることはオススメ出来ません）
+	public $unitTime     = 10800; // 3時間（これ以上短くすることはオススメ出来ません）
 
 	// ターン更新時の連続更新を許可するか？(0:しない、1:する)
-	var $contUpdate   = 1; // 1にすると負荷対策になります
+	public $contUpdate   = 1; // 1にすると負荷対策になります
 
 	// 島の最大数（最大250島まで）
-	var $maxIsland    = 30; // これ以上増やすとバグが生じやすくなります
+	public $maxIsland    = 30; // これ以上増やすとバグが生じやすくなります
 
 	// 島の大きさ
-	var $islandSize   = 20; // 馬鹿みたいに広くしてデータ壊れても知りません
+	public $islandSize   = 20; // 馬鹿みたいに広くしてデータ壊れても知りません
 
 	// 初期資金
-	var $initialMoney = 1000;
+	public $initialMoney = 1000;
 	// 初期食料
-	var $initialFood  = 100;
+	public $initialFood  = 100;
 	// 初期面積（設定しない場合は、0）
-	var $initialSize  = 0;
+	public $initialSize  = 0;
 	// 初期島データ（使用しない場合は""、使用する場合は"island.txt"として島データファイルを作ってください）
-	var $initialLand  = "";
+	public $initialLand  = "";
 
 	// 資金最大値
-	var $maxMoney     = 99999; // バランス的にこのくらいが妥当かと
+	public $maxMoney     = 99999; // バランス的にこのくらいが妥当かと
 	// 食料最大値
-	var $maxFood      = 99999;
+	public $maxFood      = 99999;
 	// 木材最大値
-	var $maxWood      = 10000;
+	public $maxWood      = 10000;
 
 	// 新規島の登録モード (0:通常、1:管理人)
-	var $registMode   = 0;
+	public $registMode   = 0;
 	// 管理人モード
-	var $adminMode;
+	public $adminMode;
 
 	// 負荷計測するか？(0:しない、1:する)
-	var $performance  = 1;
-	var $CPU_start;
+	public $performance  = 1;
+	public $CPU_start;
 
 	//---------------------------------------------------
 	// バックアップに関する設定
 	//---------------------------------------------------
 	// セーフモードなら1をそうでないなら0を設定してください
-	var $safemode    = 1;
+	public $safemode    = 1;
 	// バックアップを何ターンおきに取るか
-	var $backupTurn  = 6;
+	public $backupTurn  = 6;
 	// バックアップを何回分残すか
-	var $backupTimes = 5;
+	public $backupTimes = 5;
 
 	//---------------------------------------------------
 	// 表示に関する設定
 	//---------------------------------------------------
 	// TOPページに一度に表示する島の数(0なら全島表示)
-	var $islandListRange = 10;//10;
+	public $islandListRange = 10;//10;
 
 	// 資金表示モード
-	var $moneyMode  = true; // true: 100の位で四捨五入, false: そのまま
+	public $moneyMode  = true; // true: 100の位で四捨五入, false: そのまま
 	// トップページに表示するログのターン数
-	var $logTopTurn = 4;
+	public $logTopTurn = 4;
 	// ログファイル保持ターン数
-	var $logMax     = 8;
+	public $logMax     = 8;
 	// 整地ログを１本化するか？(0:しない 1:座標あり 2:座標なし)
-	var $logOmit    = 2;
+	public $logOmit    = 2;
 
 	// 発見ログ保持行数
-	var $historyMax = 10;
+	public $historyMax = 10;
 
 	// お知らせ
-	var $infoFile   = "info.txt";
+	public $infoFile   = "info.txt";
 	// 記事表示部の最大の高さ。
-	var $divHeight  = 150;
+	public $divHeight  = 150;
 
 	// 放棄コマンド自動入力ターン数
-	var $giveupTurn = 30;
+	public $giveupTurn = 30;
 
 	// コマンド入力限界数
-	var $commandMax = 30;
+	public $commandMax = 30;
 
 	//---------------------------------------------------
 	// 名称の定義
 	//---------------------------------------------------
-	var $nameRank                       = "順位";
-	var $namePopulation                 = "人口";
-	var $nameArea                       = "面積";
-	var $nameFunds                      = "資金";
-	var $nameFood                       = "食料";
-	var $nameUnemploymentRate           = "失業率";
-	var $nameFarmSize                   = "農場規模";
-	var $nameFactoryScale               = "工場規模";
-	var $nameCommercialScale            = "商業規模";
-	var $nameMineScale                  = "採掘場規模";
-	var $namePowerPlantScale            = "発電所規模";
-	var $namePowerSupplyRate            = "電力供給率";
-	var $nameWeather                    = "天気";
-	var $nameMilitaryTechnology         = "軍事技術";
-	var $nameMonsterExterminationNumber = "怪獣退治数";
-	var $nameSatellite                  = "人工衛星";
-	var $nameGin                        = "ジン";
-	var $nameItems                      = "アイテム";
+	public $nameRank                       = "順位";
+	public $namePopulation                 = "人口";
+	public $nameArea                       = "面積";
+	public $nameFunds                      = "資金";
+	public $nameFood                       = "食料";
+	public $nameUnemploymentRate           = "失業率";
+	public $nameFarmSize                   = "農場規模";
+	public $nameFactoryScale               = "工場規模";
+	public $nameCommercialScale            = "商業規模";
+	public $nameMineScale                  = "採掘場規模";
+	public $namePowerPlantScale            = "発電所規模";
+	public $namePowerSupplyRate            = "電力供給率";
+	public $nameWeather                    = "天気";
+	public $nameMilitaryTechnology         = "軍事技術";
+	public $nameMonsterExterminationNumber = "怪獣退治数";
+	public $nameSatellite                  = "人工衛星";
+	public $nameGin                        = "ジン";
+	public $nameItems                      = "アイテム";
 
 
 	//---------------------------------------------------
 	// 各種単位の設定
 	//---------------------------------------------------
 	// 人口の単位
-	var $unitPop     = "00人";
+	public $unitPop     = "00人";
 	// 食料の単位
-	var $unitFood    = "00トン";
+	public $unitFood    = "00トン";
 	// 広さの単位
-	var $unitArea    = "00万坪";
+	public $unitArea    = "00万坪";
 	// 木の数の単位
-	var $unitTree    = "00本";
+	public $unitTree    = "00本";
 	// お金の単位
-	var $unitMoney   = "億円";
+	public $unitMoney   = "億円";
 	// 怪獣の単位
-	var $unitMonster = "匹";
+	public $unitMonster = "匹";
 
 	// 木の単位当たりの売値
-	var $treeValue   = 10;
+	public $treeValue   = 10;
 
 	// 名前変更のコスト
-	var $costChangeName = 500;
+	public $costChangeName = 500;
 
 	// 人口1単位あたりの食料消費料
-	var $eatenFood   = 0.2;
+	public $eatenFood   = 0.2;
 
 	// 油田の収入
-	var $oilMoney    = 1000;
+	public $oilMoney    = 1000;
 	// 油田の枯渇確率
-	var $oilRatio    = 40;
+	public $oilRatio    = 40;
 
 	// 何ターン毎に宝くじの抽選が行われるか？
-	var $lottery     = 50;
+	public $lottery     = 50;
 	// 当選金
-	var $lotmoney    = 30000;
+	public $lotmoney    = 30000;
 
 	//---------------------------------------------------
 	// 同盟に関する設定
 	//---------------------------------------------------
-	var $comAlly;
+	public $comAlly;
 
 	// 同盟作成を許可するか？(0:しない、1:する、2:管理者のみ)
-	var $allyUse     = 1;
+	public $allyUse     = 1;
 
 	// ひとつの同盟にしか加盟できないようにするか？(0:しない、1:する)
-	var $allyJoinOne = 1;
+	public $allyJoinOne = 1;
 
 	// 同盟データの管理ファイル
-	var $allyData    = 'ally.dat';
+	public $allyData    = 'ally.dat';
 
 	// 同盟のマーク
-	var $allyMark = array(
+	public $allyMark = array(
 		"🐶","🐵","🐦",
 		// 'Б','Г','Д','Ж','Й',
 		// 'Ф','Ц','Ш','Э','Ю',
@@ -229,74 +229,74 @@ class Init {
 	);
 
 	// 入力文字数の制限 (全角文字数で指定) 実際は、<input> 内の MAXLENGTH を直に修正してください。 (;^_^A
-	var $lengthAllyName    = 15;   // 同盟の名前
-	var $lengthAllyComment = 40;   // 「各同盟の状況」欄に表示される盟主のコメント
-	var $lengthAllyTitle   = 30;   // 「同盟の情報」欄の上に表示される盟主メッセージのタイトル
-	var $lengthAllyMessage = 1500; // 「同盟の情報」欄の上に表示される盟主メッセージ
+	public $lengthAllyName    = 15;   // 同盟の名前
+	public $lengthAllyComment = 40;   // 「各同盟の状況」欄に表示される盟主のコメント
+	public $lengthAllyTitle   = 30;   // 「同盟の情報」欄の上に表示される盟主メッセージのタイトル
+	public $lengthAllyMessage = 1500; // 「同盟の情報」欄の上に表示される盟主メッセージ
 
 	// スタイルシートを改変していないので、ここに記述
-	var $tagMoney_  = '<span style="color:#999933; font-weight:bold;">';
-	var $_tagMoney  = '</span>';
+	public $tagMoney_  = '<span style="color:#999933; font-weight:bold;">';
+	public $_tagMoney  = '</span>';
 
 	// コメントの自動リンク (0:しない 1:する)
-	var $autoLink   = 1;
+	public $autoLink   = 1;
 
 	// 以下は、表示関連で使用しているだけで、実際の機能を有していません、さらなる改造で実現可能です。
 
 	// 加盟・脱退をコマンドで行うようにする？(0:しない、1:する)
-	var $allyJoinComUse = 0;
+	public $allyJoinComUse = 0;
 
 	// 同盟に加盟することで通常災害発生確率が減少？(0:しない)
 	// 対象となる災害：地震、津波、台風、隕石、巨大隕石、噴火
-	var $allyDisDown  = 0;    // 設定する場合、通常時に対する倍率を設定。(例)0.5なら半減。2なら倍増(^^;;;
-	var $costMakeAlly = 1000; // 同盟の結成・変更にかかる費用
-	var $costKeepAlly = 500;  // 同盟の維持費(加盟している島で均等に負担)
+	public $allyDisDown  = 0;    // 設定する場合、通常時に対する倍率を設定。(例)0.5なら半減。2なら倍増(^^;;;
+	public $costMakeAlly = 1000; // 同盟の結成・変更にかかる費用
+	public $costKeepAlly = 500;  // 同盟の維持費(加盟している島で均等に負担)
 
 	//---------------------------------------------------
 	// 軍事に関する設定
 	//---------------------------------------------------
 	// ミサイル発射禁止ターン
-	var $noMissile     = 20; // これより前には実行が許可されない
+	public $noMissile     = 20; // これより前には実行が許可されない
 	// 援助禁止ターン
-	var $noAssist      = 50; // これより前には実行が許可されない
+	public $noAssist      = 50; // これより前には実行が許可されない
 
 	// 複数地点へのミサイル発射を可能にするか？1:Yes 0:No
-	var $multiMissiles = 1;
+	public $multiMissiles = 1;
 
 	// ミサイル基地
 	// 経験値の最大値
-	var $maxExpPoint   = 200; // ただし、最大でも255まで
+	public $maxExpPoint   = 200; // ただし、最大でも255まで
 
 	// レベルの最大値
-	var $maxBaseLevel  = 5; // ミサイル基地
-	var $maxSBaseLevel = 3; // 海底基地
+	public $maxBaseLevel  = 5; // ミサイル基地
+	public $maxSBaseLevel = 3; // 海底基地
 
 	// 経験値がいくつでレベルアップか
-	var $baseLevelUp   = array(20, 60, 120, 200); // ミサイル基地
-	var $sBaseLevelUp  = array(50, 200); // 海底基地
+	public $baseLevelUp   = array(20, 60, 120, 200); // ミサイル基地
+	public $sBaseLevelUp  = array(50, 200); // 海底基地
 
 	// 防衛施設の最大耐久力
-	var $dBaseHP       = 5;
+	public $dBaseHP       = 5;
 	// 海底防衛施設の最大耐久力
-	var $sdBaseHP      = 3;
+	public $sdBaseHP      = 3;
 	// 防衛施設が怪獣に踏まれた時自爆するなら1、しないなら0
-	var $dBaseAuto     = 1;
+	public $dBaseAuto     = 1;
 
 	// 目標の島 所有の島が選択された状態でリストを生成 1、順位がTOPの島なら0
 	// ミサイルの誤射が多い場合などに使用すると良いかもしれない
-	var $targetIsland  = 1;
+	public $targetIsland  = 1;
 
 	//---------------------------------------------------
 	// 船舶に関する設定
 	//---------------------------------------------------
 	// 船の最大所有数
-	var $shipMax  = 5;
+	public $shipMax  = 5;
 
 	// 船舶の種類（造船対象の船舶）
-	var $shipKind = 4; // 最大15
+	public $shipKind = 4; // 最大15
 
 	// 船舶の名前（10以降は災害船舶と定義）
-	var $shipName = array (
+	public $shipName = array (
 		'輸送船',         # 0
 		'漁船',           # 1
 		'海底探索船',     # 2
@@ -315,74 +315,74 @@ class Init {
 		);
 
 	// 船舶維持費
-	var $shipCost = array(100, 200, 300, 500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	public $shipCost = array(100, 200, 300, 500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 	// 船舶体力（最大15）
-	var $shipHP   = array(1, 2, 3, 10, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 1);
+	public $shipHP   = array(1, 2, 3, 10, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 1);
 
 	// 船舶経験値の最大値（最大でも255まで）
-	var $shipEX   = 100;
+	public $shipEX   = 100;
 
 	// レベルの最大値
-	var $shipLv   = 5;
+	public $shipLv   = 5;
 
 	// 経験値がいくつでレベルアップか
-	var $shipLevelUp   = array(10, 30, 60, 100);
+	public $shipLevelUp   = array(10, 30, 60, 100);
 
 	// 船舶設定値（確率：設定値 x 0.1%）
-	var $shipIncom          =  200; // 輸送船収入
-	var $shipFood           =  100; // 漁船の食料収入
-	var $shipIntercept      =  200; // 戦艦がミサイルを迎撃する確率
-	var $disRunAground1     =   10; // 座礁確率  座礁処理に入るための確率
-	var $disRunAground2     =   10; // 座礁確率  船 個別の判定
-	var $disZorasu          =   30; // ぞらす 出現確率
-	var $disViking          =   10; // 海賊船 出現確率 船１つあたり（たくさん船を持てばその分確率UP）
-	var $disVikingAway      =   30; // 海賊船 去る確率
-	var $disVikingRob       =   50; // 海賊船強奪
-	var $disVikingAttack    =  500; // 海賊が攻撃してくる確率
-	var $disVikingMinAtc    =    1; // 海賊船が与える最低ダメージ
-	var $disVikingMaxAtc    =    3; // 海賊船が与える最大ダメージ
+	public $shipIncom          =  200; // 輸送船収入
+	public $shipFood           =  100; // 漁船の食料収入
+	public $shipIntercept      =  200; // 戦艦がミサイルを迎撃する確率
+	public $disRunAground1     =   10; // 座礁確率  座礁処理に入るための確率
+	public $disRunAground2     =   10; // 座礁確率  船 個別の判定
+	public $disZorasu          =   30; // ぞらす 出現確率
+	public $disViking          =   10; // 海賊船 出現確率 船１つあたり（たくさん船を持てばその分確率UP）
+	public $disVikingAway      =   30; // 海賊船 去る確率
+	public $disVikingRob       =   50; // 海賊船強奪
+	public $disVikingAttack    =  500; // 海賊が攻撃してくる確率
+	public $disVikingMinAtc    =    1; // 海賊船が与える最低ダメージ
+	public $disVikingMaxAtc    =    3; // 海賊船が与える最大ダメージ
 
 	//---------------------------------------------------
 	// 災害に関する設定（確率：設定値 x 0.1%）
 	//---------------------------------------------------
-	var $disEarthquake =   5;  // 地震
-	var $disTsunami    =  10;  // 津波
-	var $disTyphoon    =  20;  // 台風
-	var $disMeteo      =  15;  // 隕石
-	var $disHugeMeteo  =   3;  // 巨大隕石
-	var $disEruption   =   5;  // 噴火
-	var $disFire       =  10;  // 火災
-	var $disMaizo      =  30;  // 埋蔵金
-	var $disSto        =  10;  // ストライキ
-	var $disTenki      =  30;  // 天気
-	var $disTrain      = 300;  // 電車
-	var $disPoo        =  30;  // 失業暴動
-	var $disPooPop     = 500;  // 暴動が発生する最低人口（50000人）
+	public $disEarthquake =   5;  // 地震
+	public $disTsunami    =  10;  // 津波
+	public $disTyphoon    =  20;  // 台風
+	public $disMeteo      =  15;  // 隕石
+	public $disHugeMeteo  =   3;  // 巨大隕石
+	public $disEruption   =   5;  // 噴火
+	public $disFire       =  10;  // 火災
+	public $disMaizo      =  30;  // 埋蔵金
+	public $disSto        =  10;  // ストライキ
+	public $disTenki      =  30;  // 天気
+	public $disTrain      = 300;  // 電車
+	public $disPoo        =  30;  // 失業暴動
+	public $disPooPop     = 500;  // 暴動が発生する最低人口（50000人）
 
 	// 地盤沈下
-	var $disFallBorder = 100; // 安全限界の広さ(Hex数)
-	var $disFalldown   = 30;  // その広さを超えた場合の確率
+	public $disFallBorder = 100; // 安全限界の広さ(Hex数)
+	public $disFalldown   = 30;  // その広さを超えた場合の確率
 
 	//---------------------------------------------------
 	// 怪獣に関する設定
 	//---------------------------------------------------
-	var $disMonsBorder1 = 2000;  // 人口基準1(怪獣レベル1)
-	var $disMonsBorder2 = 4000;  // 人口基準2(怪獣レベル2)
-	var $disMonsBorder3 = 6000;  // 人口基準3(怪獣レベル3)
-	var $disMonsBorder4 = 8000;  // 人口基準4(怪獣レベル4)
-	var $disMonsBorder5 = 10000; // 人口基準5(怪獣レベル5)
-	var $disMonster     = 2.5;   // 単位面積あたりの出現率(0.01%単位)
+	public $disMonsBorder1 = 2000;  // 人口基準1(怪獣レベル1)
+	public $disMonsBorder2 = 4000;  // 人口基準2(怪獣レベル2)
+	public $disMonsBorder3 = 6000;  // 人口基準3(怪獣レベル3)
+	public $disMonsBorder4 = 8000;  // 人口基準4(怪獣レベル4)
+	public $disMonsBorder5 = 10000; // 人口基準5(怪獣レベル5)
+	public $disMonster     = 2.5;   // 単位面積あたりの出現率(0.01%単位)
 
-	var $monsterLevel1  = 4;     // サンジラまで
-	var $monsterLevel2  = 9;     // いのらゴーストまで
-	var $monsterLevel3  = 15;    // かおくと（♀）まで
-	var $monsterLevel4  = 23;    // 迎撃いのらまで
-	var $monsterLevel5  = 26;    // インベーダーまで
+	public $monsterLevel1  = 4;     // サンジラまで
+	public $monsterLevel2  = 9;     // いのらゴーストまで
+	public $monsterLevel3  = 15;    // かおくと（♀）まで
+	public $monsterLevel4  = 23;    // 迎撃いのらまで
+	public $monsterLevel5  = 26;    // インベーダーまで
 
-	var $monsterNumber  = 27;    // 怪獣の種類
+	public $monsterNumber  = 27;    // 怪獣の種類
 	// 怪獣の名前
-	var $monsterName = array (
+	public $monsterName = array (
 		'メカいのら',         # 0
 		'いのら（♂）',       # 1
 		'いのら（♀）',       # 2
@@ -412,14 +412,14 @@ class Init {
 		'インベーダー',       # 26
 	);
 	// 怪獣の画像(硬化中)
-	var $monsterImage   = array ('', '', '', 'kouka.gif', 'kouka.gif', '', '', '', '', '', 'kouka.gif', 'kouka.gif', '', 'kouka1.gif', '', 'kouka3.gif', 'kouka3.gif', 'kouka2.gif', '', '', '', '', '', '', '', '');
+	public $monsterImage   = array ('', '', '', 'kouka.gif', 'kouka.gif', '', '', '', '', '', 'kouka.gif', 'kouka.gif', '', 'kouka1.gif', '', 'kouka3.gif', 'kouka3.gif', 'kouka2.gif', '', '', '', '', '', '', '', '');
 
 	// 最低体力、体力の幅、特殊能力、経験値、死体の値段
-	var $monsterBHP     = array(10, 1, 1, 1, 1, 2, 3, 2, 2, 2, 3, 3, 9, 5, 4, 4, 3, 5, 9, 4, 5, 6, 6, 7, 8, 5, 99);
-	var $monsterDHP     = array( 0, 2, 1, 2, 1, 2, 2, 2, 1, 1, 2, 2, 0, 1, 2, 1, 2, 2, 0, 3, 2, 2, 2, 2, 1, 0, 0);
-	var $monsterSpecial = array(0x0, 0x0, 0x0, 0x4, 0x4, 0x1, 0x1, 0x120, 0x20, 0x2, 0x11, 0x10, 0x40, 0x4, 0x200, 0x20000, 0x410, 0x5, 0x240, 0x1020, 0x2020, 0x4400, 0x10100, 0x101, 0x21, 0x2121, 0x42);
-	var $monsterExp     = array(20, 6, 5, 7, 6, 9, 8, 17, 12, 10, 10, 9, 30, 13, 15, 20, 25, 22, 40, 45, 43, 50, 50, 48, 60, 100, 200);
-	var $monsterValue   = array(1000, 300, 200, 400, 300, 600, 500, 900, 700, 600, 800, 700, 2000, 900, 1000, 500, 1800, 1200, 2500, 3000, 2700, 5000, 4000, 3500, 7000, 10000, 50000);
+	public $monsterBHP     = array(10, 1, 1, 1, 1, 2, 3, 2, 2, 2, 3, 3, 9, 5, 4, 4, 3, 5, 9, 4, 5, 6, 6, 7, 8, 5, 99);
+	public $monsterDHP     = array( 0, 2, 1, 2, 1, 2, 2, 2, 1, 1, 2, 2, 0, 1, 2, 1, 2, 2, 0, 3, 2, 2, 2, 2, 1, 0, 0);
+	public $monsterSpecial = array(0x0, 0x0, 0x0, 0x4, 0x4, 0x1, 0x1, 0x120, 0x20, 0x2, 0x11, 0x10, 0x40, 0x4, 0x200, 0x20000, 0x410, 0x5, 0x240, 0x1020, 0x2020, 0x4400, 0x10100, 0x101, 0x21, 0x2121, 0x42);
+	public $monsterExp     = array(20, 6, 5, 7, 6, 9, 8, 17, 12, 10, 10, 9, 30, 13, 15, 20, 25, 22, 40, 45, 43, 50, 50, 48, 60, 100, 200);
+	public $monsterValue   = array(1000, 300, 200, 400, 300, 600, 500, 900, 700, 600, 800, 700, 2000, 900, 1000, 500, 1800, 1200, 2500, 3000, 2700, 5000, 4000, 3500, 7000, 10000, 50000);
 	// 特殊能力の内容は、(各能力は 1bit に割り当てる)
 	// 0x0 特になし
 	// 0x1 足が速い(最大2歩あるく)
@@ -441,9 +441,9 @@ class Init {
 	// 賞に関する設定
 	//---------------------------------------------------
 	// ターン杯を何ターン毎に出すか
-	var $turnPrizeUnit = 100;
+	public $turnPrizeUnit = 100;
 	// 賞の名前
-	var $prizeName = array (
+	public $prizeName = array (
 		'ターン杯', '繁栄賞', '超繁栄賞', '究極繁栄賞', '平和賞', '超平和賞', '究極平和賞', '災難賞', '超災難賞', '究極災難賞', '素人怪獣討伐賞', '怪獣討伐賞', '超怪獣討伐賞', '究極怪獣討伐賞', '怪獣討伐王賞',
 	);
 
@@ -451,9 +451,9 @@ class Init {
 	// 記念碑に関する設定
 	//---------------------------------------------------
 	// 何種類あるか
-	var $monumentNumber = 54;
+	public $monumentNumber = 54;
 	// 名前
-	var $monumentName = array (
+	public $monumentName = array (
 		'戦の碑', '農の碑', '鉱の碑', '匠の碑', '平和の碑', 'キャッスル城', 'モノリス', '聖樹', '戦いの碑', 'ラスカル', '棺桶', 'ヨーゼフ', 'くま', 'くま', 'くま', '貯金箱', 'モアイ', '地球儀', 'バッグ', 'ごみ箱', 'ダークいのら像', 'テトラ像', 'はねはむ像', 'ロケット', 'ピラミッド', 'アサガオ', 'チューリップ', 'チューリップ', '水仙', 'サボテン', '仙人掌', '魔方陣', '神殿', '神社', '闇石', '地石', '氷石', '風石', '炎石', '光石', '卵', '卵', '卵', '卵', '古代遺跡', 'サンタクロース', '壊れた侵略者', '憩いの公園', '桜', '向日葵', '銀杏', 'クリスマスツリー2001', '雪うさぎ', '幸福の女神像'
 	);
 
@@ -461,9 +461,9 @@ class Init {
 	// 人工衛星に関する設定
 	//---------------------------------------------------
 	// 何種類あるか
-	var $EiseiNumber = 6;
+	public $EiseiNumber = 6;
 	// 名前
-	var $EiseiName = array (
+	public $EiseiName = array (
 		'気象衛星', '観測衛星', '迎撃衛星', '軍事衛星', '防衛衛星', 'イレギュラー'
 	);
 
@@ -471,9 +471,9 @@ class Init {
 	// ジンに関する設定
 	//---------------------------------------------------
 	// 何種類あるか
-	var $ZinNumber = 7;
+	public $ZinNumber = 7;
 	// 名前
-	var $ZinName = array (
+	public $ZinName = array (
 		'ノーム', 'ウィスプ', 'シェイド', 'ドリアード', 'ルナ', 'ジン', 'サラマンダー'
 	);
 
@@ -481,9 +481,9 @@ class Init {
 	// アイテムに関する設定
 	//---------------------------------------------------
 	// 何種類あるか
-	var $ItemNumber = 21;
+	public $ItemNumber = 21;
 	// 名前
-	var $ItemName = array (
+	public $ItemName = array (
 		'地図１', 'ノコギリ', '禁断の書', 'マスク', 'ポチョムキン', '地図２', '科学書', '物理書', '第三の脳', 'マスターソード', '植物図鑑', 'ルーペ', '苗木', '数学書', '技術書', 'マナ・クリスタル', '農作物図鑑', '経済書', 'リング', 'レッドダイヤ', '木材'
 	);
 
@@ -491,91 +491,91 @@ class Init {
 		外見関係
 	********************/
 	// 大きい文字
-	var $tagBig_       = '<span class="big">';
-	var $_tagBig       = '</span>';
+	public $tagBig_       = '<span class="big">';
+	public $_tagBig       = '</span>';
 	// 島の名前など
-	var $tagName_      = '<span class="islName">';
-	var $_tagName      = '</span>';
+	public $tagName_      = '<span class="islName">';
+	public $_tagName      = '</span>';
 	// 薄くなった島の名前
-	var $tagName2_     = '<span class="islName2">';
-	var $_tagName2     = '</span>';
+	public $tagName2_     = '<span class="islName2">';
+	public $_tagName2     = '</span>';
 	// 順位の番号など
-	var $tagNumber_    = '<span class="number">';
-	var $_tagNumber    = '</span>';
+	public $tagNumber_    = '<span class="number">';
+	public $_tagNumber    = '</span>';
 	// 順位表における見だし
-	var $tagTH_        = '<span class="head">';
-	var $_tagTH        = '</span>';
+	public $tagTH_        = '<span class="head">';
+	public $_tagTH        = '</span>';
 	// 開発計画の名前
-	var $tagComName_   = '<span class="command">';
-	var $_tagComName   = '</span>';
+	public $tagComName_   = '<span class="command">';
+	public $_tagComName   = '</span>';
 	// 災害
-	var $tagDisaster_  = '<span class="disaster">';
-	var $_tagDisaster  = '</span>';
+	public $tagDisaster_  = '<span class="disaster">';
+	public $_tagDisaster  = '</span>';
 	// 順位表、セルの属性
-	var $bgTitleCell   = 'class="TitleCell"';   // 順位表見出し
-	var $bgNumberCell  = 'class="NumberCell"';  // 順位表順位
-	var $bgNameCell    = 'class="NameCell"';    // 順位表島の名前
-	var $bgInfoCell    = 'class="InfoCell"';    // 順位表島の情報
-	var $bgMarkCell    = 'class="MarkCell"';    // 同盟のマーク
-	var $bgCommentCell = 'class="CommentCell"'; // 順位表コメント欄
-	var $bgInputCell   = 'class="InputCell"';   // 開発計画フォーム
-	var $bgMapCell     = 'class="MapCell"';     // 開発計画地図
-	var $bgCommandCell = 'class="CommandCell"'; // 開発計画入力済み計画
+	public $bgTitleCell   = 'class="TitleCell"';   // 順位表見出し
+	public $bgNumberCell  = 'class="NumberCell"';  // 順位表順位
+	public $bgNameCell    = 'class="NameCell"';    // 順位表島の名前
+	public $bgInfoCell    = 'class="InfoCell"';    // 順位表島の情報
+	public $bgMarkCell    = 'class="MarkCell"';    // 同盟のマーク
+	public $bgCommentCell = 'class="CommentCell"'; // 順位表コメント欄
+	public $bgInputCell   = 'class="InputCell"';   // 開発計画フォーム
+	public $bgMapCell     = 'class="MapCell"';     // 開発計画地図
+	public $bgCommandCell = 'class="CommandCell"'; // 開発計画入力済み計画
 
 	/********************
 		地形番号
 	********************/
-	var $landSea       =  0; // 海
-	var $landWaste     =  1; // 荒地
-	var $landPlains    =  2; // 平地
-	var $landTown      =  3; // 町系
-	var $landForest    =  4; // 森
-	var $landFarm      =  5; // 農場
-	var $landFactory   =  6; // 工場
-	var $landBase      =  7; // ミサイル基地
-	var $landDefence   =  8; // 防衛施設
-	var $landMountain  =  9; // 山
-	var $landMonster   = 10; // 怪獣
-	var $landSbase     = 11; // 海底基地
-	var $landOil       = 12; // 海底油田
-	var $landMonument  = 13; // 記念碑
-	var $landHaribote  = 14; // ハリボテ
-	var $landPark      = 15; // 遊園地
-	var $landFusya     = 16; // 風車
-	var $landSyoubou   = 17; // 消防署
-	var $landNursery   = 18; // 養殖場
-	var $landSeaSide   = 19; // 海岸(砂浜)
-	var $landSeaResort = 20; // 海の家
-	var $landCommerce  = 21; // 商業ビル
-	var $landPort      = 22; // 港
-	var $landSeaCity   = 23; // 海底都市
-	var $landSdefence  = 24; // 海底防衛施設
-	var $landSfarm     = 25; // 海底農場
-	var $landSsyoubou  = 26; // 海底消防署
-	var $landHatuden   = 27; // 発電所
-	var $landBank      = 28; // 銀行
-	var $landPoll      = 29; // 汚染土壌
-	var $landProcity   = 30; // 防災都市
-	var $landZorasu    = 31; // ぞらす
-	var $landSoccer    = 32; // スタジアム
-	var $landRail      = 33; // 線路
-	var $landStat      = 34; // 駅
-	var $landTrain     = 35; // 電車
-	var $landSleeper   = 36; // 怪獣（睡眠中）
-	var $landNewtown   = 37; // ニュータウン
-	var $landBigtown   = 38; // 現代都市
-	var $landMyhome    = 39; // 自宅
-	var $landFroCity   = 40; // 海上都市
-	var $landSoukoM    = 41; // 金庫
-	var $landSoukoF    = 42; // 食料庫
-	var $landShip      = 43; // 船舶
+	public $landSea       =  0; // 海
+	public $landWaste     =  1; // 荒地
+	public $landPlains    =  2; // 平地
+	public $landTown      =  3; // 町系
+	public $landForest    =  4; // 森
+	public $landFarm      =  5; // 農場
+	public $landFactory   =  6; // 工場
+	public $landBase      =  7; // ミサイル基地
+	public $landDefence   =  8; // 防衛施設
+	public $landMountain  =  9; // 山
+	public $landMonster   = 10; // 怪獣
+	public $landSbase     = 11; // 海底基地
+	public $landOil       = 12; // 海底油田
+	public $landMonument  = 13; // 記念碑
+	public $landHaribote  = 14; // ハリボテ
+	public $landPark      = 15; // 遊園地
+	public $landFusya     = 16; // 風車
+	public $landSyoubou   = 17; // 消防署
+	public $landNursery   = 18; // 養殖場
+	public $landSeaSide   = 19; // 海岸(砂浜)
+	public $landSeaResort = 20; // 海の家
+	public $landCommerce  = 21; // 商業ビル
+	public $landPort      = 22; // 港
+	public $landSeaCity   = 23; // 海底都市
+	public $landSdefence  = 24; // 海底防衛施設
+	public $landSfarm     = 25; // 海底農場
+	public $landSsyoubou  = 26; // 海底消防署
+	public $landHatuden   = 27; // 発電所
+	public $landBank      = 28; // 銀行
+	public $landPoll      = 29; // 汚染土壌
+	public $landProcity   = 30; // 防災都市
+	public $landZorasu    = 31; // ぞらす
+	public $landSoccer    = 32; // スタジアム
+	public $landRail      = 33; // 線路
+	public $landStat      = 34; // 駅
+	public $landTrain     = 35; // 電車
+	public $landSleeper   = 36; // 怪獣（睡眠中）
+	public $landNewtown   = 37; // ニュータウン
+	public $landBigtown   = 38; // 現代都市
+	public $landMyhome    = 39; // 自宅
+	public $landFroCity   = 40; // 海上都市
+	public $landSoukoM    = 41; // 金庫
+	public $landSoukoF    = 42; // 食料庫
+	public $landShip      = 43; // 船舶
 
 	/********************
 		コマンド
 	********************/
 	// コマンド分割
 	// このコマンド分割だけは、自動入力系のコマンドは設定しないで下さい。
-	var $commandDivido =
+	public $commandDivido =
 		array(
 			'開発,0,10',      // 計画番号00～10
 			'建設,11,25',     // 計画番号11～20
@@ -589,112 +589,112 @@ class Init {
 	// ○→ '開発,0,10',   # 計画番号00～10
 	// ×→ '開発, 0,10', # 計画番号00～10
 
-	var $commandTotal = 68; // コマンドの種類
+	public $commandTotal = 68; // コマンドの種類
 
 	// 順序
-	var $comList;
+	public $comList;
 
 	// 整地系
-	var $comPrepare      = 01; // 整地
-	var $comPrepare2     = 02; // 地ならし
-	var $comReclaim      = 03; // 埋め立て
-	var $comDestroy      = 04; // 掘削
-	var $comDeForest     = 05; // 伐採
+	public $comPrepare      = 01; // 整地
+	public $comPrepare2     = 02; // 地ならし
+	public $comReclaim      = 03; // 埋め立て
+	public $comDestroy      = 04; // 掘削
+	public $comDeForest     = 05; // 伐採
 
 	// 作る系
-	var $comPlant        = 11; // 植林
-	var $comSeaSide      = 12; // 砂浜整備
-	var $comFarm         = 13; // 農場整備
-	var $comSfarm        = 14; // 海底農場整備
-	var $comNursery      = 15; // 養殖場設置
-	var $comFactory      = 16; // 工場建設
-	var $comCommerce     = 17; // 商業ビル建設
-	var $comMountain     = 18; // 採掘場整備
-	var $comHatuden      = 19; // 発電所
-	var $comBase         = 20; // ミサイル基地建設
-	var $comDbase        = 21; // 防衛施設建設
-	var $comSdbase       = 22; // 海底防衛施設
-	var $comSbase        = 23; // 海底基地建設
-	var $comMonument     = 24; // 記念碑建造
-	var $comHaribote     = 25; // ハリボテ設置
-	var $comFusya        = 26; // 風車設置
-	var $comSyoubou      = 27; // 消防署建設
-	var $comSsyoubou     = 28; // 海底消防署
-	var $comPort         = 29; // 港建設
-	var $comMakeShip     = 30; // 造船
-	var $comSendShip     = 31; // 船派遣
-	var $comReturnShip   = 32; // 船派遣
-	var $comShipBack     = 33; // 船破棄
-	var $comSeaResort    = 34; // 海の家建設
-	var $comPark         = 35; // 遊園地建設
-	var $comSoccer       = 36; // スタジアム建設
-	var $comRail         = 37; // 線路敷設
-	var $comStat         = 38; // 駅建設
-	var $comSeaCity      = 39; // 海底都市建設
-	var $comProcity      = 40; // 防災都市
-	var $comNewtown      = 41; // ニュータウン建設
-	var $comBigtown      = 42; // 現代都市建設
-	var $comMyhome       = 43; // 自宅建設
-	var $comSoukoM       = 44; // 金庫
-	var $comSoukoF       = 45; // 食料庫
+	public $comPlant        = 11; // 植林
+	public $comSeaSide      = 12; // 砂浜整備
+	public $comFarm         = 13; // 農場整備
+	public $comSfarm        = 14; // 海底農場整備
+	public $comNursery      = 15; // 養殖場設置
+	public $comFactory      = 16; // 工場建設
+	public $comCommerce     = 17; // 商業ビル建設
+	public $comMountain     = 18; // 採掘場整備
+	public $comHatuden      = 19; // 発電所
+	public $comBase         = 20; // ミサイル基地建設
+	public $comDbase        = 21; // 防衛施設建設
+	public $comSdbase       = 22; // 海底防衛施設
+	public $comSbase        = 23; // 海底基地建設
+	public $comMonument     = 24; // 記念碑建造
+	public $comHaribote     = 25; // ハリボテ設置
+	public $comFusya        = 26; // 風車設置
+	public $comSyoubou      = 27; // 消防署建設
+	public $comSsyoubou     = 28; // 海底消防署
+	public $comPort         = 29; // 港建設
+	public $comMakeShip     = 30; // 造船
+	public $comSendShip     = 31; // 船派遣
+	public $comReturnShip   = 32; // 船派遣
+	public $comShipBack     = 33; // 船破棄
+	public $comSeaResort    = 34; // 海の家建設
+	public $comPark         = 35; // 遊園地建設
+	public $comSoccer       = 36; // スタジアム建設
+	public $comRail         = 37; // 線路敷設
+	public $comStat         = 38; // 駅建設
+	public $comSeaCity      = 39; // 海底都市建設
+	public $comProcity      = 40; // 防災都市
+	public $comNewtown      = 41; // ニュータウン建設
+	public $comBigtown      = 42; // 現代都市建設
+	public $comMyhome       = 43; // 自宅建設
+	public $comSoukoM       = 44; // 金庫
+	public $comSoukoF       = 45; // 食料庫
 
 	// サッカー系
-	var $comOffense      = 51; // 攻撃力強化
-	var $comDefense      = 52; // 守備力強化
-	var $comPractice     = 53; // 総合練習
-	var $comPlaygame     = 54; // 交流試合
+	public $comOffense      = 51; // 攻撃力強化
+	public $comDefense      = 52; // 守備力強化
+	public $comPractice     = 53; // 総合練習
+	public $comPlaygame     = 54; // 交流試合
 
 	// 発射系
-	var $comMissileNM    = 61; // ミサイル発射
-	var $comMissilePP    = 62; // PPミサイル発射
-	var $comMissileST    = 63; // STミサイル発射
-	var $comMissileBT    = 64; // BTミサイル発射
-	var $comMissileSP    = 65; // 催眠弾発射
-	var $comMissileLD    = 66; // 陸地破壊弾発射
-	var $comMissileLU    = 67; // 地形隆起弾発射
-	var $comMissileSM    = 68; // ミサイル撃ち止め
-	var $comEisei        = 69; // 人工衛星発射
-	var $comEiseimente   = 70; // 人工衛星発修復
-	var $comEiseiAtt     = 71; // 人工衛星破壊
-	var $comEiseiLzr     = 72; // 衛星レーザー
-	var $comSendMonster  = 73; // 怪獣派遣
-	var $comSendSleeper  = 74; // 怪獣輸送
+	public $comMissileNM    = 61; // ミサイル発射
+	public $comMissilePP    = 62; // PPミサイル発射
+	public $comMissileST    = 63; // STミサイル発射
+	public $comMissileBT    = 64; // BTミサイル発射
+	public $comMissileSP    = 65; // 催眠弾発射
+	public $comMissileLD    = 66; // 陸地破壊弾発射
+	public $comMissileLU    = 67; // 地形隆起弾発射
+	public $comMissileSM    = 68; // ミサイル撃ち止め
+	public $comEisei        = 69; // 人工衛星発射
+	public $comEiseimente   = 70; // 人工衛星発修復
+	public $comEiseiAtt     = 71; // 人工衛星破壊
+	public $comEiseiLzr     = 72; // 衛星レーザー
+	public $comSendMonster  = 73; // 怪獣派遣
+	public $comSendSleeper  = 74; // 怪獣輸送
 
 	// 運営系
-	var $comDoNothing    = 81; // 資金繰り
-	var $comSell         = 82; // 食料輸出
-	var $comSellTree     = 83; // 木材輸出
-	var $comMoney        = 84; // 資金援助
-	var $comFood         = 85; // 食料援助
-	var $comLot          = 86; // 宝くじ購入
-	var $comPropaganda   = 87; // 誘致活動
-	var $comBoku         = 88; // 僕の引越し
-	var $comHikidasi     = 89; // 倉庫引き出し
-	var $comGiveup       = 90; // 島の放棄
+	public $comDoNothing    = 81; // 資金繰り
+	public $comSell         = 82; // 食料輸出
+	public $comSellTree     = 83; // 木材輸出
+	public $comMoney        = 84; // 資金援助
+	public $comFood         = 85; // 食料援助
+	public $comLot          = 86; // 宝くじ購入
+	public $comPropaganda   = 87; // 誘致活動
+	public $comBoku         = 88; // 僕の引越し
+	public $comHikidasi     = 89; // 倉庫引き出し
+	public $comGiveup       = 90; // 島の放棄
 
 	// 自動入力系
-	var $comAutoPrepare  = 91; // フル整地
-	var $comAutoPrepare2 = 92; // フル地ならし
-	var $comAutoDelete   = 93; // 全コマンド消去
-	var $comAutoReclaim  = 94; // フル埋め立て
+	public $comAutoPrepare  = 91; // フル整地
+	public $comAutoPrepare2 = 92; // フル地ならし
+	public $comAutoDelete   = 93; // 全コマンド消去
+	public $comAutoReclaim  = 94; // フル埋め立て
 
-	var $comName;
-	var $comCost;
+	public $comName;
+	public $comCost;
 
 	// 島の座標数
-	var $pointNumber;
+	public $pointNumber;
 
 	// 周囲2ヘックスの座標
-	var $ax = array(0, 1, 1, 1, 0,-1, 0, 1, 2, 2, 2, 1, 0,-1,-1,-2,-1,-1, 0);
-	var $ay = array(0,-1, 0, 1, 1, 0,-1,-2,-1, 0, 1, 2, 2, 2, 1, 0,-1,-2,-2);
+	public $ax = array(0, 1, 1, 1, 0,-1, 0, 1, 2, 2, 2, 1, 0,-1,-1,-2,-1,-1, 0);
+	public $ay = array(0,-1, 0, 1, 1, 0,-1,-2,-1, 0, 1, 2, 2, 2, 1, 0,-1,-2,-2);
 
 	// コメントなどに、予\定のように\が勝手に追加される
-	var $stripslashes;
+	public $stripslashes;
 
 
 	//////////////////////////////////////////////////
 
-	private function setVariable() {
+	private function setpubliciable() {
 		$this->pointNumber = $this->islandSize * $this->islandSize;
 		$this->comList = array(
 			$this->comPrepare,
@@ -920,7 +920,7 @@ class Init {
 
 	function Init() {
 		$this->CPU_start = microtime();
-		$this->setVariable();
+		$this->setpubliciable();
 		mt_srand($_SERVER['REQUEST_TIME']);
 		// 日本時間にあわせる
 		// 海外のサーバに設置する場合は次の行にある//をはずす。

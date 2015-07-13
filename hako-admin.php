@@ -44,8 +44,8 @@ function go(obj) {
 <input type="hidden" name="mode" value="enter">
 <select name="menulist">
 END;
-		$cnt = (int)count($urllist);
-		for ( $i = 0; $i < $cnt; $i++ ) {
+		$urllistCnt = (int)count($urllist);
+		for ( $i = 0; $i < $urllistCnt; $i++ ) {
 			if ($i === 0) {
 				echo "<option value=\"{$init->baseDir}{$urllist[$i]}\" selected=\"selected\">{$menulist[$i]}</option>\n";
 			} else {
