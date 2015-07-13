@@ -69,7 +69,7 @@ class Init {
 	// ゲームタイトル
 	public $title        = "hako";
 	public $adminName    = "hiro";
-	public $urlTopPage   = "http://localhost/";
+	public $urlTopPage   = "http://b.0218.jp/";
 	public $twitterID    = "hiro0218";
 
 	// 1ターンが何秒か

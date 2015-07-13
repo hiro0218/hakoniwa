@@ -577,17 +577,12 @@ function NaviClose() {
     StyElm.style.visibility = "hidden";
 }
 
-function windowEvent(){
-    if (window.event) {
-        return window.event;
+function windowEvent() {
+    if (window.event) return window.event;
+    for (var a = arguments.callee.caller; a;) {
+        var b = a.arguments[0];
+        if (b && b.constructor == MouseEvent) return b;
+        a = a.caller
     }
-    var caller = arguments.callee.caller;
-    while (caller) {
-        var ob = caller.arguments[0];
-        if (ob && ob.constructor == MouseEvent) {
-            return ob
-        }
-        caller = caller.caller;
-    }
-    return null;
-}
+    return null
+};
