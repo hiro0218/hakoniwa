@@ -1,226 +1,419 @@
 /********************************************************************/
-/*  Edited By : Watson                                              */
-/********************************************************************/
-@charset "Shift_JIS";
 
-/* Šî–{\¬ ---------------------------------------------------------*/
+
+/*  Edited By : Watson                                              */
+
+
+/********************************************************************/
+
+
+/* åŸºæœ¬æ§‹æˆ ---------------------------------------------------------*/
+
 body {
-	font-family	: Tahoma, "MS UI Gothic", Chicago;
-	color		: #333;
-	background-color: #F0F8FF;
-	background-image: url('skb/skb_background.gif');
-	font-size	: 10pt;
+  font-family: "æ¸¸ã‚´ã‚·ãƒƒã‚¯ä½“", "Yu Gothic", YuGothic, sans-serif;
+  color: #333;
+  background-color: #F0F8FF;
 }
-a {
-	color		: #4169E1;
-	text-decoration	: none;
-}
-a:visited {
-	color		: #4682B4;
-}
-a:active {
-	color		: #008B8B;
-}
-a:hover {
-	color		: #008B8B;
-	background-color: #99decc;
-}
-/* ‹æØ‚èü */
+
+/* åŒºåˆ‡ã‚Šç·š */
+
 hr {
-	border		: dashed #4169E1 1px;
+  border: solid #4169E1 1px;
 }
-/* ƒe[ƒuƒ‹ */
+
+/* ãƒ†ãƒ¼ãƒ–ãƒ« */
+
 table {
-	border		: none;
+  border: none;
 }
 th, td {
-	border		: solid #00BFFF 1px;
-	font-size	: 10pt;
-	white-space	: nowrap;
+  border: solid #00BFFF 1px;
+  white-space: nowrap;
 }
 th {
-	border-color	: #1E90FF;
+  border-color: #1E90FF;
 }
 td.M {
-	border		: none;
+  border: none;
 }
 img {
-	border		: none;
-}
-/* XVŠÔ */
-#lastModified {
-	font-size	: 90%;
-}
-/* ƒtƒbƒ^ */
-#LinkFoot {
-	background-color: #F0FFFF;
-	border		: solid #6495ED 1px;
-	width		: 50%;
-	margin-left	: 25%;
-	padding		: 5px;
+  border: none;
 }
 
-/* TOPƒy[ƒW ---------------------------------------------------------*/
-/* ƒ^ƒCƒgƒ‹ */
+/* æ›´æ–°æ™‚é–“ */
+
+#lastModified {
+  font-size: 90%;
+}
+
+/* ãƒ•ãƒƒã‚¿ */
+
+#LinkFoot {}
+
+/* TOPãƒšãƒ¼ã‚¸ ---------------------------------------------------------*/
+
+
+/* ã‚¿ã‚¤ãƒˆãƒ« */
+
 h1 {
-	margin		: 0.5em 0px 1em 0px;
-	font-size	: 32pt;
-	font-style	: italic;
-	font-weight	: bold;
-	color		: #C0C0C0;
-	letter-spacing	: 5px;
-	text-transform	: uppercase;
-	border		: solid #008B8B;
-	border-width	: 0px 0px 1px 0px;
-	width		: 60%;
-	background-image: url('skb/skb_bg_title.gif');
-	background-position: 100% 100%;
-	background-repeat: no-repeat;
+  color: #C0C0C0;
+  letter-spacing: 5px;
+  text-transform: uppercase;
 }
 .title:first-letter {
-	color		: #4169E1;
-	font-size	: 48pt;
+  color: #4169E1;
+  font-size: 48pt;
 }
 .Turn {
-	display		: block;
-	text-align	: left;
-	font-weight	: bold;
-	font-size	: 14pt;
-	color		: #6495ED;
-	text-transform	: uppercase;
+  display: block;
+  text-align: left;
+  font-weight: bold;
+  font-size: 14pt;
+  color: #6495ED;
+  text-transform: uppercase;
 }
 h2 {
-	display		: block;
-	text-align	: left;
-	font-weight	: bold;
-	font-size	: 14pt;
-	color		: #6495ED;
-	background-image: url('skb/skb_bg_h1.png');
-	border		: solid #6495ED 1px;
-	padding-left	: 40px;
-	text-transform	: uppercase;
-}
-/* Å‹ß‚Ìo—ˆ– */
-#HistoryLog, #RecentlyLog {
-	white-space	: nowrap;
-}
-/* ‘å‚«‚¢•¶š */
-.big {
-	font-size	: 24pt;
-}
-/* ƒŠƒAƒ‹ƒ^ƒCƒ}[ */
-.timer {
-	color		: #6495ED;
-	font-weight	: bold;
-	border-style	: none;
-	margin		: 1px 0px;
+  font-weight: bold;
+  color: #6495ED;
+  text-transform: uppercase;
 }
 
-/* Mapƒy[ƒW ---------------------------------------------------------*/
-#NaviView{
-	visibility	: hidden;
-	z-index		: 1;
-	position	: absolute;
-	background-color: #000000;
-	border		: solid #000000;
-	border-width	: 1px;
-	min-width	: 120px;
-	max-width	: 180px;
-	margin-top	: -224px;
-	padding		: 3px;
-	white-space	: normal;
-	filter	   	: Alpha(opacity=120);
- 	opacity		: 0.8; /* MozzilaŒn */
+/* æœ€è¿‘ã®å‡ºæ¥äº‹ */
+
+#HistoryLog, #RecentlyLog {
+  white-space: nowrap;
+}
+
+/* å¤§ãã„æ–‡å­— */
+
+.big {
+  font-size: 24pt;
+}
+
+/* ãƒªã‚¢ãƒ«ã‚¿ã‚¤ãƒãƒ¼ */
+
+.timer {
+  color: #6495ED;
+  font-weight: bold;
+  border-style: none;
+  margin: 1px 0px;
+}
+
+/* Mapãƒšãƒ¼ã‚¸ ---------------------------------------------------------*/
+
+#NaviView {
+  visibility: hidden;
+  z-index: 1;
+  position: absolute;
+  background-color: #000000;
+  border: solid #000000;
+  border-width: 1px;
+  min-width: 120px;
+  max-width: 180px;
+  margin-top: -224px;
+  padding: 3px;
+  white-space: normal;
+  filter: Alpha(opacity=120);
+  opacity: 0.8;
+  /* Mozzilaç³» */
 }
 .NaviTitle {
-	font-size	: 9pt;
-	padding		: 5px 0;
-	color	: #ffffff;
-	border		: dotted #f0ffff;
-	border-width	: 0 0 1 0;
+  font-size: 9pt;
+  padding: 5px 0;
+  color: #ffffff;
+  border: dotted #f0ffff;
+  border-width: 0 0 1 0;
 }
 .NaviImg {
-	margin		: 5px;
+  margin: 5px;
 }
 .NaviText {
-	margin		: 5px 0 5px 0;
-	font-size	: 11px;
-	color	: #ffffff;
+  margin: 5px 0 5px 0;
+  font-size: 11px;
+  color: #ffffff;
 }
-/* “‡î•ñƒe[ƒuƒ‹ */
+
+/* å³¶æƒ…å ±ãƒ†ãƒ¼ãƒ–ãƒ« */
+
 #islandInfo table {
-	text-align	: center;
-	width		: 100%;
+  text-align: center;
+  width: 100%;
 }
 #islandMap, #islandMap table {
-	margin		: auto;
+  margin: auto;
 }
-/* ŠÏŒõÒ’ÊMƒe[ƒuƒ‹ */
+
+/* è¦³å…‰è€…é€šä¿¡ãƒ†ãƒ¼ãƒ–ãƒ« */
+
 #localBBS table th {
-	background-color: #AFEEEE;
+  background-color: #AFEEEE;
 }
-.islName, .islName2, .number, .head, .headToTo, .command, .disaster, .lbbsCell,
-.money, .food, .HCwin, .HClose, .attention, .bumon { font-weight: bold; }
-.islName   { color: #A06040;        } /* “‡‚Ì–¼‘O‚È‚Ç */
-.islName2  { color: #808080;        } /* ”–‚­‚È‚Á‚½“‡‚Ì–¼‘O */
-.number    { color: #6495ED;        } /* ‡ˆÊ‚Ì”Ô†‚È‚Ç */
-.head      { color: #000080;        } /* ‡ˆÊ•\‚É‚¨‚¯‚éŒ©‚¾‚µ */
-.headToTo  { color: royalblue;      } /* toto•\‚É‚¨‚¯‚éŒ©‚¾‚µ */
-.command   { color: #D08000;        } /* ŠJ”­Œv‰æ–¼ */
-.disaster  { color: #FF0000;        } /* ĞŠQ */
-.lbbsST    { color: gray;           } /* ŠÏŒõÒ’ÊMi‹É”éj */
-.money     { color: goldenrod;      } /* ‚¨‹à */
-.food      { color: lightseagreen;  } /* H—¿ */
-.HCwin     { color: #0000FF;        } /* ” ’ëƒJƒbƒvŸ—˜ */
-.HClose    { color: #A06040;        } /* ” ’ëƒJƒbƒv”s–k */
-.attention { color: #FF0000;        } /* ’ˆÓ */
-.bumon     { color: #FFFFFF;        } /* ƒ‰ƒ“ƒLƒ“ƒO‚Ì•”–å–¼ */
-.point     { color: royalblue;      } /* point */
-.unemploy1 { color: royalblue;      } /* ¸‹Æ—¦- */
-.unemploy2 { color: red;            } /* ¸‹Æ—¦+ */
-.shuto     { color: mediumseagreen; } /* ñ“s–¼Cƒ†ƒj[ƒN’nŒ` */
-.house     { color: salmon;         } /* “‡å‚Ì‰ÆC“‡ID */
-.eisei     { color: lightseagreen;  } /* lH‰q¯ */
-.monsm     { color: hotpink;        } /* ‰öboŒ»’†IC¬’·—¦ */
-.normal    { color: #000000;        } /* ’Êí‚Ì•¶šF */
-
-/* ”wŒiF */
-.TitleCell   { background-color: #87CEFA;        } /* ‡ˆÊ•\Œ©o‚µ */
-.NumberCell  { background-color: #87CEFA;        } /* ‡ˆÊ•\‡ˆÊ */
-.NameCell    { background-color: #F5FFFA;        } /* ‡ˆÊ•\“‡‚Ì–¼‘O */
-.InfoCell    { background-color: #E0FFFF; text-align: right;       } /* ‡ˆÊ•\“‡‚Ìî•ñ */
-.MarkCell    { background-color: #E0FFFF; text-align: center;       } /* ‡ˆÊ•\“‡‚Ìî•ñ */
-.TenkiCell   { background-color: #E0FFFF; text-align: center;       } /* ‡ˆÊ•\“‡‚Ìî•ñ */
-.ItemCell    { background-color: #E0FFFF; text-align: left;       } /* ‡ˆÊ•\“‡‚Ìî•ñ */
-.CommentCell { background-color: #FFFFFF; text-align: left;       } /* ‡ˆÊ•\ƒRƒƒ“ƒg—“ */
-.InputCell   { background-color: #AFEEEE;        } /* ŠJ”­Œv‰æƒtƒH[ƒ€ */
-.MapCell     { background-color: #FFFFFF;        } /* ŠJ”­Œv‰æ’n} */
-.CommandCell { background-color: #FFFFFF; white-space: normal;       } /* ŠJ”­Œv‰æ“ü—ÍÏ‚İŒv‰æ */
-.lbbsCell    { background-color: #FFFFFF;        } /* ŠÏŒõÒ’ÊM‚Ì“à—e */
-.PoinCell    { background-color: moccasin;       } /* Point—“ */
-.TotoCell    { background-color: white;          } /* toto—“ */
-.RankingCell { background-color: lightsteelblue; } /* ƒ‰ƒ“ƒLƒ“ƒO—“ */
-.PopupCell   { background-color: #E0FFFF;        } /* Popup ƒRƒ}ƒ“ƒh“ü—Í—“ */
-
-/* JSƒRƒ}ƒ“ƒh‘—MÏ‚İ */
-.commandjs1  {
-	border-width	: 0px;
-	color		: blue;
-	width		: 100%;
-	height		: 100%;
-	background-color: #fff;
+.islName, .islName2, .number, .head, .headToTo, .command, .disaster, .lbbsCell, .money, .food, .HCwin, .HClose, .attention, .bumon {
+  font-weight: bold;
 }
-/* JSƒRƒ}ƒ“ƒh–¢‘—M */
-.commandjs2  {
-	border-width	: 0px;
-	color		: red;
-	width		: 100%;
-	height		: 100%;
-	background-color: #FFFFFF;
+.islName {
+  color: #A06040;
 }
 
-/* ƒAƒNƒZƒXƒƒO ---------------------------------------------------------*/
-/* ƒAƒNƒZƒXƒƒOƒe[ƒuƒ‹ */
+/* å³¶ã®åå‰ãªã© */
+
+.islName2 {
+  color: #808080;
+}
+
+/* è–„ããªã£ãŸå³¶ã®åå‰ */
+
+.number {
+  color: #6495ED;
+}
+
+/* é †ä½ã®ç•ªå·ãªã© */
+
+.head {
+  color: #000080;
+}
+
+/* é †ä½è¡¨ã«ãŠã‘ã‚‹è¦‹ã ã— */
+
+.headToTo {
+  color: royalblue;
+}
+
+/* totoè¡¨ã«ãŠã‘ã‚‹è¦‹ã ã— */
+
+.command {
+  color: #D08000;
+}
+
+/* é–‹ç™ºè¨ˆç”»å */
+
+.disaster {
+  color: #FF0000;
+}
+
+/* ç½å®³ */
+
+.lbbsST {
+  color: gray;
+}
+
+/* è¦³å…‰è€…é€šä¿¡ï¼ˆæ¥µç§˜ï¼‰ */
+
+.money {
+  color: goldenrod;
+}
+
+/* ãŠé‡‘ */
+
+.food {
+  color: lightseagreen;
+}
+
+/* é£Ÿæ–™ */
+
+.HCwin {
+  color: #0000FF;
+}
+
+/* ç®±åº­ã‚«ãƒƒãƒ—å‹åˆ© */
+
+.HClose {
+  color: #A06040;
+}
+
+/* ç®±åº­ã‚«ãƒƒãƒ—æ•—åŒ— */
+
+.attention {
+  color: #FF0000;
+}
+
+/* æ³¨æ„ */
+
+.bumon {
+  color: #FFFFFF;
+}
+
+/* ãƒ©ãƒ³ã‚­ãƒ³ã‚°ã®éƒ¨é–€å */
+
+.point {
+  color: royalblue;
+}
+
+/* point */
+
+.unemploy1 {
+  color: royalblue;
+}
+
+/* å¤±æ¥­ç‡- */
+
+.unemploy2 {
+  color: red;
+}
+
+/* å¤±æ¥­ç‡+ */
+
+.shuto {
+  color: mediumseagreen;
+}
+
+/* é¦–éƒ½åï¼Œãƒ¦ãƒ‹ãƒ¼ã‚¯åœ°å½¢ */
+
+.house {
+  color: salmon;
+}
+
+/* å³¶ä¸»ã®å®¶ï¼Œå³¶ID */
+
+.eisei {
+  color: lightseagreen;
+}
+
+/* äººå·¥è¡›æ˜Ÿ */
+
+.monsm {
+  color: hotpink;
+}
+
+/* æ€ªç£å‡ºç¾ä¸­ï¼ï¼Œæˆé•·ç‡ */
+
+.normal {
+  color: #000000;
+}
+
+/* é€šå¸¸ã®æ–‡å­—è‰² */
+
+
+/* èƒŒæ™¯è‰² */
+
+.TitleCell {
+  background-color: #87CEFA;
+}
+
+/* é †ä½è¡¨è¦‹å‡ºã— */
+
+.NumberCell {
+  background-color: #87CEFA;
+}
+
+/* é †ä½è¡¨é †ä½ */
+
+.NameCell {
+  background-color: #F5FFFA;
+}
+
+/* é †ä½è¡¨å³¶ã®åå‰ */
+
+.InfoCell {
+  background-color: #E0FFFF;
+  text-align: right;
+}
+
+/* é †ä½è¡¨å³¶ã®æƒ…å ± */
+
+.MarkCell {
+  background-color: #E0FFFF;
+  text-align: center;
+}
+
+/* é †ä½è¡¨å³¶ã®æƒ…å ± */
+
+.TenkiCell {
+  background-color: #E0FFFF;
+  text-align: center;
+}
+
+/* é †ä½è¡¨å³¶ã®æƒ…å ± */
+
+.ItemCell {
+  background-color: #E0FFFF;
+  text-align: left;
+}
+
+/* é †ä½è¡¨å³¶ã®æƒ…å ± */
+
+.CommentCell {
+  background-color: #FFFFFF;
+  text-align: left;
+}
+
+/* é †ä½è¡¨ã‚³ãƒ¡ãƒ³ãƒˆæ¬„ */
+
+.InputCell {
+  background-color: #AFEEEE;
+}
+
+/* é–‹ç™ºè¨ˆç”»ãƒ•ã‚©ãƒ¼ãƒ  */
+
+.MapCell {
+  background-color: #FFFFFF;
+}
+
+/* é–‹ç™ºè¨ˆç”»åœ°å›³ */
+
+.CommandCell {
+  background-color: #FFFFFF;
+  white-space: normal;
+}
+
+/* é–‹ç™ºè¨ˆç”»å…¥åŠ›æ¸ˆã¿è¨ˆç”» */
+
+.lbbsCell {
+  background-color: #FFFFFF;
+}
+
+/* è¦³å…‰è€…é€šä¿¡ã®å†…å®¹ */
+
+.PoinCell {
+  background-color: moccasin;
+}
+
+/* Pointæ¬„ */
+
+.TotoCell {
+  background-color: white;
+}
+
+/* totoæ¬„ */
+
+.RankingCell {
+  background-color: lightsteelblue;
+}
+
+/* ãƒ©ãƒ³ã‚­ãƒ³ã‚°æ¬„ */
+
+.PopupCell {
+  background-color: #E0FFFF;
+}
+
+/* Popup ã‚³ãƒãƒ³ãƒ‰å…¥åŠ›æ¬„ */
+
+
+/* JSã‚³ãƒãƒ³ãƒ‰é€ä¿¡æ¸ˆã¿ */
+
+.commandjs1 {
+  border-width: 0px;
+  color: blue;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+
+/* JSã‚³ãƒãƒ³ãƒ‰æœªé€ä¿¡ */
+
+.commandjs2 {
+  border-width: 0px;
+  color: red;
+  width: 100%;
+  height: 100%;
+  background-color: #FFFFFF;
+}
+
+/* ã‚¢ã‚¯ã‚»ã‚¹ãƒ­ã‚° ---------------------------------------------------------*/
+
+
+/* ã‚¢ã‚¯ã‚»ã‚¹ãƒ­ã‚°ãƒ†ãƒ¼ãƒ–ãƒ« */
+
 #DATA-TABLE {
-	background-color: #ffffff;
+  background-color: #ffffff;
 }

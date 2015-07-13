@@ -2,21 +2,21 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- “‡—a‚©‚èŠÇ——pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- å³¶é ã‹ã‚Šç®¡ç†ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-keep.php by SERA - 2012/07/23
 
 *******************************************************************/
 
-require 'jcode.phps';
-require 'config.php';
-require 'hako-cgi.php';
-require 'hako-file.php';
-require 'hako-html.php';
+require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-cgi.php';
+require_once ABSOLUTE_PATH.'hako-file.php';
+require_once ABSOLUTE_PATH.'hako-html.php';
 
 define("READ_LINE", 1024);
+
 $init = new Init;
 $THIS_FILE = $init->baseDir . "/hako-keep.php";
 $MAIN_FILE = $init->baseDir . "/hako-main.php";
@@ -25,38 +25,38 @@ $MAIN_FILE = $init->baseDir . "/hako-main.php";
 class HTMLKP extends HTML {
 	function main($data, $hako) {
 		global $init;
-		
-		print <<<END
-<CENTER><a href="{$init->baseDir}/hako-main.php"><span class="big">ƒgƒbƒv‚Ö–ß‚é</span></a></CENTER>
-<h1 class="title">{$init->title}<br>“‡—a‚©‚èŠÇ—ƒc[ƒ‹</h1>
+
+		echo <<<END
+<CENTER><a href="{$init->baseDir}/hako-main.php"><span class="big">ãƒˆãƒƒãƒ—ã¸æˆ»ã‚‹</span></a></CENTER>
+<h1 class="title">{$init->title}<br>å³¶é ã‹ã‚Šç®¡ç†ãƒ„ãƒ¼ãƒ«</h1>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<h2>ŠÇ—l—a‚©‚è‚É•ÏX</h2><br>
+<h2>ç®¡ç†äººé ã‹ã‚Šã«å¤‰æ›´</h2><br>
 <br>
 <select name="ISLANDID">
 $hako->islandListNoKP
 </select>
 <input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
 <input type="hidden" name="mode" value="TOKP">
-<input type="submit" value="ŠÇ—l—a‚©‚è‚É•ÏX">
+<input type="submit" value="ç®¡ç†äººé ã‹ã‚Šã«å¤‰æ›´">
 </form>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<h2>ŠÇ—l—a‚©‚è‚ğ‰ğœ</h2><br>
+<h2>ç®¡ç†äººé ã‹ã‚Šã‚’è§£é™¤</h2><br>
 <br>
 <select name="ISLANDID">
 $hako->islandListKP
 </select>
 <input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
 <input type="hidden" name="mode" value="FROMKP">
-<input type="submit" value="ŠÇ—l—a‚©‚è‚ğ‰ğœ">
+<input type="submit" value="ç®¡ç†äººé ã‹ã‚Šã‚’è§£é™¤">
 </form>
 END;
 	}
 }
 
 class Hako extends HakoIO {
-	var $islandListNoKP;	// •’Ê‚Ì“‡ƒŠƒXƒg
-	var $islandListKP;	// ŠÇ—l—a‚©‚è“‡ƒŠƒXƒg
-	
+	var $islandListNoKP;	// æ™®é€šã®å³¶ãƒªã‚¹ãƒˆ
+	var $islandListKP;	// ç®¡ç†äººé ã‹ã‚Šå³¶ãƒªã‚¹ãƒˆ
+
 	function init($cgi) {
 		$this->readIslandsFile($cgi);
 		$this->islandListNoKP = "<option value=\"0\"></option>\n";
@@ -66,9 +66,9 @@ class Hako extends HakoIO {
 			$id = $this->islands[$i]['id'];
 			$keep = $this->islands[$i]['keep'];
 			if($keep == 1) {
-				$this->islandListKP .= "<option value=\"$id\">${name}“‡</option>\n";
+				$this->islandListKP .= "<option value=\"$id\">${name}å³¶</option>\n";
 			} else {
-				$this->islandListNoKP .= "<option value=\"$id\">${name}“‡</option>\n";
+				$this->islandListNoKP .= "<option value=\"$id\">${name}å³¶</option>\n";
 			}
 		}
 	}
@@ -77,7 +77,7 @@ class Hako extends HakoIO {
 class Main {
 	var $mode;
 	var $dataSet = array();
-	
+
 	function execute() {
 		$html = new HTMLKP;
 		$cgi = new Cgi;
@@ -86,7 +86,7 @@ class Main {
 		$hako->init($this);
 		$cgi->getCookies();
 		$html->header($cgi->dataSet);
-		
+
 		switch($this->mode) {
 			case "TOKP":
 				if($this->passCheck()) {
@@ -95,7 +95,7 @@ class Main {
 				}
 				$html->main($this->dataSet, $hako);
 				break;
-				
+
 			case "FROMKP":
 				if($this->passCheck()) {
 					$this->fromMode($this->dataSet['ISLANDID'], $hako);
@@ -103,7 +103,7 @@ class Main {
 				}
 				$html->main($this->dataSet, $hako);
 				break;
-				
+
 			case "enter":
 			default:
 				if($this->passCheck()) {
@@ -113,22 +113,22 @@ class Main {
 		}
 		$html->footer();
 	}
-	
+
 	function parseInputData() {
 		$this->mode = $_POST['mode'];
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
-				// ”¼ŠpƒJƒi‚ª‚ ‚ê‚Î‘SŠp‚É•ÏŠ·‚µ‚Ä•Ô‚·
-				JcodeConvert($value, 0, 2);
+				// åŠè§’ã‚«ãƒŠãŒã‚ã‚Œã°å…¨è§’ã«å¤‰æ›ã—ã¦è¿”ã™
+				// JcodeConvert($value, 0, 2);
 				$value = str_replace(",", "", $value);
 				$this->dataSet["{$name}"] = $value;
 			}
 		}
 	}
-	
+
 	function toMode($id, &$hako) {
 		global $init;
-		
+
 		if ($id) {
 			$num = $hako->idToNumber[$id];
 			if (!$hako->islands[$num]['keep']) {
@@ -140,10 +140,10 @@ class Main {
 			}
 		}
 	}
-	
+
 	function fromMode($id, &$hako) {
 		global $init;
-		
+
 		if ($id) {
 			$num = $hako->idToNumber[$id];
 			if ($hako->islands[$num]['keep']) {
@@ -155,7 +155,7 @@ class Main {
 			}
 		}
 	}
-	
+
 	function passCheck() {
 		global $init;
 		if(file_exists("{$init->passwordFile}")) {
@@ -166,7 +166,7 @@ class Main {
 		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
 			return 1;
 		} else {
-			print "<h2>ƒpƒXƒ[ƒh‚ªˆá‚¢‚Ü‚·B</h2>\n";
+			print "<h2>ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒé•ã„ã¾ã™ã€‚</h2>\n";
 			return 0;
 		}
 	}
@@ -174,5 +174,3 @@ class Main {
 
 $start = new Main();
 $start->execute();
-
-?>

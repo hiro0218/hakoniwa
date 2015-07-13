@@ -2,76 +2,62 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- ŠÇ—Òƒ‚[ƒh—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- ç®¡ç†è€…ãƒ¢ãƒ¼ãƒ‰ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-admin.php by SERA - 2013/06/29
 
 *******************************************************************/
 
-require 'config.php';
-require 'hako-cgi.php';
-require 'hako-html.php';
+require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-cgi.php';
+require_once ABSOLUTE_PATH.'hako-html.php';
 
 define("READ_LINE", 1024);
-$init = new Init;
+$init = new Init();
 $THIS_FILE = $init->baseDir . "/hako-main.php";
 
 class HtmlEntrance extends HTML {
 	function enter($urllist, $menulist) {
 		global $init;
-		print <<<END
-<script type="text/javascript" language="JavaScript">
-<!-- 
+		echo <<<END
+<script>
 function go(obj) {
 	if(obj.menulist.value) {
 		obj.action = obj.menulist.value;
 	}
 }
--->
 </script>
 
-<CENTER><a href="{$init->baseDir}/hako-main.php"><span class="big">ƒgƒbƒv‚Ö–ß‚é</span></a></CENTER>
-<h1 class="title">{$init->title}<br>ŠÇ—º“ü‚èŒû</h1>
+<CENTER>
+<a href="{$init->baseDir}/hako-main.php"><span class="big">ãƒˆãƒƒãƒ—ã¸æˆ»ã‚‹</span></a>
+</CENTER>
+<h1 class="title">{$init->title}<br>ç®¡ç†å®¤å…¥ã‚Šå£</h1>
 <hr>
 <TABLE BORDER=0 width="100%">
 <TR valign="top">
-<TD width="50%" class="M">
+<TD class="M">
 <div id="AdminEnter">
-<h2>ŠÇ—º‚Ö</h2>
+<h2>ç®¡ç†å®¤ã¸</h2>
 <form method="post" onSubmit="go(this)">
-<strong>ƒpƒXƒ[ƒhF</strong>
+<strong>ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ï¼š</strong>
 <input type="password" size="32" maxlength="32" name="PASSWORD">
 <input type="hidden" name="mode" value="enter">
 <select name="menulist">
 END;
-		for ( $i = 0; $i < count($urllist); $i++ ) {
-			if ($i == 0) {
-				print "<option value=\"{$init->baseDir}{$urllist[$i]}\" selected=\"selected\">{$menulist[$i]}</option>\n";
+		$cnt = (int)count($urllist);
+		for ( $i = 0; $i < $cnt; $i++ ) {
+			if ($i === 0) {
+				echo "<option value=\"{$init->baseDir}{$urllist[$i]}\" selected=\"selected\">{$menulist[$i]}</option>\n";
 			} else {
-				print "<option value=\"{$init->baseDir}{$urllist[$i]}\">{$menulist[$i]}</option>\n";
+				echo "<option value=\"{$init->baseDir}{$urllist[$i]}\">{$menulist[$i]}</option>\n";
 			}
 		}
-		print "</select>\n";
-		print "<input type=\"submit\" value=\"ŠÇ—º‚Ö\">\n";
-		print "</form>\n";
-		print <<<END
-</TD>
-<TD width="50%" class="M">
-END;
-		print "<div id=\"HistoryLog\">\n";
-		print "<h2>” ’ë”“‡S.E”z•zŒ³‚©‚ç‚Ì‚¨’m‚ç‚¹</h2>\n";
-		print "<DIV style=\"overflow:auto; height:{$init->divHeight}px;\">\n";
-		$fileName = "http://hakoniwa.symphonic-net.com/info/hakose_info.txt";
-		$fp = @fopen($fileName, "r");
-		while($line = @fgets($fp, READ_LINE)) {
-			$line = chop($line);
-			print "{$line}<br>\n";
-		}
-		@fclose($fp);
-		print "</div></div>\n";
-		print <<<END
+		echo "</select>\n";
+		echo "<input type=\"submit\" value=\"ç®¡ç†å®¤ã¸\">\n";
+		echo "</form>\n";
+		echo <<<END
 </TD>
 </TR>
 </TABLE>
@@ -81,17 +67,17 @@ END;
 }
 
 class Main {
-	var $urllist = array();
+	var $urllist  = array();
 	var $menulist = array();
-	
+
 	function Main() {
-		$this->urllist = array( ini_get('safe_mode') ? '/hako-mente-safemode.php' : '/hako-mente.php', '/hako-axes.php', '/hako-keep.php', '/hako-present.php', '/hako-edit.php', '/hako-bfctrl.php');
-		$this->menulist = array('ƒf[ƒ^ŠÇ—','ƒAƒNƒZƒXƒƒO‰{——','“‡—a‚©‚èŠÇ—','ƒvƒŒƒ[ƒ“ƒg','ƒ}ƒbƒvƒGƒfƒBƒ^','BattleFieldŠÇ—');
+		$this->urllist  = array( ini_get('safe_mode') ? '/hako-mente-safemode.php' : '/hako-mente.php', '/hako-axes.php', '/hako-keep.php', '/hako-present.php', '/hako-edit.php', '/hako-bfctrl.php');
+		$this->menulist = array('ãƒ‡ãƒ¼ã‚¿ç®¡ç†','ã‚¢ã‚¯ã‚»ã‚¹ãƒ­ã‚°é–²è¦§','å³¶é ã‹ã‚Šç®¡ç†','ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ','ãƒãƒƒãƒ—ã‚¨ãƒ‡ã‚£ã‚¿','BattleFieldç®¡ç†');
 	}
-	
+
 	function execute() {
-		$html = new HtmlEntrance;
-		$cgi = new Cgi;
+		$html = new HtmlEntrance();
+		$cgi  = new Cgi();
 		$cgi->getCookies();
 		$html->header($cgi->dataSet);
 		$html->enter($this->urllist, $this->menulist);
@@ -101,5 +87,3 @@ class Main {
 
 $start = new Main();
 $start->execute();
-
-?>

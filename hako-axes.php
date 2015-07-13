@@ -2,17 +2,17 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- ƒAƒNƒZƒX‰ğÍ—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- ã‚¢ã‚¯ã‚»ã‚¹è§£æç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-axes.php by SERA - 2012/06/29
 
 *******************************************************************/
 
-require 'config.php';
-require 'hako-cgi.php';
-require 'hako-html.php';
+require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-cgi.php';
+require_once ABSOLUTE_PATH.'hako-html.php';
 
 define("READ_LINE", 1024);
 $init = new Init;
@@ -22,110 +22,110 @@ $THIS_FILE = $init->baseDir . "/hako-axes.php";
 class HtmlMente extends HTML {
 	function enter() {
 		global $init;
-		
-		print <<<END
-<h1 class="title">{$init->title}<br>ƒAƒNƒZƒXƒƒO‰{——º</h1>
+
+		echo <<<END
+<h1 class="title">{$init->title}<br>ã‚¢ã‚¯ã‚»ã‚¹ãƒ­ã‚°é–²è¦§å®¤</h1>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<strong>ƒpƒXƒ[ƒhF</strong>
+<strong>ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ï¼š</strong>
 <input type="password" size="32" maxlength="32" name="PASSWORD">
 <input type="hidden" name="mode" value="enter">
-<input type="submit" value="“üº‚·‚é">
+<input type="submit" value="å…¥å®¤ã™ã‚‹">
 </form>
 END;
 	}
-	
+
 	function main($data) {
 		global $init;
-		print "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">ƒgƒbƒv‚Ö–ß‚é</span></a></CENTER>\n";
-		print "<h1 class=\"title\">{$init->title}<br>ƒAƒNƒZƒXƒƒO‰{——º</h1>\n";
+		echo "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">ãƒˆãƒƒãƒ—ã¸æˆ»ã‚‹</span></a></CENTER>\n";
+		echo "<h1 class=\"title\">{$init->title}<br>ã‚¢ã‚¯ã‚»ã‚¹ãƒ­ã‚°é–²è¦§å®¤</h1>\n";
 		$this->dataPrint($data);
 	}
-	
-	// •\¦ƒ‚[ƒh
+
+	// è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰
 	function dataPrint($data, $suf = "") {
 		global $init;
-		
-		print "<HR>";
-		print <<<END
+
+		echo "<HR>";
+		echo <<<END
 <br>
-<h2>ƒAƒNƒZƒXƒƒO</h2>
+<h2>ã‚¢ã‚¯ã‚»ã‚¹ãƒ­ã‚°</h2>
 <form action="#">
-<input type="button" value="ƒI[ƒgƒtƒBƒ‹ƒ^•\¦" onclick="Button_DispFilter(this, 'DATA-TABLE')" onkeypress="Button_DispFilter(this, 'DATA-TABLE')">
+<input type="button" value="ã‚ªãƒ¼ãƒˆãƒ•ã‚£ãƒ«ã‚¿è¡¨ç¤º" onclick="Button_DispFilter(this, 'DATA-TABLE')" onkeypress="Button_DispFilter(this, 'DATA-TABLE')">
 <table id="DATA-TABLE">
 <thead>
 <tr class="NumberCell">
-<td scope="row"><input type="button" tabindex="1" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [0])" value="ƒƒOƒCƒ“‚µ‚½ŠÔ"></td>
-<td scope="row"><input type="button" tabindex="2" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [1, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [1, 0])" value="“‡‚h‚c"></td>
-<td scope="row"><input type="button" tabindex="3" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [2, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [2, 0])" value="“‡‚Ì–¼‘O"></td>
-<td scope="row"><input type="button" tabindex="4" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [3, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [3, 0])" value="‚h‚oî•ñ"></td>
-<td scope="row"><input type="button" tabindex="5" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [4, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [4, 0])" value="ƒzƒXƒgî•ñ"></td>
+<td scope="row"><input type="button" tabindex="1" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [0])" value="ãƒ­ã‚°ã‚¤ãƒ³ã—ãŸæ™‚é–“"></td>
+<td scope="row"><input type="button" tabindex="2" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [1, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [1, 0])" value="å³¶ï¼©ï¼¤"></td>
+<td scope="row"><input type="button" tabindex="3" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [2, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [2, 0])" value="å³¶ã®åå‰"></td>
+<td scope="row"><input type="button" tabindex="4" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [3, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [3, 0])" value="ï¼©ï¼°æƒ…å ±"></td>
+<td scope="row"><input type="button" tabindex="5" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [4, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [4, 0])" value="ãƒ›ã‚¹ãƒˆæƒ…å ±"></td>
 </tr>
 </thead>
 <tbody>
 END;
-		// ƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚İê—p‚ÅƒI[ƒvƒ“‚·‚é
+		// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã¿å°‚ç”¨ã§ã‚ªãƒ¼ãƒ—ãƒ³ã™ã‚‹
 		$fp = fopen("{$init->dirName}/{$init->logname}", 'r');
-		
-		// I’[‚É’B‚·‚é‚Ü‚Åƒ‹[ƒv
+
+		// çµ‚ç«¯ã«é”ã™ã‚‹ã¾ã§ãƒ«ãƒ¼ãƒ—
 		while (!feof($fp)) {
-			// ƒtƒ@ƒCƒ‹‚©‚çˆês“Ç‚İ‚Ş
+			// ãƒ•ã‚¡ã‚¤ãƒ«ã‹ã‚‰ä¸€è¡Œèª­ã¿è¾¼ã‚€
 			$line = fgets($fp);
 			if($line !== FALSE) {
 				$line = substr_replace($line, ",<center>", 32, 1);
 				$wpos = strpos($line, ',', 33);
 				$line = substr_replace($line, "</center>,", $wpos, 1);
 				$num  = preg_replace( "/,/", "</TD><TD>", $line);
-				print "<TR>\n";
-				print "<TD scope=\"col\">{$num}</TD>\n";
-				print "</TR>\n";
+				echo "<TR>\n";
+				echo "<TD scope=\"col\">{$num}</TD>\n";
+				echo "</TR>\n";
 			}
 		}
 		fclose($fp);
-		print "</tbody>\n</table>\n</form>";
+		echo "</tbody>\n</table>\n</form>";
 	}
 }
 
 class Main {
 	var $mode;
 	var $dataSet = array();
-	
+
 	function execute() {
 		$html = new HtmlMente;
 		$cgi = new Cgi;
 		$this->parseInputData();
 		$cgi->getCookies();
 		$html->header($cgi->dataSet);
-		
+
 		switch($this->mode) {
 			case "enter":
 				if($this->passCheck()) {
 					$html->main($this->dataSet);
 				}
 				break;
-				
+
 			default:
 				$html->enter();
 				break;
 		}
 		$html->footer();
 	}
-	
+
 	function parseInputData() {
 		$this->mode = $_POST['mode'];
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
 				// $value = Util::sjis_convert($value);
-				// ”¼ŠpƒJƒi‚ª‚ ‚ê‚Î‘SŠp‚É•ÏŠ·‚µ‚Ä•Ô‚·
+				// åŠè§’ã‚«ãƒŠãŒã‚ã‚Œã°å…¨è§’ã«å¤‰æ›ã—ã¦è¿”ã™
 				// $value = i18n_ja_jp_hantozen($value,"KHV");
 				$value = str_replace(",", "", $value);
 				$this->dataSet["{$name}"] = $value;
 			}
 		}
 	}
-	
+
 	function passCheck() {
 		global $init;
-		
+
 		if(file_exists("{$init->passwordFile}")) {
 			$fp = fopen("{$init->passwordFile}", "r");
 			$masterPassword = chop(fgets($fp, READ_LINE));
@@ -134,7 +134,7 @@ class Main {
 		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
 			return 1;
 		} else {
-			print "<h2>ƒpƒXƒ[ƒh‚ªˆá‚¢‚Ü‚·B</h2>\n";
+			echo "<h2>ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒé•ã„ã¾ã™ã€‚</h2>\n";
 			return 0;
 		}
 	}
@@ -142,5 +142,3 @@ class Main {
 
 $start = new Main();
 $start->execute();
-
-?>

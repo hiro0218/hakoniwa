@@ -2,94 +2,93 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- ƒƒCƒ“ƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- ãƒ¡ã‚¤ãƒ³ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-main.php by SERA - 2013/05/19
 
 *******************************************************************/
 
-require 'jcode.phps';
-require 'config.php';
-require 'hako-cgi.php';
-require 'hako-file.php';
-require 'hako-html.php';
-require 'hako-turn.php';
-require 'hako-util.php';
+require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-cgi.php';
+require_once ABSOLUTE_PATH.'hako-file.php';
+require_once ABSOLUTE_PATH.'hako-html.php';
+require_once ABSOLUTE_PATH.'hako-turn.php';
+require_once ABSOLUTE_PATH.'hako-util.php';
 
 $init = new Init;
 
 define("READ_LINE", 1024);
 $THIS_FILE = $init->baseDir . "/hako-main.php";
-$BACK_TO_TOP = "<A HREF=\"{$THIS_FILE}?\">{$init->tagBig_}ƒgƒbƒv‚Ö–ß‚é{$init->_tagBig}</A>";
-$ISLAND_TURN; // ƒ^[ƒ“”
+$BACK_TO_TOP = "<A HREF=\"{$THIS_FILE}?\">{$init->tagBig_}ãƒˆãƒƒãƒ—ã¸æˆ»ã‚‹{$init->_tagBig}</A>";
+$ISLAND_TURN; // ã‚¿ãƒ¼ãƒ³æ•°
 
 $PRODUCT_VERSION = '20130519';
 
 //--------------------------------------------------------------------
 class Hako extends HakoIO {
-	var $islandList;    // “‡ƒŠƒXƒg
-	var $targetList;    // ƒ^[ƒQƒbƒg‚Ì“‡ƒŠƒXƒg
-	var $defaultTarget; // –Ú•W•â‘«—pƒ^[ƒQƒbƒg
-	
+	var $islandList;    // å³¶ãƒªã‚¹ãƒˆ
+	var $targetList;    // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®å³¶ãƒªã‚¹ãƒˆ
+	var $defaultTarget; // ç›®æ¨™è£œè¶³ç”¨ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
+
 	function readIslands(&$cgi) {
 		global $init;
-		
+
 		$m = $this->readIslandsFile($cgi);
-		$this->islandList = $this->getIslandList($cgi->dataSet['defaultID']);
+		$this->islandList = $this->getIslandList( (isset( $cgi->dataSet['defaultID'] )) ? $cgi->dataSet['defaultID'] : "");
 		if($init->targetIsland == 1) {
-			// –Ú•W‚Ì“‡ Š—L‚Ì“‡‚ª‘I‘ğ‚³‚ê‚½ƒŠƒXƒg
+			// ç›®æ¨™ã®å³¶ æ‰€æœ‰ã®å³¶ãŒé¸æŠã•ã‚ŒãŸãƒªã‚¹ãƒˆ
 			$this->targetList = $this->islandList;
 		} else {
-			// ‡ˆÊ‚ªTOP‚Ì“‡‚ª‘I‘ğ‚³‚ê‚½ó‘Ô‚ÌƒŠƒXƒg
+			// é †ä½ãŒTOPã®å³¶ãŒé¸æŠã•ã‚ŒãŸçŠ¶æ…‹ã®ãƒªã‚¹ãƒˆ
 			$this->targetList = $this->getIslandList($cgi->dataSet['defaultTarget']);
 		}
 		return $m;
 	}
 	//---------------------------------------------------
-	// “‡ƒŠƒXƒg¶¬
+	// å³¶ãƒªã‚¹ãƒˆç”Ÿæˆ
 	//---------------------------------------------------
 	function getIslandList($select = 0) {
 		global $init;
-		
+
 		$list = "";
 		for($i = 0; $i < $this->islandNumber; $i++) {
 			if($init->allyUse) {
-				$name = Util::islandName($this->islands[$i], $this->ally, $this->idToAllyNumber); // “¯–¿ƒ}[ƒN‚ğ’Ç‰Á
+				$name = Util::islandName($this->islands[$i], $this->ally, $this->idToAllyNumber); // åŒç›Ÿãƒãƒ¼ã‚¯ã‚’è¿½åŠ 
 			} else {
 				$name = $this->islands[$i]['name'];
 			}
 			$id = $this->islands[$i]['id'];
-			
-			// UŒ‚–Ú•W‚ğ‚ ‚ç‚©‚¶‚ß©•ª‚Ì“‡‚É‚·‚é
+
+			// æ”»æ’ƒç›®æ¨™ã‚’ã‚ã‚‰ã‹ã˜ã‚è‡ªåˆ†ã®å³¶ã«ã™ã‚‹
 			if(empty($this->defaultTarget)) {
 				$this->defaultTarget = $id;
 			}
-			
+
 			if($id == $select) {
 				$s = "selected";
 			} else {
 				$s = "";
 			}
 			if($init->allyUse) {
-				$list .= "<option value=\"$id\" $s>{$name}</option>\n"; // “¯–¿ƒ}[ƒN‚ğ’Ç‰Á
+				$list .= "<option value=\"$id\" $s>{$name}</option>\n"; // åŒç›Ÿãƒãƒ¼ã‚¯ã‚’è¿½åŠ 
 			} else {
-				$list .= "<option value=\"$id\" $s>{$name}“‡</option>\n";
+				$list .= "<option value=\"$id\" $s>{$name}å³¶</option>\n";
 			}
 		}
 		return $list;
 	}
 	//---------------------------------------------------
-	// Ü‚ÉŠÖ‚·‚éƒŠƒXƒg‚ğ¶¬
+	// è³ã«é–¢ã™ã‚‹ãƒªã‚¹ãƒˆã‚’ç”Ÿæˆ
 	//---------------------------------------------------
 	function getPrizeList($prize) {
 		global $init;
-		list($flags, $monsters, $turns) = split(",", $prize, 3);
-		
-		$turns = split(",", $turns);
+		list($flags, $monsters, $turns) = explode(",", $prize, 3);
+
+		$turns = explode(",", $turns);
 		$prizeList = "";
-		// ƒ^[ƒ“”t
+		// ã‚¿ãƒ¼ãƒ³æ¯
 		$max = -1;
 		$nameList = "";
 		if($turns[0] != "") {
@@ -101,7 +100,7 @@ class Hako extends HakoIO {
 		if($max != -1) {
 			$prizeList .= "<img src=\"prize0.gif\" alt=\"$nameList\" title=\"$nameList\" width=\"16\" height=\"16\"> ";
 		}
-		// Ü
+		// è³
 		$f = 1;
 		for($k = 1; $k < count($init->prizeName); $k++) {
 			if($flags & $f) {
@@ -109,7 +108,7 @@ class Hako extends HakoIO {
 			}
 			$f = $f << 1;
 		}
-		// “|‚µ‚½‰öbƒŠƒXƒg
+		// å€’ã—ãŸæ€ªç£ãƒªã‚¹ãƒˆ
 		$f = 1;
 		$max = -1;
 		$nameList = "";
@@ -126,14 +125,21 @@ class Hako extends HakoIO {
 		return $prizeList;
 	}
 	//---------------------------------------------------
-	// ’nŒ`‚ÉŠÖ‚·‚éƒf[ƒ^¶¬
+	// åœ°å½¢ã«é–¢ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ç”Ÿæˆ
 	//---------------------------------------------------
 	function landString($l, $lv, $x, $y, $mode, $comStr) {
 		global $init;
-		
+
 		$point = "({$x},{$y})";
 		$naviExp = "''";
-		
+		$image = '';
+		$naviTitle = '';
+		$naviText = "";
+
+		if ( empty($comStr) ) {
+			$comStr = "";
+		}
+
 		if($x < $init->islandSize / 2) {
 			$naviPos = 0;
 		} else {
@@ -142,467 +148,470 @@ class Hako extends HakoIO {
 		switch($l) {
 			case $init->landSea:
 				if($lv == 0) {
-					// ŠC
+					// æµ·
 					$image = 'land0.gif';
-					$naviTitle = 'ŠC';
+					$naviTitle = 'æµ·';
 				} elseif($lv == 1) {
-					// ó£
+					// æµ…ç€¬
 					$image = 'land14.gif';
-					$naviTitle = 'ó£';
+					$naviTitle = 'æµ…ç€¬';
 				} else {
-					// à•ó
+					// è²¡å®
 					$image = 'land17.gif';
-					$naviTitle = 'ŠC';
+					$naviTitle = 'æµ·';
 				}
 				break;
-				
+
 			case $init->landSeaCity:
-				// ŠC’ê“ss
+				// æµ·åº•éƒ½å¸‚
 				$image = 'SeaCity.gif';
-				$naviTitle = 'ŠC’ê“ss';
+				$naviTitle = 'æµ·åº•éƒ½å¸‚';
 				$naviText = "{$lv}{$init->unitPop}";
 				break;
-				
+
 			case $init->landFroCity:
-				// ŠCã“ss
+				// æµ·ä¸Šéƒ½å¸‚
 				$image = 'FroCity.gif';
-				$naviTitle = 'ŠCã“ss';
+				$naviTitle = 'æµ·ä¸Šéƒ½å¸‚';
 				$naviText = "{$lv}{$init->unitPop}";
 				break;
-				
+
 			case $init->landPort:
-				// `
+				// æ¸¯
 				$image = 'port.gif';
-				$naviTitle = '`';
+				$naviTitle = 'æ¸¯';
 				break;
-				
+
 			case $init->landShip:
-				// ‘D”•
+				// èˆ¹èˆ¶
 				$ship = Util::navyUnpack($lv);
-				$owner = $this->idToName[$ship[0]]; // Š‘®
-				$naviTitle = "{$init->shipName[$ship[1]]}"; // ‘D”•‚Ìí—Ş
-				$hp = round(100 - $ship[2] / $init->shipHP[$ship[1]] * 100); // ”j‘¹—¦
+				$owner = $this->idToName[$ship[0]]; // æ‰€å±
+				$naviTitle = "{$init->shipName[$ship[1]]}"; // èˆ¹èˆ¶ã®ç¨®é¡
+				$hp = round(100 - $ship[2] / $init->shipHP[$ship[1]] * 100); // ç ´æç‡
 				if($ship[1] <= 1) {
-					// —A‘—‘DA‹™‘D
-					$naviText = "{$owner}“‡Š‘®";
+					// è¼¸é€èˆ¹ã€æ¼èˆ¹
+					$naviText = "{$owner}å³¶æ‰€å±";
 				} elseif($ship[1] == 2) {
-					// ŠC’ê’Tõ‘D
+					// æµ·åº•æ¢ç´¢èˆ¹
 					$treasure = $ship[3] * 1000 + $ship[4] * 100;
 					if($treasure > 0) {
-						$naviText = "{$owner}“‡Š‘®<br>”j‘¹—¦F{$hp}%<br>{$treasure}‰­‰~‘Š“–‚Ìà•óÏÚ";
+						$naviText = "{$owner}å³¶æ‰€å±<br>ç ´æç‡ï¼š{$hp}%<br>{$treasure}å„„å††ç›¸å½“ã®è²¡å®ç©è¼‰";
 					} else {
-						$naviText = "{$owner}“‡Š‘®";
+						$naviText = "{$owner}å³¶æ‰€å±";
 					}
 				} elseif($ship[1] < 10) {
-					$naviText = "{$owner}“‡Š‘®<br>”j‘¹—¦F{$hp}%";
+					$naviText = "{$owner}å³¶æ‰€å±<br>ç ´æç‡ï¼š{$hp}%";
 				} else {
-					// ŠC‘¯‘D
+					// æµ·è³Šèˆ¹
 					$treasure = $ship[3] * 1000 + $ship[4] * 100;
-					$naviText = "”j‘¹—¦F{$hp}%";
+					$naviText = "ç ´æç‡ï¼š{$hp}%";
 				}
-				$image = "ship{$ship[1]}.gif"; // ‘D”•‰æ‘œ
+				$image = "ship{$ship[1]}.gif"; // èˆ¹èˆ¶ç”»åƒ
 				break;
-				
+
 			case $init->landRail:
-				// ü˜H
+				// ç·šè·¯
 				$image = "rail{$lv}.gif";
-				$naviTitle = 'ü˜H';
+				$naviTitle = 'ç·šè·¯';
 				break;
-				
+
 			case $init->landStat:
-				// ‰w
+				// é§…
 				$image = 'stat.gif';
-				$naviTitle = '‰w';
+				$naviTitle = 'é§…';
 				break;
-				
+
 			case $init->landTrain:
-				// “dÔ
+				// é›»è»Š
 				$image = "train{$lv}.gif";
-				$naviTitle = '“dÔ';
+				$naviTitle = 'é›»è»Š';
 				break;
-				
+
 			case $init->landZorasu:
-				// ŠC‰öb
+				// æµ·æ€ªç£
 				$image = 'zorasu.gif';
-				$naviTitle = '‚¼‚ç‚·';
+				$naviTitle = 'ãã‚‰ã™';
 				break;
-				
+
 			case $init->landSeaSide:
-				// ŠCŠİ
+				// æµ·å²¸
 				$image = 'sunahama.gif';
-				$naviTitle = '»•l';
+				$naviTitle = 'ç ‚æµœ';
 				break;
-				
+
 			case $init->landSeaResort:
-				// ŠC‚Ì‰Æ
+				// æµ·ã®å®¶
 				if($lv < 30) {
 					$image = 'umi1.gif';
-					$naviTitle = 'ŠC‚Ì‰Æ';
+					$naviTitle = 'æµ·ã®å®¶';
 				} else if($lv < 100) {
 					$image = 'umi2.gif';
-					$naviTitle = '–¯h';
+					$naviTitle = 'æ°‘å®¿';
 				} else {
 					$image = 'umi3.gif';
-					$naviTitle = 'ƒŠƒ][ƒgƒzƒeƒ‹';
+					$naviTitle = 'ãƒªã‚¾ãƒ¼ãƒˆãƒ›ãƒ†ãƒ«';
 				}
-				$naviText = "û“ü:{$lv}{$init->unitPop} <br>";
+				$naviText = "åå…¥:{$lv}{$init->unitPop} <br>";
 				break;
-				
+
 			case $init->landSoccer:
-				// ƒXƒ^ƒWƒAƒ€
+				// ã‚¹ã‚¿ã‚¸ã‚¢ãƒ 
 				$image = 'stadium.gif';
-				$naviTitle = 'ƒXƒ^ƒWƒAƒ€';
+				$naviTitle = 'ã‚¹ã‚¿ã‚¸ã‚¢ãƒ ';
 				break;
-				
+
 			case $init->landPark:
-				// —V‰€’n
+				// éŠåœ’åœ°
 				$image = "park{$lv}.gif";
-				$naviTitle = '—V‰€’n';
+				$naviTitle = 'éŠåœ’åœ°';
 				break;
-				
+
 			case $init->landFusya:
-				// •—Ô
+				// é¢¨è»Š
 				$image = 'fusya.gif';
-				$naviTitle = '•—Ô';
+				$naviTitle = 'é¢¨è»Š';
 				break;
-				
+
 			case $init->landSyoubou:
-				// Á–h
+				// æ¶ˆé˜²ç½²
 				$image = 'syoubou.gif';
-				$naviTitle = 'Á–h';
+				$naviTitle = 'æ¶ˆé˜²ç½²';
 				break;
-				
+
 			case $init->landSsyoubou:
-				// ŠC’êÁ–h
+				// æµ·åº•æ¶ˆé˜²ç½²
 				$image = 'syoubou2.gif';
-				$naviTitle = 'ŠC’êÁ–h';
+				$naviTitle = 'æµ·åº•æ¶ˆé˜²ç½²';
 				break;
-				
+
 			case $init->landNursery:
-				// —{Bê
+				// é¤Šæ®–å ´
 				$image = 'Nursery.gif';
-				$naviTitle = '—{Bê';
-				$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+				$naviTitle = 'é¤Šæ®–å ´';
+				$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				break;
-				
+
 			case $init->landWaste:
-				// r’n
+				// è’åœ°
 				if($lv == 1) {
-					$image = 'land13.gif'; // ’…’e“_
+					$image = 'land13.gif'; // ç€å¼¾ç‚¹
 				} else {
 					$image = 'land1.gif';
 				}
-				$naviTitle = 'r’n';
+				$naviTitle = 'è’åœ°';
 				break;
-				
+
 			case $init->landPlains:
-				// •½’n
+				// å¹³åœ°
 				$image = 'land2.gif';
-				$naviTitle = '•½’n';
+				$naviTitle = 'å¹³åœ°';
 				break;
-				
+
 			case $init->landPoll:
-				// ‰˜õ“yë
+				// æ±šæŸ“åœŸå£Œ
 				$image = 'poll.gif';
-				$naviTitle = '‰˜õ“yë';
-				$naviText = "‰˜õƒŒƒxƒ‹{$lv}";
+				$naviTitle = 'æ±šæŸ“åœŸå£Œ';
+				$naviText = "æ±šæŸ“ãƒ¬ãƒ™ãƒ«{$lv}";
 				break;
-				
+
 			case $init->landForest:
-				// X
+				// æ£®
 				if($mode == 1) {
 					$image = 'land6.gif';
 					$naviText= "${lv}{$init->unitTree}";
 				} else {
-					// ŠÏŒõÒ‚Ìê‡‚Í–Ø‚Ì–{”‰B‚·
+					// è¦³å…‰è€…ã®å ´åˆã¯æœ¨ã®æœ¬æ•°éš ã™
 					$image = 'land6.gif';
 				}
-				$naviTitle = 'X';
+				$naviTitle = 'æ£®';
 				break;
-				
+
 			case $init->landTown:
-				// ’¬
+				// ç”º
 				$p; $n;
 				if($lv < 30) {
 					$p = 3;
-					$naviTitle = '‘º';
+					$naviTitle = 'æ‘';
 				} else if($lv < 100) {
 					$p = 4;
-					$naviTitle = '’¬';
+					$naviTitle = 'ç”º';
 				} else if($lv < 200) {
 					$p = 5;
-					$naviTitle = '“ss';
+					$naviTitle = 'éƒ½å¸‚';
 				} else {
 					$p = 52;
-					$naviTitle = '‘å“ss';
+					$naviTitle = 'å¤§éƒ½å¸‚';
 				}
 				$image = "land{$p}.gif";
 				$naviText = "{$lv}{$init->unitPop}";
 				break;
-				
+
 			case $init->landProcity:
-				// –hĞ“ss
+				// é˜²ç½éƒ½å¸‚
 				if($lv < 110) {
-					$naviTitle = '–hĞ“ssƒ‰ƒ“ƒN‚d';
+					$naviTitle = 'é˜²ç½éƒ½å¸‚ãƒ©ãƒ³ã‚¯ï¼¥';
 				} else if($lv < 130) {
-					$naviTitle = '–hĞ“ssƒ‰ƒ“ƒN‚c';
+					$naviTitle = 'é˜²ç½éƒ½å¸‚ãƒ©ãƒ³ã‚¯ï¼¤';
 				} else if($lv < 160) {
-					$naviTitle = '–hĞ“ssƒ‰ƒ“ƒN‚b';
+					$naviTitle = 'é˜²ç½éƒ½å¸‚ãƒ©ãƒ³ã‚¯ï¼£';
 				} else if($lv < 200) {
-					$naviTitle = '–hĞ“ssƒ‰ƒ“ƒN‚a';
+					$naviTitle = 'é˜²ç½éƒ½å¸‚ãƒ©ãƒ³ã‚¯ï¼¢';
 				} else {
-					$naviTitle = '–hĞ“ssƒ‰ƒ“ƒN‚`';
+					$naviTitle = 'é˜²ç½éƒ½å¸‚ãƒ©ãƒ³ã‚¯ï¼¡';
 				}
 				$image = "bousai.gif";
 				$naviText = "{$lv}{$init->unitPop}";
 				break;
-				
+
 			case $init->landNewtown:
-				// ƒjƒ…[ƒ^ƒEƒ“
+				// ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³
 				$level = Util::expToLevel($l, $lv);
 				$nwork = (int)($lv/15);
 				$image = 'new.gif';
-				$naviTitle = 'ƒjƒ…[ƒ^ƒEƒ“';
-				$naviText = "{$lv}{$init->unitPop}/Eê{$nwork}0{$init->unitPop}";
+				$naviTitle = 'ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³';
+				$naviText = "{$lv}{$init->unitPop}/è·å ´{$nwork}0{$init->unitPop}";
 				break;
-				
+
 			case $init->landBigtown:
-				// Œ»‘ã“ss
+				// ç¾ä»£éƒ½å¸‚
 				$level = Util::expToLevel($l, $lv);
 				$mwork = (int)($lv/20);
 				$lwork = (int)($lv/30);
 				$image = 'big.gif';
-				$naviTitle = 'Œ»‘ã“ss';
-				$naviText = "{$lv}{$init->unitPop}/Eê{$lwork}0{$init->unitPop}/”_ê{$mwork}0{$init->unitPop}";
+				$naviTitle = 'ç¾ä»£éƒ½å¸‚';
+				$naviText = "{$lv}{$init->unitPop}/è·å ´{$lwork}0{$init->unitPop}/è¾²å ´{$mwork}0{$init->unitPop}";
 				break;
-				
+
 			case $init->landFarm:
-				// ”_ê
+				// è¾²å ´
 				$image = 'land7.gif';
-				$naviTitle = '”_ê';
-				$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+				$naviTitle = 'è¾²å ´';
+				$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				if($lv > 25) {
-				// ƒh[ƒ€Œ^”_ê
+				// ãƒ‰ãƒ¼ãƒ å‹è¾²å ´
 				$image = 'land71.gif';
-				$naviTitle = 'ƒh[ƒ€Œ^”_ê';
+				$naviTitle = 'ãƒ‰ãƒ¼ãƒ å‹è¾²å ´';
 				}
 				break;
-				
+
 			case $init->landSfarm:
-				// ŠC’ê”_ê
+				// æµ·åº•è¾²å ´
 				$image = 'land72.gif';
-				$naviTitle = 'ŠC’ê”_ê';
-				$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+				$naviTitle = 'æµ·åº•è¾²å ´';
+				$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				break;
-				
+
 			case $init->landFactory:
-				// Hê
+				// å·¥å ´
 				$image = 'land8.gif';
-				$naviTitle = 'Hê';
-				$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+				$naviTitle = 'å·¥å ´';
+				$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				if($lv > 100) {
-				// ‘åHê
+				// å¤§å·¥å ´
 				$image = 'land82.gif';
-				$naviTitle = '‘åHê';
+				$naviTitle = 'å¤§å·¥å ´';
 				}
 				break;
-				
+
 			case $init->landCommerce:
-				// ¤‹Æƒrƒ‹
+				// å•†æ¥­ãƒ“ãƒ«
 				$image = 'commerce.gif';
-				$naviTitle = '¤‹Æƒrƒ‹';
-				$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+				$naviTitle = 'å•†æ¥­ãƒ“ãƒ«';
+				$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				if($lv > 150) {
-				// –{Ğƒrƒ‹
+				// æœ¬ç¤¾ãƒ“ãƒ«
 				$image = 'commerce2.gif';
-				$naviTitle = '–{Ğƒrƒ‹';
+				$naviTitle = 'æœ¬ç¤¾ãƒ“ãƒ«';
 				}
 				break;
-				
+
 			case $init->landHatuden:
-				// ”­“dŠ
+				// ç™ºé›»æ‰€
 				$image = 'hatuden.gif';
-				$naviTitle = '”­“dŠ';
+				$naviTitle = 'ç™ºé›»æ‰€';
 				$naviText = "{$lv}000kw";
 				if($lv > 100) {
-				// ‘åŒ^”­“dŠ
+				// å¤§å‹ç™ºé›»æ‰€
 				$image = 'hatuden2.gif';
-				$naviTitle = '‘åŒ^”­“dŠ';
+				$naviTitle = 'å¤§å‹ç™ºé›»æ‰€';
 				}
 				break;
-				
+
 			case $init->landBank:
-				// ‹âs
+				// éŠ€è¡Œ
 				$image = 'bank.gif';
-				$naviTitle = '‹âs';
+				$naviTitle = 'éŠ€è¡Œ';
 					break;
-					
+
 			case $init->landBase:
 				if($mode == 0 || $mode == 2) {
-					// ŠÏŒõÒ‚Ìê‡‚ÍX‚Ì‚Ó‚è
+					// è¦³å…‰è€…ã®å ´åˆã¯æ£®ã®ãµã‚Š
 					$image = 'land6.gif';
-					$naviTitle = 'X';
+					$naviTitle = 'æ£®';
 				} else {
-					// ƒ~ƒTƒCƒ‹Šî’n
+					// ãƒŸã‚µã‚¤ãƒ«åŸºåœ°
 					$level = Util::expToLevel($l, $lv);
 					$image = 'land9.gif';
-					$naviTitle = 'ƒ~ƒTƒCƒ‹Šî’n';
-					$naviText = "ƒŒƒxƒ‹ ${level} / ŒoŒ±’l {$lv}";
+					$naviTitle = 'ãƒŸã‚µã‚¤ãƒ«åŸºåœ°';
+					$naviText = "ãƒ¬ãƒ™ãƒ« ${level} / çµŒé¨“å€¤ {$lv}";
 				}
 				break;
-				
+
 			case $init->landSbase:
-				// ŠC’êŠî’n
+				// æµ·åº•åŸºåœ°
 				if($mode == 0 || $mode == 2) {
-					// ŠÏŒõÒ‚Ìê‡‚ÍŠC‚Ì‚Ó‚è
+					// è¦³å…‰è€…ã®å ´åˆã¯æµ·ã®ãµã‚Š
 					$image = 'land0.gif';
-					$naviTitle = 'ŠC';
+					$naviTitle = 'æµ·';
 				} else {
 					$level = Util::expToLevel($l, $lv);
 					$image = 'land12.gif';
-					$naviTitle = 'ŠC’êŠî’n';
-					$naviText = "ƒŒƒxƒ‹ ${level} / ŒoŒ±’l {$lv}";
+					$naviTitle = 'æµ·åº•åŸºåœ°';
+					$naviText = "ãƒ¬ãƒ™ãƒ« ${level} / çµŒé¨“å€¤ {$lv}";
 				}
 				break;
-				
+
 			case $init->landDefence:
-				// –h‰q{İ
+				// é˜²è¡›æ–½è¨­
 				if($mode == 0 || $mode == 2) {
 					$image = 'land10.gif';
-					$naviTitle = '–h‰q{İ';
+					$naviTitle = 'é˜²è¡›æ–½è¨­';
 				} else {
 					$image = 'land10.gif';
-					$naviTitle = '–h‰q{İ';
-					$naviText = "‘Ï‹v—Í {$lv}";
+					$naviTitle = 'é˜²è¡›æ–½è¨­';
+					$naviText = "è€ä¹…åŠ› {$lv}";
 				}
 				break;
-				
+
 			case $init->landHaribote:
-				// ƒnƒŠƒ{ƒe
+				// ãƒãƒªãƒœãƒ†
 				$image = 'land10.gif';
 				if($mode == 0 || $mode == 2) {
-					// ŠÏŒõÒ‚Ìê‡‚Í–h‰q{İ‚Ì‚Ó‚è
-					$naviTitle = '–h‰q{İ';
+					// è¦³å…‰è€…ã®å ´åˆã¯é˜²è¡›æ–½è¨­ã®ãµã‚Š
+					$naviTitle = 'é˜²è¡›æ–½è¨­';
 				} else {
-					$naviTitle = 'ƒnƒŠƒ{ƒe';
+					$naviTitle = 'ãƒãƒªãƒœãƒ†';
 				}
 				break;
-				
+
 			case $init->landSdefence:
-				// ŠC’ê–h‰q{İ
+				// æµ·åº•é˜²è¡›æ–½è¨­
 				if($mode == 0 || $mode == 2) {
 					$image = 'land102.gif';
-					$naviTitle = 'ŠC’ê–h‰q{İ';
+					$naviTitle = 'æµ·åº•é˜²è¡›æ–½è¨­';
 				} else {
 					$image = 'land102.gif';
-					$naviTitle = 'ŠC’ê–h‰q{İ';
-					$naviText = "‘Ï‹v—Í {$lv}";
+					$naviTitle = 'æµ·åº•é˜²è¡›æ–½è¨­';
+					$naviText = "è€ä¹…åŠ› {$lv}";
 				}
 				break;
-				
+
 			case $init->landOil:
-				// ŠC’ê–û“c
+				// æµ·åº•æ²¹ç”°
 				$image = 'land16.gif';
-				$naviTitle = 'ŠC’ê–û“c';
+				$naviTitle = 'æµ·åº•æ²¹ç”°';
 				break;
-				
+
 			case $init->landMountain:
-				// R
+				// å±±
 				if($lv > 0) {
 					$image = 'land15.gif';
-					$naviTitle = 'ÌŒ@ê';
-					$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+					$naviTitle = 'æ¡æ˜å ´';
+					$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				} else {
 					$image = 'land11.gif';
-					$naviTitle = 'R';
+					$naviTitle = 'å±±';
 				}
 				break;
-				
+
 			case $init->landMyhome:
-				// ©‘î
+				// è‡ªå®…
 				$image = "home{$lv}.gif";
-				$naviTitle = 'ƒ}ƒCƒz[ƒ€';
-				$naviText = "{$lv}l‰Æ‘°";
+				$naviTitle = 'ãƒã‚¤ãƒ›ãƒ¼ãƒ ';
+				$naviText = "{$lv}äººå®¶æ—";
 				break;
-				
+
 			case $init->landSoukoM:
 				$flagm = 1;
 			case $init->landSoukoF:
-				// ‘qŒÉ
+				// å€‰åº«
 				if($flagm == 1) {
-					$naviTitle = '‹àŒÉ';
+					$naviTitle = 'é‡‘åº«';
 				} else {
-					$naviTitle = 'H—¿ŒÉ';
+					$naviTitle = 'é£Ÿæ–™åº«';
 				}
 				$image = "souko.gif";
 				$sec = (int)($lv / 100);
 				$tyo = $lv % 100;
 				if($l == $init->landSoukoM) {
 					if($tyo == 0) {
-						$naviText = "ƒZƒLƒ…ƒŠƒeƒBF{$sec}A’™‹àF‚È‚µ";
+						$naviText = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ï¼š{$sec}ã€è²¯é‡‘ï¼šãªã—";
 					} else {
-						$naviText = "ƒZƒLƒ…ƒŠƒeƒBF{$sec}A’™‹àF{$tyo}000{$init->unitMoney}";
+						$naviText = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ï¼š{$sec}ã€è²¯é‡‘ï¼š{$tyo}000{$init->unitMoney}";
 					}
 				} else {
 					if($tyo == 0) {
-						$naviText = "ƒZƒLƒ…ƒŠƒeƒBF{$sec}A’™HF‚È‚µ";
+						$naviText = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ï¼š{$sec}ã€è²¯é£Ÿï¼šãªã—";
 					} else {
-						$naviText = "ƒZƒLƒ…ƒŠƒeƒBF{$sec}A’™HF{$tyo}000{$init->unitFood}";
+						$naviText = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ï¼š{$sec}ã€è²¯é£Ÿï¼š{$tyo}000{$init->unitFood}";
 					}
 				}
 				break;
-				
+
 			case $init->landMonument:
-				// ‹L”O”è
+				// è¨˜å¿µç¢‘
 				$image = "monument{$lv}.gif";
-				$naviTitle = '‹L”O”è';
+				$naviTitle = 'è¨˜å¿µç¢‘';
 				$naviText = $init->monumentName[$lv];
 				break;
-				
+
 			case $init->landMonster:
 			case $init->landSleeper:
-				// ‰öb
+				// æ€ªç£
 				$monsSpec = Util::monsterSpec($lv);
 				$spec = $monsSpec['kind'];
 				$special = $init->monsterSpecial[$spec];
 				$image = "monster{$spec}.gif";
 				if($l == $init->landSleeper) {
-					$naviTitle = '‰öbi‡–°’†j';
+					$naviTitle = 'æ€ªç£ï¼ˆç¡çœ ä¸­ï¼‰';
 				} else {
-					$naviTitle = '‰öb';
+					$naviTitle = 'æ€ªç£';
 				}
-				
-				// d‰»’†?
-				if((($special & 0x4) && (($this->islandTurn % 2) == 1)) ||
+
+				// ç¡¬åŒ–ä¸­?
+				if((($special & 0x4)  && (($this->islandTurn % 2) == 1)) ||
 					 (($special & 0x10) && (($this->islandTurn % 2) == 0))) {
-					// d‰»’†
+					// ç¡¬åŒ–ä¸­
 					$image = $init->monsterImage[$monsSpec['kind']];
 				}
-				$naviText = "‰öb{$monsSpec['name']}(‘Ì—Í{$monsSpec['hp']})";
+				$naviText = "æ€ªç£{$monsSpec['name']}(ä½“åŠ›{$monsSpec['hp']})";
 		}
+
+		// åº§æ¨™è¨­å®š
 		if($mode == 1 || $mode == 2) {
-			print "<a href=\"javascript: void(0);\" onclick=\"ps($x,$y)\">";
-			$naviText = "{$comStr}\\n{$naviText}";
+			print "<a href=\"javascript:void(0);\" onclick=\"ps($x,$y)\">";
 		}
-		print "<img src=\"{$image}\" width=\"32\" height=\"32\" alt=\"{$point} {$naviTitle} {$comStr}\" onMouseOver=\"Navi({$naviPos},'{$image}', '{$naviTitle}', '{$point}', '{$naviText}', {$naviExp});\" onMouseOut=\"NaviClose(); return false\">";
-		
-		// À•Wİ’è•Â‚¶
+
+		print "<img src=\"{$image}\" width=\"32\" height=\"32\" alt=\"{$point} {$naviTitle}\" onMouseOver=\"Navi({$naviPos},'{$image}', '{$naviTitle}', '{$point}', '{$naviText}', {$naviExp});\" onMouseOut=\"NaviClose(); return false\">";
+
+		// åº§æ¨™è¨­å®š é–‰ã˜
 		if($mode == 1 || $mode == 2) {
 			print "</a>";
 		}
+
 	}
 }
 
 //--------------------------------------------------------------------
 class Main {
-
 	function execute() {
-		$hako = new Hako;
-		$cgi = new Cgi;
-		
+		$hako = new Hako();
+		$cgi  = new Cgi();
+
 		$cgi->parseInputData();
 		$cgi->getCookies();
-		
+		$fp = "";
+
 		if(!$hako->readIslands($cgi)) {
 			HTML::header($cgi->dataSet);
 			Error::noDataFile();
@@ -617,106 +626,102 @@ class Main {
 		$cgi->setCookies();
 		$cgi->lastModified();
 
-		if($cgi->dataSet['DEVELOPEMODE'] == "java") {
+		$_developmode = (isset( $cgi->dataSet['DEVELOPEMODE'] )) ? $cgi->dataSet['DEVELOPEMODE'] : "";
+		if( mb_strtolower($_developmode) == "java") {
 			$html = new HtmlJS;
-			$com = new MakeJS;
+			$com  = new MakeJS;
 		} else {
 			$html = new HtmlMap;
-			$com = new Make;
+			$com  = new Make;
 		}
 		switch($cgi->mode) {
 			case "turn":
-				$turn = new Turn;
-				$html = new HtmlTop;
+				$turn = new Turn();
+				$html = new HtmlTop();
 				$html->header($cgi->dataSet);
-				$turn->turnMain($hako, $cgi->dataSet); 
-				$html->main($hako, $cgi->dataSet); // ƒ^[ƒ“ˆ—ŒãATOPƒy[ƒWopen
+				$turn->turnMain($hako, $cgi->dataSet);
+				$html->main($hako, $cgi->dataSet); // ã‚¿ãƒ¼ãƒ³å‡¦ç†å¾Œã€TOPãƒšãƒ¼ã‚¸open
 				$html->footer();
 				break;
-				
+
 			case "owner":
 				$html->header($cgi->dataSet);
 				$html->owner($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "command":
 				$html->header($cgi->dataSet);
 				$com->commandMain($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "new":
 				$html->header($cgi->dataSet);
 				$com->newIsland($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "comment":
 				$html->header($cgi->dataSet);
 				$com->commentMain($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "print":
 				$html->header($cgi->dataSet);
 				$html->visitor($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "targetView":
 				$html->header($cgi->dataSet);
 				$html->printTarget($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "change":
 				$html->header($cgi->dataSet);
 				$com->changeMain($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "ChangeOwnerName":
 				$html->header($cgi->dataSet);
 				$com->changeOwnerName($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
-			case "lbbs":
-				$lbbs = new Make;
-				$html->header($cgi->dataSet);
-				$lbbs->localBbsMain($hako, $cgi->dataSet);
-				$html->footer();
-				break;
-				
-			case "skin":
-				$html = new HtmlSetted;
-				$html->header($cgi->dataSet);
-				$html->setSkin();
-				$html->footer();
-				break;
-			case "imgset":
-				$html = new HtmlSetted;
-				$html->header($cgi->dataSet);
-				$html->setImg();
-				$html->footer();
-				break;
+
+			// case "skin":
+			// 	$html = new HtmlSetted();
+			// 	$html->header($cgi->dataSet);
+			// 	$html->setSkin();
+			// 	$html->footer();
+			// 	break;
+
+			// case "imgset":
+			// 	$html = new HtmlSetted;
+			// 	$html->header($cgi->dataSet);
+			// 	$html->setImg();
+			// 	$html->footer();
+			// 	break;
+
 			case "conf":
-				$html = new HtmlTop;
+				$html = new HtmlTop();
 				$html->header($cgi->dataSet);
-				$html->regist($hako, $cgi->dataSet);
+				$html->register($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "log":
-				$html = new HtmlTop;
+				$html = new HtmlTop();
 				$html->header($cgi->dataSet);
 				$html->log();
 				$html->footer();
 				break;
-				
-			default: 
-				$html = new HtmlTop;
+
+			default:
+				$html = new HtmlTop();
 				$html->header($cgi->dataSet);
 				$html->main($hako, $cgi->dataSet);
 				$html->footer();
@@ -726,7 +731,5 @@ class Main {
 	}
 }
 
-$start = new Main;
+$start = new Main();
 $start->execute();
-
-?>

@@ -2,10 +2,10 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- Šeíƒ†[ƒeƒBƒŠƒeƒB’è‹`—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- å„ç¨®ãƒ¦ãƒ¼ãƒ†ã‚£ãƒªãƒ†ã‚£å®šç¾©ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-util.php by SERA - 2012/07/08
 
 *******************************************************************/
@@ -13,30 +13,30 @@
 //--------------------------------------------------------------------
 class Util {
 	//---------------------------------------------------
-	// ‘‹à‚Ì•\¦
+	// è³‡é‡‘ã®è¡¨ç¤º
 	//---------------------------------------------------
-	function aboutMoney($money = 0) {
+	static function aboutMoney($money = 0) {
 		global $init;
-		
+
 		if($init->moneyMode) {
 			if($money < 500) {
-				return "„’è500{$init->unitMoney}–¢–";
+				return "æ¨å®š500{$init->unitMoney}æœªæº€";
 			} else {
-				return "„’è" . round($money / 1000) . "000" . $init->unitMoney;
+				return "æ¨å®š" . round($money / 1000) . "000" . $init->unitMoney;
 			}
 		} else {
 			return $money . $init->unitMoney;
 		}
 	}
-	
+
 	//---------------------------------------------------
-	// ŒoŒ±’n‚©‚çƒ~ƒTƒCƒ‹Šî’nƒŒƒxƒ‹‚ğZo
+	// çµŒé¨“åœ°ã‹ã‚‰ãƒŸã‚µã‚¤ãƒ«åŸºåœ°ãƒ¬ãƒ™ãƒ«ã‚’ç®—å‡º
 	//---------------------------------------------------
-	function expToLevel($kind, $exp) {
+	static function expToLevel($kind, $exp) {
 		global $init;
-		
+
 		if($kind == $init->landBase) {
-			// ƒ~ƒTƒCƒ‹Šî’n
+			// ãƒŸã‚µã‚¤ãƒ«åŸºåœ°
 			for($i = $init->maxBaseLevel; $i > 1; $i--) {
 				if($exp >= $init->baseLevelUp[$i - 2]) {
 					return $i;
@@ -44,7 +44,7 @@ class Util {
 			}
 			return 1;
 		} else {
-			// ŠC’êŠî’n
+			// æµ·åº•åŸºåœ°
 			for($i = $init->maxSBaseLevel; $i > 1; $i--) {
 				if($exp >= $init->sBaseLevelUp[$i - 2]) {
 					return $i;
@@ -53,39 +53,39 @@ class Util {
 			return 1;
 		}
 	}
-	
+
 	//---------------------------------------------------
-	// ‰öb‚Ìí—ŞE–¼‘OE‘Ì—Í‚ğZo
+	// æ€ªç£ã®ç¨®é¡ãƒ»åå‰ãƒ»ä½“åŠ›ã‚’ç®—å‡º
 	//---------------------------------------------------
-	function monsterSpec($lv) {
+	static function monsterSpec($lv) {
 		global $init;
-		
-		// í—Ş
+
+		// ç¨®é¡
 		$kind = (int)($lv / 100);
-		// –¼‘O
+		// åå‰
 		$name = $init->monsterName[$kind];
-		// ‘Ì—Í
+		// ä½“åŠ›
 		$hp = $lv - ($kind * 100);
 		return array ( 'kind' => $kind, 'name' => $name, 'hp' => $hp );
 	}
 	//---------------------------------------------------
-	// “‡‚Ì–¼‘O‚©‚ç”Ô†‚ğZo
+	// å³¶ã®åå‰ã‹ã‚‰ç•ªå·ã‚’ç®—å‡º
 	//---------------------------------------------------
-	function  nameToNumber($hako, $name) {
-		// ‘S“‡‚©‚ç’T‚·
+	static function  nameToNumber($hako, $name) {
+		// å…¨å³¶ã‹ã‚‰æ¢ã™
 		for($i = 0; $i < $hako->islandNumber; $i++) {
 			if(strcmp($name, "{$hako->islands[$i]['name']}") == 0) {
 				return $i;
 			}
 		}
-		// Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡
+		// è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆ
 		return -1;
 	}
-	
+
 	//---------------------------------------------------
-	// “‡–¼‚ğ•Ô‚·
+	// å³¶åã‚’è¿”ã™
 	//---------------------------------------------------
-	function islandName($island, $ally, $idToAllyNumber) {
+	static function islandName($island, $ally, $idToAllyNumber) {
 		$name = '';
 		foreach ($island['allyId'] as $id) {
 			$i = $idToAllyNumber[$id];
@@ -93,17 +93,17 @@ class Util {
 			$color = $ally[$i]['color'];
 			$name .= '<FONT COLOR="' . $color . '"><B>' . $mark . '</B></FONT> ';
 		}
-		$name .= $island['name'] . "“‡";
-		
+		$name .= $island['name'] . "å³¶";
+
 		return ($name);
 	}
 	//---------------------------------------------------
-	// ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+	// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
 	//---------------------------------------------------
-	function checkPassword($p1 = "", $p2 = "") {
+	static function checkPassword($p1 = "", $p2 = "") {
 		global $init;
-		
-		// nullƒ`ƒFƒbƒN
+
+		// nullãƒã‚§ãƒƒã‚¯
 		if(empty($p2)) {
 			return false;
 		}
@@ -112,7 +112,7 @@ class Util {
 			$masterPassword = chop(fgets($fp, READ_LINE));
 			fclose($fp);
 		}
-		// ƒ}ƒXƒ^[ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+		// ãƒã‚¹ã‚¿ãƒ¼ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
 		if(strcmp($masterPassword, crypt($p2, 'ma')) == 0) {
 			return true;
 		}
@@ -121,11 +121,11 @@ class Util {
 		}
 		return false;
 	}
-	
-	function checkSpecialPassword($p = "") {
+
+	static function checkSpecialPassword($p = "") {
 		global $init;
-		
-		// nullƒ`ƒFƒbƒN
+
+		// nullãƒã‚§ãƒƒã‚¯
 		if(empty($p)) {
 			return false;
 		}
@@ -135,68 +135,68 @@ class Util {
 			$specialPassword = chop(fgets($fp, READ_LINE));
 			fclose($fp);
 		}
-		// “ÁêƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+		// ç‰¹æ®Šãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
 		if(strcmp($specialPassword, crypt($p, 'sp')) == 0) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	//---------------------------------------------------
-	// ƒpƒXƒ[ƒh‚ÌƒGƒ“ƒR[ƒh
+	// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰
 	//---------------------------------------------------
-	function encode($s) {
+	static function encode($s) {
 		global $init;
-		
+
 		if($init->cryptOn) {
 			return crypt($s, 'h2');
 		} else {
 			return $s;
 		}
 	}
-	
+
 	//---------------------------------------------------
-	// 0 ` num -1 ‚Ì—”¶¬
+	// 0 ï½ num -1 ã®ä¹±æ•°ç”Ÿæˆ
 	//---------------------------------------------------
-	function random($num = 0) {
+	static function random($num = 0) {
 		if($num <= 1) {
 			return 0;
 		}
 		return mt_rand(0, $num - 1);
 	}
-	
+
 	//---------------------------------------------------
-	// ƒ[ƒJƒ‹Œf¦”Â‚ÌƒƒbƒZ[ƒW‚ğˆê‚Â‘O‚É‚¸‚ç‚·
+	// ãƒ­ãƒ¼ã‚«ãƒ«æ²ç¤ºæ¿ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä¸€ã¤å‰ã«ãšã‚‰ã™
 	//---------------------------------------------------
-	function slideBackLbbsMessage(&$lbbs, $num) {
+	static function slideBackLbbsMessage(&$lbbs, $num) {
 		global $init;
-		
+
 		array_splice($lbbs, $num, 1);
 		$lbbs[$init->lbbsMax - 1] = '0>>0>>';
 	}
 	//---------------------------------------------------
-	// ƒ[ƒJƒ‹Œf¦”Â‚ÌƒƒbƒZ[ƒW‚ğˆê‚ÂŒã‚ë‚É‚¸‚ç‚·
+	// ãƒ­ãƒ¼ã‚«ãƒ«æ²ç¤ºæ¿ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’ä¸€ã¤å¾Œã‚ã«ãšã‚‰ã™
 	//---------------------------------------------------
-	function slideLbbsMessage(&$lbbs) {
+	static function slideLbbsMessage(&$lbbs) {
 		array_pop($lbbs);
 		array_unshift($lbbs, $lbbs[0]);
 	}
-	
+
 	//---------------------------------------------------
-	// ƒ‰ƒ“ƒ_ƒ€‚ÈÀ•W‚ğ¶¬
+	// ãƒ©ãƒ³ãƒ€ãƒ ãªåº§æ¨™ã‚’ç”Ÿæˆ
 	//---------------------------------------------------
-	function makeRandomPointArray() {
+	static function makeRandomPointArray() {
 		global $init;
-		
+
 		$rx = $ry = array();
 		for($i = 0; $i < $init->islandSize; $i++)
 		for($j = 0; $j < $init->islandSize; $j++)
 		$rx[$i * $init->islandSize + $j] = $j;
-		
+
 		for($i = 0; $i < $init->islandSize; $i++)
 		for($j = 0; $j < $init->islandSize; $j++)
 		$ry[$j * $init->islandSize + $i] = $j;
-		
+
 		for($i = $init->pointNumber; --$i;) {
 			$j = Util::random($i + 1);
 			if($i != $j) {
@@ -210,16 +210,16 @@ class Util {
 		}
 		return array($rx, $ry);
 	}
-	
+
 	//---------------------------------------------------
-	// ƒ‰ƒ“ƒ_ƒ€‚È“‡‚Ì‡˜‚ğ¶¬
+	// ãƒ©ãƒ³ãƒ€ãƒ ãªå³¶ã®é †åºã‚’ç”Ÿæˆ
 	//---------------------------------------------------
-	function randomArray($n = 1) {
-		// ‰Šú’l
+	static function randomArray($n = 1) {
+		// åˆæœŸå€¤
 		for($i = 0; $i < $n; $i++) {
 			$list[$i] = $i;
 		}
-		// ƒVƒƒƒbƒtƒ‹
+		// ã‚·ãƒ£ãƒƒãƒ•ãƒ«
 		for($i = 0; $i < $n; $i++) {
 			$j = Util::random($n - 1);
 			if($i != $j) {
@@ -230,17 +230,17 @@ class Util {
 		}
 		return $list;
 	}
-	
+
 	//---------------------------------------------------
-	// ƒRƒ}ƒ“ƒh‚ğ‘O‚É‚¸‚ç‚·
+	// ã‚³ãƒãƒ³ãƒ‰ã‚’å‰ã«ãšã‚‰ã™
 	//---------------------------------------------------
-	function slideFront(&$command, $number = 0) {
+	static function slideFront(&$command, $number = 0) {
 		global $init;
-		
-		// ‚»‚ê‚¼‚ê‚¸‚ç‚·
+
+		// ãã‚Œãã‚Œãšã‚‰ã™
 		array_splice($command, $number, 1);
-		
-		// ÅŒã‚É‘‹àŒJ‚è
+
+		// æœ€å¾Œã«è³‡é‡‘ç¹°ã‚Š
 		$command[$init->commandMax - 1] = array (
 			'kind'   => $init->comDoNothing,
 			'target' => 0,
@@ -249,122 +249,129 @@ class Util {
 			'arg'    => 0
 		);
 	}
-	
+
 	//---------------------------------------------------
-	// ƒRƒ}ƒ“ƒh‚ğŒã‚É‚¸‚ç‚·
+	// ã‚³ãƒãƒ³ãƒ‰ã‚’å¾Œã«ãšã‚‰ã™
 	//---------------------------------------------------
-	function slideBack(&$command, $number = 0) {
+	static function slideBack(&$command, $number = 0) {
 		global $init;
-		
-		// ‚»‚ê‚¼‚ê‚¸‚ç‚·
+
+		// ãã‚Œãã‚Œãšã‚‰ã™
 		if($number == count($command) - 1) {
 			return;
 		}
 		for($i = $init->commandMax - 1; $i >= $number; $i--) {
-			$command[$i] = $command[$i - 1];
+			if ( preg_match('/[^0-9]/', $i) ) {
+				$command[$i] = $command[$i - 1];
+			}
 		}
 	}
-	
-	function euc_convert($arg) {
-		// •¶šƒR[ƒh‚ğEUC-JP‚É•ÏŠ·‚µ‚Ä•Ô‚·
-		// •¶š—ñ‚Ì•¶šƒR[ƒh‚ğ”»•Ê
+
+	static function euc_convert($arg) {
+		// æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’EUC-JPã«å¤‰æ›ã—ã¦è¿”ã™
+		// æ–‡å­—åˆ—ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’åˆ¤åˆ¥
 		$code = i18n_discover_encoding("$arg");
-		// ”ñEUC-JP‚Ìê‡‚Ì‚İEUC-JP‚É•ÏŠ·
+		// éEUC-JPã®å ´åˆã®ã¿EUC-JPã«å¤‰æ›
 		if ( $code != "EUC-JP" ) {
 			$arg = i18n_convert("$arg","EUC-JP");
 		}
 		return $arg;
 	}
-	
-	function sjis_convert($arg) {
-		// •¶šƒR[ƒh‚ğSHIFT_JIS‚É•ÏŠ·‚µ‚Ä•Ô‚·
-		// •¶š—ñ‚Ì•¶šƒR[ƒh‚ğ”»•Ê
+
+	static function sjis_convert($arg) {
+		// æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’SHIFT_JISã«å¤‰æ›ã—ã¦è¿”ã™
+		// æ–‡å­—åˆ—ã®æ–‡å­—ã‚³ãƒ¼ãƒ‰ã‚’åˆ¤åˆ¥
 		$code = i18n_discover_encoding("$arg");
-		// ”ñSHIFT_JIS‚Ìê‡‚Ì‚İSHIFT_JIS‚É•ÏŠ·
+		// éSHIFT_JISã®å ´åˆã®ã¿SHIFT_JISã«å¤‰æ›
 		if ( $code != "SJIS" ) {
 			$arg = i18n_convert("$arg","SJIS");
 		}
 		return $arg;
 	}
-	
+
 	//---------------------------------------------------
-	// ‘Dî•ñ‚ÌUnpack
+	// èˆ¹æƒ…å ±ã®Unpack
 	//---------------------------------------------------
-	function navyUnpack($lv) {
+	static function navyUnpack($lv) {
 		global $init;
-		
-		// bit ˆÓ–¡
+
+		// bit æ„å‘³
 		//-----------
-		//  7  “‡ID
-		//  4  í—Ş
-		//  4  ‘Ï‹v—Í
-		//  5  ŒoŒ±’l
-		//  4  ƒtƒ‰ƒO
-		// 24  ‡Œv
-		
+		//  7  å³¶ID
+		//  4  ç¨®é¡
+		//  4  è€ä¹…åŠ›
+		//  5  çµŒé¨“å€¤
+		//  4  ãƒ•ãƒ©ã‚°
+		// 24  åˆè¨ˆ
+
 		$flag = $lv & 0x0f; $lv >>= 4;
 		$exp  = $lv & 0x1f; $lv >>= 5;
 		$hp   = $lv & 0x0f; $lv >>= 4;
 		$kind = $lv & 0x0f; $lv >>= 4;
 		$id   = $lv;
-		
+
 		return array($id, $kind, $hp, $exp, $flag);
 	}
-	
+
 	//---------------------------------------------------
-	// ‘Dî•ñ‚ÌPack
+	// èˆ¹æƒ…å ±ã®Pack
 	//---------------------------------------------------
-	function navyPack($id, $kind, $hp, $exp, $flag) {
+	static function navyPack($id, $kind, $hp, $exp, $flag) {
 		global $init;
-		
-		// bit ˆÓ–¡
+
+		// bit æ„å‘³
 		//-----------
-		//  7  “‡ID
-		//  4  í—Ş
-		//  4  ‘Ï‹v—Í
-		//  5  ŒoŒ±’l
-		//  4  ƒtƒ‰ƒO
-		// 24  ‡Œv
-		
+		//  7  å³¶ID
+		//  4  ç¨®é¡
+		//  4  è€ä¹…åŠ›
+		//  5  çµŒé¨“å€¤
+		//  4  ãƒ•ãƒ©ã‚°
+		// 24  åˆè¨ˆ
+
 		$lv = 0;
 		$lv |= $id   & 0x7f; $lv <<= 4;
 		$lv |= $kind & 0x0f; $lv <<= 4;
 		$lv |= $hp   & 0x0f; $lv <<= 5;
 		$lv |= $exp  & 0x1f; $lv <<= 4;
 		$lv |= $flag & 0x0f;
-		
+
 		return $lv;
 	}
-	
+
 	//---------------------------------------------------
-	// ƒtƒ@ƒCƒ‹‚ğƒƒbƒN‚·‚é
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹
 	//---------------------------------------------------
-	function lock() {
+	static function lock() {
 		global $init;
-		
+
 		$fp = fopen("{$init->dirName}/lock.dat", "w");
-		
+
 		for($count = 0; $count < LOCK_RETRY_COUNT; $count++) {
 			if(flock($fp, LOCK_EX)) {
-				// ƒƒbƒN¬Œ÷
+				// ãƒ­ãƒƒã‚¯æˆåŠŸ
 				return $fp;
 			}
-			// ˆê’èŠÔsleep‚µAƒƒbƒN‚ª‰ğœ‚³‚ê‚é‚Ì‚ğ‘Ò‚Â
-			// —”ŠÔsleep‚·‚é‚±‚Æ‚ÅAƒƒbƒN‚ª‰½“x‚àÕ“Ë‚µ‚È‚¢‚æ‚¤‚É‚·‚é
+			// ä¸€å®šæ™‚é–“sleepã—ã€ãƒ­ãƒƒã‚¯ãŒè§£é™¤ã•ã‚Œã‚‹ã®ã‚’å¾…ã¤
+			// ä¹±æ•°æ™‚é–“sleepã™ã‚‹ã“ã¨ã§ã€ãƒ­ãƒƒã‚¯ãŒä½•åº¦ã‚‚è¡çªã—ãªã„ã‚ˆã†ã«ã™ã‚‹
 			usleep((LOCK_RETRY_INTERVAL - mt_rand(0, 300)) * 1000);
 		}
-		// ƒƒbƒN¸”s
+		// ãƒ­ãƒƒã‚¯å¤±æ•—
 		fclose($fp);
 		Error::lockFail();
 		return FALSE;
 	}
 	//---------------------------------------------------
-	// ƒtƒ@ƒCƒ‹‚ğƒAƒ“ƒƒbƒN‚·‚é
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ã™ã‚‹
 	//---------------------------------------------------
-	function unlock($fp) {
+	static function unlock($fp) {
 		flock($fp, LOCK_UN);
 		fclose($fp);
 	}
-}
 
-?>
+	static function makeTagMessage($message, $status = "success"){
+			echo '<div class="alert alert-'. $status .' role="alert">';
+			echo $message;
+			echo '</div>';
+	}
+
+}

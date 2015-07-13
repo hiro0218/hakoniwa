@@ -2,10 +2,10 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- Cookie’è‹`—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- Cookieå®šç¾©ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-cgi.php by SERA - 2012/04/03
 
 *******************************************************************/
@@ -14,20 +14,21 @@ class Cgi {
 	var $mode = "";
 	var $dataSet = array();
 	//---------------------------------------------------
-	// POSTAGET‚Ìƒf[ƒ^‚ðŽæ“¾
+	// POSTã€GETã®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—
 	//---------------------------------------------------
 	function parseInputData() {
 		global $init;
-		
-		$this->mode = $_POST['mode'];
+
+		$this->mode = (array_key_exists('mode', $_POST)) ? $_POST['mode'] : "";
+
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
 				// $value = Util::sjis_convert($value);
-				// ”¼ŠpƒJƒi‚ª‚ ‚ê‚Î‘SŠp‚É•ÏŠ·‚µ‚Ä•Ô‚·
+				// åŠè§’ã‚«ãƒŠãŒã‚ã‚Œã°å…¨è§’ã«å¤‰æ›ã—ã¦è¿”ã™
 				// $value = i18n_ja_jp_hantozen($value,"KHV");
 				$value = str_replace(",", "", $value);
-				$value = JcodeConvert($value, 0, 2);
-				$value = HANtoZEN_SJIS($value);
+				// $value = JcodeConvert($value, 0, 2);
+				// $value = HANtoZEN_UTF8($value);
 				if($init->stripslashes == true) {
 					$this->dataSet["{$name}"] = stripslashes($value);
 				} else {
@@ -35,17 +36,7 @@ class Cgi {
 				}
 			}
 		}
-		if(!empty($this->dataSet['IMGLINE'])) {
-			$neo = $this->dataSet['IMGLINE'];
-			if(strcmp($neo, 'delete') == 0) {
-				$neo = $init->imgDir;
-			} else {
-				$neo = str_replace("\\", "/", $neo);
-				$neo = preg_replace("/\/[\w\.]+\.gif/", "", $neo);
-				$neo = 'file:///' . $neo;
-			}
-			$this->dataSet['IMG'] = $neo;
-		}
+
 		if(!empty($_GET['Sight'])) {
 			$this->mode = "print";
 			$this->dataSet['ISLANDID'] = $_GET['Sight'];
@@ -54,18 +45,24 @@ class Cgi {
 			$this->mode = "targetView";
 			$this->dataSet['ISLANDID'] = $_GET['target'];
 		}
-		if($_GET['mode'] == "conf") {
+
+		$getMode = (array_key_exists('mode', $_GET)) ? $_GET['mode'] : "";
+		if($getMode == "conf") {
 			$this->mode = "conf";
 		}
-		if($_GET['mode'] == "log") {
+		if($getMode == "log") {
 			$this->mode = "log";
 		}
 		$init->adminMode = 0;
 		if(empty($_GET['AdminButton'])) {
-			if(Util::checkPassword("", $this->dataSet['PASSWORD'])) { $init->adminMode = 1; }
+			$_password = (isset( $this->dataSet['PASSWORD'] )) ? $this->dataSet['PASSWORD'] : "";
+
+			if(Util::checkPassword("", $_password)) {
+				$init->adminMode = 1;
+				}
 		}
 		if($this->mode == "turn") {
-			// ‚±‚Ì’iŠK‚Å mode ‚É turn ‚ªƒZƒbƒg‚³‚ê‚é‚Ì‚Í•s³ƒAƒNƒZƒX‚ª‚ ‚éê‡‚Ì‚Ý‚È‚Ì‚ÅƒNƒŠƒA‚·‚é
+			// ã“ã®æ®µéšŽã§ mode ã« turn ãŒã‚»ãƒƒãƒˆã•ã‚Œã‚‹ã®ã¯ä¸æ­£ã‚¢ã‚¯ã‚»ã‚¹ãŒã‚ã‚‹å ´åˆã®ã¿ãªã®ã§ã‚¯ãƒªã‚¢ã™ã‚‹
 			$this->mode = '';
 		}
 		if(!empty($_GET['islandListStart'])) {
@@ -73,15 +70,15 @@ class Cgi {
 		} else {
 			$this->dataSet['islandListStart'] = 1;
 		}
-		$this->dataSet["ISLANDNAME"] = jsubstr($this->dataSet["ISLANDNAME"], 0, 16);
-		$this->dataSet["MESSAGE"] = jsubstr($this->dataSet["MESSAGE"], 0, 60);
-		$this->dataSet["LBBSMESSAGE"] = jsubstr($this->dataSet["LBBSMESSAGE"], 0, 60);
+
+		$this->dataSet["ISLANDNAME"]  = (isset( $this->dataSet['ISLANDNAME'] ))  ? mb_substr($this->dataSet["ISLANDNAME"], 0, 16) : "";
+		$this->dataSet["MESSAGE"]     = (isset( $this->dataSet['MESSAGE'] ))     ? mb_substr($this->dataSet["MESSAGE"], 0, 60) : "";
 	}
-	
+
 	function lastModified() {
 		global $init;
-		
-		// Last Modifiedƒwƒbƒ_‚ðo—Í
+
+		// Last Modifiedãƒ˜ãƒƒãƒ€ã‚’å‡ºåŠ›
 		/*
 		if($this->mode == "Sight") {
 			$fileName = "{$init->dirName}/island.{$this->dataSet['ISLANDID']}";
@@ -92,31 +89,36 @@ class Cgi {
 		$fileName = "{$init->dirName}/hakojima.dat";
 		$time_stamp = filemtime($fileName);
 		$time = gmdate("D, d M Y G:i:s", $time_stamp);
-		header ("Last-Modified: $time GMT");
-		$this->modifiedSinces($time_stamp);
+		//header ("Last-Modified: $time GMT");
+		//$this->modifiedSinces($time_stamp);
 	}
-	
-	function modifiedSinces($time) {
-		$modsince = $_SERVER{'HTTP_IF_MODIFIED_SINCE'};
-		
-		$ms = gmdate("D, d M Y G:i:s", $time) . " GMT";
-		if($modsince == $ms) {
-			// RFC 822
-			header ("HTTP/1.1 304 Not Modified\n");
-		}
-		$ms = gmdate("l, d-M-y G:i:s", $time) . " GMT";
-		if($modsince == $ms) {
-			// RFC 850
-			header ("HTTP/1.1 304 Not Modified\n");
-		}
-		$ms = gmdate("D M j G:i:s Y", $time);
-		if($modsince == $ms) {
-			// ANSI C's asctime() format
-			header ("HTTP/1.1 304 Not Modified\n");
-		}
-	}
+
+	// function modifiedSinces($time) {
+	// 	$modsince = "";
+	// 	if(isset($_SERVER["HTTP_IF_MODIFIED_SINCE"])){
+	// 		$modsince = $_SERVER["HTTP_IF_MODIFIED_SINCE"];
+	// 	}
+	// 	if ( isset($modsince) ) {
+	// 		$ms = gmdate("D, d M Y G:i:s", $time) . " GMT";
+	// 		if($modsince == $ms) {
+	// 			// RFC 822
+	// 			header ("HTTP/1.1 304 Not Modified\n");
+	// 		}
+	// 		$ms = gmdate("l, d-M-y G:i:s", $time) . " GMT";
+	// 		if($modsince == $ms) {
+	// 			// RFC 850
+	// 			header ("HTTP/1.1 304 Not Modified\n");
+	// 		}
+	// 		$ms = gmdate("D M j G:i:s Y", $time);
+	// 		if($modsince == $ms) {
+	// 			// ANSI C's asctime() format
+	// 			header ("HTTP/1.1 304 Not Modified\n");
+	// 		}
+	// 	}
+	// }
+
 	//---------------------------------------------------
-	// COOKIE‚ðŽæ“¾
+	// COOKIEã‚’å–å¾—
 	//---------------------------------------------------
 	function getCookies() {
 		if(!empty($_COOKIE)) {
@@ -125,43 +127,35 @@ class Cgi {
 					case "OWNISLANDID":
 						$this->dataSet['defaultID'] = $value;
 						break;
-						
+
 					case "OWNISLANDPASSWORD":
 						$this->dataSet['defaultPassword'] = $value;
 						break;
-						
+
 					case "TARGETISLANDID":
 						$this->dataSet['defaultTarget'] = $value;
 						break;
-						
-					case "LBBSNAME":
-						$this->dataSet['defaultName'] = $value;
-						break;
-						
-					case "LBBSCOLOR":
-						$this->dataSet['defaultColor'] = $value;
-						break;
-						
+
 					case "POINTX":
 						$this->dataSet['defaultX'] = $value;
 						break;
-						
+
 					case "POINTY":
 						$this->dataSet['defaultY'] = $value;
 						break;
-						
+
 					case "COMMAND":
 						$this->dataSet['defaultKind'] = $value;
 						break;
-						
+
 					case "DEVELOPEMODE":
 						$this->dataSet['defaultDevelopeMode'] = $value;
 						break;
-						
-					case "SKIN":
-						$this->dataSet['defaultSkin'] = $value;
-						break;
-						
+
+					// case "SKIN":
+					// 	$this->dataSet['defaultSkin'] = $value;
+					// 	break;
+
 					case "IMG":
 						$this->dataSet['defaultImg'] = $value;
 						break;
@@ -169,58 +163,50 @@ class Cgi {
 			}
 		}
 	}
+
 	//---------------------------------------------------
-	// COOKIE‚ð¶¬
+	// COOKIEã‚’ç”Ÿæˆ
 	//---------------------------------------------------
 	function setCookies() {
-		$time = time() + 30 * 86400; // Œ»Ý + 30“ú—LŒø
-		
-		// Cookie‚ÌÝ’è & POST‚Å“ü—Í‚³‚ê‚½ƒf[ƒ^‚ÅACookie‚©‚çŽæ“¾‚µ‚½ƒf[ƒ^‚ðXV
-		if($this->dataSet['ISLANDID'] && $this->mode == "owner") {
+		$time = $_SERVER['REQUEST_TIME'] + 30 * 86400; // ç¾åœ¨ + 30æ—¥æœ‰åŠ¹
+
+		// Cookieã®è¨­å®š & POSTã§å…¥åŠ›ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã§ã€Cookieã‹ã‚‰å–å¾—ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’æ›´æ–°
+		if( isset($this->dataSet['ISLANDID']) && $this->mode == "owner") {
 			setcookie("OWNISLANDID",$this->dataSet['ISLANDID'], $time);
 			$this->dataSet['defaultID'] = $this->dataSet['ISLANDID'];
 		}
-		if($this->dataSet['PASSWORD']) {
+		if( isset($this->dataSet['PASSWORD']) ) {
 			setcookie("OWNISLANDPASSWORD",$this->dataSet['PASSWORD'], $time);
 			$this->dataSet['defaultPassword'] = $this->dataSet['PASSWORD'];
 		}
-		if($this->dataSet['TARGETID']) {
+		if( isset($this->dataSet['TARGETID']) ) {
 			setcookie("TARGETISLANDID",$this->dataSet['TARGETID'], $time);
 			$this->dataSet['defaultTarget'] = $this->dataSet['TARGETID'];
 		}
-		if($this->dataSet['LBBSNAME']) {
-			setcookie("LBBSNAME",$this->dataSet['LBBSNAME'], $time);
-			$this->dataSet['defaultName'] = $this->dataSet['LBBSNAME'];
-		}
-		if($this->dataSet['LBBSCOLOR']) {
-			setcookie("LBBSCOLOR",$this->dataSet['LBBSCOLOR'], $time);
-			$this->dataSet['defaultColor'] = $this->dataSet['LBBSCOLOR'];
-		}
-		if($this->dataSet['POINTX']) {
+
+		if( isset($this->dataSet['POINTX']) ) {
 			setcookie("POINTX",$this->dataSet['POINTX'], $time);
 			$this->dataSet['defaultX'] = $this->dataSet['POINTX'];
 		}
-		if($this->dataSet['POINTY']) {
+		if( isset($this->dataSet['POINTY']) ) {
 			setcookie("POINTY",$this->dataSet['POINTY'], $time);
 			$this->dataSet['defaultY'] = $this->dataSet['POINTY'];
 		}
-		if($this->dataSet['COMMAND']) {
+		if( isset($this->dataSet['COMMAND']) ) {
 			setcookie("COMMAND",$this->dataSet['COMMAND'], $time);
 			$this->dataSet['defaultKind'] = $this->dataSet['COMMAND'];
 		}
-		if($this->dataSet['DEVELOPEMODE']) {
+		if( isset($this->dataSet['DEVELOPEMODE']) ) {
 			setcookie("DEVELOPEMODE",$this->dataSet['DEVELOPEMODE'], $time);
 			$this->dataSet['defaultDevelopeMode'] = $this->dataSet['DEVELOPEMODE'];
 		}
-		if($this->dataSet['SKIN']) {
-			setcookie("SKIN",$this->dataSet['SKIN'], $time);
-			$this->dataSet['defaultSkin'] = $this->dataSet['SKIN'];
-		}
-		if($this->dataSet['IMG']) {
+		// if( isset($this->dataSet['SKIN']) ) {
+		// 	setcookie("SKIN",$this->dataSet['SKIN'], $time);
+		// 	$this->dataSet['defaultSkin'] = $this->dataSet['SKIN'];
+		// }
+		if( isset($this->dataSet['IMG']) ) {
 			setcookie("IMG",$this->dataSet['IMG'], $time);
 			$this->dataSet['defaultImg'] = $this->dataSet['IMG'];
 		}
 	}
 }
-
-?>

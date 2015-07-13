@@ -2,44 +2,43 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- “‡•ÒW—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- å³¶ç·¨é›†ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-edit.php by SERA - 2013/06/02
 
 *******************************************************************/
 
-require 'jcode.phps';
-require 'config.php';
-require 'hako-file.php';
-require 'hako-html.php';
-require 'hako-util.php';
+require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-file.php';
+require_once ABSOLUTE_PATH.'hako-html.php';
+require_once ABSOLUTE_PATH.'hako-util.php';
 
 $init = new Init;
 
 define("READ_LINE", 1024);
 $THIS_FILE = $init->baseDir . "/hako-edit.php";
-$BACK_TO_TOP = "<A HREF=\"JavaScript:void(0);\" onClick=\"document.TOP.submit();return false;\">{$init->tagBig_}ƒgƒbƒv‚Ö–ß‚é{$init->_tagBig}</A>";
+$BACK_TO_TOP = "<A HREF=\"JavaScript:void(0);\" onClick=\"document.TOP.submit();return false;\">{$init->tagBig_}ãƒˆãƒƒãƒ—ã¸æˆ»ã‚‹{$init->_tagBig}</A>";
 
 //----------------------------------------------------------------------
 class Hako extends HakoIO {
 
 	function readIslands(&$cgi) {
 		global $init;
-		
+
 		$m = $this->readIslandsFile($cgi);
 		return $m;
 	}
-	
+
 	//---------------------------------------------------
-	// ’nŒ`‚ÉŠÖ‚·‚éƒf[ƒ^¶¬
+	// åœ°å½¢ã«é–¢ã™ã‚‹ãƒ‡ãƒ¼ã‚¿ç”Ÿæˆ
 	//---------------------------------------------------
 	function landString($l, $lv, $x, $y, $mode, $comStr) {
 		global $init;
 		$point = "({$x},{$y})";
 		$naviExp = "''";
-		
+
 		if($x < $init->islandSize / 2) {
 			$naviPos = 0;
 		} else {
@@ -48,453 +47,454 @@ class Hako extends HakoIO {
 		switch($l) {
 			case $init->landSea:
 				if($lv == 0) {
-					// ŠC
+					// æµ·
 					$image = 'land0.gif';
-					$naviTitle = 'ŠC';
+					$naviTitle = 'æµ·';
 				} elseif($lv == 1) {
-					// ó£
+					// æµ…ç€¬
 					$image = 'land14.gif';
-					$naviTitle = 'ó£';
+					$naviTitle = 'æµ…ç€¬';
 				} else {
-					// à•óH
+					// è²¡å®ï¼Ÿ
 					$image = 'land17.gif';
-					$naviTitle = 'ŠC';
+					$naviTitle = 'æµ·';
 					$naviText = "{$lv}";
 				}
 				break;
-				
+
 			case $init->landSeaCity:
-				// ŠC’ê“ss
+				// æµ·åº•éƒ½å¸‚
 				$image = 'SeaCity.gif';
-				$naviTitle = 'ŠC’ê“ss';
+				$naviTitle = 'æµ·åº•éƒ½å¸‚';
 				$naviText = "{$lv}{$init->unitPop}";
 				break;
-				
+
 			case $init->landFroCity:
-				// ŠCã“ss
+				// æµ·ä¸Šéƒ½å¸‚
 				$image = 'FroCity.gif';
-				$naviTitle = 'ŠCã“ss';
+				$naviTitle = 'æµ·ä¸Šéƒ½å¸‚';
 				$naviText = "{$lv}{$init->unitPop}";
 				break;
-				
+
 			case $init->landPort:
-				// `
+				// æ¸¯
 				$image = 'port.gif';
-				$naviTitle = '`';
+				$naviTitle = 'æ¸¯';
 				break;
-				
+
 			case $init->landShip:
-				// ‘D”•
+				// èˆ¹èˆ¶
 				$ship = Util::navyUnpack($lv);
-				$owner = $this->idToName[$ship[0]]; // Š‘®
-				$naviTitle = "{$init->shipName[$ship[1]]}"; // ‘D”•‚Ìí—Ş
-				$hp = round(100 - $ship[2] / $init->shipHP[$ship[1]] * 100); // ”j‘¹—¦
+				$owner = $this->idToName[$ship[0]]; // æ‰€å±
+				$naviTitle = "{$init->shipName[$ship[1]]}"; // èˆ¹èˆ¶ã®ç¨®é¡
+				$hp = round(100 - $ship[2] / $init->shipHP[$ship[1]] * 100); // ç ´æç‡
 				if($ship[1] <= 1) {
-					// —A‘—‘DA‹™‘D
-					$naviText = "{$owner}“‡Š‘®";
+					// è¼¸é€èˆ¹ã€æ¼èˆ¹
+					$naviText = "{$owner}å³¶æ‰€å±";
 				} elseif($ship[1] == 2) {
-					// ŠC’ê’Tõ‘D
+					// æµ·åº•æ¢ç´¢èˆ¹
 					$treasure = $ship[3] * 1000 + $ship[4] * 100;
 					if($treasure > 0) {
-						$naviText = "{$owner}“‡Š‘®<br>”j‘¹—¦F{$hp}%<br>{$treasure}‰­‰~‘Š“–‚Ìà•óÏÚ";
+						$naviText = "{$owner}å³¶æ‰€å±<br>ç ´æç‡ï¼š{$hp}%<br>{$treasure}å„„å††ç›¸å½“ã®è²¡å®ç©è¼‰";
 					} else {
-						$naviText = "{$owner}“‡Š‘®";
+						$naviText = "{$owner}å³¶æ‰€å±";
 					}
 				} elseif($ship[1] < 10) {
-					$naviText = "{$owner}“‡Š‘®<br>”j‘¹—¦F{$hp}%";
+					$naviText = "{$owner}å³¶æ‰€å±<br>ç ´æç‡ï¼š{$hp}%";
 				} else {
-					// ŠC‘¯‘D
-					$naviText = "”j‘¹—¦F{$hp}%";
+					// æµ·è³Šèˆ¹
+					$naviText = "ç ´æç‡ï¼š{$hp}%";
 				}
-				$image = "ship{$ship[1]}.gif"; // ‘D”•‰æ‘œ
+				$image = "ship{$ship[1]}.gif"; // èˆ¹èˆ¶ç”»åƒ
 				break;
-				
+
 			case $init->landRail:
-				// ü˜H
+				// ç·šè·¯
 				$image = "rail{$lv}.gif";
-				$naviTitle = 'ü˜H';
+				$naviTitle = 'ç·šè·¯';
 				break;
-				
+
 			case $init->landStat:
-				// ‰w
+				// é§…
 				$image = 'stat.gif';
-				$naviTitle = '‰w';
+				$naviTitle = 'é§…';
 				break;
-				
+
 			case $init->landTrain:
-				// “dÔ
+				// é›»è»Š
 				$image = "train{$lv}.gif";
-				$naviTitle = '“dÔ';
+				$naviTitle = 'é›»è»Š';
 				break;
-				
+
 			case $init->landZorasu:
-				// ŠC‰öb
+				// æµ·æ€ªç£
 				$image = 'zorasu.gif';
-				$naviTitle = '‚¼‚ç‚·';
+				$naviTitle = 'ãã‚‰ã™';
 				break;
-				
+
 			case $init->landSeaSide:
-				// ŠCŠİ
+				// æµ·å²¸
 				$image = 'sunahama.gif';
-				$naviTitle = '»•l';
+				$naviTitle = 'ç ‚æµœ';
 				break;
-				
+
 			case $init->landSeaResort:
-				// ŠC‚Ì‰Æ
+				// æµ·ã®å®¶
 				if($lv < 30) {
 					$image = 'umi1.gif';
-					$naviTitle = 'ŠC‚Ì‰Æ';
+					$naviTitle = 'æµ·ã®å®¶';
 				} else if($lv < 100) {
 					$image = 'umi2.gif';
-					$naviTitle = '–¯h';
+					$naviTitle = 'æ°‘å®¿';
 				} else {
 					$image = 'umi3.gif';
-					$naviTitle = 'ƒŠƒ][ƒgƒzƒeƒ‹';
+					$naviTitle = 'ãƒªã‚¾ãƒ¼ãƒˆãƒ›ãƒ†ãƒ«';
 				}
-				$naviText = "û“ü:{$lv}{$init->unitPop} <br>";
+				$naviText = "åå…¥:{$lv}{$init->unitPop} <br>";
 				break;
-				
+
 			case $init->landSoccer:
-				// ƒXƒ^ƒWƒAƒ€
+				// ã‚¹ã‚¿ã‚¸ã‚¢ãƒ 
 				$image = 'stadium.gif';
-				$naviTitle = 'ƒXƒ^ƒWƒAƒ€';
+				$naviTitle = 'ã‚¹ã‚¿ã‚¸ã‚¢ãƒ ';
 				break;
-				
+
 			case $init->landPark:
-				// —V‰€’n
+				// éŠåœ’åœ°
 				$image = "park{$lv}.gif";
-				$naviTitle = '—V‰€’n';
+				$naviTitle = 'éŠåœ’åœ°';
 				break;
-				
+
 			case $init->landFusya:
-				// •—Ô
+				// é¢¨è»Š
 				$image = 'fusya.gif';
-				$naviTitle = '•—Ô';
+				$naviTitle = 'é¢¨è»Š';
 				break;
-				
+
 			case $init->landSyoubou:
-				// Á–h
+				// æ¶ˆé˜²ç½²
 				$image = 'syoubou.gif';
-				$naviTitle = 'Á–h';
+				$naviTitle = 'æ¶ˆé˜²ç½²';
 				break;
-				
+
 			case $init->landSsyoubou:
-				// ŠC’êÁ–h
+				// æµ·åº•æ¶ˆé˜²ç½²
 				$image = 'syoubou2.gif';
-				$naviTitle = 'ŠC’êÁ–h';
+				$naviTitle = 'æµ·åº•æ¶ˆé˜²ç½²';
 				break;
-				
+
 			case $init->landNursery:
-				// —{Bê
+				// é¤Šæ®–å ´
 				$image = 'Nursery.gif';
-				$naviTitle = '—{Bê';
-				$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+				$naviTitle = 'é¤Šæ®–å ´';
+				$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				break;
-				
+
 			case $init->landWaste:
-				// r’n
+				// è’åœ°
 				if($lv == 1) {
-					$image = 'land13.gif'; // ’…’e“_
+					$image = 'land13.gif'; // ç€å¼¾ç‚¹
 				} else {
 					$image = 'land1.gif';
 				}
-				$naviTitle = 'r’n';
+				$naviTitle = 'è’åœ°';
 				break;
-				
+
 			case $init->landPlains:
-				// •½’n
+				// å¹³åœ°
 				$image = 'land2.gif';
-				$naviTitle = '•½’n';
+				$naviTitle = 'å¹³åœ°';
 				break;
-				
+
 			case $init->landPoll:
-				// ‰˜õ“yë
+				// æ±šæŸ“åœŸå£Œ
 				$image = 'poll.gif';
-				$naviTitle = '‰˜õ“yë';
-				$naviText = "‰˜õƒŒƒxƒ‹{$lv}";
+				$naviTitle = 'æ±šæŸ“åœŸå£Œ';
+				$naviText = "æ±šæŸ“ãƒ¬ãƒ™ãƒ«{$lv}";
 				break;
-				
+
 			case $init->landForest:
-				// X
+				// æ£®
 				if($mode == 1) {
 					$image = 'land6.gif';
 					$naviText= "${lv}{$init->unitTree}";
 				} else {
-					// ŠÏŒõÒ‚Ìê‡‚Í–Ø‚Ì–{”‰B‚·
+					// è¦³å…‰è€…ã®å ´åˆã¯æœ¨ã®æœ¬æ•°éš ã™
 					$image = 'land6.gif';
 				}
-				$naviTitle = 'X';
+				$naviTitle = 'æ£®';
 				break;
-				
+
 			case $init->landTown:
-				// ’¬
+				// ç”º
 				$p; $n;
 				if($lv < 30) {
 					$p = 3;
-					$naviTitle = '‘º';
+					$naviTitle = 'æ‘';
 				} else if($lv < 100) {
 					$p = 4;
-					$naviTitle = '’¬';
+					$naviTitle = 'ç”º';
 				} else if($lv < 200) {
 					$p = 5;
-					$naviTitle = '“ss';
+					$naviTitle = 'éƒ½å¸‚';
 				} else {
 					$p = 52;
-					$naviTitle = '‘å“ss';
+					$naviTitle = 'å¤§éƒ½å¸‚';
 				}
 				$image = "land{$p}.gif";
 				$naviText = "{$lv}{$init->unitPop}";
 				break;
-				
+
 			case $init->landProcity:
-				// –hĞ“ss
+				// é˜²ç½éƒ½å¸‚
 				if($lv < 110) {
-					$naviTitle = '–hĞ“ssƒ‰ƒ“ƒN‚d';
+					$naviTitle = 'é˜²ç½éƒ½å¸‚ãƒ©ãƒ³ã‚¯ï¼¥';
 				} else if($lv < 130) {
-					$naviTitle = '–hĞ“ssƒ‰ƒ“ƒN‚c';
+					$naviTitle = 'é˜²ç½éƒ½å¸‚ãƒ©ãƒ³ã‚¯ï¼¤';
 				} else if($lv < 160) {
-					$naviTitle = '–hĞ“ssƒ‰ƒ“ƒN‚b';
+					$naviTitle = 'é˜²ç½éƒ½å¸‚ãƒ©ãƒ³ã‚¯ï¼£';
 				} else if($lv < 200) {
-					$naviTitle = '–hĞ“ssƒ‰ƒ“ƒN‚a';
+					$naviTitle = 'é˜²ç½éƒ½å¸‚ãƒ©ãƒ³ã‚¯ï¼¢';
 				} else {
-					$naviTitle = '–hĞ“ssƒ‰ƒ“ƒN‚`';
+					$naviTitle = 'é˜²ç½éƒ½å¸‚ãƒ©ãƒ³ã‚¯ï¼¡';
 				}
 				$image = "bousai.gif";
 				$naviText = "{$lv}{$init->unitPop}";
 				break;
-				
+
 			case $init->landNewtown:
-				// ƒjƒ…[ƒ^ƒEƒ“
+				// ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³
 				$level = Util::expToLevel($l, $lv);
 				$nwork = (int)($lv/15);
 				$image = 'new.gif';
-				$naviTitle = 'ƒjƒ…[ƒ^ƒEƒ“';
-				$naviText = "{$lv}{$init->unitPop}/Eê{$nwork}0{$init->unitPop}";
+				$naviTitle = 'ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³';
+				$naviText = "{$lv}{$init->unitPop}/è·å ´{$nwork}0{$init->unitPop}";
 				break;
-				
+
 			case $init->landBigtown:
-				// Œ»‘ã“ss
+				// ç¾ä»£éƒ½å¸‚
 				$level = Util::expToLevel($l, $lv);
 				$mwork = (int)($lv/20);
 				$lwork = (int)($lv/30);
 				$image = 'big.gif';
-				$naviTitle = 'Œ»‘ã“ss';
-				$naviText = "{$lv}{$init->unitPop}/Eê{$mwork}0{$init->unitPop}/”_ê{$lwork}0{$init->unitPop}";
+				$naviTitle = 'ç¾ä»£éƒ½å¸‚';
+				$naviText = "{$lv}{$init->unitPop}/è·å ´{$mwork}0{$init->unitPop}/è¾²å ´{$lwork}0{$init->unitPop}";
 				break;
-				
+
 			case $init->landFarm:
-				// ”_ê
+				// è¾²å ´
 				$image = 'land7.gif';
-				$naviTitle = '”_ê';
-				$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+				$naviTitle = 'è¾²å ´';
+				$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				if($lv > 25) {
-					// ƒh[ƒ€Œ^”_ê
+					// ãƒ‰ãƒ¼ãƒ å‹è¾²å ´
 					$image = 'land71.gif';
-					$naviTitle = 'ƒh[ƒ€Œ^”_ê';
+					$naviTitle = 'ãƒ‰ãƒ¼ãƒ å‹è¾²å ´';
 				}
 				break;
-				
+
 			case $init->landSfarm:
-				// ŠC’ê”_ê
+				// æµ·åº•è¾²å ´
 				$image = 'land72.gif';
-				$naviTitle = 'ŠC’ê”_ê';
-				$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+				$naviTitle = 'æµ·åº•è¾²å ´';
+				$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				break;
-				
+
 			case $init->landFactory:
-				// Hê
+				// å·¥å ´
 				$image = 'land8.gif';
-				$naviTitle = 'Hê';
-				$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+				$naviTitle = 'å·¥å ´';
+				$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				if($lv > 100) {
-					// ‘åHê
+					// å¤§å·¥å ´
 					$image = 'land82.gif';
-					$naviTitle = '‘åHê';
+					$naviTitle = 'å¤§å·¥å ´';
 				}
 				break;
-				
+
 			case $init->landCommerce:
-				// ¤‹Æƒrƒ‹
+				// å•†æ¥­ãƒ“ãƒ«
 				$image = 'commerce.gif';
-				$naviTitle = '¤‹Æƒrƒ‹';
-				$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+				$naviTitle = 'å•†æ¥­ãƒ“ãƒ«';
+				$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				if($lv > 150) {
-					// –{Ğƒrƒ‹
+					// æœ¬ç¤¾ãƒ“ãƒ«
 					$image = 'commerce2.gif';
-					$naviTitle = '–{Ğƒrƒ‹';
+					$naviTitle = 'æœ¬ç¤¾ãƒ“ãƒ«';
 				}
 				break;
-				
+
 			case $init->landHatuden:
-				// ”­“dŠ
+				// ç™ºé›»æ‰€
 				$image = 'hatuden.gif';
-				$naviTitle = '”­“dŠ';
+				$naviTitle = 'ç™ºé›»æ‰€';
 				$naviText = "{$lv}000kw";
 				if($lv > 100) {
-					// ‘åŒ^”­“dŠ
+					// å¤§å‹ç™ºé›»æ‰€
 					$image = 'hatuden2.gif';
-					$naviTitle = '‘åŒ^”­“dŠ';
+					$naviTitle = 'å¤§å‹ç™ºé›»æ‰€';
 				}
 				break;
-				
+
 			case $init->landBank:
-				// ‹âs
+				// éŠ€è¡Œ
 				$image = 'bank.gif';
-				$naviTitle = '‹âs';
+				$naviTitle = 'éŠ€è¡Œ';
 				break;
-				
+
 			case $init->landBase:
 				if($mode == 0 || $mode == 2) {
-					// ŠÏŒõÒ‚Ìê‡‚ÍX‚Ì‚Ó‚è
+					// è¦³å…‰è€…ã®å ´åˆã¯æ£®ã®ãµã‚Š
 					$image = 'land6.gif';
-					$naviTitle = 'X';
+					$naviTitle = 'æ£®';
 				} else {
-					// ƒ~ƒTƒCƒ‹Šî’n
+					// ãƒŸã‚µã‚¤ãƒ«åŸºåœ°
 					$level = Util::expToLevel($l, $lv);
 					$image = 'land9.gif';
-					$naviTitle = 'ƒ~ƒTƒCƒ‹Šî’n';
-					$naviText = "ƒŒƒxƒ‹ ${level} / ŒoŒ±’l {$lv}";
+					$naviTitle = 'ãƒŸã‚µã‚¤ãƒ«åŸºåœ°';
+					$naviText = "ãƒ¬ãƒ™ãƒ« ${level} / çµŒé¨“å€¤ {$lv}";
 				}
 				break;
 			case $init->landSbase:
-				// ŠC’êŠî’n
+				// æµ·åº•åŸºåœ°
 				if($mode == 0 || $mode == 2) {
-					// ŠÏŒõÒ‚Ìê‡‚ÍŠC‚Ì‚Ó‚è
+					// è¦³å…‰è€…ã®å ´åˆã¯æµ·ã®ãµã‚Š
 					$image = 'land0.gif';
-					$naviTitle = 'ŠC';
+					$naviTitle = 'æµ·';
 				} else {
 					$level = Util::expToLevel($l, $lv);
 					$image = 'land12.gif';
-					$naviTitle = 'ŠC’êŠî’n';
-					$naviText = "ƒŒƒxƒ‹ ${level} / ŒoŒ±’l {$lv}";
+					$naviTitle = 'æµ·åº•åŸºåœ°';
+					$naviText = "ãƒ¬ãƒ™ãƒ« ${level} / çµŒé¨“å€¤ {$lv}";
 				}
 				break;
-				
+
 			case $init->landDefence:
-				// –h‰q{İ
+				// é˜²è¡›æ–½è¨­
 				if($mode == 0 || $mode == 2) {
 					$image = 'land10.gif';
-					$naviTitle = '–h‰q{İ';
+					$naviTitle = 'é˜²è¡›æ–½è¨­';
 				} else {
 					$image = 'land10.gif';
-					$naviTitle = '–h‰q{İ';
-					$naviText = "‘Ï‹v—Í {$lv}";
+					$naviTitle = 'é˜²è¡›æ–½è¨­';
+					$naviText = "è€ä¹…åŠ› {$lv}";
 				}
 				break;
-				
+
 			case $init->landHaribote:
-				// ƒnƒŠƒ{ƒe
+				// ãƒãƒªãƒœãƒ†
 				$image = 'land10.gif';
 				if($mode == 0 || $mode == 2) {
-					// ŠÏŒõÒ‚Ìê‡‚Í–h‰q{İ‚Ì‚Ó‚è
-					$naviTitle = '–h‰q{İ';
+					// è¦³å…‰è€…ã®å ´åˆã¯é˜²è¡›æ–½è¨­ã®ãµã‚Š
+					$naviTitle = 'é˜²è¡›æ–½è¨­';
 				} else {
-					$naviTitle = 'ƒnƒŠƒ{ƒe';
+					$naviTitle = 'ãƒãƒªãƒœãƒ†';
 				}
 				break;
-				
+
 			case $init->landSdefence:
-				// ŠC’ê–h‰q{İ
+				// æµ·åº•é˜²è¡›æ–½è¨­
 				if($mode == 0 || $mode == 2) {
 					$image = 'land102.gif';
-					$naviTitle = 'ŠC’ê–h‰q{İ';
+					$naviTitle = 'æµ·åº•é˜²è¡›æ–½è¨­';
 				} else {
 					$image = 'land102.gif';
-					$naviTitle = 'ŠC’ê–h‰q{İ';
-					$naviText = "‘Ï‹v—Í {$lv}";
+					$naviTitle = 'æµ·åº•é˜²è¡›æ–½è¨­';
+					$naviText = "è€ä¹…åŠ› {$lv}";
 				}
 				break;
-				
+
 			case $init->landOil:
-				// ŠC’ê–û“c
+				// æµ·åº•æ²¹ç”°
 				$image = 'land16.gif';
-				$naviTitle = 'ŠC’ê–û“c';
+				$naviTitle = 'æµ·åº•æ²¹ç”°';
 				break;
-				
+
 			case $init->landMountain:
-				// R
+				// å±±
 				if($lv > 0) {
 					$image = 'land15.gif';
-					$naviTitle = 'ÌŒ@ê';
-					$naviText = "{$lv}0{$init->unitPop}‹K–Í";
+					$naviTitle = 'æ¡æ˜å ´';
+					$naviText = "{$lv}0{$init->unitPop}è¦æ¨¡";
 				} else {
 					$image = 'land11.gif';
-					$naviTitle = 'R';
+					$naviTitle = 'å±±';
 				}
 				break;
-				
+
 			case $init->landMyhome:
-				// ©‘î
+				// è‡ªå®…
 				$image = "home{$lv}.gif";
-				$naviTitle = 'ƒ}ƒCƒz[ƒ€';
-				$naviText = "{$lv}l‰Æ‘°";
+				$naviTitle = 'ãƒã‚¤ãƒ›ãƒ¼ãƒ ';
+				$naviText = "{$lv}äººå®¶æ—";
 				break;
-				
+
 			case $init->landSoukoM:
 				$flagm = 1;
 			case $init->landSoukoF:
-				// ‘qŒÉ
+				// å€‰åº«
 				if($flagm == 1) {
-					$naviTitle = '‹àŒÉ';
+					$naviTitle = 'é‡‘åº«';
 				} else {
-					$naviTitle = 'H—¿ŒÉ';
+					$naviTitle = 'é£Ÿæ–™åº«';
 				}
 				$image = "souko.gif";
 				$sec = (int)($lv / 100);
 				$tyo = $lv % 100;
 				if($l == $init->landSoukoM) {
 					if($tyo == 0) {
-						$naviText = "ƒZƒLƒ…ƒŠƒeƒBF{$sec}A’™‹àF‚È‚µ";
+						$naviText = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ï¼š{$sec}ã€è²¯é‡‘ï¼šãªã—";
 					} else {
-						$naviText = "ƒZƒLƒ…ƒŠƒeƒBF{$sec}A’™‹àF{$tyo}000{$init->unitMoney}";
+						$naviText = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ï¼š{$sec}ã€è²¯é‡‘ï¼š{$tyo}000{$init->unitMoney}";
 					}
 				} else {
 					if($tyo == 0) {
-						$naviText = "ƒZƒLƒ…ƒŠƒeƒBF{$sec}A’™HF‚È‚µ";
+						$naviText = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ï¼š{$sec}ã€è²¯é£Ÿï¼šãªã—";
 					} else {
-						$naviText = "ƒZƒLƒ…ƒŠƒeƒBF{$sec}A’™HF{$tyo}000{$init->unitFood}";
+						$naviText = "ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ï¼š{$sec}ã€è²¯é£Ÿï¼š{$tyo}000{$init->unitFood}";
 					}
 				}
 				break;
-				
+
 			case $init->landMonument:
-				// ‹L”O”è
+				// è¨˜å¿µç¢‘
 				$image = "monument{$lv}.gif";
-				$naviTitle = '‹L”O”è';
+				$naviTitle = 'è¨˜å¿µç¢‘';
 				$naviText = $init->monumentName[$lv];
 				break;
-				
+
 			case $init->landMonster:
 			case $init->landSleeper:
-				// ‰öb
+				// æ€ªç£
 				$monsSpec = Util::monsterSpec($lv);
 				$spec = $monsSpec['kind'];
 				$special = $init->monsterSpecial[$spec];
 				$image = "monster{$spec}.gif";
 				if($l == $init->landSleeper) {
-					$naviTitle = '‰öbi‡–°’†j';
+					$naviTitle = 'æ€ªç£ï¼ˆç¡çœ ä¸­ï¼‰';
 				} else {
-					$naviTitle = '‰öb';
+					$naviTitle = 'æ€ªç£';
 				}
-				
-				// d‰»’†?
+
+				// ç¡¬åŒ–ä¸­?
 				if((($special & 0x4) && (($this->islandTurn % 2) == 1)) ||
 					 (($special & 0x10) && (($this->islandTurn % 2) == 0))) {
-					// d‰»’†
+					// ç¡¬åŒ–ä¸­
 					$image = $init->monsterImage[$monsSpec['kind']];
 				}
-				$naviText = "‰öb{$monsSpec['name']}(‘Ì—Í{$monsSpec['hp']})";
+				$naviText = "æ€ªç£{$monsSpec['name']}(ä½“åŠ›{$monsSpec['hp']})";
 		}
-		
+
 		if($mode == 1 || $mode == 2) {
-			print "<a href=\"javascript: void(0);\" onclick=\"ps($x,$y)\">";
+			echo "<a href=\"javascript:void(0);\" onclick=\"ps($x,$y)\">";
 			$naviText = "{$comStr}\\n{$naviText}";
 		}
-		print "<img src=\"{$image}\" width=\"32\" height=\"32\" alt=\"{$point} {$naviTitle} {$comStr}\" onMouseOver=\"Navi({$naviPos},'{$image}', '{$naviTitle}', '{$point}', '{$naviText}', {$naviExp});\" onMouseOut=\"NaviClose(); return false\">";
-		
-		// À•Wİ’è•Â‚¶
+
+		echo "<img src=\"{$image}\" width=\"32\" height=\"32\" alt=\"{$point} {$naviTitle} {$comStr}\" onMouseOver=\"Navi({$naviPos},'{$image}', '{$naviTitle}', '{$point}', '{$naviText}', {$naviExp});\" onMouseOut=\"NaviClose(); return false\">";
+
+		// åº§æ¨™è¨­å®šé–‰ã˜
 		if($mode == 1 || $mode == 2) {
-			print "</a>";
+			echo "</a>";
 		}
 	}
 }
@@ -504,7 +504,7 @@ class Cgi {
 	var $mode = "";
 	var $dataSet = array();
 	//---------------------------------------------------
-	// POSTAGET‚Ìƒf[ƒ^‚ğæ“¾
+	// POSTã€GETã®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—
 	//---------------------------------------------------
 	function parseInputData() {
 		global $init;
@@ -513,8 +513,8 @@ class Cgi {
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
 				$value = str_replace(",", "", $value);
-				$value = JcodeConvert($value, 0, 2);
-				$value = HANtoZEN_SJIS($value);
+				// $value = JcodeConvert($value, 0, 2);
+				// $value = HANtoZEN_UTF8($value);
 				if($init->stripslashes == true) {
 					$this->dataSet["{$name}"] = stripslashes($value);
 				} else {
@@ -526,9 +526,9 @@ class Cgi {
 			}
 		}
 	}
-	
+
 	//---------------------------------------------------
-	// COOKIE‚ğæ“¾
+	// COOKIEã‚’å–å¾—
 	//---------------------------------------------------
 	function getCookies() {
 		if(!empty($_COOKIE)) {
@@ -552,9 +552,9 @@ class Cgi {
 					case "LEVEL":
 						$this->dataSet['defaultLEVEL'] = $value;
 						break;
-					case "SKIN":
-						$this->dataSet['defaultSkin'] = $value;
-						break;
+					// case "SKIN":
+					// 	$this->dataSet['defaultSkin'] = $value;
+					// 	break;
 					case "IMG":
 						$this->dataSet['defaultImg'] = $value;
 						break;
@@ -562,14 +562,14 @@ class Cgi {
 			}
 		}
 	}
-	
+
 	//---------------------------------------------------
-	// COOKIE‚ğ¶¬
+	// COOKIEã‚’ç”Ÿæˆ
 	//---------------------------------------------------
 	function setCookies() {
-		$time = time() + 30; // Œ»İ + 30•b—LŒø
-		
-		// Cookie‚Ìİ’è & POST‚Å“ü—Í‚³‚ê‚½ƒf[ƒ^‚ÅACookie‚©‚çæ“¾‚µ‚½ƒf[ƒ^‚ğXV
+		$time = $_SERVER['REQUEST_TIME'] + 30; // ç¾åœ¨ + 30ç§’æœ‰åŠ¹
+
+		// Cookieã®è¨­å®š & POSTã§å…¥åŠ›ã•ã‚ŒãŸãƒ‡ãƒ¼ã‚¿ã§ã€Cookieã‹ã‚‰å–å¾—ã—ãŸãƒ‡ãƒ¼ã‚¿ã‚’æ›´æ–°
 		if($this->dataSet['POINTX']) {
 			setcookie("POINTX",$this->dataSet['POINTX'], $time);
 			$this->dataSet['defaultX'] = $this->dataSet['POINTX'];
@@ -594,10 +594,10 @@ class Cgi {
 			setcookie("LEVEL",$this->dataSet['LEVEL'], $time);
 			$this->dataSet['defaultLEVEL'] = $this->dataSet['LEVEL'];
 		}
-		if($this->dataSet['SKIN']) {
-			setcookie("SKIN",$this->dataSet['SKIN'], $time);
-			$this->dataSet['defaultSkin'] = $this->dataSet['SKIN'];
-		}
+		// if($this->dataSet['SKIN']) {
+		// 	setcookie("SKIN",$this->dataSet['SKIN'], $time);
+		// 	$this->dataSet['defaultSkin'] = $this->dataSet['SKIN'];
+		// }
 		if($this->dataSet['IMG']) {
 			setcookie("IMG",$this->dataSet['IMG'], $time);
 			$this->dataSet['defaultImg'] = $this->dataSet['IMG'];
@@ -608,144 +608,145 @@ class Cgi {
 //----------------------------------------------------------------------
 class Edit {
 	//---------------------------------------------------
-	// TOP •\¦iƒpƒXƒ[ƒh“ü—Íj
+	// TOP è¡¨ç¤ºï¼ˆãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰å…¥åŠ›ï¼‰
 	//---------------------------------------------------
 	function enter() {
 		global $init;
-		
-		print <<<END
-<h1 class="title">{$init->title}<br>ƒ}ƒbƒvEƒGƒfƒBƒ^</h1>
+
+		echo <<<END
+<h1 class="title">{$init->title}<br>ãƒãƒƒãƒ—ãƒ»ã‚¨ãƒ‡ã‚£ã‚¿</h1>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<strong>ƒpƒXƒ[ƒhF</strong>
+<strong>ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ï¼š</strong>
 <input type="password" size="32" maxlength="32" name="PASSWORD">
 <input type="hidden" name="mode" value="list">
-<input type="submit" value="ˆê——‚Ö">
+<input type="submit" value="ä¸€è¦§ã¸">
 </form>
 END;
 	}
-	
+
 	//---------------------------------------------------
-	// “‡‚Ìˆê——‚ğ•\¦
+	// å³¶ã®ä¸€è¦§ã‚’è¡¨ç¤º
 	//---------------------------------------------------
 	function main($hako, $data) {
 		global $init;
-		
-		// ƒpƒXƒ[ƒh
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 		if(!Util::checkPassword("", $data['PASSWORD'])) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
-		print "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">ƒgƒbƒv‚Ö–ß‚é</span></a></CENTER>\n";
-		print "<h1 class=\"title\">{$init->title}<br>ƒ}ƒbƒvEƒGƒfƒBƒ^</h1>\n";
-		print <<<END
-<h2 class='Turn'>ƒ^[ƒ“$hako->islandTurn</h2>
+		
+		echo "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">ãƒˆãƒƒãƒ—ã¸æˆ»ã‚‹</span></a></CENTER>\n";
+		echo "<h1 class=\"title\">{$init->title}<br>ãƒãƒƒãƒ—ãƒ»ã‚¨ãƒ‡ã‚£ã‚¿</h1>\n";
+		echo <<<END
+<h2 class='Turn'>ã‚¿ãƒ¼ãƒ³$hako->islandTurn</h2>
 <hr>
 <div ID="IslandView">
-<h2>”“‡‚Ìó‹µ</h2>
+<h2>è«¸å³¶ã®çŠ¶æ³</h2>
 <p>
-“‡‚Ì–¼‘O‚ğƒNƒŠƒbƒN‚·‚é‚ÆA<strong>ƒ}ƒbƒv</strong>‚ª•\¦‚³‚ê‚Ü‚·B
+å³¶ã®åå‰ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ã€<strong>ãƒãƒƒãƒ—</strong>ãŒè¡¨ç¤ºã•ã‚Œã¾ã™ã€‚
 </p>
-<table border="1">
+<table class="table table-bordered">
 <tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}‡ˆÊ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“‡{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}lŒû{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}–ÊÏ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}‘‹à{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}H—¿{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}”_ê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}Hê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}ÌŒ@ê‹K–Í{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å³¶{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}é¢ç©{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}è¾²å ´è¦æ¨¡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å·¥å ´è¦æ¨¡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}æ¡æ˜å ´è¦æ¨¡{$init->_tagTH}</th>
 </tr>
 END;
-		// •\¦“à—e‚ÍAŠÇ—Ò—p‚Ì“à—e
+		// è¡¨ç¤ºå†…å®¹ã¯ã€ç®¡ç†è€…ç”¨ã®å†…å®¹
 		for($i = 0; $i < $hako->islandNumber; $i++) {
 			$island = $hako->islands[$i];
-			$j = ($island['isBF']) ? 'š' : $i + 1;
+			$j = ($island['isBF']) ? 'â˜…' : $i + 1;
 			$id = $island['id'];
 			$pop = $island['pop'] . $init->unitPop;
 			$area = $island['area'] . $init->unitArea;
 			$money = $island['money'] . $init->unitMoney;
 			$food = $island['food'] . $init->unitFood;
-			$farm = ($island['farm'] <= 0) ? "•Û—L‚¹‚¸" : $island['farm'] * 10 . $init->unitPop;
-			$factory = ($island['factory'] <= 0) ? "•Û—L‚¹‚¸" : $island['factory'] * 10 . $init->unitPop;
-			$mountain = ($island['mountain'] <= 0) ? "•Û—L‚¹‚¸" : $island['mountain'] * 10 . $init->unitPop;
+			$farm = ($island['farm'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['farm'] * 10 . $init->unitPop;
+			$factory = ($island['factory'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['factory'] * 10 . $init->unitPop;
+			$mountain = ($island['mountain'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['mountain'] * 10 . $init->unitPop;
 			$comment = $island['comment'];
 			$comment_turn = $island['comment_turn'];
 			$monster = '';
 			if($island['monster'] > 0) {
-				$monster = "<strong class=\"monster\">[‰öb{$island['monster']}‘Ì]</strong>";
+				$monster = "<strong class=\"monster\">[æ€ªç£{$island['monster']}ä½“]</strong>";
 			}
 			$name = "";
 			if($island['absent'] == 0) {
-				$name = "{$init->tagName_}{$island['name']}“‡{$init->_tagName}";
+				$name = "{$init->tagName_}{$island['name']}å³¶{$init->_tagName}";
 			} else {
-				$name = "{$init->tagName2_}{$island['name']}“‡({$island['absent']}){$init->_tagName2}";
+				$name = "{$init->tagName2_}{$island['name']}å³¶({$island['absent']}){$init->_tagName2}";
 			}
 			if(!empty($island['owner'])) {
 				$owner = $island['owner'];
 			} else {
-				$owner = "ƒRƒƒ“ƒg";
+				$owner = "ã‚³ãƒ¡ãƒ³ãƒˆ";
 			}
 			if($init->commentNew > 0 && ($comment_turn + $init->commentNew) > $hako->islandTurn) {
 				$comment .= " <span class=\"new\">New</span>";
 			}
 			if($hako->islandNumber - $i == $hako->islandNumberBF) {
-				print "</table>\n</div>\n";
-				print "<BR>\n";
-				print "<hr>\n\n";
-				print "<div ID=\"IslandView\">\n";
-				print "<h2>Battle Field‚Ìó‹µ</h2>\n";
-				
-				print <<<END
-<table border="1">
+				echo "</table>\n</div>\n";
+				echo "<BR>\n";
+				echo "<hr>\n\n";
+				echo "<div ID=\"IslandView\">\n";
+				echo "<h2>Battle Fieldã®çŠ¶æ³</h2>\n";
+
+				echo <<<END
+<table class="table table-bordered">
 <tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}‡ˆÊ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“‡{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}lŒû{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}–ÊÏ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}‘‹à{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}H—¿{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}”_ê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}Hê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}ÌŒ@ê‹K–Í{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}å³¶{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}é¢ç©{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}è¾²å ´è¦æ¨¡{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}å·¥å ´è¦æ¨¡{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}æ¡æ˜å ´è¦æ¨¡{$init->_tagTH}</th>
 </tr>
 END;
 			}
-			print "<tr>\n";
-			print "<th {$init->bgNumberCell} rowspan=\"2\">{$init->tagNumber_}$j{$init->_tagNumber}</th>\n";
-			print "<td {$init->bgNameCell} rowspan=\"2\"><a href=\"JavaScript:void(0);\" onClick=\"document.MAP{$id}.submit();return false;\">{$name}</a> {$monster}<br>\n{$prize}</td>\n";
-			print <<<END
+			echo "<tr>\n";
+			echo "<th {$init->bgNumberCell} rowspan=\"2\">{$init->tagNumber_}$j{$init->_tagNumber}</th>\n";
+			echo "<td {$init->bgNameCell} rowspan=\"2\"><a href=\"JavaScript:void(0);\" onClick=\"document.MAP{$id}.submit();return false;\">{$name}</a> {$monster}<br>\n{$prize}</td>\n";
+			echo <<<END
 <form name="MAP{$id}" action="{$GLOBALS['THIS_FILE']}" method="post">
 <input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
 <input type="hidden" name="mode" value="map">
 <input type="hidden" name="Sight" value="{$id}">
 </form>
 END;
-			print "<td {$init->bgInfoCell}>$pop</td>\n";
-			print "<td {$init->bgInfoCell}>$area</td>\n";
-			print "<td {$init->bgInfoCell}>$money</td>\n";
-			print "<td {$init->bgInfoCell}>$food</td>\n";
-			print "<td {$init->bgInfoCell}>$farm</td>\n";
-			print "<td {$init->bgInfoCell}>$factory</td>\n";
-			print "<td {$init->bgInfoCell}>$mountain</td>\n";
-			print "</tr>\n";
-			print "<tr>\n";
-			print "<td {$init->bgCommentCell} colspan=\"7\">{$init->tagTH_}{$owner}F{$init->_tagTH}$comment</td>\n";
-			print "</tr>\n";
+			echo "<td {$init->bgInfoCell}>$pop</td>\n";
+			echo "<td {$init->bgInfoCell}>$area</td>\n";
+			echo "<td {$init->bgInfoCell}>$money</td>\n";
+			echo "<td {$init->bgInfoCell}>$food</td>\n";
+			echo "<td {$init->bgInfoCell}>$farm</td>\n";
+			echo "<td {$init->bgInfoCell}>$factory</td>\n";
+			echo "<td {$init->bgInfoCell}>$mountain</td>\n";
+			echo "</tr>\n";
+			echo "<tr>\n";
+			echo "<td {$init->bgCommentCell} colspan=\"7\">{$init->tagTH_}{$owner}ï¼š{$init->_tagTH}$comment</td>\n";
+			echo "</tr>\n";
 		}
-		print "</table>\n</div>\n";
+		echo "</table>\n</div>\n";
 	}
 	//---------------------------------------------------
-	// ƒ}ƒbƒvƒGƒfƒBƒ^‚Ì•\¦
+	// ãƒãƒƒãƒ—ã‚¨ãƒ‡ã‚£ã‚¿ã®è¡¨ç¤º
 	//---------------------------------------------------
 	function editMap($hako, $data) {
 		global $init;
-		
-		// ƒpƒXƒ[ƒh
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 		if(!Util::checkPassword("", $data['PASSWORD'])) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
@@ -753,8 +754,8 @@ END;
 		$id = $data['ISLANDID'];
 		$number = $hako->idToNumber[$id];
 		$island = $hako->islands[$number];
-		
-		// ’nŒ`ƒŠƒXƒg‚ğ¶¬
+
+		// åœ°å½¢ãƒªã‚¹ãƒˆã‚’ç”Ÿæˆ
 		$landList = array (
 			"$init->landSea",
 			"$init->landSeaSide",
@@ -801,62 +802,62 @@ END;
 			"$init->landSleeper",
 			"$init->landZorasu"
 		);
-			
-		// ’nŒ`ƒŠƒXƒg–¼Ì‚ğ¶¬
+
+		// åœ°å½¢ãƒªã‚¹ãƒˆåç§°ã‚’ç”Ÿæˆ
 		$landName = array (
-			"ŠCAó£",
-			"»•l",
-			"r’n",
-			"‰˜õ“yë",
-			"•½’n",
-			"X",
-			"‘ºA’¬A“ss",
-			"–hĞ“ss",
-			"ƒjƒ…[ƒ^ƒEƒ“",
-			"Œ»‘ã“ss",
-			"ŠC’ê“ss",
-			"ŠCã“ss",
-			"`",
-			"‘D”•",
-			"ü˜H",
-			"‰w",
-			"“dÔ",
-			"•—Ô",
-			"Á–h",
-			"ŠC’êÁ–h",
-			"”_ê",
-			"ŠC’ê”_ê",
-			"—{Bê",
-			"Hê",
-			"¤‹Æƒrƒ‹",
-			"RAÌŒ@ê",
-			"”­“dŠ",
-			"ƒ~ƒTƒCƒ‹Šî’n",
-			"ƒnƒŠƒ{ƒe",
-			"–h‰q{İ",
-			"ŠC’êŠî’n",
-			"ŠC’ê–h‰q{İ",
-			"ƒ}ƒCƒz[ƒ€",
-			"‹àŒÉ",
-			"H—¿ŒÉ",
-			"‹L”O”è",
-			"ƒXƒ^ƒWƒAƒ€",
-			"—V‰€’n",
-			"ŠC‚Ì‰Æ",
-			"ŠC’ê–û“c",
-			"‹âs",
-			"‰öb",
-			"‰öbi‡–°’†j",
-			"‚¼‚ç‚·"
+			"æµ·ã€æµ…ç€¬",
+			"ç ‚æµœ",
+			"è’åœ°",
+			"æ±šæŸ“åœŸå£Œ",
+			"å¹³åœ°",
+			"æ£®",
+			"æ‘ã€ç”ºã€éƒ½å¸‚",
+			"é˜²ç½éƒ½å¸‚",
+			"ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³",
+			"ç¾ä»£éƒ½å¸‚",
+			"æµ·åº•éƒ½å¸‚",
+			"æµ·ä¸Šéƒ½å¸‚",
+			"æ¸¯",
+			"èˆ¹èˆ¶",
+			"ç·šè·¯",
+			"é§…",
+			"é›»è»Š",
+			"é¢¨è»Š",
+			"æ¶ˆé˜²ç½²",
+			"æµ·åº•æ¶ˆé˜²ç½²",
+			"è¾²å ´",
+			"æµ·åº•è¾²å ´",
+			"é¤Šæ®–å ´",
+			"å·¥å ´",
+			"å•†æ¥­ãƒ“ãƒ«",
+			"å±±ã€æ¡æ˜å ´",
+			"ç™ºé›»æ‰€",
+			"ãƒŸã‚µã‚¤ãƒ«åŸºåœ°",
+			"ãƒãƒªãƒœãƒ†",
+			"é˜²è¡›æ–½è¨­",
+			"æµ·åº•åŸºåœ°",
+			"æµ·åº•é˜²è¡›æ–½è¨­",
+			"ãƒã‚¤ãƒ›ãƒ¼ãƒ ",
+			"é‡‘åº«",
+			"é£Ÿæ–™åº«",
+			"è¨˜å¿µç¢‘",
+			"ã‚¹ã‚¿ã‚¸ã‚¢ãƒ ",
+			"éŠåœ’åœ°",
+			"æµ·ã®å®¶",
+			"æµ·åº•æ²¹ç”°",
+			"éŠ€è¡Œ",
+			"æ€ªç£",
+			"æ€ªç£ï¼ˆç¡çœ ä¸­ï¼‰",
+			"ãã‚‰ã™"
 		);
-		print <<<END
+		echo <<<END
 <script type="text/javascript">
 <!--
 function ps(x, y, ld, lv) {
 	document.InputPlan.POINTX.options[x].selected = true;
 	document.InputPlan.POINTY.options[y].selected = true;
 	document.InputPlan.LAND.options[ld].selected = true;
-	
+
 	if(ld == {$init->landMonster} || ld == {$init->landSleeper}) {
 		mn = Math.floor(lv / 10);
 		lv = lv - mn * 10;
@@ -870,7 +871,7 @@ function ps(x, y, ld, lv) {
 //-->
 </script>
 <div align="center">
-{$init->tagBig_}{$init->tagName_}{$island['name']}“‡{$init->_tagName}ƒ}ƒbƒvEƒGƒfƒBƒ^{$init->_tagBig}<br>
+{$init->tagBig_}{$init->tagName_}{$island['name']}å³¶{$init->_tagName}ãƒãƒƒãƒ—ãƒ»ã‚¨ãƒ‡ã‚£ã‚¿{$init->_tagBig}<br>
 {$GLOBALS['BACK_TO_TOP']}
 </div>
 
@@ -879,34 +880,34 @@ function ps(x, y, ld, lv) {
 <input type="hidden" name="mode" value="list">
 </form>
 END;
-		// “‡‚Ìî•ñ‚ğ•\¦
+		// å³¶ã®æƒ…å ±ã‚’è¡¨ç¤º
 		$html->islandInfo($island, $number, 1);
-		
-		// à–¾•¶‚ğ•\¦
-		print <<<END
+
+		// èª¬æ˜æ–‡ã‚’è¡¨ç¤º
+		echo <<<END
 <div align="center">
-<table border="1">
+<table class="table table-bordered">
 <tr valign="top">
 <td {$init->bgCommandCell}>
-<b>ƒŒƒxƒ‹‚É‚Â‚¢‚Ä</b>
+<b>ãƒ¬ãƒ™ãƒ«ã«ã¤ã„ã¦</b>
 <ul>
-<li><b>ŠCAó£</b><br>ƒŒƒxƒ‹ 0 ‚Ì‚Æ‚«ŠC<br>1 ‚Ì‚Æ‚«ó£<br>‚»‚êˆÈŠO ‚Ì‚Æ‚«à•ó
-<li><b>r’n</b><br>ƒŒƒxƒ‹ 1 ‚Ì‚Æ‚«’…’e“_
-<li><b>‘ºA’¬A“ss</b><br>ƒŒƒxƒ‹ 30 –¢–‚ª‘º<br>ƒŒƒxƒ‹ 100 –¢–‚ª’¬<br>ƒŒƒxƒ‹ 200 –¢–‚ª“ss
-<li><b>ƒ~ƒTƒCƒ‹Šî’n</b><br>ŒoŒ±’l
-<li><b>RAÌŒ@ê</b><br>ƒŒƒxƒ‹ 1 ˆÈã‚Ì‚Æ‚«ÌŒ@ê
-<li><b>‰öb</b><br>Še‰öb‚ÌÅ‘åƒŒƒxƒ‹‚ğ’´‚¦‚é<br>İ’è‚Í‚Å‚«‚Ü‚¹‚ñ
-<li><b>ŠC’êŠî’n</b><br>ŒoŒ±’l
+<li><b>æµ·ã€æµ…ç€¬</b><br>ãƒ¬ãƒ™ãƒ« 0 ã®ã¨ãæµ·<br>1 ã®ã¨ãæµ…ç€¬<br>ãã‚Œä»¥å¤– ã®ã¨ãè²¡å®
+<li><b>è’åœ°</b><br>ãƒ¬ãƒ™ãƒ« 1 ã®ã¨ãç€å¼¾ç‚¹
+<li><b>æ‘ã€ç”ºã€éƒ½å¸‚</b><br>ãƒ¬ãƒ™ãƒ« 30 æœªæº€ãŒæ‘<br>ãƒ¬ãƒ™ãƒ« 100 æœªæº€ãŒç”º<br>ãƒ¬ãƒ™ãƒ« 200 æœªæº€ãŒéƒ½å¸‚
+<li><b>ãƒŸã‚µã‚¤ãƒ«åŸºåœ°</b><br>çµŒé¨“å€¤
+<li><b>å±±ã€æ¡æ˜å ´</b><br>ãƒ¬ãƒ™ãƒ« 1 ä»¥ä¸Šã®ã¨ãæ¡æ˜å ´
+<li><b>æ€ªç£</b><br>å„æ€ªç£ã®æœ€å¤§ãƒ¬ãƒ™ãƒ«ã‚’è¶…ãˆã‚‹<br>è¨­å®šã¯ã§ãã¾ã›ã‚“
+<li><b>æµ·åº•åŸºåœ°</b><br>çµŒé¨“å€¤
 </ul>
 
 </td>
 <td {$init->bgMapCell}>
 END;
-		// ’nŒ`o—Í
+		// åœ°å½¢å‡ºåŠ›
 		$html->islandMap($hako, $island, 1);
-		
-		// ƒGƒfƒBƒ^—Ìˆæ‚Ì•\¦
-		print <<<END
+
+		// ã‚¨ãƒ‡ã‚£ã‚¿é ˜åŸŸã®è¡¨ç¤º
+		echo <<<END
 </td>
 <td {$init->bgInputCell}>
 <div align="center">
@@ -914,83 +915,83 @@ END;
 <input type="hidden" name="mode" value="regist">
 <input type="hidden" name="ISLANDID" value="{$island['id']}">
 <input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-<strong>ƒ}ƒbƒvEƒGƒfƒBƒ^</strong><br>
+<strong>ãƒãƒƒãƒ—ãƒ»ã‚¨ãƒ‡ã‚£ã‚¿</strong><br>
 <hr>
-<strong>À•W(</strong>
+<strong>åº§æ¨™(</strong>
 <select name="POINTX">
 END;
 		for($i = 0; $i < $init->islandSize; $i++) {
 			if($i == $data['defaultX']) {
-				print "<option value=\"{$i}\" selected>{$i}</option>\n";
+				echo "<option value=\"{$i}\" selected>{$i}</option>\n";
 			} else {
-				print "<option value=\"{$i}\">{$i}</option>\n";
+				echo "<option value=\"{$i}\">{$i}</option>\n";
 			}
 		}
-		print "</select>, <select name=\"POINTY\">";
+		echo "</select>, <select name=\"POINTY\">";
 		for($i = 0; $i < $init->islandSize; $i++) {
 			if($i == $data['defaultY']) {
-				print "<option value=\"{$i}\" selected>{$i}</option>\n";
+				echo "<option value=\"{$i}\" selected>{$i}</option>\n";
 			} else {
-				print "<option value=\"{$i}\">{$i}</option>\n";
+				echo "<option value=\"{$i}\">{$i}</option>\n";
 			}
 		}
-		print <<<END
+		echo <<<END
 </select><strong>)</strong>
 <hr>
-<strong>’nŒ`</strong>
+<strong>åœ°å½¢</strong>
 <select name="LAND">
 END;
 		for($i = 0; $i < count($landList); $i++) {
 			if($landList[$i] == $data['defaultLAND']) {
-				print "<option value=\"{$landList[$i]}\" selected>{$landName[$i]}</option>\n";
+				echo "<option value=\"{$landList[$i]}\" selected>{$landName[$i]}</option>\n";
 			} else {
-				print "<option value=\"{$landList[$i]}\">{$landName[$i]}</option>\n";
+				echo "<option value=\"{$landList[$i]}\">{$landName[$i]}</option>\n";
 			}
 		}
-		print <<<END
+		echo <<<END
 </select>
 <hr>
-<strong>‰öb‚Ìí—Ş</strong>
+<strong>æ€ªç£ã®ç¨®é¡</strong>
 <select name="MONSTER">
 END;
 		for($i = 0; $i < $init->monsterNumber; $i++) {
 			if($i == $data['defaultMONSTER']) {
-				print "<option value=\"{$i}\" selected>{$init->monsterName[$i]}</option>\n";
+				echo "<option value=\"{$i}\" selected>{$init->monsterName[$i]}</option>\n";
 			} else {
-				print "<option value=\"{$i}\">{$init->monsterName[$i]}</option>\n";
+				echo "<option value=\"{$i}\">{$init->monsterName[$i]}</option>\n";
 			}
 		}
-		print <<<END
+		echo <<<END
 </select>
 <hr>
-<strong>‘D”•‚Ìí—Ş</strong>
+<strong>èˆ¹èˆ¶ã®ç¨®é¡</strong>
 <select name="SHIP">
 END;
 		for($i = 0; $i < 15; $i++) {
 			if($init->shipName[$i] != "") {
 				if($i == $data['defaultSHIP']) {
-					print "<option value=\"{$i}\" selected>{$init->shipName[$i]}</option>\n";
+					echo "<option value=\"{$i}\" selected>{$init->shipName[$i]}</option>\n";
 				} else {
-						print "<option value=\"{$i}\">{$init->shipName[$i]}</option>\n";
+						echo "<option value=\"{$i}\">{$init->shipName[$i]}</option>\n";
 				}
 			}
 		}
-		print <<<END
+		echo <<<END
 </select>
 <hr>
-<strong>ƒŒƒxƒ‹</strong>
+<strong>ãƒ¬ãƒ™ãƒ«</strong>
 <input type="number" min="0" max="1048575" size="8" maxlength="7" name="LEVEL" value="{$data['defaultLEVEL']}">
 <hr>
-<input type="submit" value="“o˜^">
+<input type="submit" value="ç™»éŒ²">
 </form>
 </div>
 
 <ul>
-<li>“o˜^‚·‚é‚Æ‚«‚Í\•ª’ˆÓŠè‚¢‚Ü‚·B
-<li>ƒf[ƒ^‚ğ”j‰ó‚·‚éê‡‚ª‚ ‚è‚Ü‚·B
-<li>ƒoƒbƒNƒAƒbƒv‚ğs‚Á‚Ä‚©‚ç<br>s‚¤—l‚É‚µ‚Ü‚µ‚å‚¤B
-<li>’nŒ`ƒf[ƒ^‚ğ•ÏX‚·‚é‚Ì‚İ‚ÅA<br>‘¼‚Ìƒf[ƒ^‚Í•ÏX‚³‚ê‚Ü‚¹‚ñB<br>
-ƒ^[ƒ“XV‚Å‘¼‚Ìƒf[ƒ^‚Ö<br>”½‰f‚³‚ê‚Ü‚·B
+<li>ç™»éŒ²ã™ã‚‹ã¨ãã¯ååˆ†æ³¨æ„é¡˜ã„ã¾ã™ã€‚
+<li>ãƒ‡ãƒ¼ã‚¿ã‚’ç ´å£Šã™ã‚‹å ´åˆãŒã‚ã‚Šã¾ã™ã€‚
+<li>ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’è¡Œã£ã¦ã‹ã‚‰<br>è¡Œã†æ§˜ã«ã—ã¾ã—ã‚‡ã†ã€‚
+<li>åœ°å½¢ãƒ‡ãƒ¼ã‚¿ã‚’å¤‰æ›´ã™ã‚‹ã®ã¿ã§ã€<br>ä»–ã®ãƒ‡ãƒ¼ã‚¿ã¯å¤‰æ›´ã•ã‚Œã¾ã›ã‚“ã€‚<br>
+ã‚¿ãƒ¼ãƒ³æ›´æ–°ã§ä»–ã®ãƒ‡ãƒ¼ã‚¿ã¸<br>åæ˜ ã•ã‚Œã¾ã™ã€‚
 </ul>
 
 </td>
@@ -1000,18 +1001,18 @@ END;
 END;
 	}
 	//---------------------------------------------------
-	// ’nŒ`‚Ì“o˜^
+	// åœ°å½¢ã®ç™»éŒ²
 	//---------------------------------------------------
-	function regist($hako, $data) {
+	function register($hako, $data) {
 		global $init;
-		
-		// ƒpƒXƒ[ƒh
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 		if(!Util::checkPassword("", $data['PASSWORD'])) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
-		
+
 		$id = $data['ISLANDID'];
 		$number = $hako->idToNumber[$id];
 		$island = $hako->islands[$number];
@@ -1023,9 +1024,9 @@ END;
 		$mons = $data['MONSTER'];
 		$ships = $data['SHIP'];
 		$level = $data['LEVEL'];
-		
+
 		if($ld == $init->landMonster || $ld == $init->landSleeper) {
-			// ‰öb‚ÌƒŒƒxƒ‹İ’è
+			// æ€ªç£ã®ãƒ¬ãƒ™ãƒ«è¨­å®š
 			$BHP = $init->monsterBHP[$mons];
 			if($init->monsterDHP[$mons] > 0) {
 				$DHP = Util::random($init->monsterDHP[$mons] - 1);
@@ -1035,23 +1036,23 @@ END;
 			$level = $BHP + $DHP;
 			$level = $mons * 100 + $level;
 		} elseif($ld == $init->landShip) {
-			// ‘D”•‚ÌƒŒƒxƒ‹İ’è
+			// èˆ¹èˆ¶ã®ãƒ¬ãƒ™ãƒ«è¨­å®š
 			$level = Util::navyPack($id, $ships, $init->shipHP[$ships], 0, 0);
 		}
-		
-		// XVƒf[ƒ^İ’è
+
+		// æ›´æ–°ãƒ‡ãƒ¼ã‚¿è¨­å®š
 		$land[$x][$y] = $ld;
 		$landValue[$x][$y] = $level;
-		
-		// ƒ}ƒbƒvƒf[ƒ^XV
+
+		// ãƒãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿æ›´æ–°
 		$hako->writeLand($id, $island);
-		
-		// İ’è‚µ‚½’l‚ğ–ß‚·
+
+		// è¨­å®šã—ãŸå€¤ã‚’æˆ»ã™
 		$hako->islands[$number] = $island;
-		
-		print "{$init->tagBig_}’nŒ`‚ğ•ÏX‚µ‚Ü‚µ‚½{$init->_tagBig}<hr>\n";
-		
-		// ƒ}ƒbƒvƒGƒfƒBƒ^‚Ì•\¦‚Ö
+
+		echo "{$init->tagBig_}åœ°å½¢ã‚’å¤‰æ›´ã—ã¾ã—ãŸ{$init->_tagBig}<hr>\n";
+
+		// ãƒãƒƒãƒ—ã‚¨ãƒ‡ã‚£ã‚¿ã®è¡¨ç¤ºã¸
 		$this->editMap($hako, $data);
 	}
 }
@@ -1072,7 +1073,7 @@ class Main {
 		}
 		$cgi->setCookies();
 		$edit = new Edit;
-		
+
 		switch($cgi->mode) {
 			case "enter":
 				$html = new HtmlTop;
@@ -1080,42 +1081,42 @@ class Main {
 				$edit->main($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "list":
 				$html = new HtmlTop;
 				$html->header($cgi->dataSet);
 				$edit->main($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "map":
 				$html = new HtmlTop;
 				$html->header($cgi->dataSet);
 				$edit->editMap($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
+
 			case "regist":
 				$html = new HtmlTop;
 				$html->header($cgi->dataSet);
-				$edit->regist($hako, $cgi->dataSet);
+				$edit->register($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-				
-			case "skin":
-				$html = new HtmlSetted;
-				$html->header($cgi->dataSet);
-				$html->setSkin();
-				$html->footer();
-				break;
-				
-			case "imgset":
-				$html = new HtmlSetted;
-				$html->header($cgi->dataSet);
-				$html->setImg();
-				$html->footer();
-				break;
-				
+
+			// case "skin":
+			// 	$html = new HtmlSetted;
+			// 	$html->header($cgi->dataSet);
+			// 	$html->setSkin();
+			// 	$html->footer();
+			// 	break;
+
+			// case "imgset":
+			// 	$html = new HtmlSetted;
+			// 	$html->header($cgi->dataSet);
+			// 	$html->setImg();
+			// 	$html->footer();
+			// 	break;
+
 			default:
 				$html = new HtmlTop;
 				$html->header($cgi->dataSet);
@@ -1128,5 +1129,3 @@ class Main {
 
 $start = new Main;
 $start->execute();
-
-?>

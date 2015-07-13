@@ -2,18 +2,17 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- ƒƒ“ƒeƒiƒ“ƒXiƒZ[ƒtƒ‚[ƒhj—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- ãƒ¡ãƒ³ãƒ†ãƒŠãƒ³ã‚¹ï¼ˆã‚»ãƒ¼ãƒ•ãƒ¢ãƒ¼ãƒ‰ï¼‰ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-mente-safemode.php by SERA - 2012/05/07
 
 *******************************************************************/
 
-require 'jcode.phps';
-require 'config.php';
-require 'hako-cgi.php';
-require 'hako-html.php';
+require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-cgi.php';
+require_once ABSOLUTE_PATH.'hako-html.php';
 
 define("READ_LINE", 1024);
 $init = new Init;
@@ -22,49 +21,49 @@ $THIS_FILE = $init->baseDir . "/hako-mente-safemode.php";
 class HtmlMente extends HTML {
 	function enter() {
 		global $init;
-		
-		print "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">ƒgƒbƒv‚Ö–ß‚é</span></a></CENTER>\n";
-		print "<h1 class=\"title\">{$init->title}<br>ƒƒ“ƒeƒiƒ“ƒXƒc[ƒ‹</h1>";
+
+		print "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">ãƒˆãƒƒãƒ—ã¸æˆ»ã‚‹</span></a></CENTER>\n";
+		print "<h1 class=\"title\">{$init->title}<br>ãƒ¡ãƒ³ãƒ†ãƒŠãƒ³ã‚¹ãƒ„ãƒ¼ãƒ«</h1>";
 		if(file_exists("{$init->passwordFile}")) {
-			print <<<END
+			echo <<<END
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<strong>ƒpƒXƒ[ƒhF</strong>
+<strong>ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ï¼š</strong>
 <input type="password" size="32" maxlength="32" name="PASSWORD">
 <input type="hidden" name="mode" value="enter">
-<input type="submit" value="ƒƒ“ƒeƒiƒ“ƒX">
+<input type="submit" value="ãƒ¡ãƒ³ãƒ†ãƒŠãƒ³ã‚¹">
 END;
 		} else {
-			print <<<END
+			echo <<<END
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<H2>ƒ}ƒXƒ^ƒpƒXƒ[ƒh‚Æ“ÁêƒpƒXƒ[ƒh‚ğŒˆ‚ß‚Ä‚­‚¾‚³‚¢B</H2>
-<P>¦“ü—Íƒ~ƒX‚ğ–h‚®‚½‚ß‚ÉA‚»‚ê‚¼‚ê‚Q‰ñ‚¸‚Â“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B</P>
-<B>ƒ}ƒXƒ^ƒpƒXƒ[ƒhF</B><BR>
+<H2>ãƒã‚¹ã‚¿ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¨ç‰¹æ®Šãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’æ±ºã‚ã¦ãã ã•ã„ã€‚</H2>
+<P>â€»å…¥åŠ›ãƒŸã‚¹ã‚’é˜²ããŸã‚ã«ã€ãã‚Œãã‚Œï¼’å›ãšã¤å…¥åŠ›ã—ã¦ãã ã•ã„ã€‚</P>
+<B>ãƒã‚¹ã‚¿ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ï¼š</B><BR>
 (1) <INPUT type="password" name="MPASS1" value="$mpass1">&nbsp;&nbsp;(2) <INPUT type="password" name="MPASS2" value="$mpass2"><BR>
 <BR>
-<B>“ÁêƒpƒXƒ[ƒhF</B><BR>
+<B>ç‰¹æ®Šãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ï¼š</B><BR>
 (1) <INPUT type="password" name="SPASS1" value="$spass1">&nbsp;&nbsp;(2) <INPUT type="password" name="SPASS2" value="$spass2"><BR>
 <BR>
 <input type="hidden" name="mode" value="setup">
-<INPUT type="submit" value="ƒpƒXƒ[ƒh‚ğİ’è‚·‚é">
+<INPUT type="submit" value="ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’è¨­å®šã™ã‚‹">
 END;
 		}
 		print "</form>\n";
 	}
-	
+
 	function main($data) {
 		global $init;
-		
-		print "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">ƒgƒbƒv‚Ö–ß‚é</span></a></CENTER>\n";
-		print "<h1 class=\"title\">{$init->title}<br>ƒƒ“ƒeƒiƒ“ƒXƒc[ƒ‹</h1>\n";
-		// ƒf[ƒ^•Û‘¶—pƒfƒBƒŒƒNƒgƒŠ‚Ì‘¶İƒ`ƒFƒbƒN
+
+		print "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">ãƒˆãƒƒãƒ—ã¸æˆ»ã‚‹</span></a></CENTER>\n";
+		print "<h1 class=\"title\">{$init->title}<br>ãƒ¡ãƒ³ãƒ†ãƒŠãƒ³ã‚¹ãƒ„ãƒ¼ãƒ«</h1>\n";
+		// ãƒ‡ãƒ¼ã‚¿ä¿å­˜ç”¨ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®å­˜åœ¨ãƒã‚§ãƒƒã‚¯
 		if(!is_dir("{$init->dirName}")) {
-			print "{$init->tagBig_}ƒf[ƒ^•Û‘¶—p‚ÌƒfƒBƒŒƒNƒgƒŠ‚ª‘¶İ‚µ‚Ü‚¹‚ñ{$init->_tagBig}";
+			print "{$init->tagBig_}ãƒ‡ãƒ¼ã‚¿ä¿å­˜ç”¨ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå­˜åœ¨ã—ã¾ã›ã‚“{$init->_tagBig}";
 			HTML::footer();
 			exit;
 		}
-		// ƒf[ƒ^•Û‘¶—pƒfƒBƒŒƒNƒgƒŠ‚Ìƒp[ƒ~ƒbƒVƒ‡ƒ“ƒ`ƒFƒbƒN
+		// ãƒ‡ãƒ¼ã‚¿ä¿å­˜ç”¨ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯
 		if(!is_writeable("{$init->dirName}") || !is_readable("{$init->dirName}")) {
-			print "{$init->tagBig_}ƒf[ƒ^•Û‘¶—p‚ÌƒfƒBƒŒƒNƒgƒŠ‚Ìƒp[ƒ~ƒbƒVƒ‡ƒ“‚ª•s³‚Å‚·Bƒp[ƒ~ƒbƒVƒ‡ƒ“‚ğ0777“™‚Ì’l‚Éİ’è‚µ‚Ä‚­‚¾‚³‚¢B{$init->_tagBig}";
+			print "{$init->tagBig_}ãƒ‡ãƒ¼ã‚¿ä¿å­˜ç”¨ã®ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ãŒä¸æ­£ã§ã™ã€‚ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ã‚’0777ç­‰ã®å€¤ã«è¨­å®šã—ã¦ãã ã•ã„ã€‚{$init->_tagBig}";
 			HTML::footer();
 			exit;
 		}
@@ -75,10 +74,10 @@ END;
 			print "<form action=\"{$GLOBALS['THIS_FILE']}\" method=\"post\">\n";
 			print "<input type=\"hidden\" name=\"PASSWORD\" value=\"{$data['PASSWORD']}\">\n";
 			print "<input type=\"hidden\" name=\"mode\" value=\"NEW\">\n";
-			print "<input type=\"submit\" value=\"V‚µ‚¢ƒf[ƒ^‚ğì‚é\">\n";
+			print "<input type=\"submit\" value=\"æ–°ã—ã„ãƒ‡ãƒ¼ã‚¿ã‚’ä½œã‚‹\">\n";
 			print "</form>\n";
 		}
-		// ƒoƒbƒNƒAƒbƒvƒf[ƒ^
+		// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ãƒ‡ãƒ¼ã‚¿
 		$dir = opendir("./");
 		while($dn = readdir($dir)) {
 			if(preg_match("/{$init->dirName}\.bak(.*)$/", $dn, $suf)) {
@@ -89,68 +88,68 @@ END;
 		}
 		closedir($dir);
 	}
-	
-	// •\¦ƒ‚[ƒh
+
+	// è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰
 	function dataPrint($data, $suf = "") {
 		global $init;
-		
+
 		print "<HR>";
 		if(strcmp($suf, "") == 0) {
 			$fp = fopen("{$init->dirName}/hakojima.dat", "r");
-			print "<h2>Œ»–ğƒf[ƒ^</h2>\n";
+			print "<h2>ç¾å½¹ãƒ‡ãƒ¼ã‚¿</h2>\n";
 		} else {
 			$fp = fopen("{$init->dirName}.bak{$suf}/hakojima.dat", "r");
-			print "<h2>ƒoƒbƒNƒAƒbƒv{$suf}</h2>\n";
+			print "<h2>ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—{$suf}</h2>\n";
 		}
 		$lastTurn = chop(fgets($fp, READ_LINE));
 		$lastTime = chop(fgets($fp, READ_LINE));
 		fclose($fp);
 		$timeString = timeToString($lastTime);
-		
-		print <<<END
-<strong>ƒ^[ƒ“$lastTurn</strong><br>
-<strong>ÅIXVŠÔ</strong>:$timeString<br>
-<strong>ÅIXVŠÔ(•b”•\\¦)</strong>:1970”N1Œ1“ú‚©‚ç$lastTime •b<br>
+
+		echo <<<END
+<strong>ã‚¿ãƒ¼ãƒ³$lastTurn</strong><br>
+<strong>æœ€çµ‚æ›´æ–°æ™‚é–“</strong>:$timeString<br>
+<strong>æœ€çµ‚æ›´æ–°æ™‚é–“(ç§’æ•°è¡¨\ç¤º)</strong>:1970å¹´1æœˆ1æ—¥ã‹ã‚‰$lastTime ç§’<br>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
 <input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
 <input type="hidden" name="mode" value="DELETE">
 <input type="hidden" name="NUMBER" value="{$suf}">
-<input type="submit" value="‚±‚Ìƒf[ƒ^‚ğíœ">
+<input type="submit" value="ã“ã®ãƒ‡ãƒ¼ã‚¿ã‚’å‰Šé™¤">
 </form>
 END;
 		if(strcmp($suf, "") == 0) {
 			$time = localtime($lastTime, TRUE);
 			$time['tm_year'] += 1900;
 			$time['tm_mon']++;
-			print <<<END
-<h2>ÅIXVŠÔ‚Ì•ÏX</h2>
+			echo <<<END
+<h2>æœ€çµ‚æ›´æ–°æ™‚é–“ã®å¤‰æ›´</h2>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
 <input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
 <input type="hidden" name="mode" value="NTIME">
 <input type="hidden" name="NUMBER" value="{$suf}">
-<input type="text" size="4" name="YEAR" value="{$time['tm_year']}">”N
-<input type="text" size="2" name="MON" value="{$time['tm_mon']}">Œ
-<input type="text" size="2" name="DATE" value="{$time['tm_mday']}">“ú
-<input type="text" size="2" name="HOUR" value="{$time['tm_hour']}">
-<input type="text" size="2" name="MIN" value="{$time['tm_min']}">•ª
-<input type="text" size="2" name="NSEC" value="{$time['tm_sec']}">•b
-<input type="submit" value="•ÏX">
+<input type="text" size="4" name="YEAR" value="{$time['tm_year']}">å¹´
+<input type="text" size="2" name="MON" value="{$time['tm_mon']}">æœˆ
+<input type="text" size="2" name="DATE" value="{$time['tm_mday']}">æ—¥
+<input type="text" size="2" name="HOUR" value="{$time['tm_hour']}">æ™‚
+<input type="text" size="2" name="MIN" value="{$time['tm_min']}">åˆ†
+<input type="text" size="2" name="NSEC" value="{$time['tm_sec']}">ç§’
+<input type="submit" value="å¤‰æ›´">
 </form>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
 <input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
 <input type="hidden" name="mode" value="STIME">
 <input type="hidden" name="NUMBER" value="{$suf}">
-1970”N1Œ1“ú‚©‚ç<input type="text" size="32" name="SSEC" value="$lastTime">•b
-<input type="submit" value="•bw’è‚Å•ÏX">
+1970å¹´1æœˆ1æ—¥ã‹ã‚‰<input type="text" size="32" name="SSEC" value="$lastTime">ç§’
+<input type="submit" value="ç§’æŒ‡å®šã§å¤‰æ›´">
 </form>
 END;
 		} else {
-			print <<<END
+			echo <<<END
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
 <input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
 <input type="hidden" name="NUMBER" value="{$suf}">
 <input type="hidden" name="mode" value="CURRENT">
-<input type="submit" value="‚±‚Ìƒf[ƒ^‚ğŒ»–ğ‚É">
+<input type="submit" value="ã“ã®ãƒ‡ãƒ¼ã‚¿ã‚’ç¾å½¹ã«">
 </form>
 END;
 		}
@@ -161,7 +160,7 @@ function timeToString($t) {
 	$time = localtime($t, TRUE);
 	$time['tm_year'] += 1900;
 	$time['tm_mon']++;
-	return "{$time['tm_year']}”N {$time['tm_mon']}Œ {$time['tm_mday']}“ú {$time['tm_hour']} {$time['tm_min']}•ª {$time['tm_sec']}•b";
+	return "{$time['tm_year']}å¹´ {$time['tm_mon']}æœˆ {$time['tm_mday']}æ—¥ {$time['tm_hour']}æ™‚ {$time['tm_min']}åˆ† {$time['tm_sec']}ç§’";
 }
 
 class Main {
@@ -173,7 +172,7 @@ class Main {
 		$this->parseInputData();
 		$cgi->getCookies();
 		$html->header($cgi->dataSet);
-		
+
 		switch($this->mode) {
 			case "NEW":
 				if($this->passCheck()) {
@@ -181,73 +180,73 @@ class Main {
 				}
 				$html->main($this->dataSet);
 				break;
-				
+
 			case "CURRENT":
 				if($this->passCheck()) {
 					$this->currentMode($this->dataSet['NUMBER']);
 				}
 				$html->main($this->dataSet);
 				break;
-				
+
 			case "DELETE":
 				if($this->passCheck()) {
 					$this->delMode($this->dataSet['NUMBER']);
 				}
 				$html->main($this->dataSet);
 				break;
-				
+
 			case "NTIME":
 				if($this->passCheck()) {
 					$this->timeMode();
 				}
 				$html->main($this->dataSet);
 				break;
-				
+
 			case "STIME":
 				if($this->passCheck()) {
 					$this->stimeMode($this->dataSet['SSEC']);
 				}
 				$html->main($this->dataSet);
 				break;
-				
+
 			case "setup":
 				$this->setupMode();
 				$html->enter();
 				break;
-				
+
 			case "enter":
 				if($this->passCheck()) {
 					$html->main($this->dataSet);
 				}
 				break;
-				
+
 			default:
 				$html->enter();
 				break;
 		}
 		$html->footer();
 	}
-	
+
 	function parseInputData() {
 		$this->mode = $_POST['mode'];
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
 				// $value = Util::sjis_convert($value);
-				// ”¼ŠpƒJƒi‚ª‚ ‚ê‚Î‘SŠp‚É•ÏŠ·‚µ‚Ä•Ô‚·
+				// åŠè§’ã‚«ãƒŠãŒã‚ã‚Œã°å…¨è§’ã«å¤‰æ›ã—ã¦è¿”ã™
 				// $value = i18n_ja_jp_hantozen($value,"KHV");
-				JcodeConvert($value, 0, 2);
+				// JcodeConvert($value, 0, 2);
 				$value = str_replace(",", "", $value);
 				$this->dataSet["{$name}"] = $value;
 			}
 		}
 	}
-	
+
 	function newMode() {
 		global $init;
-		
+
 		// mkdir($init->dirName, $init->dirMode);
-		// Œ»İ‚ÌŠÔ‚ğæ“¾
-		$now = time();
+		// ç¾åœ¨ã®æ™‚é–“ã‚’å–å¾—
+		$now = $_SERVER['REQUEST_TIME'];
 		$now = $now - ($now % ($init->unitTime));
 		$fileName = "{$init->dirName}/hakojima.dat";
 		touch($fileName);
@@ -257,27 +256,27 @@ class Main {
 		fputs($fp, "0\n");
 		fputs($fp, "1\n");
 		fclose($fp);
-		
-		// “¯–¿ƒtƒ@ƒCƒ‹¶¬
+
+		// åŒç›Ÿãƒ•ã‚¡ã‚¤ãƒ«ç”Ÿæˆ
 		$fileName = "{$init->dirName}/ally.dat";
 		$fp = fopen($fileName, "w");
 		fclose($fp);
-		
-		// ƒAƒNƒZƒXƒƒO¶¬
+
+		// ã‚¢ã‚¯ã‚»ã‚¹ãƒ­ã‚°ç”Ÿæˆ
 		$fileName = "{$init->dirName}/{$init->logname}";
 		$fp = fopen($fileName, "w");
 		fclose($fp);
-		
-		// .htaccess¶¬
+
+		// .htaccessç”Ÿæˆ
 		$fileName = "{$init->dirName}/.htaccess";
 		$fp = fopen($fileName, "w");
 		fputs($fp, "Options -Indexes");
 		fclose($fp);
 	}
-	
+
 	function delMode($id) {
 		global $init;
-		
+
 		if(strcmp($id, "") == 0) {
 			$dirName = "{$init->dirName}";
 		} else {
@@ -285,7 +284,7 @@ class Main {
 		}
 		$this->rmTree($dirName);
 	}
-	
+
 	function timeMode() {
 		$year = $this->dataSet['YEAR'];
 		$day = $this->dataSet['DATE'];
@@ -296,10 +295,10 @@ class Main {
 		$ctSec = mktime($hour, $min, $sec, $mon, $day, $year);
 		$this->stimeMode($ctSec);
 	}
-	
+
 	function stimeMode($sec) {
 		global $init;
-		
+
 		$fileName = "{$init->dirName}/hakojima.dat";
 		$fp = fopen($fileName, "r+");
 		$buffer = array();
@@ -313,20 +312,20 @@ class Main {
 		}
 		fclose($fp);
 	}
-	
+
 	function currentMode($id) {
 		global $init;
-		
+
 		$this->rmTree("{$init->dirName}");
 		// mkdir("{$init->dirName}", $init->dirMode);
 		$dir = opendir("{$init->dirName}.bak{$id}/");
 		while($fileName = readdir($dir)) {
 			if(!(strcmp($fileName, ".") == 0 || strcmp($fileName, "..") == 0))
 				copy("{$init->dirName}.bak{$id}/{$fileName}", "{$init->dirName}/{$fileName}");
-		} 
+		}
 		closedir($dir);
 	}
-	
+
 	function rmTree($dirName) {
 		if(is_dir("{$dirName}")) {
 			$dir = opendir("{$dirName}/");
@@ -338,15 +337,15 @@ class Main {
 			// rmdir($dirName);
 		}
 	}
-	
+
 	function setupMode() {
 		global $init;
-		
+
 		if(empty($this->dataSet['MPASS1']) || empty($this->dataSet['MPASS2']) || strcmp($this->dataSet['MPASS1'], $this->dataSet['MPASS2'])) {
-			print "<h2>ƒ}ƒXƒ^ƒpƒXƒ[ƒh‚ª“ü—Í‚³‚ê‚Ä‚¢‚È‚¢‚©ŠÔˆá‚Á‚Ä‚¢‚Ü‚·</h2>\n";
+			print "<h2>ãƒã‚¹ã‚¿ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒå…¥åŠ›ã•ã‚Œã¦ã„ãªã„ã‹é–“é•ã£ã¦ã„ã¾ã™</h2>\n";
 			return 0;
 		} else if(empty($this->dataSet['SPASS1']) || empty($this->dataSet['SPASS2']) || strcmp($this->dataSet['SPASS1'], $this->dataSet['SPASS2'])) {
-			print "<h2>“ÁêƒpƒXƒ[ƒh‚ª“ü—Í‚³‚ê‚Ä‚¢‚È‚¢‚©ŠÔˆá‚Á‚Ä‚¢‚Ü‚·</h2>\n";
+			print "<h2>ç‰¹æ®Šãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒå…¥åŠ›ã•ã‚Œã¦ã„ãªã„ã‹é–“é•ã£ã¦ã„ã¾ã™</h2>\n";
 			return 0;
 		}
 		$masterPassword = crypt($this->dataSet['MPASS1'], 'ma');
@@ -356,10 +355,10 @@ class Main {
 		fputs($fp, "$specialPassword\n");
 		fclose($fp);
 	}
-	
+
 	function passCheck() {
 		global $init;
-		
+
 		if(file_exists("{$init->passwordFile}")) {
 			$fp = fopen("{$init->passwordFile}", "r");
 			$masterPassword = chop(fgets($fp, READ_LINE));
@@ -368,7 +367,7 @@ class Main {
 		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
 			return 1;
 		} else {
-			print "<h2>ƒpƒXƒ[ƒh‚ªˆá‚¢‚Ü‚·B</h2>\n";
+			print "<h2>ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒé•ã„ã¾ã™ã€‚</h2>\n";
 			return 0;
 		}
 	}
@@ -376,5 +375,3 @@ class Main {
 
 $start = new Main();
 $start->execute();
-
-?>

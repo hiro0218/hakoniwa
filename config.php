@@ -1,686 +1,705 @@
 <?php
-
 /*******************************************************************
 
-	” ’ë”“‡ S.E
+	ç®±åº­è«¸å³¶ S.E
 
-	- ‰ŠúÝ’è—pƒtƒ@ƒCƒ‹ -
-	
+	- åˆæœŸè¨­å®šç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	config.php by SERA - 2013/07/06
 
 *******************************************************************/
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+date_default_timezone_set('Asia/Tokyo');
 
-define("GZIP", false);  // true: GZIP ˆ³k“]‘—‚ðŽg—p  false: Žg—p‚µ‚È‚¢
-define("DEBUG", false); // true: ƒfƒoƒbƒO false: ’Êí
-define("LOCK_RETRY_COUNT", 10);		// ƒtƒ@ƒCƒ‹ƒƒbƒNˆ—‚ÌƒŠƒgƒ‰ƒC‰ñ”
-define("LOCK_RETRY_INTERVAL", 1000);// ÄƒƒbƒNˆ—ŽÀŽ{‚Ü‚Å‚ÌŽžŠÔ(ƒ~ƒŠ•b)BÅ’á‚Å‚à500‚­‚ç‚¢‚ðŽw’è
+define("DEBUG", true); 								// true: ãƒ‡ãƒãƒƒã‚° false: é€šå¸¸
+define("LOCK_RETRY_COUNT", 10);				// ãƒ•ã‚¡ã‚¤ãƒ«ãƒ­ãƒƒã‚¯å‡¦ç†ã®ãƒªãƒˆãƒ©ã‚¤å›žæ•°
+define("LOCK_RETRY_INTERVAL", 1000);	// å†ãƒ­ãƒƒã‚¯å‡¦ç†å®Ÿæ–½ã¾ã§ã®æ™‚é–“(ãƒŸãƒªç§’)ã€‚æœ€ä½Žã§ã‚‚500ãã‚‰ã„ã‚’æŒ‡å®š
+
+// çµ¶å¯¾ãƒ‘ã‚¹å®šç¾©
+defined("DS") || define("DS", DIRECTORY_SEPARATOR);
+define("ABSOLUTE_PATH", dirname(__FILE__) . DS);
+
+//require_once ABSOLUTE_PATH.'jcode/jcode.php';
 
 //--------------------------------------------------------------------
 class Init {
-	// ŠeŽíÝ’è’l
-	
+
+   //function __construct() {}
+   //function __destruct() {}
+
+	// å„ç¨®è¨­å®šå€¤
+
 	//---------------------------------------------------
-	// ƒvƒƒOƒ‰ƒ€ƒtƒ@ƒCƒ‹‚ÉŠÖ‚·‚éÝ’è
+	// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ãƒ•ã‚¡ã‚¤ãƒ«ã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// ƒvƒƒOƒ‰ƒ€‚ð’u‚­ƒfƒBƒŒƒNƒgƒŠ
-	var $baseDir = "http://localhost/php";
-	
-	// ‰æ‘œ‚ð’u‚­ƒfƒBƒŒƒNƒgƒŠ
-	var $imgDir  = "http://localhost/php/img";
-	// ƒ[ƒJƒ‹Ý’è—p‰æ‘œ
-	var $imgPack = "http://localhost/php/img.zip";
-	// ƒ[ƒJƒ‹Ý’èà–¾ƒy[ƒW
-	var $imgExp  = "http://localhost/php/local.html";
-	// ƒ[ƒJƒ‹Ý’è‹­§ YES:1, No:0
-	var $setImg  = 0;
-	
-	// CSSƒtƒ@ƒCƒ‹‚ð’u‚­ƒfƒBƒŒƒNƒgƒŠ
-	var $cssDir  = "http://localhost/php/css";
-	// CSSƒŠƒXƒg
+	// ãƒ—ãƒ­ã‚°ãƒ©ãƒ ã‚’ç½®ããƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	var $baseDir = "http://localhost/hakoniwa";
+
+	// ç”»åƒã‚’ç½®ããƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	var $imgDir  = "http://localhost/hakoniwa/img";
+
+	// CSSãƒ•ã‚¡ã‚¤ãƒ«ã‚’ç½®ããƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒª
+	var $cssDir  = "http://localhost/hakoniwa/css";
+	// CSSãƒªã‚¹ãƒˆ
 	var $cssList = array('SkyBlue.css');
-	
-	// ƒf[ƒ^ƒfƒBƒŒƒNƒgƒŠ‚Ì–¼‘Oi•K‚¸•ÏX‚µ‚Ä‚­‚¾‚³‚¢j
+
+	// ãƒ‡ãƒ¼ã‚¿ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®åå‰ï¼ˆå¿…ãšå¤‰æ›´ã—ã¦ãã ã•ã„ï¼‰
 	var $dirName = "data";
-	// ƒfƒBƒŒƒNƒgƒŠì¬Žž‚Ìƒp[ƒ~ƒVƒ‡ƒ“
+	// ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆæ™‚ã®ãƒ‘ãƒ¼ãƒŸã‚·ãƒ§ãƒ³
 	var $dirMode = 0777;
-	
-	//ƒpƒXƒ[ƒh‚ÌˆÃ†‰» true: ˆÃ†‰»Afalse: ˆÃ†‰»‚µ‚È‚¢
-	var $cryptOn      = true; 
-	// ƒpƒXƒ[ƒhEƒtƒ@ƒCƒ‹
+
+	//ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®æš—å·åŒ– true: æš—å·åŒ–ã€false: æš—å·åŒ–ã—ãªã„
+	var $cryptOn      = true;
+	// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒ»ãƒ•ã‚¡ã‚¤ãƒ«
 	var $passwordFile = "password.php";
-	
-	// ƒAƒNƒZƒXƒƒOƒtƒ@ƒCƒ‹‚Ì–¼‘O
+
+	// ã‚¢ã‚¯ã‚»ã‚¹ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã®åå‰
 	var $logname = "ip.csv";
-	// ƒAƒNƒZƒXƒƒOÅ‘å‹L˜^ƒŒƒR[ƒh”
+	// ã‚¢ã‚¯ã‚»ã‚¹ãƒ­ã‚°æœ€å¤§è¨˜éŒ²ãƒ¬ã‚³ãƒ¼ãƒ‰æ•°
 	var $axesmax = 300;
-	
+
 	//---------------------------------------------------
-	// ƒQ[ƒ€‘S”Ê‚ÉŠÖ‚·‚éÝ’è
+	// ã‚²ãƒ¼ãƒ å…¨èˆ¬ã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// ƒQ[ƒ€ƒ^ƒCƒgƒ‹
-	var $title        = "” ’ë”“‡ S.E";
-	var $adminName    = "ŠÇ—l‚Ì–¼‘O";
-	var $adminEmail   = "ƒƒ‹ƒAƒh";
-	var $urlBbs       = "ŒfŽ¦”Â‚ÌƒAƒhƒŒƒX";
-	var $urlTopPage   = "ƒgƒbƒvƒy[ƒW‚ÌƒAƒhƒŒƒX";
-	var $urlManu      = "ƒ}ƒjƒ…ƒAƒ‹‚ÌƒAƒhƒŒƒX";
-	
-	// 1ƒ^[ƒ“‚ª‰½•b‚©
-	var $unitTime     = 10800; // 3ŽžŠÔi‚±‚êˆÈã’Z‚­‚·‚é‚±‚Æ‚ÍƒIƒXƒXƒo—ˆ‚Ü‚¹‚ñj
-	
-	// ƒ^[ƒ“XVŽž‚Ì˜A‘±XV‚ð‹–‰Â‚·‚é‚©H(0:‚µ‚È‚¢A1:‚·‚é)
-	var $contUpdate   = 0; // 1‚É‚·‚é‚Æ•‰‰×‘Îô‚É‚È‚è‚Ü‚·
-	
-	// “‡‚ÌÅ‘å”iÅ‘å250“‡‚Ü‚Åj
-	var $maxIsland    = 30; // ‚±‚êˆÈã‘‚â‚·‚ÆƒoƒO‚ª¶‚¶‚â‚·‚­‚È‚è‚Ü‚·
-	
-	// “‡‚Ì‘å‚«‚³
-	var $islandSize   = 12; // ”nŽ­‚Ý‚½‚¢‚ÉL‚­‚µ‚Äƒf[ƒ^‰ó‚ê‚Ä‚à’m‚è‚Ü‚¹‚ñ
-	
-	// ‰ŠúŽ‘‹à
+	// ã‚²ãƒ¼ãƒ ã‚¿ã‚¤ãƒˆãƒ«
+	var $title        = "hako";
+	var $adminName    = "hiro";
+	var $adminEmail   = "#";
+	var $urlBbs       = "#";
+	var $urlTopPage   = "http://localhost/";
+	var $urlManu      = "#";
+
+	var $landSuffix		= "å¸åœ‹"; // add
+
+	// 1ã‚¿ãƒ¼ãƒ³ãŒä½•ç§’ã‹
+	var $unitTime     = 10800; // 3æ™‚é–“ï¼ˆã“ã‚Œä»¥ä¸ŠçŸ­ãã™ã‚‹ã“ã¨ã¯ã‚ªã‚¹ã‚¹ãƒ¡å‡ºæ¥ã¾ã›ã‚“ï¼‰
+
+	// ã‚¿ãƒ¼ãƒ³æ›´æ–°æ™‚ã®é€£ç¶šæ›´æ–°ã‚’è¨±å¯ã™ã‚‹ã‹ï¼Ÿ(0:ã—ãªã„ã€1:ã™ã‚‹)
+	var $contUpdate   = 1; // 1ã«ã™ã‚‹ã¨è² è·å¯¾ç­–ã«ãªã‚Šã¾ã™
+
+	// å³¶ã®æœ€å¤§æ•°ï¼ˆæœ€å¤§250å³¶ã¾ã§ï¼‰
+	var $maxIsland    = 30; // ã“ã‚Œä»¥ä¸Šå¢—ã‚„ã™ã¨ãƒã‚°ãŒç”Ÿã˜ã‚„ã™ããªã‚Šã¾ã™
+
+	// å³¶ã®å¤§ãã•
+	var $islandSize   = 20; // é¦¬é¹¿ã¿ãŸã„ã«åºƒãã—ã¦ãƒ‡ãƒ¼ã‚¿å£Šã‚Œã¦ã‚‚çŸ¥ã‚Šã¾ã›ã‚“
+
+	// åˆæœŸè³‡é‡‘
 	var $initialMoney = 1000;
-	// ‰ŠúH—¿
+	// åˆæœŸé£Ÿæ–™
 	var $initialFood  = 100;
-	// ‰Šú–ÊÏiÝ’è‚µ‚È‚¢ê‡‚ÍA0j
+	// åˆæœŸé¢ç©ï¼ˆè¨­å®šã—ãªã„å ´åˆã¯ã€0ï¼‰
 	var $initialSize  = 0;
-	// ‰Šú“‡ƒf[ƒ^iŽg—p‚µ‚È‚¢ê‡‚Í""AŽg—p‚·‚éê‡‚Í"island.txt"‚Æ‚µ‚Ä“‡ƒf[ƒ^ƒtƒ@ƒCƒ‹‚ðì‚Á‚Ä‚­‚¾‚³‚¢j
+	// åˆæœŸå³¶ãƒ‡ãƒ¼ã‚¿ï¼ˆä½¿ç”¨ã—ãªã„å ´åˆã¯""ã€ä½¿ç”¨ã™ã‚‹å ´åˆã¯"island.txt"ã¨ã—ã¦å³¶ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½œã£ã¦ãã ã•ã„ï¼‰
 	var $initialLand  = "";
-	
-	// Ž‘‹àÅ‘å’l
-	var $maxMoney     = 99999; // ƒoƒ‰ƒ“ƒX“I‚É‚±‚Ì‚­‚ç‚¢‚ª‘Ã“–‚©‚Æ
-	// H—¿Å‘å’l
+
+	// è³‡é‡‘æœ€å¤§å€¤
+	var $maxMoney     = 99999; // ãƒãƒ©ãƒ³ã‚¹çš„ã«ã“ã®ãã‚‰ã„ãŒå¦¥å½“ã‹ã¨
+	// é£Ÿæ–™æœ€å¤§å€¤
 	var $maxFood      = 99999;
-	// –ØÞÅ‘å’l
+	// æœ¨ææœ€å¤§å€¤
 	var $maxWood      = 10000;
-	
-	// V‹K“‡‚Ì“o˜^ƒ‚[ƒh (0:’ÊíA1:ŠÇ—l)
+
+	// æ–°è¦å³¶ã®ç™»éŒ²ãƒ¢ãƒ¼ãƒ‰ (0:é€šå¸¸ã€1:ç®¡ç†äºº)
 	var $registMode   = 0;
-	// ŠÇ—lƒ‚[ƒh
+	// ç®¡ç†äººãƒ¢ãƒ¼ãƒ‰
 	var $adminMode;
-	
-	// •‰‰×Œv‘ª‚·‚é‚©H(0:‚µ‚È‚¢A1:‚·‚é)
+
+	// è² è·è¨ˆæ¸¬ã™ã‚‹ã‹ï¼Ÿ(0:ã—ãªã„ã€1:ã™ã‚‹)
 	var $performance  = 1;
 	var $CPU_start;
-	
+
 	//---------------------------------------------------
-	// ƒoƒbƒNƒAƒbƒv‚ÉŠÖ‚·‚éÝ’è
+	// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// ƒZ[ƒtƒ‚[ƒh‚È‚ç1‚ð‚»‚¤‚Å‚È‚¢‚È‚ç0‚ðÝ’è‚µ‚Ä‚­‚¾‚³‚¢
+	// ã‚»ãƒ¼ãƒ•ãƒ¢ãƒ¼ãƒ‰ãªã‚‰1ã‚’ãã†ã§ãªã„ãªã‚‰0ã‚’è¨­å®šã—ã¦ãã ã•ã„
 	var $safemode    = 1;
-	// ƒoƒbƒNƒAƒbƒv‚ð‰½ƒ^[ƒ“‚¨‚«‚ÉŽæ‚é‚©
+	// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’ä½•ã‚¿ãƒ¼ãƒ³ãŠãã«å–ã‚‹ã‹
 	var $backupTurn  = 6;
-	// ƒoƒbƒNƒAƒbƒv‚ð‰½‰ñ•ªŽc‚·‚©
+	// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚’ä½•å›žåˆ†æ®‹ã™ã‹
 	var $backupTimes = 5;
-	
+
 	//---------------------------------------------------
-	// •\Ž¦‚ÉŠÖ‚·‚éÝ’è
+	// è¡¨ç¤ºã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// TOPƒy[ƒW‚Éˆê“x‚É•\Ž¦‚·‚é“‡‚Ì”(0‚È‚ç‘S“‡•\Ž¦)
-	var $islandListRange =10;
-	
-	// Ž‘‹à•\Ž¦ƒ‚[ƒh
-	var $moneyMode  = true; // true: 100‚ÌˆÊ‚ÅŽlŽÌŒÜ“ü, false: ‚»‚Ì‚Ü‚Ü
-	// ƒgƒbƒvƒy[ƒW‚É•\Ž¦‚·‚éƒƒO‚Ìƒ^[ƒ“”
+	// TOPãƒšãƒ¼ã‚¸ã«ä¸€åº¦ã«è¡¨ç¤ºã™ã‚‹å³¶ã®æ•°(0ãªã‚‰å…¨å³¶è¡¨ç¤º)
+	var $islandListRange = 10;//10;
+
+	// è³‡é‡‘è¡¨ç¤ºãƒ¢ãƒ¼ãƒ‰
+	var $moneyMode  = true; // true: 100ã®ä½ã§å››æ¨äº”å…¥, false: ãã®ã¾ã¾
+	// ãƒˆãƒƒãƒ—ãƒšãƒ¼ã‚¸ã«è¡¨ç¤ºã™ã‚‹ãƒ­ã‚°ã®ã‚¿ãƒ¼ãƒ³æ•°
 	var $logTopTurn = 4;
-	// ƒƒOƒtƒ@ƒCƒ‹•ÛŽƒ^[ƒ“”
+	// ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ä¿æŒã‚¿ãƒ¼ãƒ³æ•°
 	var $logMax     = 8;
-	// ®’nƒƒO‚ð‚P–{‰»‚·‚é‚©H(0:‚µ‚È‚¢ 1:À•W‚ ‚è 2:À•W‚È‚µ)
-	var $logOmit    = 1;
-	
-	// ”­Œ©ƒƒO•ÛŽs”
+	// æ•´åœ°ãƒ­ã‚°ã‚’ï¼‘æœ¬åŒ–ã™ã‚‹ã‹ï¼Ÿ(0:ã—ãªã„ 1:åº§æ¨™ã‚ã‚Š 2:åº§æ¨™ãªã—)
+	var $logOmit    = 2;
+
+	// ç™ºè¦‹ãƒ­ã‚°ä¿æŒè¡Œæ•°
 	var $historyMax = 10;
-	
-	// ‚¨’m‚ç‚¹
+
+	// ãŠçŸ¥ã‚‰ã›
 	var $infoFile   = "info.txt";
-	// ‹LŽ–•\Ž¦•”‚ÌÅ‘å‚Ì‚‚³B
+	// è¨˜äº‹è¡¨ç¤ºéƒ¨ã®æœ€å¤§ã®é«˜ã•ã€‚
 	var $divHeight  = 150;
-	
-	// •úŠüƒRƒ}ƒ“ƒhŽ©“®“ü—Íƒ^[ƒ“”
+
+	// æ”¾æ£„ã‚³ãƒžãƒ³ãƒ‰è‡ªå‹•å…¥åŠ›ã‚¿ãƒ¼ãƒ³æ•°
 	var $giveupTurn = 30;
-	
-	// ƒRƒ}ƒ“ƒh“ü—ÍŒÀŠE”
+
+	// ã‚³ãƒžãƒ³ãƒ‰å…¥åŠ›é™ç•Œæ•°
 	var $commandMax = 30;
-	
+
 	//---------------------------------------------------
-	// ƒ[ƒJƒ‹ŒfŽ¦”Â‚ÌÝ’è
+	// åç§°ã®å®šç¾©
 	//---------------------------------------------------
-	// ƒ[ƒJƒ‹ŒfŽ¦”Âs”‚ðŽg—p‚·‚é‚©‚Ç‚¤‚©(false:Žg—p‚µ‚È‚¢Atrue:Žg—p‚·‚é)
-	var $useBbs    = true;
-	// ƒ[ƒJƒ‹ŒfŽ¦”Âs”
-	var $lbbsMax   = 5;
-	
-	// ƒ[ƒJƒ‹ŒfŽ¦”Â‚Ö‚Ì“½–¼”­Œ¾‚ð‹–‰Â‚·‚é‚©(false:‹ÖŽ~Atrue:‹–‰Â)
-	var $lbbsAnon        = false;
-	// ƒ[ƒJƒ‹ŒfŽ¦”Â‚Ì”­Œ¾‚É”­Œ¾ŽÒ‚Ì“‡–¼‚ð•\Ž¦‚·‚é‚©(false:•\Ž¦‚µ‚È‚¢Atrue:•\Ž¦‚·‚é)
-	var $lbbsSpeaker     = true;
-	
-	// ‘¼“‡‚Ìƒ[ƒJƒ‹ŒfŽ¦”Â‚É”­Œ¾‚·‚é‚½‚ß‚Ì”ï—p(0:–³—¿)
-	var $lbbsMoneyPublic = 0; // ŒöŠJ
-	var $lbbsMoneySecret = 100; // ‹É”é
-	
+	var $nameRank                       = "é †ä½";
+	var $namePopulation                 = "äººå£";
+	var $nameArea                       = "é¢ç©";
+	var $nameFunds                      = "è³‡é‡‘";
+	var $nameFood                       = "é£Ÿæ–™";
+	var $nameUnemploymentRate           = "å¤±æ¥­çŽ‡";
+	var $nameFarmSize                   = "è¾²å ´è¦æ¨¡";
+	var $nameFactoryScale               = "å·¥å ´è¦æ¨¡";
+	var $nameCommercialScale            = "å•†æ¥­è¦æ¨¡";
+	var $nameMineScale                  = "æŽ¡æŽ˜å ´è¦æ¨¡";
+	var $namePowerPlantScale            = "ç™ºé›»æ‰€è¦æ¨¡";
+	var $namePowerSupplyRate            = "é›»åŠ›ä¾›çµ¦çŽ‡";
+	var $nameWeather                    = "å¤©æ°—";
+	var $nameMilitaryTechnology         = "è»äº‹æŠ€è¡“";
+	var $nameMonsterExterminationNumber = "æ€ªç£é€€æ²»æ•°";
+	var $nameSatellite                  = "äººå·¥è¡›æ˜Ÿ";
+	var $nameGin                        = "ã‚¸ãƒ³";
+	var $nameItems                      = "ã‚¢ã‚¤ãƒ†ãƒ ";
+
+
 	//---------------------------------------------------
-	// ŠeŽí’PˆÊ‚ÌÝ’è
+	// å„ç¨®å˜ä½ã®è¨­å®š
 	//---------------------------------------------------
-	// lŒû‚Ì’PˆÊ
-	var $unitPop     = "00l";
-	// H—¿‚Ì’PˆÊ
-	var $unitFood    = "00ƒgƒ“";
-	// L‚³‚Ì’PˆÊ
-	var $unitArea    = "00–œ’Ø";
-	// –Ø‚Ì”‚Ì’PˆÊ
-	var $unitTree    = "00–{";
-	// ‚¨‹à‚Ì’PˆÊ
-	var $unitMoney   = "‰­‰~";
-	// ‰öb‚Ì’PˆÊ
-	var $unitMonster = "•C";
-	
-	// –Ø‚Ì’PˆÊ“–‚½‚è‚Ì”„’l
+	// äººå£ã®å˜ä½
+	var $unitPop     = "00äºº";
+	// é£Ÿæ–™ã®å˜ä½
+	var $unitFood    = "00ãƒˆãƒ³";
+	// åºƒã•ã®å˜ä½
+	var $unitArea    = "00ä¸‡åª";
+	// æœ¨ã®æ•°ã®å˜ä½
+	var $unitTree    = "00æœ¬";
+	// ãŠé‡‘ã®å˜ä½
+	var $unitMoney   = "å„„å††";
+	// æ€ªç£ã®å˜ä½
+	var $unitMonster = "åŒ¹";
+
+	// æœ¨ã®å˜ä½å½“ãŸã‚Šã®å£²å€¤
 	var $treeValue   = 10;
-	
-	// –¼‘O•ÏX‚ÌƒRƒXƒg
+
+	// åå‰å¤‰æ›´ã®ã‚³ã‚¹ãƒˆ
 	var $costChangeName = 500;
-	
-	// lŒû1’PˆÊ‚ ‚½‚è‚ÌH—¿Á”ï—¿
+
+	// äººå£1å˜ä½ã‚ãŸã‚Šã®é£Ÿæ–™æ¶ˆè²»æ–™
 	var $eatenFood   = 0.2;
-	
-	// –û“c‚ÌŽû“ü
+
+	// æ²¹ç”°ã®åŽå…¥
 	var $oilMoney    = 1000;
-	// –û“c‚ÌŒÍŠ‰Šm—¦
+	// æ²¹ç”°ã®æž¯æ¸‡ç¢ºçŽ‡
 	var $oilRatio    = 40;
-	
-	// ‰½ƒ^[ƒ“–ˆ‚É•ó‚­‚¶‚Ì’Š‘I‚ªs‚í‚ê‚é‚©H
+
+	// ä½•ã‚¿ãƒ¼ãƒ³æ¯Žã«å®ãã˜ã®æŠ½é¸ãŒè¡Œã‚ã‚Œã‚‹ã‹ï¼Ÿ
 	var $lottery     = 50;
-	// “–‘I‹à
+	// å½“é¸é‡‘
 	var $lotmoney    = 30000;
-	
+
 	//---------------------------------------------------
-	// “¯–¿‚ÉŠÖ‚·‚éÝ’è
+	// åŒç›Ÿã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// “¯–¿ì¬‚ð‹–‰Â‚·‚é‚©H(0:‚µ‚È‚¢A1:‚·‚éA2:ŠÇ—ŽÒ‚Ì‚Ý)
+	var $comAlly;
+
+	// åŒç›Ÿä½œæˆã‚’è¨±å¯ã™ã‚‹ã‹ï¼Ÿ(0:ã—ãªã„ã€1:ã™ã‚‹ã€2:ç®¡ç†è€…ã®ã¿)
 	var $allyUse     = 1;
-	
-	// ‚Ð‚Æ‚Â‚Ì“¯–¿‚É‚µ‚©‰Á–¿‚Å‚«‚È‚¢‚æ‚¤‚É‚·‚é‚©H(0:‚µ‚È‚¢A1:‚·‚é)
+
+	// ã²ã¨ã¤ã®åŒç›Ÿã«ã—ã‹åŠ ç›Ÿã§ããªã„ã‚ˆã†ã«ã™ã‚‹ã‹ï¼Ÿ(0:ã—ãªã„ã€1:ã™ã‚‹)
 	var $allyJoinOne = 1;
-	
-	// “¯–¿ƒf[ƒ^‚ÌŠÇ—ƒtƒ@ƒCƒ‹
+
+	// åŒç›Ÿãƒ‡ãƒ¼ã‚¿ã®ç®¡ç†ãƒ•ã‚¡ã‚¤ãƒ«
 	var $allyData    = 'ally.dat';
-	
-	// “¯–¿‚Ìƒ}[ƒN
+
+	// åŒç›Ÿã®ãƒžãƒ¼ã‚¯
 	var $allyMark = array(
-		'„A','„C','„D','„G','„J',
-		'„U','„W','„Y','„^','„_',
-		'„`','„q','ƒ¦','ƒ°','ƒµ',
-		'ƒ¶','‚ï','‚î','÷','ö',
-		'õ','ô','ó','ò','ñ',
-		'ð','ä','Þ','Ý','Í',
-		'Ì','É','§','’','‘',
-		'—','š','‰','Š','',
-		'','Ž','W','Y',
+		"ðŸ¶","ðŸµ","ðŸ¦",
+		// 'Ð‘','Ð“','Ð”','Ð–','Ð™',
+		// 'Ð¤','Ð¦','Ð¨','Ð­','Ð®',
+		// 'Ð¯','Ð±','Î˜','Î£','Î¨',
+		// 'Î©','ã‚‘','ã‚','Â¶','â€¡',
+		// 'â€ ','â™ª','â™­','â™¯','â€°',
+		// 'â„«','âˆ½','âˆ‡','âˆ‚','âˆ€',
+		// 'â‡”','âˆ¨','ã€’','ï¿¡','ï¿ ',
+		// 'ï¼ ','â˜…','â™‚','â™€','ï¼„',
+		// 'ï¿¥','â„ƒ','ä»','ã€†',
 	);
-	
-	// “ü—Í•¶Žš”‚Ì§ŒÀ (‘SŠp•¶Žš”‚ÅŽw’è) ŽÀÛ‚ÍA<input> “à‚Ì MAXLENGTH ‚ð’¼‚ÉC³‚µ‚Ä‚­‚¾‚³‚¢B (;^_^A
-	var $lengthAllyName    = 15;   // “¯–¿‚Ì–¼‘O
-	var $lengthAllyComment = 40;   // uŠe“¯–¿‚Ìó‹µv—“‚É•\Ž¦‚³‚ê‚é–¿Žå‚ÌƒRƒƒ“ƒg
-	var $lengthAllyTitle   = 30;   // u“¯–¿‚Ìî•ñv—“‚Ìã‚É•\Ž¦‚³‚ê‚é–¿ŽåƒƒbƒZ[ƒW‚Ìƒ^ƒCƒgƒ‹
-	var $lengthAllyMessage = 1500; // u“¯–¿‚Ìî•ñv—“‚Ìã‚É•\Ž¦‚³‚ê‚é–¿ŽåƒƒbƒZ[ƒW
-	
-	// ƒXƒ^ƒCƒ‹ƒV[ƒg‚ð‰ü•Ï‚µ‚Ä‚¢‚È‚¢‚Ì‚ÅA‚±‚±‚É‹Lq
+
+	// å…¥åŠ›æ–‡å­—æ•°ã®åˆ¶é™ (å…¨è§’æ–‡å­—æ•°ã§æŒ‡å®š) å®Ÿéš›ã¯ã€<input> å†…ã® MAXLENGTH ã‚’ç›´ã«ä¿®æ­£ã—ã¦ãã ã•ã„ã€‚ (;^_^A
+	var $lengthAllyName    = 15;   // åŒç›Ÿã®åå‰
+	var $lengthAllyComment = 40;   // ã€Œå„åŒç›Ÿã®çŠ¶æ³ã€æ¬„ã«è¡¨ç¤ºã•ã‚Œã‚‹ç›Ÿä¸»ã®ã‚³ãƒ¡ãƒ³ãƒˆ
+	var $lengthAllyTitle   = 30;   // ã€ŒåŒç›Ÿã®æƒ…å ±ã€æ¬„ã®ä¸Šã«è¡¨ç¤ºã•ã‚Œã‚‹ç›Ÿä¸»ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®ã‚¿ã‚¤ãƒˆãƒ«
+	var $lengthAllyMessage = 1500; // ã€ŒåŒç›Ÿã®æƒ…å ±ã€æ¬„ã®ä¸Šã«è¡¨ç¤ºã•ã‚Œã‚‹ç›Ÿä¸»ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+
+	// ã‚¹ã‚¿ã‚¤ãƒ«ã‚·ãƒ¼ãƒˆã‚’æ”¹å¤‰ã—ã¦ã„ãªã„ã®ã§ã€ã“ã“ã«è¨˜è¿°
 	var $tagMoney_  = '<span style="color:#999933; font-weight:bold;">';
 	var $_tagMoney  = '</span>';
-	
-	// ƒRƒƒ“ƒg‚ÌŽ©“®ƒŠƒ“ƒN (0:‚µ‚È‚¢ 1:‚·‚é)
+
+	// ã‚³ãƒ¡ãƒ³ãƒˆã®è‡ªå‹•ãƒªãƒ³ã‚¯ (0:ã—ãªã„ 1:ã™ã‚‹)
 	var $autoLink   = 1;
-	
-	// ˆÈ‰º‚ÍA•\Ž¦ŠÖ˜A‚ÅŽg—p‚µ‚Ä‚¢‚é‚¾‚¯‚ÅAŽÀÛ‚Ì‹@”\‚ð—L‚µ‚Ä‚¢‚Ü‚¹‚ñA‚³‚ç‚È‚é‰ü‘¢‚ÅŽÀŒ»‰Â”\‚Å‚·B
-	
-	// ‰Á–¿E’E‘Þ‚ðƒRƒ}ƒ“ƒh‚Ås‚¤‚æ‚¤‚É‚·‚éH(0:‚µ‚È‚¢A1:‚·‚é)
+
+	// ä»¥ä¸‹ã¯ã€è¡¨ç¤ºé–¢é€£ã§ä½¿ç”¨ã—ã¦ã„ã‚‹ã ã‘ã§ã€å®Ÿéš›ã®æ©Ÿèƒ½ã‚’æœ‰ã—ã¦ã„ã¾ã›ã‚“ã€ã•ã‚‰ãªã‚‹æ”¹é€ ã§å®Ÿç¾å¯èƒ½ã§ã™ã€‚
+
+	// åŠ ç›Ÿãƒ»è„±é€€ã‚’ã‚³ãƒžãƒ³ãƒ‰ã§è¡Œã†ã‚ˆã†ã«ã™ã‚‹ï¼Ÿ(0:ã—ãªã„ã€1:ã™ã‚‹)
 	var $allyJoinComUse = 0;
-	
-	// “¯–¿‚É‰Á–¿‚·‚é‚±‚Æ‚Å’ÊíÐŠQ”­¶Šm—¦‚ªŒ¸­H(0:‚µ‚È‚¢)
-	// ‘ÎÛ‚Æ‚È‚éÐŠQF’nkA’Ã”gA‘ä•—Aè¦ÎA‹‘åè¦ÎA•¬‰Î
-	var $allyDisDown  = 0;    // Ý’è‚·‚éê‡A’ÊíŽž‚É‘Î‚·‚é”{—¦‚ðÝ’èB(—á)0.5‚È‚ç”¼Œ¸B2‚È‚ç”{‘(^^;;;
-	var $costMakeAlly = 1000; // “¯–¿‚ÌŒ‹¬E•ÏX‚É‚©‚©‚é”ï—p
-	var $costKeepAlly = 500;  // “¯–¿‚ÌˆÛŽ”ï(‰Á–¿‚µ‚Ä‚¢‚é“‡‚Å‹Ï“™‚É•‰’S)
-	
+
+	// åŒç›Ÿã«åŠ ç›Ÿã™ã‚‹ã“ã¨ã§é€šå¸¸ç½å®³ç™ºç”Ÿç¢ºçŽ‡ãŒæ¸›å°‘ï¼Ÿ(0:ã—ãªã„)
+	// å¯¾è±¡ã¨ãªã‚‹ç½å®³ï¼šåœ°éœ‡ã€æ´¥æ³¢ã€å°é¢¨ã€éš•çŸ³ã€å·¨å¤§éš•çŸ³ã€å™´ç«
+	var $allyDisDown  = 0;    // è¨­å®šã™ã‚‹å ´åˆã€é€šå¸¸æ™‚ã«å¯¾ã™ã‚‹å€çŽ‡ã‚’è¨­å®šã€‚(ä¾‹)0.5ãªã‚‰åŠæ¸›ã€‚2ãªã‚‰å€å¢—(^^;;;
+	var $costMakeAlly = 1000; // åŒç›Ÿã®çµæˆãƒ»å¤‰æ›´ã«ã‹ã‹ã‚‹è²»ç”¨
+	var $costKeepAlly = 500;  // åŒç›Ÿã®ç¶­æŒè²»(åŠ ç›Ÿã—ã¦ã„ã‚‹å³¶ã§å‡ç­‰ã«è² æ‹…)
+
 	//---------------------------------------------------
-	// ŒRŽ–‚ÉŠÖ‚·‚éÝ’è
+	// è»äº‹ã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// ƒ~ƒTƒCƒ‹”­ŽË‹ÖŽ~ƒ^[ƒ“
-	var $noMissile     = 20; // ‚±‚ê‚æ‚è‘O‚É‚ÍŽÀs‚ª‹–‰Â‚³‚ê‚È‚¢
-	// ‰‡•‹ÖŽ~ƒ^[ƒ“
-	var $noAssist      = 50; // ‚±‚ê‚æ‚è‘O‚É‚ÍŽÀs‚ª‹–‰Â‚³‚ê‚È‚¢
-	
-	// •¡”’n“_‚Ö‚Ìƒ~ƒTƒCƒ‹”­ŽË‚ð‰Â”\‚É‚·‚é‚©H1:Yes 0:No
+	// ãƒŸã‚µã‚¤ãƒ«ç™ºå°„ç¦æ­¢ã‚¿ãƒ¼ãƒ³
+	var $noMissile     = 20; // ã“ã‚Œã‚ˆã‚Šå‰ã«ã¯å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œãªã„
+	// æ´åŠ©ç¦æ­¢ã‚¿ãƒ¼ãƒ³
+	var $noAssist      = 50; // ã“ã‚Œã‚ˆã‚Šå‰ã«ã¯å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œãªã„
+
+	// è¤‡æ•°åœ°ç‚¹ã¸ã®ãƒŸã‚µã‚¤ãƒ«ç™ºå°„ã‚’å¯èƒ½ã«ã™ã‚‹ã‹ï¼Ÿ1:Yes 0:No
 	var $multiMissiles = 1;
-	
-	// ƒ~ƒTƒCƒ‹Šî’n
-	// ŒoŒ±’l‚ÌÅ‘å’l
-	var $maxExpPoint   = 200; // ‚½‚¾‚µAÅ‘å‚Å‚à255‚Ü‚Å
-	
-	// ƒŒƒxƒ‹‚ÌÅ‘å’l
-	var $maxBaseLevel  = 5; // ƒ~ƒTƒCƒ‹Šî’n
-	var $maxSBaseLevel = 3; // ŠC’êŠî’n
-	
-	// ŒoŒ±’l‚ª‚¢‚­‚Â‚ÅƒŒƒxƒ‹ƒAƒbƒv‚©
-	var $baseLevelUp   = array(20, 60, 120, 200); // ƒ~ƒTƒCƒ‹Šî’n
-	var $sBaseLevelUp  = array(50, 200); // ŠC’êŠî’n
-	
-	// –h‰qŽ{Ý‚ÌÅ‘å‘Ï‹v—Í
+
+	// ãƒŸã‚µã‚¤ãƒ«åŸºåœ°
+	// çµŒé¨“å€¤ã®æœ€å¤§å€¤
+	var $maxExpPoint   = 200; // ãŸã ã—ã€æœ€å¤§ã§ã‚‚255ã¾ã§
+
+	// ãƒ¬ãƒ™ãƒ«ã®æœ€å¤§å€¤
+	var $maxBaseLevel  = 5; // ãƒŸã‚µã‚¤ãƒ«åŸºåœ°
+	var $maxSBaseLevel = 3; // æµ·åº•åŸºåœ°
+
+	// çµŒé¨“å€¤ãŒã„ãã¤ã§ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—ã‹
+	var $baseLevelUp   = array(20, 60, 120, 200); // ãƒŸã‚µã‚¤ãƒ«åŸºåœ°
+	var $sBaseLevelUp  = array(50, 200); // æµ·åº•åŸºåœ°
+
+	// é˜²è¡›æ–½è¨­ã®æœ€å¤§è€ä¹…åŠ›
 	var $dBaseHP       = 5;
-	// ŠC’ê–h‰qŽ{Ý‚ÌÅ‘å‘Ï‹v—Í
+	// æµ·åº•é˜²è¡›æ–½è¨­ã®æœ€å¤§è€ä¹…åŠ›
 	var $sdBaseHP      = 3;
-	// –h‰qŽ{Ý‚ª‰öb‚É“¥‚Ü‚ê‚½ŽžŽ©”š‚·‚é‚È‚ç1A‚µ‚È‚¢‚È‚ç0
+	// é˜²è¡›æ–½è¨­ãŒæ€ªç£ã«è¸ã¾ã‚ŒãŸæ™‚è‡ªçˆ†ã™ã‚‹ãªã‚‰1ã€ã—ãªã„ãªã‚‰0
 	var $dBaseAuto     = 1;
-	
-	// –Ú•W‚Ì“‡ Š—L‚Ì“‡‚ª‘I‘ð‚³‚ê‚½ó‘Ô‚ÅƒŠƒXƒg‚ð¶¬ 1A‡ˆÊ‚ªTOP‚Ì“‡‚È‚ç0
-	// ƒ~ƒTƒCƒ‹‚ÌŒëŽË‚ª‘½‚¢ê‡‚È‚Ç‚ÉŽg—p‚·‚é‚Æ—Ç‚¢‚©‚à‚µ‚ê‚È‚¢
+
+	// ç›®æ¨™ã®å³¶ æ‰€æœ‰ã®å³¶ãŒé¸æŠžã•ã‚ŒãŸçŠ¶æ…‹ã§ãƒªã‚¹ãƒˆã‚’ç”Ÿæˆ 1ã€é †ä½ãŒTOPã®å³¶ãªã‚‰0
+	// ãƒŸã‚µã‚¤ãƒ«ã®èª¤å°„ãŒå¤šã„å ´åˆãªã©ã«ä½¿ç”¨ã™ã‚‹ã¨è‰¯ã„ã‹ã‚‚ã—ã‚Œãªã„
 	var $targetIsland  = 1;
-	
+
 	//---------------------------------------------------
-	// ‘D”•‚ÉŠÖ‚·‚éÝ’è
+	// èˆ¹èˆ¶ã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// ‘D‚ÌÅ‘åŠ—L”
+	// èˆ¹ã®æœ€å¤§æ‰€æœ‰æ•°
 	var $shipMax  = 5;
-	
-	// ‘D”•‚ÌŽí—Þi‘¢‘D‘ÎÛ‚Ì‘D”•j
-	var $shipKind = 4; // Å‘å15
-	
-	// ‘D”•‚Ì–¼‘Oi10ˆÈ~‚ÍÐŠQ‘D”•‚Æ’è‹`j
+
+	// èˆ¹èˆ¶ã®ç¨®é¡žï¼ˆé€ èˆ¹å¯¾è±¡ã®èˆ¹èˆ¶ï¼‰
+	var $shipKind = 4; // æœ€å¤§15
+
+	// èˆ¹èˆ¶ã®åå‰ï¼ˆ10ä»¥é™ã¯ç½å®³èˆ¹èˆ¶ã¨å®šç¾©ï¼‰
 	var $shipName = array (
-		'—A‘—‘D',         # 0
-		'‹™‘D',           # 1
-		'ŠC’ê’Tõ‘D',     # 2
-		'íŠÍ',           # 3
+		'è¼¸é€èˆ¹',         # 0
+		'æ¼èˆ¹',           # 1
+		'æµ·åº•æŽ¢ç´¢èˆ¹',     # 2
+		'æˆ¦è‰¦',           # 3
 		'',               # 4
 		'',               # 5
 		'',               # 6
 		'',               # 7
 		'',               # 8
 		'',               # 9
-		'ŠC‘¯‘D',         # 10
+		'æµ·è³Šèˆ¹',         # 10
 		'',               # 11
 		'',               # 12
 		'',               # 13
 		''                # 14
 		);
-	
-	// ‘D”•ˆÛŽ”ï
+
+	// èˆ¹èˆ¶ç¶­æŒè²»
 	var $shipCost = array(100, 200, 300, 500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-	
-	// ‘D”•‘Ì—ÍiÅ‘å15j
+
+	// èˆ¹èˆ¶ä½“åŠ›ï¼ˆæœ€å¤§15ï¼‰
 	var $shipHP   = array(1, 2, 3, 10, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 1);
-	
-	// ‘D”•ŒoŒ±’l‚ÌÅ‘å’liÅ‘å‚Å‚à255‚Ü‚Åj
+
+	// èˆ¹èˆ¶çµŒé¨“å€¤ã®æœ€å¤§å€¤ï¼ˆæœ€å¤§ã§ã‚‚255ã¾ã§ï¼‰
 	var $shipEX   = 100;
-	
-	// ƒŒƒxƒ‹‚ÌÅ‘å’l
+
+	// ãƒ¬ãƒ™ãƒ«ã®æœ€å¤§å€¤
 	var $shipLv   = 5;
-	
-	// ŒoŒ±’l‚ª‚¢‚­‚Â‚ÅƒŒƒxƒ‹ƒAƒbƒv‚©
+
+	// çµŒé¨“å€¤ãŒã„ãã¤ã§ãƒ¬ãƒ™ãƒ«ã‚¢ãƒƒãƒ—ã‹
 	var $shipLevelUp   = array(10, 30, 60, 100);
-	
-	// ‘D”•Ý’è’liŠm—¦FÝ’è’l x 0.1%j
-	var $shipIncom          =  200; // —A‘—‘DŽû“ü
-	var $shipFood           =  100; // ‹™‘D‚ÌH—¿Žû“ü
-	var $shipIntercept      =  200; // íŠÍ‚ªƒ~ƒTƒCƒ‹‚ðŒ}Œ‚‚·‚éŠm—¦
-	var $disRunAground1     =   10; // ÀÊŠm—¦  ÀÊˆ—‚É“ü‚é‚½‚ß‚ÌŠm—¦
-	var $disRunAground2     =   10; // ÀÊŠm—¦  ‘D ŒÂ•Ê‚Ì”»’è
-	var $disZorasu          =   30; // ‚¼‚ç‚· oŒ»Šm—¦
-	var $disViking          =   10; // ŠC‘¯‘D oŒ»Šm—¦ ‘D‚P‚Â‚ ‚½‚èi‚½‚­‚³‚ñ‘D‚ðŽ‚Ä‚Î‚»‚Ì•ªŠm—¦UPj
-	var $disVikingAway      =   30; // ŠC‘¯‘D ‹Ž‚éŠm—¦
-	var $disVikingRob       =   50; // ŠC‘¯‘D‹­’D
-	var $disVikingAttack    =  500; // ŠC‘¯‚ªUŒ‚‚µ‚Ä‚­‚éŠm—¦
-	var $disVikingMinAtc    =    1; // ŠC‘¯‘D‚ª—^‚¦‚éÅ’áƒ_ƒ[ƒW
-	var $disVikingMaxAtc    =    3; // ŠC‘¯‘D‚ª—^‚¦‚éÅ‘åƒ_ƒ[ƒW
-	
+
+	// èˆ¹èˆ¶è¨­å®šå€¤ï¼ˆç¢ºçŽ‡ï¼šè¨­å®šå€¤ x 0.1%ï¼‰
+	var $shipIncom          =  200; // è¼¸é€èˆ¹åŽå…¥
+	var $shipFood           =  100; // æ¼èˆ¹ã®é£Ÿæ–™åŽå…¥
+	var $shipIntercept      =  200; // æˆ¦è‰¦ãŒãƒŸã‚µã‚¤ãƒ«ã‚’è¿Žæ’ƒã™ã‚‹ç¢ºçŽ‡
+	var $disRunAground1     =   10; // åº§ç¤ç¢ºçŽ‡  åº§ç¤å‡¦ç†ã«å…¥ã‚‹ãŸã‚ã®ç¢ºçŽ‡
+	var $disRunAground2     =   10; // åº§ç¤ç¢ºçŽ‡  èˆ¹ å€‹åˆ¥ã®åˆ¤å®š
+	var $disZorasu          =   30; // ãžã‚‰ã™ å‡ºç¾ç¢ºçŽ‡
+	var $disViking          =   10; // æµ·è³Šèˆ¹ å‡ºç¾ç¢ºçŽ‡ èˆ¹ï¼‘ã¤ã‚ãŸã‚Šï¼ˆãŸãã•ã‚“èˆ¹ã‚’æŒã¦ã°ãã®åˆ†ç¢ºçŽ‡UPï¼‰
+	var $disVikingAway      =   30; // æµ·è³Šèˆ¹ åŽ»ã‚‹ç¢ºçŽ‡
+	var $disVikingRob       =   50; // æµ·è³Šèˆ¹å¼·å¥ª
+	var $disVikingAttack    =  500; // æµ·è³ŠãŒæ”»æ’ƒã—ã¦ãã‚‹ç¢ºçŽ‡
+	var $disVikingMinAtc    =    1; // æµ·è³Šèˆ¹ãŒä¸Žãˆã‚‹æœ€ä½Žãƒ€ãƒ¡ãƒ¼ã‚¸
+	var $disVikingMaxAtc    =    3; // æµ·è³Šèˆ¹ãŒä¸Žãˆã‚‹æœ€å¤§ãƒ€ãƒ¡ãƒ¼ã‚¸
+
 	//---------------------------------------------------
-	// ÐŠQ‚ÉŠÖ‚·‚éÝ’èiŠm—¦FÝ’è’l x 0.1%j
+	// ç½å®³ã«é–¢ã™ã‚‹è¨­å®šï¼ˆç¢ºçŽ‡ï¼šè¨­å®šå€¤ x 0.1%ï¼‰
 	//---------------------------------------------------
-	var $disEarthquake =   5;  // ’nk
-	var $disTsunami    =  10;  // ’Ã”g
-	var $disTyphoon    =  20;  // ‘ä•—
-	var $disMeteo      =  15;  // è¦Î
-	var $disHugeMeteo  =   3;  // ‹‘åè¦Î
-	var $disEruption   =   5;  // •¬‰Î
-	var $disFire       =  10;  // ‰ÎÐ
-	var $disMaizo      =  30;  // –„‘ ‹à
-	var $disSto        =  10;  // ƒXƒgƒ‰ƒCƒL
-	var $disTenki      =  30;  // “V‹C
-	var $disTrain      = 300;  // “dŽÔ
-	var $disPoo        =  30;  // Ž¸‹Æ–\“®
-	var $disPooPop     = 500;  // –\“®‚ª”­¶‚·‚éÅ’álŒûi50000lj
-	
-	// ’n”Õ’¾‰º
-	var $disFallBorder = 100; // ˆÀ‘SŒÀŠE‚ÌL‚³(Hex”)
-	var $disFalldown   = 30;  // ‚»‚ÌL‚³‚ð’´‚¦‚½ê‡‚ÌŠm—¦
-	
+	var $disEarthquake =   5;  // åœ°éœ‡
+	var $disTsunami    =  10;  // æ´¥æ³¢
+	var $disTyphoon    =  20;  // å°é¢¨
+	var $disMeteo      =  15;  // éš•çŸ³
+	var $disHugeMeteo  =   3;  // å·¨å¤§éš•çŸ³
+	var $disEruption   =   5;  // å™´ç«
+	var $disFire       =  10;  // ç«ç½
+	var $disMaizo      =  30;  // åŸ‹è”µé‡‘
+	var $disSto        =  10;  // ã‚¹ãƒˆãƒ©ã‚¤ã‚­
+	var $disTenki      =  30;  // å¤©æ°—
+	var $disTrain      = 300;  // é›»è»Š
+	var $disPoo        =  30;  // å¤±æ¥­æš´å‹•
+	var $disPooPop     = 500;  // æš´å‹•ãŒç™ºç”Ÿã™ã‚‹æœ€ä½Žäººå£ï¼ˆ50000äººï¼‰
+
+	// åœ°ç›¤æ²ˆä¸‹
+	var $disFallBorder = 100; // å®‰å…¨é™ç•Œã®åºƒã•(Hexæ•°)
+	var $disFalldown   = 30;  // ãã®åºƒã•ã‚’è¶…ãˆãŸå ´åˆã®ç¢ºçŽ‡
+
 	//---------------------------------------------------
-	// ‰öb‚ÉŠÖ‚·‚éÝ’è
+	// æ€ªç£ã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	var $disMonsBorder1 = 2000;  // lŒûŠî€1(‰öbƒŒƒxƒ‹1)
-	var $disMonsBorder2 = 4000;  // lŒûŠî€2(‰öbƒŒƒxƒ‹2)
-	var $disMonsBorder3 = 6000;  // lŒûŠî€3(‰öbƒŒƒxƒ‹3)
-	var $disMonsBorder4 = 8000;  // lŒûŠî€4(‰öbƒŒƒxƒ‹4)
-	var $disMonsBorder5 = 10000; // lŒûŠî€5(‰öbƒŒƒxƒ‹5)
-	var $disMonster     = 2.5;   // ’PˆÊ–ÊÏ‚ ‚½‚è‚ÌoŒ»—¦(0.01%’PˆÊ)
-	
-	var $monsterLevel1  = 4;     // ƒTƒ“ƒWƒ‰‚Ü‚Å
-	var $monsterLevel2  = 9;     // ‚¢‚Ì‚çƒS[ƒXƒg‚Ü‚Å
-	var $monsterLevel3  = 15;    // ‚©‚¨‚­‚ÆiŠj‚Ü‚Å
-	var $monsterLevel4  = 23;    // Œ}Œ‚‚¢‚Ì‚ç‚Ü‚Å
-	var $monsterLevel5  = 26;    // ƒCƒ“ƒx[ƒ_[‚Ü‚Å
-	
-	var $monsterNumber  = 27;    // ‰öb‚ÌŽí—Þ
-	// ‰öb‚Ì–¼‘O
+	var $disMonsBorder1 = 2000;  // äººå£åŸºæº–1(æ€ªç£ãƒ¬ãƒ™ãƒ«1)
+	var $disMonsBorder2 = 4000;  // äººå£åŸºæº–2(æ€ªç£ãƒ¬ãƒ™ãƒ«2)
+	var $disMonsBorder3 = 6000;  // äººå£åŸºæº–3(æ€ªç£ãƒ¬ãƒ™ãƒ«3)
+	var $disMonsBorder4 = 8000;  // äººå£åŸºæº–4(æ€ªç£ãƒ¬ãƒ™ãƒ«4)
+	var $disMonsBorder5 = 10000; // äººå£åŸºæº–5(æ€ªç£ãƒ¬ãƒ™ãƒ«5)
+	var $disMonster     = 2.5;   // å˜ä½é¢ç©ã‚ãŸã‚Šã®å‡ºç¾çŽ‡(0.01%å˜ä½)
+
+	var $monsterLevel1  = 4;     // ã‚µãƒ³ã‚¸ãƒ©ã¾ã§
+	var $monsterLevel2  = 9;     // ã„ã®ã‚‰ã‚´ãƒ¼ã‚¹ãƒˆã¾ã§
+	var $monsterLevel3  = 15;    // ã‹ãŠãã¨ï¼ˆâ™€ï¼‰ã¾ã§
+	var $monsterLevel4  = 23;    // è¿Žæ’ƒã„ã®ã‚‰ã¾ã§
+	var $monsterLevel5  = 26;    // ã‚¤ãƒ³ãƒ™ãƒ¼ãƒ€ãƒ¼ã¾ã§
+
+	var $monsterNumber  = 27;    // æ€ªç£ã®ç¨®é¡ž
+	// æ€ªç£ã®åå‰
 	var $monsterName = array (
-		'ƒƒJ‚¢‚Ì‚ç',         # 0
-		'‚¢‚Ì‚çi‰j',       # 1
-		'‚¢‚Ì‚çiŠj',       # 2
-		'ƒTƒ“ƒWƒ‰i‰j',     # 3
-		'ƒTƒ“ƒWƒ‰iŠj',     # 4
-		'ƒŒƒbƒh‚¢‚Ì‚çi‰j', # 5
-		'ƒŒƒbƒh‚¢‚Ì‚çiŠj', # 6
-		'ƒ_[ƒN‚¢‚Ì‚çi‰j', # 7
-		'ƒ_[ƒN‚¢‚Ì‚çiŠj', # 8
-		'‚¢‚Ì‚çƒS[ƒXƒg',     # 9
-		'ƒNƒWƒ‰i‰j',       # 10
-		'ƒNƒWƒ‰iŠj',       # 11
-		'ƒ[ƒv‚¢‚Ì‚ç',       # 12
-		'‚¨‚¶[',             # 13
-		'ƒCƒiƒbƒVƒ…iŠj',   # 14
-		'‚©‚¨‚­‚ÆiŠj',     # 15
-		'‚©‚¨‚­‚Æi‰j',     # 16
-		'ƒOƒŒ[ƒ^[‚¨‚¶[',   # 17
-		'ƒCƒiƒbƒVƒ…i‰j',   # 18
-		'ƒLƒ“ƒO‚¢‚Ì‚çi‰j', # 19
-		'ƒLƒ“ƒO‚¢‚Ì‚çiŠj', # 20
-		'‚¤‚¨‚ªi‰j',       # 21
-		'‚¤‚¨‚ªiŠj',       # 22
-		'Œ}Œ‚‚¢‚Ì‚ç',         # 23
-		'ƒn[ƒg‚¢‚Ì‚ç',       # 24
-		'•P‚¢‚Ì‚ç',           # 25
-		'ƒCƒ“ƒx[ƒ_[',       # 26
+		'ãƒ¡ã‚«ã„ã®ã‚‰',         # 0
+		'ã„ã®ã‚‰ï¼ˆâ™‚ï¼‰',       # 1
+		'ã„ã®ã‚‰ï¼ˆâ™€ï¼‰',       # 2
+		'ã‚µãƒ³ã‚¸ãƒ©ï¼ˆâ™‚ï¼‰',     # 3
+		'ã‚µãƒ³ã‚¸ãƒ©ï¼ˆâ™€ï¼‰',     # 4
+		'ãƒ¬ãƒƒãƒ‰ã„ã®ã‚‰ï¼ˆâ™‚ï¼‰', # 5
+		'ãƒ¬ãƒƒãƒ‰ã„ã®ã‚‰ï¼ˆâ™€ï¼‰', # 6
+		'ãƒ€ãƒ¼ã‚¯ã„ã®ã‚‰ï¼ˆâ™‚ï¼‰', # 7
+		'ãƒ€ãƒ¼ã‚¯ã„ã®ã‚‰ï¼ˆâ™€ï¼‰', # 8
+		'ã„ã®ã‚‰ã‚´ãƒ¼ã‚¹ãƒˆ',     # 9
+		'ã‚¯ã‚¸ãƒ©ï¼ˆâ™‚ï¼‰',       # 10
+		'ã‚¯ã‚¸ãƒ©ï¼ˆâ™€ï¼‰',       # 11
+		'ãƒ¯ãƒ¼ãƒ—ã„ã®ã‚‰',       # 12
+		'ãŠã˜ãƒ¼',             # 13
+		'ã‚¤ãƒŠãƒƒã‚·ãƒ¥ï¼ˆâ™€ï¼‰',   # 14
+		'ã‹ãŠãã¨ï¼ˆâ™€ï¼‰',     # 15
+		'ã‹ãŠãã¨ï¼ˆâ™‚ï¼‰',     # 16
+		'ã‚°ãƒ¬ãƒ¼ã‚¿ãƒ¼ãŠã˜ãƒ¼',   # 17
+		'ã‚¤ãƒŠãƒƒã‚·ãƒ¥ï¼ˆâ™‚ï¼‰',   # 18
+		'ã‚­ãƒ³ã‚°ã„ã®ã‚‰ï¼ˆâ™‚ï¼‰', # 19
+		'ã‚­ãƒ³ã‚°ã„ã®ã‚‰ï¼ˆâ™€ï¼‰', # 20
+		'ã†ãŠãŒï¼ˆâ™‚ï¼‰',       # 21
+		'ã†ãŠãŒï¼ˆâ™€ï¼‰',       # 22
+		'è¿Žæ’ƒã„ã®ã‚‰',         # 23
+		'ãƒãƒ¼ãƒˆã„ã®ã‚‰',       # 24
+		'å§«ã„ã®ã‚‰',           # 25
+		'ã‚¤ãƒ³ãƒ™ãƒ¼ãƒ€ãƒ¼',       # 26
 	);
-	// ‰öb‚Ì‰æ‘œ(d‰»’†)
+	// æ€ªç£ã®ç”»åƒ(ç¡¬åŒ–ä¸­)
 	var $monsterImage   = array ('', '', '', 'kouka.gif', 'kouka.gif', '', '', '', '', '', 'kouka.gif', 'kouka.gif', '', 'kouka1.gif', '', 'kouka3.gif', 'kouka3.gif', 'kouka2.gif', '', '', '', '', '', '', '', '');
-	
-	// Å’á‘Ì—ÍA‘Ì—Í‚Ì•A“ÁŽê”\—ÍAŒoŒ±’lAŽ€‘Ì‚Ì’l’i
+
+	// æœ€ä½Žä½“åŠ›ã€ä½“åŠ›ã®å¹…ã€ç‰¹æ®Šèƒ½åŠ›ã€çµŒé¨“å€¤ã€æ­»ä½“ã®å€¤æ®µ
 	var $monsterBHP     = array(10, 1, 1, 1, 1, 2, 3, 2, 2, 2, 3, 3, 9, 5, 4, 4, 3, 5, 9, 4, 5, 6, 6, 7, 8, 5, 99);
 	var $monsterDHP     = array( 0, 2, 1, 2, 1, 2, 2, 2, 1, 1, 2, 2, 0, 1, 2, 1, 2, 2, 0, 3, 2, 2, 2, 2, 1, 0, 0);
 	var $monsterSpecial = array(0x0, 0x0, 0x0, 0x4, 0x4, 0x1, 0x1, 0x120, 0x20, 0x2, 0x11, 0x10, 0x40, 0x4, 0x200, 0x20000, 0x410, 0x5, 0x240, 0x1020, 0x2020, 0x4400, 0x10100, 0x101, 0x21, 0x2121, 0x42);
 	var $monsterExp     = array(20, 6, 5, 7, 6, 9, 8, 17, 12, 10, 10, 9, 30, 13, 15, 20, 25, 22, 40, 45, 43, 50, 50, 48, 60, 100, 200);
 	var $monsterValue   = array(1000, 300, 200, 400, 300, 600, 500, 900, 700, 600, 800, 700, 2000, 900, 1000, 500, 1800, 1200, 2500, 3000, 2700, 5000, 4000, 3500, 7000, 10000, 50000);
-	// “ÁŽê”\—Í‚Ì“à—e‚ÍA(Še”\—Í‚Í 1bit ‚ÉŠ„‚è“–‚Ä‚é)
-	// 0x0 “Á‚É‚È‚µ
-	// 0x1 ‘«‚ª‘¬‚¢(Å‘å2•à‚ ‚é‚­)
-	// 0x2 ‘«‚ª‚Æ‚Ä‚à‘¬‚¢(Å‘å‰½•à‚ ‚é‚­‚©•s–¾)
-	// 0x4 Šï”ƒ^[ƒ“‚Íd‰»
-	// 0x10 ‹ô”ƒ^[ƒ“‚Íd‰»
-	// 0x20 ’‡ŠÔ‚ðŒÄ‚Ô
-	// 0x40 ƒ[ƒv‚·‚é
-	// 0x100 ƒ~ƒTƒCƒ‹’@‚«—Ž‚Æ‚·
-	// 0x200 ”òsˆÚ“®”\—Í
-	// 0x400 •mŽ€‚É‚È‚é‚Æ‘å”š”­
-	// 0x1000 ‹à‘‚â‚·
-	// 0x2000 H—¿‘‚â‚·
-	// 0x4000 ‹àŒ¸‚ç‚·
-	// 0x10000 H—¿Œ¸‚ç‚·
-	// 0x20000 •ª—ô‚·‚é
-	
+	// ç‰¹æ®Šèƒ½åŠ›ã®å†…å®¹ã¯ã€(å„èƒ½åŠ›ã¯ 1bit ã«å‰²ã‚Šå½“ã¦ã‚‹)
+	// 0x0 ç‰¹ã«ãªã—
+	// 0x1 è¶³ãŒé€Ÿã„(æœ€å¤§2æ­©ã‚ã‚‹ã)
+	// 0x2 è¶³ãŒã¨ã¦ã‚‚é€Ÿã„(æœ€å¤§ä½•æ­©ã‚ã‚‹ãã‹ä¸æ˜Ž)
+	// 0x4 å¥‡æ•°ã‚¿ãƒ¼ãƒ³ã¯ç¡¬åŒ–
+	// 0x10 å¶æ•°ã‚¿ãƒ¼ãƒ³ã¯ç¡¬åŒ–
+	// 0x20 ä»²é–“ã‚’å‘¼ã¶
+	// 0x40 ãƒ¯ãƒ¼ãƒ—ã™ã‚‹
+	// 0x100 ãƒŸã‚µã‚¤ãƒ«å©ãè½ã¨ã™
+	// 0x200 é£›è¡Œç§»å‹•èƒ½åŠ›
+	// 0x400 ç€•æ­»ã«ãªã‚‹ã¨å¤§çˆ†ç™º
+	// 0x1000 é‡‘å¢—ã‚„ã™
+	// 0x2000 é£Ÿæ–™å¢—ã‚„ã™
+	// 0x4000 é‡‘æ¸›ã‚‰ã™
+	// 0x10000 é£Ÿæ–™æ¸›ã‚‰ã™
+	// 0x20000 åˆ†è£‚ã™ã‚‹
+
 	//---------------------------------------------------
-	// Ü‚ÉŠÖ‚·‚éÝ’è
+	// è³žã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// ƒ^[ƒ“”t‚ð‰½ƒ^[ƒ“–ˆ‚Éo‚·‚©
+	// ã‚¿ãƒ¼ãƒ³æ¯ã‚’ä½•ã‚¿ãƒ¼ãƒ³æ¯Žã«å‡ºã™ã‹
 	var $turnPrizeUnit = 100;
-	// Ü‚Ì–¼‘O
+	// è³žã®åå‰
 	var $prizeName = array (
-		'ƒ^[ƒ“”t', '”É‰hÜ', '’´”É‰hÜ', '‹†‹É”É‰hÜ', '•½˜aÜ', '’´•½˜aÜ', '‹†‹É•½˜aÜ', 'Ð“ïÜ', '’´Ð“ïÜ', '‹†‹ÉÐ“ïÜ', '‘fl‰öb“¢”°Ü', '‰öb“¢”°Ü', '’´‰öb“¢”°Ü', '‹†‹É‰öb“¢”°Ü', '‰öb“¢”°‰¤Ü',
+		'ã‚¿ãƒ¼ãƒ³æ¯', 'ç¹æ „è³ž', 'è¶…ç¹æ „è³ž', 'ç©¶æ¥µç¹æ „è³ž', 'å¹³å’Œè³ž', 'è¶…å¹³å’Œè³ž', 'ç©¶æ¥µå¹³å’Œè³ž', 'ç½é›£è³ž', 'è¶…ç½é›£è³ž', 'ç©¶æ¥µç½é›£è³ž', 'ç´ äººæ€ªç£è¨Žä¼è³ž', 'æ€ªç£è¨Žä¼è³ž', 'è¶…æ€ªç£è¨Žä¼è³ž', 'ç©¶æ¥µæ€ªç£è¨Žä¼è³ž', 'æ€ªç£è¨Žä¼çŽ‹è³ž',
 	);
-	
+
 	//---------------------------------------------------
-	// ‹L”O”è‚ÉŠÖ‚·‚éÝ’è
+	// è¨˜å¿µç¢‘ã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// ‰½Ží—Þ‚ ‚é‚©
+	// ä½•ç¨®é¡žã‚ã‚‹ã‹
 	var $monumentNumber = 54;
-	// –¼‘O
+	// åå‰
 	var $monumentName = array (
-		'í‚Ì”è', '”_‚Ì”è', 'z‚Ì”è', ' ‚Ì”è', '•½˜a‚Ì”è', 'ƒLƒƒƒbƒXƒ‹é', 'ƒ‚ƒmƒŠƒX', '¹Ž÷', 'í‚¢‚Ì”è', 'ƒ‰ƒXƒJƒ‹', 'Š»‰±', 'ƒˆ[ƒ[ƒt', '‚­‚Ü', '‚­‚Ü', '‚­‚Ü', '’™‹à” ', 'ƒ‚ƒAƒC', '’n‹…‹V', 'ƒoƒbƒO', '‚²‚Ý” ', 'ƒ_[ƒN‚¢‚Ì‚ç‘œ', 'ƒeƒgƒ‰‘œ', '‚Í‚Ë‚Í‚Þ‘œ', 'ƒƒPƒbƒg', 'ƒsƒ‰ƒ~ƒbƒh', 'ƒAƒTƒKƒI', 'ƒ`ƒ…[ƒŠƒbƒv', 'ƒ`ƒ…[ƒŠƒbƒv', '…å', 'ƒTƒ{ƒeƒ“', 'ål¶', '–‚•ûw', '_“a', '_ŽÐ', 'ˆÅÎ', '’nÎ', '•XÎ', '•—Î', '‰ŠÎ', 'ŒõÎ', '—‘', '—‘', '—‘', '—‘', 'ŒÃ‘ãˆâÕ', 'ƒTƒ“ƒ^ƒNƒ[ƒX', '‰ó‚ê‚½N—ªŽÒ', 'Œe‚¢‚ÌŒö‰€', '÷', 'Œü“úˆ¨', '‹âˆÇ', 'ƒNƒŠƒXƒ}ƒXƒcƒŠ[2001', 'á‚¤‚³‚¬', 'K•Ÿ‚Ì—_‘œ'
+		'æˆ¦ã®ç¢‘', 'è¾²ã®ç¢‘', 'é‰±ã®ç¢‘', 'åŒ ã®ç¢‘', 'å¹³å’Œã®ç¢‘', 'ã‚­ãƒ£ãƒƒã‚¹ãƒ«åŸŽ', 'ãƒ¢ãƒŽãƒªã‚¹', 'è–æ¨¹', 'æˆ¦ã„ã®ç¢‘', 'ãƒ©ã‚¹ã‚«ãƒ«', 'æ£ºæ¡¶', 'ãƒ¨ãƒ¼ã‚¼ãƒ•', 'ãã¾', 'ãã¾', 'ãã¾', 'è²¯é‡‘ç®±', 'ãƒ¢ã‚¢ã‚¤', 'åœ°çƒå„€', 'ãƒãƒƒã‚°', 'ã”ã¿ç®±', 'ãƒ€ãƒ¼ã‚¯ã„ã®ã‚‰åƒ', 'ãƒ†ãƒˆãƒ©åƒ', 'ã¯ã­ã¯ã‚€åƒ', 'ãƒ­ã‚±ãƒƒãƒˆ', 'ãƒ”ãƒ©ãƒŸãƒƒãƒ‰', 'ã‚¢ã‚µã‚¬ã‚ª', 'ãƒãƒ¥ãƒ¼ãƒªãƒƒãƒ—', 'ãƒãƒ¥ãƒ¼ãƒªãƒƒãƒ—', 'æ°´ä»™', 'ã‚µãƒœãƒ†ãƒ³', 'ä»™äººæŽŒ', 'é­”æ–¹é™£', 'ç¥žæ®¿', 'ç¥žç¤¾', 'é—‡çŸ³', 'åœ°çŸ³', 'æ°·çŸ³', 'é¢¨çŸ³', 'ç‚ŽçŸ³', 'å…‰çŸ³', 'åµ', 'åµ', 'åµ', 'åµ', 'å¤ä»£éºè·¡', 'ã‚µãƒ³ã‚¿ã‚¯ãƒ­ãƒ¼ã‚¹', 'å£Šã‚ŒãŸä¾µç•¥è€…', 'æ†©ã„ã®å…¬åœ’', 'æ¡œ', 'å‘æ—¥è‘µ', 'éŠ€æ', 'ã‚¯ãƒªã‚¹ãƒžã‚¹ãƒ„ãƒªãƒ¼2001', 'é›ªã†ã•ãŽ', 'å¹¸ç¦ã®å¥³ç¥žåƒ'
 	);
-	
+
 	//---------------------------------------------------
-	// lH‰q¯‚ÉŠÖ‚·‚éÝ’è
+	// äººå·¥è¡›æ˜Ÿã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// ‰½Ží—Þ‚ ‚é‚©
+	// ä½•ç¨®é¡žã‚ã‚‹ã‹
 	var $EiseiNumber = 6;
-	// –¼‘O
+	// åå‰
 	var $EiseiName = array (
-		'‹CÛ‰q¯', 'ŠÏ‘ª‰q¯', 'Œ}Œ‚‰q¯', 'ŒRŽ–‰q¯', '–h‰q‰q¯', 'ƒCƒŒƒMƒ…ƒ‰['
+		'æ°—è±¡è¡›æ˜Ÿ', 'è¦³æ¸¬è¡›æ˜Ÿ', 'è¿Žæ’ƒè¡›æ˜Ÿ', 'è»äº‹è¡›æ˜Ÿ', 'é˜²è¡›è¡›æ˜Ÿ', 'ã‚¤ãƒ¬ã‚®ãƒ¥ãƒ©ãƒ¼'
 	);
-	
+
 	//---------------------------------------------------
-	// ƒWƒ“‚ÉŠÖ‚·‚éÝ’è
+	// ã‚¸ãƒ³ã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// ‰½Ží—Þ‚ ‚é‚©
+	// ä½•ç¨®é¡žã‚ã‚‹ã‹
 	var $ZinNumber = 7;
-	// –¼‘O
+	// åå‰
 	var $ZinName = array (
-		'ƒm[ƒ€', 'ƒEƒBƒXƒv', 'ƒVƒFƒCƒh', 'ƒhƒŠƒA[ƒh', 'ƒ‹ƒi', 'ƒWƒ“', 'ƒTƒ‰ƒ}ƒ“ƒ_['
+		'ãƒŽãƒ¼ãƒ ', 'ã‚¦ã‚£ã‚¹ãƒ—', 'ã‚·ã‚§ã‚¤ãƒ‰', 'ãƒ‰ãƒªã‚¢ãƒ¼ãƒ‰', 'ãƒ«ãƒŠ', 'ã‚¸ãƒ³', 'ã‚µãƒ©ãƒžãƒ³ãƒ€ãƒ¼'
 	);
-	
+
 	//---------------------------------------------------
-	// ƒAƒCƒeƒ€‚ÉŠÖ‚·‚éÝ’è
+	// ã‚¢ã‚¤ãƒ†ãƒ ã«é–¢ã™ã‚‹è¨­å®š
 	//---------------------------------------------------
-	// ‰½Ží—Þ‚ ‚é‚©
+	// ä½•ç¨®é¡žã‚ã‚‹ã‹
 	var $ItemNumber = 21;
-	// –¼‘O
+	// åå‰
 	var $ItemName = array (
-		'’n}‚P', 'ƒmƒRƒMƒŠ', '‹Ö’f‚Ì‘', 'ƒ}ƒXƒN', 'ƒ|ƒ`ƒ‡ƒ€ƒLƒ“', '’n}‚Q', '‰ÈŠw‘', '•¨—‘', '‘æŽO‚Ì”]', 'ƒ}ƒXƒ^[ƒ\[ƒh', 'A•¨}ŠÓ', 'ƒ‹[ƒy', '•c–Ø', '”Šw‘', '‹Zp‘', 'ƒ}ƒiEƒNƒŠƒXƒ^ƒ‹', '”_ì•¨}ŠÓ', 'ŒoÏ‘', 'ƒŠƒ“ƒO', 'ƒŒƒbƒhƒ_ƒCƒ„', '–ØÞ'
+		'åœ°å›³ï¼‘', 'ãƒŽã‚³ã‚®ãƒª', 'ç¦æ–­ã®æ›¸', 'ãƒžã‚¹ã‚¯', 'ãƒãƒãƒ§ãƒ ã‚­ãƒ³', 'åœ°å›³ï¼’', 'ç§‘å­¦æ›¸', 'ç‰©ç†æ›¸', 'ç¬¬ä¸‰ã®è„³', 'ãƒžã‚¹ã‚¿ãƒ¼ã‚½ãƒ¼ãƒ‰', 'æ¤ç‰©å›³é‘‘', 'ãƒ«ãƒ¼ãƒš', 'è‹—æœ¨', 'æ•°å­¦æ›¸', 'æŠ€è¡“æ›¸', 'ãƒžãƒŠãƒ»ã‚¯ãƒªã‚¹ã‚¿ãƒ«', 'è¾²ä½œç‰©å›³é‘‘', 'çµŒæ¸ˆæ›¸', 'ãƒªãƒ³ã‚°', 'ãƒ¬ãƒƒãƒ‰ãƒ€ã‚¤ãƒ¤', 'æœ¨æ'
 	);
-	
+
 	/********************
-		ŠOŒ©ŠÖŒW
+		å¤–è¦‹é–¢ä¿‚
 	********************/
-	// ‘å‚«‚¢•¶Žš
+	// å¤§ãã„æ–‡å­—
 	var $tagBig_       = '<span class="big">';
 	var $_tagBig       = '</span>';
-	// “‡‚Ì–¼‘O‚È‚Ç
+	// å³¶ã®åå‰ãªã©
 	var $tagName_      = '<span class="islName">';
 	var $_tagName      = '</span>';
-	// ”–‚­‚È‚Á‚½“‡‚Ì–¼‘O
+	// è–„ããªã£ãŸå³¶ã®åå‰
 	var $tagName2_     = '<span class="islName2">';
 	var $_tagName2     = '</span>';
-	// ‡ˆÊ‚Ì”Ô†‚È‚Ç
+	// é †ä½ã®ç•ªå·ãªã©
 	var $tagNumber_    = '<span class="number">';
 	var $_tagNumber    = '</span>';
-	// ‡ˆÊ•\‚É‚¨‚¯‚éŒ©‚¾‚µ
+	// é †ä½è¡¨ã«ãŠã‘ã‚‹è¦‹ã ã—
 	var $tagTH_        = '<span class="head">';
 	var $_tagTH        = '</span>';
-	// ŠJ”­Œv‰æ‚Ì–¼‘O
+	// é–‹ç™ºè¨ˆç”»ã®åå‰
 	var $tagComName_   = '<span class="command">';
 	var $_tagComName   = '</span>';
-	// ÐŠQ
+	// ç½å®³
 	var $tagDisaster_  = '<span class="disaster">';
 	var $_tagDisaster  = '</span>';
-	// ‡ˆÊ•\AƒZƒ‹‚Ì‘®«
-	var $bgTitleCell   = 'class="TitleCell"';   // ‡ˆÊ•\Œ©o‚µ
-	var $bgNumberCell  = 'class="NumberCell"';  // ‡ˆÊ•\‡ˆÊ
-	var $bgNameCell    = 'class="NameCell"';    // ‡ˆÊ•\“‡‚Ì–¼‘O
-	var $bgInfoCell    = 'class="InfoCell"';    // ‡ˆÊ•\“‡‚Ìî•ñ
-	var $bgMarkCell    = 'class="MarkCell"';    // “¯–¿‚Ìƒ}[ƒN
-	var $bgCommentCell = 'class="CommentCell"'; // ‡ˆÊ•\ƒRƒƒ“ƒg—“
-	var $bgInputCell   = 'class="InputCell"';   // ŠJ”­Œv‰æƒtƒH[ƒ€
-	var $bgMapCell     = 'class="MapCell"';     // ŠJ”­Œv‰æ’n}
-	var $bgCommandCell = 'class="CommandCell"'; // ŠJ”­Œv‰æ“ü—ÍÏ‚ÝŒv‰æ
-	
+	// é †ä½è¡¨ã€ã‚»ãƒ«ã®å±žæ€§
+	var $bgTitleCell   = 'class="TitleCell"';   // é †ä½è¡¨è¦‹å‡ºã—
+	var $bgNumberCell  = 'class="NumberCell"';  // é †ä½è¡¨é †ä½
+	var $bgNameCell    = 'class="NameCell"';    // é †ä½è¡¨å³¶ã®åå‰
+	var $bgInfoCell    = 'class="InfoCell"';    // é †ä½è¡¨å³¶ã®æƒ…å ±
+	var $bgMarkCell    = 'class="MarkCell"';    // åŒç›Ÿã®ãƒžãƒ¼ã‚¯
+	var $bgCommentCell = 'class="CommentCell"'; // é †ä½è¡¨ã‚³ãƒ¡ãƒ³ãƒˆæ¬„
+	var $bgInputCell   = 'class="InputCell"';   // é–‹ç™ºè¨ˆç”»ãƒ•ã‚©ãƒ¼ãƒ 
+	var $bgMapCell     = 'class="MapCell"';     // é–‹ç™ºè¨ˆç”»åœ°å›³
+	var $bgCommandCell = 'class="CommandCell"'; // é–‹ç™ºè¨ˆç”»å…¥åŠ›æ¸ˆã¿è¨ˆç”»
+
 	/********************
-		’nŒ`”Ô†
+		åœ°å½¢ç•ªå·
 	********************/
-	var $landSea       =  0; // ŠC
-	var $landWaste     =  1; // r’n
-	var $landPlains    =  2; // •½’n
-	var $landTown      =  3; // ’¬Œn
-	var $landForest    =  4; // X
-	var $landFarm      =  5; // ”_ê
-	var $landFactory   =  6; // Hê
-	var $landBase      =  7; // ƒ~ƒTƒCƒ‹Šî’n
-	var $landDefence   =  8; // –h‰qŽ{Ý
-	var $landMountain  =  9; // ŽR
-	var $landMonster   = 10; // ‰öb
-	var $landSbase     = 11; // ŠC’êŠî’n
-	var $landOil       = 12; // ŠC’ê–û“c
-	var $landMonument  = 13; // ‹L”O”è
-	var $landHaribote  = 14; // ƒnƒŠƒ{ƒe
-	var $landPark      = 15; // —V‰€’n
-	var $landFusya     = 16; // •—ŽÔ
-	var $landSyoubou   = 17; // Á–h
-	var $landNursery   = 18; // —{Bê
-	var $landSeaSide   = 19; // ŠCŠÝ(»•l)
-	var $landSeaResort = 20; // ŠC‚Ì‰Æ
-	var $landCommerce  = 21; // ¤‹Æƒrƒ‹
-	var $landPort      = 22; // `
-	var $landSeaCity   = 23; // ŠC’ê“sŽs
-	var $landSdefence  = 24; // ŠC’ê–h‰qŽ{Ý
-	var $landSfarm     = 25; // ŠC’ê”_ê
-	var $landSsyoubou  = 26; // ŠC’êÁ–h
-	var $landHatuden   = 27; // ”­“dŠ
-	var $landBank      = 28; // ‹âs
-	var $landPoll      = 29; // ‰˜õ“yë
-	var $landProcity   = 30; // –hÐ“sŽs
-	var $landZorasu    = 31; // ‚¼‚ç‚·
-	var $landSoccer    = 32; // ƒXƒ^ƒWƒAƒ€
-	var $landRail      = 33; // ü˜H
-	var $landStat      = 34; // ‰w
-	var $landTrain     = 35; // “dŽÔ
-	var $landSleeper   = 36; // ‰öbi‡–°’†j
-	var $landNewtown   = 37; // ƒjƒ…[ƒ^ƒEƒ“
-	var $landBigtown   = 38; // Œ»‘ã“sŽs
-	var $landMyhome    = 39; // Ž©‘î
-	var $landFroCity   = 40; // ŠCã“sŽs
-	var $landSoukoM    = 41; // ‹àŒÉ
-	var $landSoukoF    = 42; // H—¿ŒÉ
-	var $landShip      = 43; // ‘D”•
-	
+	var $landSea       =  0; // æµ·
+	var $landWaste     =  1; // è’åœ°
+	var $landPlains    =  2; // å¹³åœ°
+	var $landTown      =  3; // ç”ºç³»
+	var $landForest    =  4; // æ£®
+	var $landFarm      =  5; // è¾²å ´
+	var $landFactory   =  6; // å·¥å ´
+	var $landBase      =  7; // ãƒŸã‚µã‚¤ãƒ«åŸºåœ°
+	var $landDefence   =  8; // é˜²è¡›æ–½è¨­
+	var $landMountain  =  9; // å±±
+	var $landMonster   = 10; // æ€ªç£
+	var $landSbase     = 11; // æµ·åº•åŸºåœ°
+	var $landOil       = 12; // æµ·åº•æ²¹ç”°
+	var $landMonument  = 13; // è¨˜å¿µç¢‘
+	var $landHaribote  = 14; // ãƒãƒªãƒœãƒ†
+	var $landPark      = 15; // éŠåœ’åœ°
+	var $landFusya     = 16; // é¢¨è»Š
+	var $landSyoubou   = 17; // æ¶ˆé˜²ç½²
+	var $landNursery   = 18; // é¤Šæ®–å ´
+	var $landSeaSide   = 19; // æµ·å²¸(ç ‚æµœ)
+	var $landSeaResort = 20; // æµ·ã®å®¶
+	var $landCommerce  = 21; // å•†æ¥­ãƒ“ãƒ«
+	var $landPort      = 22; // æ¸¯
+	var $landSeaCity   = 23; // æµ·åº•éƒ½å¸‚
+	var $landSdefence  = 24; // æµ·åº•é˜²è¡›æ–½è¨­
+	var $landSfarm     = 25; // æµ·åº•è¾²å ´
+	var $landSsyoubou  = 26; // æµ·åº•æ¶ˆé˜²ç½²
+	var $landHatuden   = 27; // ç™ºé›»æ‰€
+	var $landBank      = 28; // éŠ€è¡Œ
+	var $landPoll      = 29; // æ±šæŸ“åœŸå£Œ
+	var $landProcity   = 30; // é˜²ç½éƒ½å¸‚
+	var $landZorasu    = 31; // ãžã‚‰ã™
+	var $landSoccer    = 32; // ã‚¹ã‚¿ã‚¸ã‚¢ãƒ 
+	var $landRail      = 33; // ç·šè·¯
+	var $landStat      = 34; // é§…
+	var $landTrain     = 35; // é›»è»Š
+	var $landSleeper   = 36; // æ€ªç£ï¼ˆç¡çœ ä¸­ï¼‰
+	var $landNewtown   = 37; // ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³
+	var $landBigtown   = 38; // ç¾ä»£éƒ½å¸‚
+	var $landMyhome    = 39; // è‡ªå®…
+	var $landFroCity   = 40; // æµ·ä¸Šéƒ½å¸‚
+	var $landSoukoM    = 41; // é‡‘åº«
+	var $landSoukoF    = 42; // é£Ÿæ–™åº«
+	var $landShip      = 43; // èˆ¹èˆ¶
+
 	/********************
-		ƒRƒ}ƒ“ƒh
+		ã‚³ãƒžãƒ³ãƒ‰
 	********************/
-	// ƒRƒ}ƒ“ƒh•ªŠ„
-	// ‚±‚ÌƒRƒ}ƒ“ƒh•ªŠ„‚¾‚¯‚ÍAŽ©“®“ü—ÍŒn‚ÌƒRƒ}ƒ“ƒh‚ÍÝ’è‚µ‚È‚¢‚Å‰º‚³‚¢B
-	var $commandDivido = 
+	// ã‚³ãƒžãƒ³ãƒ‰åˆ†å‰²
+	// ã“ã®ã‚³ãƒžãƒ³ãƒ‰åˆ†å‰²ã ã‘ã¯ã€è‡ªå‹•å…¥åŠ›ç³»ã®ã‚³ãƒžãƒ³ãƒ‰ã¯è¨­å®šã—ãªã„ã§ä¸‹ã•ã„ã€‚
+	var $commandDivido =
 		array(
-			'ŠJ”­,0,10',      // Œv‰æ”Ô†00`10
-			'ŒšÝ,11,25',     // Œv‰æ”Ô†11`20
-			'ŒšÝ2,26,50',    // Œv‰æ”Ô†21`30
-			'ƒTƒbƒJ[,51,60', // Œv‰æ”Ô†51`60
-			'UŒ‚1,61,70',    // Œv‰æ”Ô†61`80
-			'UŒ‚2,71,80',    // Œv‰æ”Ô†61`80
-			'‰^‰c,81,90'      // Œv‰æ”Ô†81`90
+			'é–‹ç™º,0,10',      // è¨ˆç”»ç•ªå·00ï½ž10
+			'å»ºè¨­,11,25',     // è¨ˆç”»ç•ªå·11ï½ž20
+			'å»ºè¨­2,26,50',    // è¨ˆç”»ç•ªå·21ï½ž30
+			'ã‚µãƒƒã‚«ãƒ¼,51,60', // è¨ˆç”»ç•ªå·51ï½ž60
+			'æ”»æ’ƒ1,61,70',    // è¨ˆç”»ç•ªå·61ï½ž80
+			'æ”»æ’ƒ2,71,80',    // è¨ˆç”»ç•ªå·61ï½ž80
+			'é‹å–¶,81,90'      // è¨ˆç”»ç•ªå·81ï½ž90
 		);
-	// ’ˆÓFƒXƒy[ƒX‚Í“ü‚ê‚È‚¢‚æ‚¤‚É
-	// ›¨ 'ŠJ”­,0,10',   # Œv‰æ”Ô†00`10
-	// ~¨ 'ŠJ”­, 0,10', # Œv‰æ”Ô†00`10
-	
-	var $commandTotal = 68; // ƒRƒ}ƒ“ƒh‚ÌŽí—Þ
-	
-	// ‡˜
+	// æ³¨æ„ï¼šã‚¹ãƒšãƒ¼ã‚¹ã¯å…¥ã‚Œãªã„ã‚ˆã†ã«
+	// â—‹â†’ 'é–‹ç™º,0,10',   # è¨ˆç”»ç•ªå·00ï½ž10
+	// Ã—â†’ 'é–‹ç™º, 0,10', # è¨ˆç”»ç•ªå·00ï½ž10
+
+	var $commandTotal = 68; // ã‚³ãƒžãƒ³ãƒ‰ã®ç¨®é¡ž
+
+	// é †åº
 	var $comList;
-	
-	// ®’nŒn
-	var $comPrepare      = 01; // ®’n
-	var $comPrepare2     = 02; // ’n‚È‚ç‚µ
-	var $comReclaim      = 03; // –„‚ß—§‚Ä
-	var $comDestroy      = 04; // Œ@í
-	var $comDeForest     = 05; // ”°Ì
-	
-	// ì‚éŒn
-	var $comPlant        = 11; // A—Ñ
-	var $comSeaSide      = 12; // »•l®”õ
-	var $comFarm         = 13; // ”_ê®”õ
-	var $comSfarm        = 14; // ŠC’ê”_ê®”õ
-	var $comNursery      = 15; // —{BêÝ’u
-	var $comFactory      = 16; // HêŒšÝ
-	var $comCommerce     = 17; // ¤‹Æƒrƒ‹ŒšÝ
-	var $comMountain     = 18; // ÌŒ@ê®”õ
-	var $comHatuden      = 19; // ”­“dŠ
-	var $comBase         = 20; // ƒ~ƒTƒCƒ‹Šî’nŒšÝ
-	var $comDbase        = 21; // –h‰qŽ{ÝŒšÝ
-	var $comSdbase       = 22; // ŠC’ê–h‰qŽ{Ý
-	var $comSbase        = 23; // ŠC’êŠî’nŒšÝ
-	var $comMonument     = 24; // ‹L”O”èŒš‘¢
-	var $comHaribote     = 25; // ƒnƒŠƒ{ƒeÝ’u
-	var $comFusya        = 26; // •—ŽÔÝ’u
-	var $comSyoubou      = 27; // Á–hŒšÝ
-	var $comSsyoubou     = 28; // ŠC’êÁ–h
-	var $comPort         = 29; // `ŒšÝ
-	var $comMakeShip     = 30; // ‘¢‘D
-	var $comSendShip     = 31; // ‘D”hŒ­
-	var $comReturnShip   = 32; // ‘D”hŒ­
-	var $comShipBack     = 33; // ‘D”jŠü
-	var $comSeaResort    = 34; // ŠC‚Ì‰ÆŒšÝ
-	var $comPark         = 35; // —V‰€’nŒšÝ
-	var $comSoccer       = 36; // ƒXƒ^ƒWƒAƒ€ŒšÝ
-	var $comRail         = 37; // ü˜H•~Ý
-	var $comStat         = 38; // ‰wŒšÝ
-	var $comSeaCity      = 39; // ŠC’ê“sŽsŒšÝ
-	var $comProcity      = 40; // –hÐ“sŽs
-	var $comNewtown      = 41; // ƒjƒ…[ƒ^ƒEƒ“ŒšÝ
-	var $comBigtown      = 42; // Œ»‘ã“sŽsŒšÝ
-	var $comMyhome       = 43; // Ž©‘îŒšÝ
-	var $comSoukoM       = 44; // ‹àŒÉ
-	var $comSoukoF       = 45; // H—¿ŒÉ
-	
-	// ƒTƒbƒJ[Œn
-	var $comOffense      = 51; // UŒ‚—Í‹­‰»
-	var $comDefense      = 52; // Žç”õ—Í‹­‰»
-	var $comPractice     = 53; // ‘‡—ûK
-	var $comPlaygame     = 54; // Œð—¬ŽŽ‡
-	
-	// ”­ŽËŒn
-	var $comMissileNM    = 61; // ƒ~ƒTƒCƒ‹”­ŽË
-	var $comMissilePP    = 62; // PPƒ~ƒTƒCƒ‹”­ŽË
-	var $comMissileST    = 63; // STƒ~ƒTƒCƒ‹”­ŽË
-	var $comMissileBT    = 64; // BTƒ~ƒTƒCƒ‹”­ŽË
-	var $comMissileSP    = 65; // Ã–°’e”­ŽË
-	var $comMissileLD    = 66; // —¤’n”j‰ó’e”­ŽË
-	var $comMissileLU    = 67; // ’nŒ`—²‹N’e”­ŽË
-	var $comMissileSM    = 68; // ƒ~ƒTƒCƒ‹Œ‚‚¿Ž~‚ß
-	var $comEisei        = 69; // lH‰q¯”­ŽË
-	var $comEiseimente   = 70; // lH‰q¯”­C•œ
-	var $comEiseiAtt     = 71; // lH‰q¯”j‰ó
-	var $comEiseiLzr     = 72; // ‰q¯ƒŒ[ƒU[
-	var $comSendMonster  = 73; // ‰öb”hŒ­
-	var $comSendSleeper  = 74; // ‰öb—A‘—
-	
-	// ‰^‰cŒn
-	var $comDoNothing    = 81; // Ž‘‹àŒJ‚è
-	var $comSell         = 82; // H—¿—Ao
-	var $comSellTree     = 83; // –ØÞ—Ao
-	var $comMoney        = 84; // Ž‘‹à‰‡•
-	var $comFood         = 85; // H—¿‰‡•
-	var $comLot          = 86; // •ó‚­‚¶w“ü
-	var $comPropaganda   = 87; // —U’vŠˆ“®
-	var $comBoku         = 88; // –l‚Ìˆø‰z‚µ
-	var $comHikidasi     = 89; // ‘qŒÉˆø‚«o‚µ
-	var $comGiveup       = 90; // “‡‚Ì•úŠü
-	
-	// Ž©“®“ü—ÍŒn
-	var $comAutoPrepare  = 91; // ƒtƒ‹®’n
-	var $comAutoPrepare2 = 92; // ƒtƒ‹’n‚È‚ç‚µ
-	var $comAutoDelete   = 93; // ‘SƒRƒ}ƒ“ƒhÁ‹Ž
-	
+
+	// æ•´åœ°ç³»
+	var $comPrepare      = 01; // æ•´åœ°
+	var $comPrepare2     = 02; // åœ°ãªã‚‰ã—
+	var $comReclaim      = 03; // åŸ‹ã‚ç«‹ã¦
+	var $comDestroy      = 04; // æŽ˜å‰Š
+	var $comDeForest     = 05; // ä¼æŽ¡
+
+	// ä½œã‚‹ç³»
+	var $comPlant        = 11; // æ¤æž—
+	var $comSeaSide      = 12; // ç ‚æµœæ•´å‚™
+	var $comFarm         = 13; // è¾²å ´æ•´å‚™
+	var $comSfarm        = 14; // æµ·åº•è¾²å ´æ•´å‚™
+	var $comNursery      = 15; // é¤Šæ®–å ´è¨­ç½®
+	var $comFactory      = 16; // å·¥å ´å»ºè¨­
+	var $comCommerce     = 17; // å•†æ¥­ãƒ“ãƒ«å»ºè¨­
+	var $comMountain     = 18; // æŽ¡æŽ˜å ´æ•´å‚™
+	var $comHatuden      = 19; // ç™ºé›»æ‰€
+	var $comBase         = 20; // ãƒŸã‚µã‚¤ãƒ«åŸºåœ°å»ºè¨­
+	var $comDbase        = 21; // é˜²è¡›æ–½è¨­å»ºè¨­
+	var $comSdbase       = 22; // æµ·åº•é˜²è¡›æ–½è¨­
+	var $comSbase        = 23; // æµ·åº•åŸºåœ°å»ºè¨­
+	var $comMonument     = 24; // è¨˜å¿µç¢‘å»ºé€ 
+	var $comHaribote     = 25; // ãƒãƒªãƒœãƒ†è¨­ç½®
+	var $comFusya        = 26; // é¢¨è»Šè¨­ç½®
+	var $comSyoubou      = 27; // æ¶ˆé˜²ç½²å»ºè¨­
+	var $comSsyoubou     = 28; // æµ·åº•æ¶ˆé˜²ç½²
+	var $comPort         = 29; // æ¸¯å»ºè¨­
+	var $comMakeShip     = 30; // é€ èˆ¹
+	var $comSendShip     = 31; // èˆ¹æ´¾é£
+	var $comReturnShip   = 32; // èˆ¹æ´¾é£
+	var $comShipBack     = 33; // èˆ¹ç ´æ£„
+	var $comSeaResort    = 34; // æµ·ã®å®¶å»ºè¨­
+	var $comPark         = 35; // éŠåœ’åœ°å»ºè¨­
+	var $comSoccer       = 36; // ã‚¹ã‚¿ã‚¸ã‚¢ãƒ å»ºè¨­
+	var $comRail         = 37; // ç·šè·¯æ•·è¨­
+	var $comStat         = 38; // é§…å»ºè¨­
+	var $comSeaCity      = 39; // æµ·åº•éƒ½å¸‚å»ºè¨­
+	var $comProcity      = 40; // é˜²ç½éƒ½å¸‚
+	var $comNewtown      = 41; // ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³å»ºè¨­
+	var $comBigtown      = 42; // ç¾ä»£éƒ½å¸‚å»ºè¨­
+	var $comMyhome       = 43; // è‡ªå®…å»ºè¨­
+	var $comSoukoM       = 44; // é‡‘åº«
+	var $comSoukoF       = 45; // é£Ÿæ–™åº«
+
+	// ã‚µãƒƒã‚«ãƒ¼ç³»
+	var $comOffense      = 51; // æ”»æ’ƒåŠ›å¼·åŒ–
+	var $comDefense      = 52; // å®ˆå‚™åŠ›å¼·åŒ–
+	var $comPractice     = 53; // ç·åˆç·´ç¿’
+	var $comPlaygame     = 54; // äº¤æµè©¦åˆ
+
+	// ç™ºå°„ç³»
+	var $comMissileNM    = 61; // ãƒŸã‚µã‚¤ãƒ«ç™ºå°„
+	var $comMissilePP    = 62; // PPãƒŸã‚µã‚¤ãƒ«ç™ºå°„
+	var $comMissileST    = 63; // STãƒŸã‚µã‚¤ãƒ«ç™ºå°„
+	var $comMissileBT    = 64; // BTãƒŸã‚µã‚¤ãƒ«ç™ºå°„
+	var $comMissileSP    = 65; // å‚¬çœ å¼¾ç™ºå°„
+	var $comMissileLD    = 66; // é™¸åœ°ç ´å£Šå¼¾ç™ºå°„
+	var $comMissileLU    = 67; // åœ°å½¢éš†èµ·å¼¾ç™ºå°„
+	var $comMissileSM    = 68; // ãƒŸã‚µã‚¤ãƒ«æ’ƒã¡æ­¢ã‚
+	var $comEisei        = 69; // äººå·¥è¡›æ˜Ÿç™ºå°„
+	var $comEiseimente   = 70; // äººå·¥è¡›æ˜Ÿç™ºä¿®å¾©
+	var $comEiseiAtt     = 71; // äººå·¥è¡›æ˜Ÿç ´å£Š
+	var $comEiseiLzr     = 72; // è¡›æ˜Ÿãƒ¬ãƒ¼ã‚¶ãƒ¼
+	var $comSendMonster  = 73; // æ€ªç£æ´¾é£
+	var $comSendSleeper  = 74; // æ€ªç£è¼¸é€
+
+	// é‹å–¶ç³»
+	var $comDoNothing    = 81; // è³‡é‡‘ç¹°ã‚Š
+	var $comSell         = 82; // é£Ÿæ–™è¼¸å‡º
+	var $comSellTree     = 83; // æœ¨æè¼¸å‡º
+	var $comMoney        = 84; // è³‡é‡‘æ´åŠ©
+	var $comFood         = 85; // é£Ÿæ–™æ´åŠ©
+	var $comLot          = 86; // å®ãã˜è³¼å…¥
+	var $comPropaganda   = 87; // èª˜è‡´æ´»å‹•
+	var $comBoku         = 88; // åƒ•ã®å¼•è¶Šã—
+	var $comHikidasi     = 89; // å€‰åº«å¼•ãå‡ºã—
+	var $comGiveup       = 90; // å³¶ã®æ”¾æ£„
+
+	// è‡ªå‹•å…¥åŠ›ç³»
+	var $comAutoPrepare  = 91; // ãƒ•ãƒ«æ•´åœ°
+	var $comAutoPrepare2 = 92; // ãƒ•ãƒ«åœ°ãªã‚‰ã—
+	var $comAutoDelete   = 93; // å…¨ã‚³ãƒžãƒ³ãƒ‰æ¶ˆåŽ»
+
 	var $comName;
 	var $comCost;
-	
-	// “‡‚ÌÀ•W”
+
+	// å³¶ã®åº§æ¨™æ•°
 	var $pointNumber;
-	
-	// ŽüˆÍ2ƒwƒbƒNƒX‚ÌÀ•W
+
+	// å‘¨å›²2ãƒ˜ãƒƒã‚¯ã‚¹ã®åº§æ¨™
 	var $ax = array(0, 1, 1, 1, 0,-1, 0, 1, 2, 2, 2, 1, 0,-1,-1,-2,-1,-1, 0);
 	var $ay = array(0,-1, 0, 1, 1, 0,-1,-2,-1, 0, 1, 2, 2, 2, 1, 0,-1,-2,-2);
-	
-	// ƒRƒƒ“ƒg‚È‚Ç‚ÉA—\\’è‚Ì‚æ‚¤‚É\‚ªŸŽè‚É’Ç‰Á‚³‚ê‚é
+
+	// ã‚³ãƒ¡ãƒ³ãƒˆãªã©ã«ã€äºˆ\å®šã®ã‚ˆã†ã«\ãŒå‹æ‰‹ã«è¿½åŠ ã•ã‚Œã‚‹
 	var $stripslashes;
-	
-	function setVariable() {
+
+
+	//////////////////////////////////////////////////
+
+	private function setVariable() {
 		$this->pointNumber = $this->islandSize * $this->islandSize;
 		$this->comList = array(
 			$this->comPrepare,
@@ -755,161 +774,161 @@ class Init {
 			$this->comAutoPrepare2,
 			$this->comAutoDelete,
 		);
-		
-		// Œv‰æ‚Ì–¼‘O‚Æ’l’i
-		$this->comName[$this->comPrepare]      = '®’n';
+
+		// è¨ˆç”»ã®åå‰ã¨å€¤æ®µ
+		$this->comName[$this->comPrepare]      = 'æ•´åœ°';
 		$this->comCost[$this->comPrepare]      = 5;
-		$this->comName[$this->comPrepare2]     = '’n‚È‚ç‚µ';
+		$this->comName[$this->comPrepare2]     = 'åœ°ãªã‚‰ã—';
 		$this->comCost[$this->comPrepare2]     = 100;
-		$this->comName[$this->comReclaim]      = '–„‚ß—§‚Ä';
+		$this->comName[$this->comReclaim]      = 'åŸ‹ã‚ç«‹ã¦';
 		$this->comCost[$this->comReclaim]      = 150;
-		$this->comName[$this->comDestroy]      = 'Œ@í';
+		$this->comName[$this->comDestroy]      = 'æŽ˜å‰Š';
 		$this->comCost[$this->comDestroy]      = 200;
-		$this->comName[$this->comDeForest]     = '”°Ì';
+		$this->comName[$this->comDeForest]     = 'ä¼æŽ¡';
 		$this->comCost[$this->comDeForest]     = 0;
-		$this->comName[$this->comPlant]        = 'A—Ñ';
+		$this->comName[$this->comPlant]        = 'æ¤æž—';
 		$this->comCost[$this->comPlant]        = 50;
-		$this->comName[$this->comSeaSide]      = '»•l®”õ';
+		$this->comName[$this->comSeaSide]      = 'ç ‚æµœæ•´å‚™';
 		$this->comCost[$this->comSeaSide]      = 100;
-		$this->comName[$this->comFarm]         = '”_ê®”õ';
+		$this->comName[$this->comFarm]         = 'è¾²å ´æ•´å‚™';
 		$this->comCost[$this->comFarm]         = 20;
-		$this->comName[$this->comSfarm]        = 'ŠC’ê”_ê®”õ';
+		$this->comName[$this->comSfarm]        = 'æµ·åº•è¾²å ´æ•´å‚™';
 		$this->comCost[$this->comSfarm]        = 500;
-		$this->comName[$this->comNursery]      = '—{BêÝ’u';
+		$this->comName[$this->comNursery]      = 'é¤Šæ®–å ´è¨­ç½®';
 		$this->comCost[$this->comNursery]      = 20;
-		$this->comName[$this->comFactory]      = 'HêŒšÝ';
+		$this->comName[$this->comFactory]      = 'å·¥å ´å»ºè¨­';
 		$this->comCost[$this->comFactory]      = 100;
-		$this->comName[$this->comCommerce]     = '¤‹Æƒrƒ‹ŒšÝ';
+		$this->comName[$this->comCommerce]     = 'å•†æ¥­ãƒ“ãƒ«å»ºè¨­';
 		$this->comCost[$this->comCommerce]     = 500;
-		$this->comName[$this->comMountain]     = 'ÌŒ@ê®”õ';
+		$this->comName[$this->comMountain]     = 'æŽ¡æŽ˜å ´æ•´å‚™';
 		$this->comCost[$this->comMountain]     = 300;
-		$this->comName[$this->comHatuden]      = '”­“dŠŒšÝ';
+		$this->comName[$this->comHatuden]      = 'ç™ºé›»æ‰€å»ºè¨­';
 		$this->comCost[$this->comHatuden]      = 300;
-		$this->comName[$this->comPort]         = '`ŒšÝ';
+		$this->comName[$this->comPort]         = 'æ¸¯å»ºè¨­';
 		$this->comCost[$this->comPort]         = 1500;
-		$this->comName[$this->comMakeShip]     = '‘¢‘D';
+		$this->comName[$this->comMakeShip]     = 'é€ èˆ¹';
 		$this->comCost[$this->comMakeShip]     = 500;
-		$this->comName[$this->comSendShip]     = '‘D”hŒ­';
+		$this->comName[$this->comSendShip]     = 'èˆ¹æ´¾é£';
 		$this->comCost[$this->comSendShip]     = 200;
-		$this->comName[$this->comReturnShip]   = '‘D‹AŠÒ';
+		$this->comName[$this->comReturnShip]   = 'èˆ¹å¸°é‚„';
 		$this->comCost[$this->comReturnShip]   = 200;
-		$this->comName[$this->comShipBack]     = '‘D”jŠü';
+		$this->comName[$this->comShipBack]     = 'èˆ¹ç ´æ£„';
 		$this->comCost[$this->comShipBack]     = 500;
-		$this->comName[$this->comRail]         = 'ü˜H•~Ý';
+		$this->comName[$this->comRail]         = 'ç·šè·¯æ•·è¨­';
 		$this->comCost[$this->comRail]         = 100;
-		$this->comName[$this->comStat]         = '‰wŒšÝ';
+		$this->comName[$this->comStat]         = 'é§…å»ºè¨­';
 		$this->comCost[$this->comStat]         = 500;
-		$this->comName[$this->comSoccer]       = 'ƒXƒ^ƒWƒAƒ€ŒšÝ';
+		$this->comName[$this->comSoccer]       = 'ã‚¹ã‚¿ã‚¸ã‚¢ãƒ å»ºè¨­';
 		$this->comCost[$this->comSoccer]       = 1000;
-		$this->comName[$this->comPark]         = '—V‰€’nŒšÝ';
+		$this->comName[$this->comPark]         = 'éŠåœ’åœ°å»ºè¨­';
 		$this->comCost[$this->comPark]         = 700;
-		$this->comName[$this->comSeaResort]    = 'ŠC‚Ì‰ÆŒšÝ';
+		$this->comName[$this->comSeaResort]    = 'æµ·ã®å®¶å»ºè¨­';
 		$this->comCost[$this->comSeaResort]    = 100;
-		$this->comName[$this->comFusya]        = '•—ŽÔŒšÝ';
+		$this->comName[$this->comFusya]        = 'é¢¨è»Šå»ºè¨­';
 		$this->comCost[$this->comFusya]        = 1000;
-		$this->comName[$this->comSyoubou]      = 'Á–hŒšÝ';
+		$this->comName[$this->comSyoubou]      = 'æ¶ˆé˜²ç½²å»ºè¨­';
 		$this->comCost[$this->comSyoubou]      = 600;
-		$this->comName[$this->comSsyoubou]     = 'ŠC’êÁ–hŒšÝ';
+		$this->comName[$this->comSsyoubou]     = 'æµ·åº•æ¶ˆé˜²ç½²å»ºè¨­';
 		$this->comCost[$this->comSsyoubou]     = 1000;
-		$this->comName[$this->comBase]         = 'ƒ~ƒTƒCƒ‹Šî’nŒšÝ';
+		$this->comName[$this->comBase]         = 'ãƒŸã‚µã‚¤ãƒ«åŸºåœ°å»ºè¨­';
 		$this->comCost[$this->comBase]         = 300;
-		$this->comName[$this->comDbase]        = '–h‰qŽ{ÝŒšÝ';
+		$this->comName[$this->comDbase]        = 'é˜²è¡›æ–½è¨­å»ºè¨­';
 		$this->comCost[$this->comDbase]        = 800;
-		$this->comName[$this->comSbase]        = 'ŠC’êŠî’nŒšÝ';
+		$this->comName[$this->comSbase]        = 'æµ·åº•åŸºåœ°å»ºè¨­';
 		$this->comCost[$this->comSbase]        = 8000;
-		$this->comName[$this->comSdbase]       = 'ŠC’ê–h‰qŽ{ÝŒšÝ';
+		$this->comName[$this->comSdbase]       = 'æµ·åº•é˜²è¡›æ–½è¨­å»ºè¨­';
 		$this->comCost[$this->comSdbase]       = 1000;
-		$this->comName[$this->comSeaCity]      = 'ŠC’ê“sŽsŒšÝ';
+		$this->comName[$this->comSeaCity]      = 'æµ·åº•éƒ½å¸‚å»ºè¨­';
 		$this->comCost[$this->comSeaCity]      = 3000;
-		$this->comName[$this->comProcity]      = '–hÐ“sŽs‰»';
+		$this->comName[$this->comProcity]      = 'é˜²ç½éƒ½å¸‚åŒ–';
 		$this->comCost[$this->comProcity]      = 3000;
-		$this->comName[$this->comNewtown]      = 'ƒjƒ…[ƒ^ƒEƒ“ŒšÝ';
+		$this->comName[$this->comNewtown]      = 'ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³å»ºè¨­';
 		$this->comCost[$this->comNewtown]      = 1000;
-		$this->comName[$this->comBigtown]      = 'Œ»‘ã“sŽsŒšÝ';
+		$this->comName[$this->comBigtown]      = 'ç¾ä»£éƒ½å¸‚å»ºè¨­';
 		$this->comCost[$this->comBigtown]      = 10000;
-		$this->comName[$this->comMyhome]       = 'Ž©‘îŒšÝ';
+		$this->comName[$this->comMyhome]       = 'è‡ªå®…å»ºè¨­';
 		$this->comCost[$this->comMyhome]       = 8000;
-		$this->comName[$this->comSoukoM]       = '‹àŒÉŒšÝ';
+		$this->comName[$this->comSoukoM]       = 'é‡‘åº«å»ºè¨­';
 		$this->comCost[$this->comSoukoM]       = 1000;
-		$this->comName[$this->comSoukoF]       = 'H—¿ŒÉŒšÝ';
+		$this->comName[$this->comSoukoF]       = 'é£Ÿæ–™åº«å»ºè¨­';
 		$this->comCost[$this->comSoukoF]       = -1000;
-		$this->comName[$this->comMonument]     = '‹L”O”èŒš‘¢';
+		$this->comName[$this->comMonument]     = 'è¨˜å¿µç¢‘å»ºé€ ';
 		$this->comCost[$this->comMonument]     = 9999;
-		$this->comName[$this->comHaribote]     = 'ƒnƒŠƒ{ƒeÝ’u';
+		$this->comName[$this->comHaribote]     = 'ãƒãƒªãƒœãƒ†è¨­ç½®';
 		$this->comCost[$this->comHaribote]     = 1;
-		$this->comName[$this->comMissileNM]    = 'ƒ~ƒTƒCƒ‹”­ŽË';
+		$this->comName[$this->comMissileNM]    = 'ãƒŸã‚µã‚¤ãƒ«ç™ºå°„';
 		$this->comCost[$this->comMissileNM]    = 20;
-		$this->comName[$this->comMissilePP]    = 'PPƒ~ƒTƒCƒ‹”­ŽË';
+		$this->comName[$this->comMissilePP]    = 'PPãƒŸã‚µã‚¤ãƒ«ç™ºå°„';
 		$this->comCost[$this->comMissilePP]    = 50;
-		$this->comName[$this->comMissileST]    = 'STƒ~ƒTƒCƒ‹”­ŽË';
+		$this->comName[$this->comMissileST]    = 'STãƒŸã‚µã‚¤ãƒ«ç™ºå°„';
 		$this->comCost[$this->comMissileST]    = 100;
-		$this->comName[$this->comMissileBT]    = 'BTƒ~ƒTƒCƒ‹”­ŽË';
+		$this->comName[$this->comMissileBT]    = 'BTãƒŸã‚µã‚¤ãƒ«ç™ºå°„';
 		$this->comCost[$this->comMissileBT]    = 300;
-		$this->comName[$this->comMissileSP]    = 'Ã–°’e”­ŽË';
+		$this->comName[$this->comMissileSP]    = 'å‚¬çœ å¼¾ç™ºå°„';
 		$this->comCost[$this->comMissileSP]    = 100;
-		$this->comName[$this->comMissileLD]    = '—¤’n”j‰ó’e”­ŽË';
+		$this->comName[$this->comMissileLD]    = 'é™¸åœ°ç ´å£Šå¼¾ç™ºå°„';
 		$this->comCost[$this->comMissileLD]    = 500;
-		$this->comName[$this->comMissileLU]    = '’nŒ`—²‹N’e”­ŽË';
+		$this->comName[$this->comMissileLU]    = 'åœ°å½¢éš†èµ·å¼¾ç™ºå°„';
 		$this->comCost[$this->comMissileLU]    = 500;
-		$this->comName[$this->comMissileSM]    = 'ƒ~ƒTƒCƒ‹Œ‚‚¿Ž~‚ß';
+		$this->comName[$this->comMissileSM]    = 'ãƒŸã‚µã‚¤ãƒ«æ’ƒã¡æ­¢ã‚';
 		$this->comCost[$this->comMissileSM]    = 0;
-		$this->comName[$this->comEisei]        = 'lH‰q¯‘Å‚¿ã‚°';
+		$this->comName[$this->comEisei]        = 'äººå·¥è¡›æ˜Ÿæ‰“ã¡ä¸Šã’';
 		$this->comCost[$this->comEisei]        = 9999;
-		$this->comName[$this->comEiseimente]   = 'lH‰q¯C•œ';
+		$this->comName[$this->comEiseimente]   = 'äººå·¥è¡›æ˜Ÿä¿®å¾©';
 		$this->comCost[$this->comEiseimente]   = 5000;
-		$this->comName[$this->comEiseiAtt]     = '‰q¯”j‰ó–C”­ŽË';
+		$this->comName[$this->comEiseiAtt]     = 'è¡›æ˜Ÿç ´å£Šç ²ç™ºå°„';
 		$this->comCost[$this->comEiseiAtt]     = 30000;
-		$this->comName[$this->comEiseiLzr]     = '‰q¯ƒŒ[ƒU[”­ŽË';
+		$this->comName[$this->comEiseiLzr]     = 'è¡›æ˜Ÿãƒ¬ãƒ¼ã‚¶ãƒ¼ç™ºå°„';
 		$this->comCost[$this->comEiseiLzr]     = 20000;
-		$this->comName[$this->comSendMonster]  = '‰öb”hŒ­';
+		$this->comName[$this->comSendMonster]  = 'æ€ªç£æ´¾é£';
 		$this->comCost[$this->comSendMonster]  = 3000;
-		$this->comName[$this->comSendSleeper]  = '‰öb—A‘—';
+		$this->comName[$this->comSendSleeper]  = 'æ€ªç£è¼¸é€';
 		$this->comCost[$this->comSendSleeper]  = 1500;
-		$this->comName[$this->comOffense]      = 'UŒ‚—Í‹­‰»';
+		$this->comName[$this->comOffense]      = 'æ”»æ’ƒåŠ›å¼·åŒ–';
 		$this->comCost[$this->comOffense]      = 300;
-		$this->comName[$this->comDefense]      = 'Žç”õ—Í‹­‰»';
+		$this->comName[$this->comDefense]      = 'å®ˆå‚™åŠ›å¼·åŒ–';
 		$this->comCost[$this->comDefense]      = 300;
-		$this->comName[$this->comPractice]     = '‘‡—ûK';
+		$this->comName[$this->comPractice]     = 'ç·åˆç·´ç¿’';
 		$this->comCost[$this->comPractice]     = 500;
-		$this->comName[$this->comPlaygame]     = 'Œð—¬ŽŽ‡';
+		$this->comName[$this->comPlaygame]     = 'äº¤æµè©¦åˆ';
 		$this->comCost[$this->comPlaygame]     = 500;
-		$this->comName[$this->comDoNothing]    = 'Ž‘‹àŒJ‚è';
+		$this->comName[$this->comDoNothing]    = 'è³‡é‡‘ç¹°ã‚Š';
 		$this->comCost[$this->comDoNothing]    = 0;
-		$this->comName[$this->comSell]         = 'H—¿—Ao';
+		$this->comName[$this->comSell]         = 'é£Ÿæ–™è¼¸å‡º';
 		$this->comCost[$this->comSell]         = -100;
-		$this->comName[$this->comSellTree]     = '–ØÞ—Ao';
+		$this->comName[$this->comSellTree]     = 'æœ¨æè¼¸å‡º';
 		$this->comCost[$this->comSellTree]     = -10;
-		$this->comName[$this->comMoney]        = 'Ž‘‹à‰‡•';
+		$this->comName[$this->comMoney]        = 'è³‡é‡‘æ´åŠ©';
 		$this->comCost[$this->comMoney]        = 100;
-		$this->comName[$this->comFood]         = 'H—¿‰‡•';
+		$this->comName[$this->comFood]         = 'é£Ÿæ–™æ´åŠ©';
 		$this->comCost[$this->comFood]         = -100;
-		$this->comName[$this->comLot]          = '•ó‚­‚¶w“ü';
+		$this->comName[$this->comLot]          = 'å®ãã˜è³¼å…¥';
 		$this->comCost[$this->comLot]          = 300;
-		$this->comName[$this->comPropaganda]   = '—U’vŠˆ“®';
+		$this->comName[$this->comPropaganda]   = 'èª˜è‡´æ´»å‹•';
 		$this->comCost[$this->comPropaganda]   = 1000;
-		$this->comName[$this->comBoku]         = '–l‚Ìˆø‰z‚µ';
+		$this->comName[$this->comBoku]         = 'åƒ•ã®å¼•è¶Šã—';
 		$this->comCost[$this->comBoku]         = 1000;
-		$this->comName[$this->comHikidasi]     = '‘qŒÉˆø‚«o‚µ';
+		$this->comName[$this->comHikidasi]     = 'å€‰åº«å¼•ãå‡ºã—';
 		$this->comCost[$this->comHikidasi]     = 100;
-		$this->comName[$this->comGiveup]       = '“‡‚Ì•úŠü';
+		$this->comName[$this->comGiveup]       = 'å³¶ã®æ”¾æ£„';
 		$this->comCost[$this->comGiveup]       = 0;
-		$this->comName[$this->comAutoPrepare]  = '®’nŽ©“®“ü—Í';
+		$this->comName[$this->comAutoPrepare]  = 'æ•´åœ°è‡ªå‹•å…¥åŠ›';
 		$this->comCost[$this->comAutoPrepare]  = 0;
-		$this->comName[$this->comAutoPrepare2] = '’n‚È‚ç‚µŽ©“®“ü—Í';
+		$this->comName[$this->comAutoPrepare2] = 'åœ°ãªã‚‰ã—è‡ªå‹•å…¥åŠ›';
 		$this->comCost[$this->comAutoPrepare2] = 0;
-		$this->comName[$this->comAutoDelete]   = '‘SŒv‰æ‚ð”’Ž†“P‰ñ';
+		$this->comName[$this->comAutoDelete]   = 'å…¨è¨ˆç”»ã‚’ç™½ç´™æ’¤å›ž';
 		$this->comCost[$this->comAutoDelete]   = 0;
 	}
-	
+
 	function Init() {
 		$this->CPU_start = microtime();
 		$this->setVariable();
-		mt_srand(time());
-		// “ú–{ŽžŠÔ‚É‚ ‚í‚¹‚é
-		// ŠCŠO‚ÌƒT[ƒo‚ÉÝ’u‚·‚éê‡‚ÍŽŸ‚Ìs‚É‚ ‚é//‚ð‚Í‚¸‚·B
+		mt_srand($_SERVER['REQUEST_TIME']);
+		// æ—¥æœ¬æ™‚é–“ã«ã‚ã‚ã›ã‚‹
+		// æµ·å¤–ã®ã‚µãƒ¼ãƒã«è¨­ç½®ã™ã‚‹å ´åˆã¯æ¬¡ã®è¡Œã«ã‚ã‚‹//ã‚’ã¯ãšã™ã€‚
 		// putenv("TZ=JST-9");
-		// —\\’è‚Ì‚æ‚¤‚É\‚ªŸŽè‚É’Ç‰Á‚³‚ê‚é
+		// äºˆ\å®šã®ã‚ˆã†ã«\ãŒå‹æ‰‹ã«è¿½åŠ ã•ã‚Œã‚‹
 		$this->stripslashes = get_magic_quotes_gpc();
 	}
+
 }
-?>

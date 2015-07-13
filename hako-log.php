@@ -2,22 +2,22 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- ƒƒOo—Í—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- ãƒ­ã‚°å‡ºåŠ›ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-log.php by SERA - 2013/06/01
 
 *******************************************************************/
 
 //--------------------------------------------------------------------
 class LogIO {
-	var $logPool = array();
+	var $logPool       = array();
 	var $secretLogPool = array();
-	var $lateLogPool = array();
-	
+	var $lateLogPool   = array();
+
 	//---------------------------------------------------
-	// ƒƒOƒtƒ@ƒCƒ‹‚ğŒã‚ë‚É‚¸‚ç‚·
+	// ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å¾Œã‚ã«ãšã‚‰ã™
 	//---------------------------------------------------
 	function slideBackLogFile() {
 		global $init;
@@ -34,9 +34,9 @@ class LogIO {
 		}
 	}
 	//---------------------------------------------------
-	// Å‹ß‚Ìo—ˆ–‚ğo—Í
+	// æœ€è¿‘ã®å‡ºæ¥äº‹ã‚’å‡ºåŠ›
 	//---------------------------------------------------
-	function logFilePrint($num = 0, $id = 0, $mode = 0) {
+	static function logFilePrint($num = 0, $id = 0, $mode = 0) {
 		global $init;
 		$fileName = $init->dirName . "/hakojima.log" . $num;
 		if(!is_file($fileName)) {
@@ -44,14 +44,15 @@ class LogIO {
 		}
 		$fp = fopen($fileName, "r");
 		$row = 1;
-		
+
+		echo "<div>";
 		while($line = chop(fgets($fp, READ_LINE))) {
-			list($m, $turn, $id1, $id2, $message) = split(",", $line, 5);
+			list($m, $turn, $id1, $id2, $message) = explode(",", $line, 5);
 			if($m == 1) {
 				if(($mode == 0) || ($id1 != $id)) {
 					continue;
 				}
-				$m = "<strong>(‹@–§)</strong>";
+				$m = "<strong>(æ©Ÿå¯†)</strong>";
 			} else {
 				$m = "";
 			}
@@ -61,17 +62,21 @@ class LogIO {
 				}
 			}
 			if($row == 1) {
-				print "{$init->tagNumber_}----yƒ^[ƒ“{$turn}‚Ìo—ˆ–z ------------------------------------------------------------------{$init->_tagNumber}<br>\n";
+				echo "<p>{$init->tagNumber_}ã€ã‚¿ãƒ¼ãƒ³{$turn}ã®å‡ºæ¥äº‹ã€‘{$init->_tagNumber}</p>\n";
 				$row++;
 			}
-			print "{$message}<br>\n";
+			echo "<ul>";
+			echo "<li>{$message}</li>\n";
+			echo "</ul>";
 		}
+		echo "</div>";
+
 		fclose($fp);
 	}
 	//---------------------------------------------------
-	// ”­Œ©‚Ì‹L˜^‚ğo—Í
+	// ç™ºè¦‹ã®è¨˜éŒ²ã‚’å‡ºåŠ›
 	//---------------------------------------------------
-	function historyPrint() {
+	static function historyPrint() {
 		global $init;
 		$fileName = $init->dirName . "/hakojima.his";
 		if(!is_file($fileName)) {
@@ -84,19 +89,22 @@ class LogIO {
 			array_push($history, $line);
 			$k++;
 		}
+		echo "<ul>";
 		for($i = 0; $i < $k; $i++) {
-			list($turn, $his) = split(",", array_pop($history), 2);
-			print "{$init->tagNumber_}ƒ^[ƒ“{$turn}{$init->_tagNumber}F$his<br>\n";
+			list($turn, $his) = explode(",", array_pop($history), 2);
+			echo "<li>{$init->tagNumber_}ã‚¿ãƒ¼ãƒ³{$turn}{$init->_tagNumber}ï¼š$his</li>\n";
 		}
+		echo "</ul>";
+
 	}
 	//---------------------------------------------------
-	// ”­Œ©‚Ì‹L˜^‚ğ•Û‘¶
+	// ç™ºè¦‹ã®è¨˜éŒ²ã‚’ä¿å­˜
 	//---------------------------------------------------
 	function history($str) {
 		global $init;
-		
+
 		$fileName = "{$init->dirName}/hakojima.his";
-		
+
 		if(!is_file($fileName)) {
 			touch($fileName);
 		}
@@ -106,14 +114,15 @@ class LogIO {
 		// chmod($fileName, 0666);
 	}
 	//---------------------------------------------------
-	// ”­Œ©‚Ì‹L˜^ƒƒO’²®
+	// ç™ºè¦‹ã®è¨˜éŒ²ãƒ­ã‚°èª¿æ•´
 	//---------------------------------------------------
 	function historyTrim() {
 		global $init;
+		$count = 0;
 		$fileName = "{$init->dirName}/hakojima.his";
 		if(is_file($fileName)) {
 			$fp = fopen($fileName, "r");
-			
+
 			$line = array();
 			while($l = chop(fgets($fp, READ_LINE))) {
 				array_push($line, $l);
@@ -134,37 +143,37 @@ class LogIO {
 		}
 	}
 	//---------------------------------------------------
-	// ƒƒO
+	// ãƒ­ã‚°
 	//---------------------------------------------------
 	function out($str, $id = "", $tid = "") {
 		array_push($this->logPool, "0,{$GLOBALS['ISLAND_TURN']},{$id},{$tid},{$str}");
 	}
 	//---------------------------------------------------
-	// ‹@–§ƒƒO
+	// æ©Ÿå¯†ãƒ­ã‚°
 	//---------------------------------------------------
 	function secret($str, $id = "", $tid = "") {
 		array_push($this->secretLogPool,"1,{$GLOBALS['ISLAND_TURN']},{$id},{$tid},{$str}");
 	}
 	//---------------------------------------------------
-	// ’x‰„ƒƒO
+	// é…å»¶ãƒ­ã‚°
 	//---------------------------------------------------
 	function late($str, $id = "", $tid = "") {
 		array_push($this->lateLogPool,"0,{$GLOBALS['ISLAND_TURN']},{$id},{$tid},{$str}");
 	}
 	//---------------------------------------------------
-	// ƒƒO‘‚«o‚µ
+	// ãƒ­ã‚°æ›¸ãå‡ºã—
 	//---------------------------------------------------
 	function flush() {
 		global $init;
-		
+
 		$fileName = "{$init->dirName}/hakojima.log0";
-		
+
 		if(!is_file($fileName)) {
 			touch($fileName);
 		}
 		$fp = fopen($fileName, "w");
-		
-		// ‘S•”‹t‡‚É‚µ‚Ä‘‚«o‚·
+
+		// å…¨éƒ¨é€†é †ã«ã—ã¦æ›¸ãå‡ºã™
 		if(!empty($this->secretLogPool)) {
 			for($i = count($this->secretLogPool) - 1; $i >= 0; $i--) {
 				fputs($fp, "{$this->secretLogPool[$i]}\n");
@@ -184,11 +193,11 @@ class LogIO {
 		// chmod($fileName, 0666);
 	}
 	//---------------------------------------------------
-	// ‚¨’m‚ç‚¹‚ğo—Í
+	// ãŠçŸ¥ã‚‰ã›ã‚’å‡ºåŠ›
 	//---------------------------------------------------
-	function infoPrint() {
+	static function infoPrint() {
 		global $init;
-		
+
 		if($init->infoFile == "") {
 			return;
 		}
@@ -199,7 +208,7 @@ class LogIO {
 		$fp = fopen($fileName, "r");
 		while($line = fgets($fp, READ_LINE)) {
 			$line = chop($line);
-			print "{$line}<br>\n";
+			echo "{$line}<br>\n";
 		}
 		fclose($fp);
 	}
@@ -209,986 +218,984 @@ class LogIO {
 class Log extends LogIO {
 	function discover($id, $name) {
 		global $init;
-		$this->history("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª”­Œ©‚³‚ê‚éB");
+		$this->history("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒç™ºè¦‹ã•ã‚Œã‚‹ã€‚");
 	}
 	function changeName($name1, $name2) {
 		global $init;
-		$this->history("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name1}“‡</A>{$init->_tagName}A–¼Ì‚ğ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name2}“‡</A>{$init->_tagName}‚É•ÏX‚·‚éB");
+		$this->history("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name1}å³¶</A>{$init->_tagName}ã€åç§°ã‚’<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name2}å³¶</A>{$init->_tagName}ã«å¤‰æ›´ã™ã‚‹ã€‚");
 	}
-	// ‘‹à‚ğƒvƒŒƒ[ƒ“ƒg
+	// è³‡é‡‘ã‚’ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ
 	function presentMoney($id, $name, $value) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ÉA‘‹à<strong>{$value}{$init->unitMoney}</strong>‚ğƒvƒŒƒ[ƒ“ƒg‚µ‚Ü‚µ‚½B", $id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã«ã€{$init->nameFunds}<strong>{$value}{$init->unitMoney}</strong>ã‚’ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆã—ã¾ã—ãŸã€‚", $id);
 	}
-	// H—¿‚ğƒvƒŒƒ[ƒ“ƒg
+	// é£Ÿæ–™ã‚’ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆ
 	function presentFood($id, $name, $value) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ÉAH—¿<strong>{$value}{$init->unitFood}</strong>‚ğƒvƒŒƒ[ƒ“ƒg‚µ‚Ü‚µ‚½B", $id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã«ã€{$init->nameFood}<strong>{$value}{$init->unitFood}</strong>ã‚’ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆã—ã¾ã—ãŸã€‚", $id);
 	}
-	// óÜ
+	// å—è³
 	function prize($id, $name, $pName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<strong>$pName</strong>‚ğóÜ‚µ‚Ü‚µ‚½B",$id);
-		$this->history("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}A<strong>$pName</strong>‚ğóÜ");
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<strong>$pName</strong>ã‚’å—è³ã—ã¾ã—ãŸã€‚",$id);
+		$this->history("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã€<strong>$pName</strong>ã‚’å—è³");
 	}
-	// €–Å
+	// æ­»æ»…
 	function dead($id, $name) {
 		global $init;
-		$this->out("{$init->tagName_}${name}“‡{$init->_tagName}‚©‚çl‚ª‚¢‚È‚­‚È‚èA<strong>–³l“‡</strong>‚É‚È‚è‚Ü‚µ‚½B", $id);
-		$this->history("{$init->tagName_}${name}“‡{$init->_tagName}Al‚ª‚¢‚È‚­‚È‚è<strong>–³l“‡</strong>‚Æ‚È‚éB");
+		$this->out("{$init->tagName_}${name}å³¶{$init->_tagName}ã‹ã‚‰äººãŒã„ãªããªã‚Šã€<strong>æ»…äº¡</strong>ã—ã¾ã—ãŸã€‚", $id);
+		$this->history("{$init->tagName_}${name}å³¶{$init->_tagName}ã€äººãŒã„ãªããªã‚Š<strong>æ»…äº¡</strong>ã™ã‚‹ã€‚");
 	}
-	// “‡‚Ì‹­§íœ
+	// å³¶ã®å¼·åˆ¶å‰Šé™¤
 	function deleteIsland($id, $name) {
 		global $init;
-		$this->history("{$init->tagName_}{$name}“‡{$init->_tagName}‚ÉA” ’ë‘å–¾_‚Ì<strong>“V”±‚ª~‚è</strong><span class=attention>ŠC‚Ì’†‚É–v‚µ</span>‚Ü‚µ‚½B");
+		$this->history("{$init->tagName_}{$name}å³¶{$init->_tagName}ã«ã€ç®±åº­å¤§æ˜ç¥ã®<strong>å¤©ç½°ãŒé™ã‚Š</strong><span class=attention>æµ·ã®ä¸­ã«æ²¡ã—</span>ã¾ã—ãŸã€‚");
 	}
 	function doNothing($id, $name, $comName) {
 		//global $init;
-		//$this->out("{$init->tagName_}{$name}“‡{$init->_tagName}‚Å{$init->tagComName_}${comName}{$init->_tagComName}‚ªs‚í‚ê‚Ü‚µ‚½B",$id);
+		//$this->out("{$init->tagName_}{$name}å³¶{$init->_tagName}ã§{$init->tagComName_}${comName}{$init->_tagComName}ãŒè¡Œã‚ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‘‹à‘«‚è‚È‚¢
+	// è³‡é‡‘è¶³ã‚Šãªã„
 	function noMoney($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA‘‹à•s‘«‚Ì‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€è³‡é‡‘ä¸è¶³ã®ãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// H—¿‘«‚è‚È‚¢
+	// é£Ÿæ–™è¶³ã‚Šãªã„
 	function noFood($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA”õ’~H—¿•s‘«‚Ì‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€å‚™è“„é£Ÿæ–™ä¸è¶³ã®ãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// –ØŞ‘«‚è‚È‚¢
+	// æœ¨æè¶³ã‚Šãªã„
 	function noWood($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA–ØŞ•s‘«‚Ì‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€æœ¨æä¸è¶³ã®ãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‰q¯‘«‚è‚È‚¢
+	// è¡›æ˜Ÿè¶³ã‚Šãªã„
 	function NoAny($id, $name, $comName, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA{$str}‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€{$str}ãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‘ÎÛ’nŒ`‚Ìí—Ş‚É‚æ‚é¸”s
+	// å¯¾è±¡åœ°å½¢ã®ç¨®é¡ã«ã‚ˆã‚‹å¤±æ•—
 	function landFail($id, $name, $comName, $kind, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA—\’è’n‚Ì{$init->tagName_}{$point}{$init->_tagName}‚ª<strong>{$kind}</strong>‚¾‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€äºˆå®šåœ°ã®{$init->tagName_}{$point}{$init->_tagName}ãŒ<strong>{$kind}</strong>ã ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‘ÎÛ’nŒ`‚ÌğŒ‚É‚æ‚é¸”s
+	// å¯¾è±¡åœ°å½¢ã®æ¡ä»¶ã«ã‚ˆã‚‹å¤±æ•—
 	function JoFail($id, $name, $comName, $kind, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA—\’è’n‚Ì{$init->tagName_}{$point}{$init->_tagName}‚ªğŒ‚ğ–‚½‚µ‚Ä‚¢‚È‚¢<strong>{$kind}</strong>‚¾‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€äºˆå®šåœ°ã®{$init->tagName_}{$point}{$init->_tagName}ãŒæ¡ä»¶ã‚’æº€ãŸã—ã¦ã„ãªã„<strong>{$kind}</strong>ã ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// “ss‚Ìí—Ş‚É‚æ‚é¸”s
+	// éƒ½å¸‚ã®ç¨®é¡ã«ã‚ˆã‚‹å¤±æ•—
 	function BokuFail($id, $name, $comName, $kind, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA—\’è’n‚Ì{$init->tagName_}{$point}{$init->_tagName}‚ªğŒ‚ğ–‚½‚µ‚½“ss‚Å‚È‚©‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€äºˆå®šåœ°ã®{$init->tagName_}{$point}{$init->_tagName}ãŒæ¡ä»¶ã‚’æº€ãŸã—ãŸéƒ½å¸‚ã§ãªã‹ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ü‚è‚É’¬‚ª‚È‚­‚Ä¸”s
+	// å‘¨ã‚Šã«ç”ºãŒãªãã¦å¤±æ•—
 	function NoTownAround($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA—\’è’n‚Ì{$init->tagName_}{$point}{$init->_tagName}‚Ìü•Ó‚ÉlŒû‚ª‚¢‚È‚©‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€äºˆå®šåœ°ã®{$init->tagName_}{$point}{$init->_tagName}ã®å‘¨è¾ºã«{$init->namePopulation}ãŒã„ãªã‹ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ¬Œ÷
+	// æˆåŠŸ
 	function landSuc($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Å{$init->tagComName_}{$comName}{$init->_tagComName}‚ªs‚í‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã§{$init->tagComName_}{$comName}{$init->_tagComName}ãŒè¡Œã‚ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‘qŒÉŠÖŒW
+	// å€‰åº«é–¢ä¿‚
 	function Souko($id, $name, $comName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Å{$init->tagComName_}{$comName}{$init->_tagComName}<strong>{$str}</strong>‚ªs‚í‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã§{$init->tagComName_}{$comName}{$init->_tagComName}<strong>{$str}</strong>ãŒè¡Œã‚ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‘qŒÉŠÖŒW
+	// å€‰åº«é–¢ä¿‚
 	function SoukoMax($id, $name, $comName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA—\’è’n‚Ì{$init->tagName_}{$point}{$init->_tagName}‚Ì<strong>{$str}</strong>‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€äºˆå®šåœ°ã®{$init->tagName_}{$point}{$init->_tagName}ã®<strong>{$str}</strong>ãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‘qŒÉŠÖŒW
+	// å€‰åº«é–¢ä¿‚
 	function SoukoLupin($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚Ö{$init->tagDisaster_}‘å‰ö“‚ªN“ü‚µ‚½‚æ‚¤‚Å‚·II{$init->_tagDisaster}",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¸{$init->tagDisaster_}å¤§æ€ªç›—ãŒä¾µå…¥ã—ãŸã‚ˆã†ã§ã™ï¼ï¼{$init->_tagDisaster}",$id);
 	}
-	// ®’nŒnƒƒO‚Ü‚Æ‚ß
+	// æ•´åœ°ç³»ãƒ­ã‚°ã¾ã¨ã‚
 	function landSucMatome($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<strong>Ë</strong> {$init->tagName_}{$point}{$init->_tagName}",$id);
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å{$init->tagComName_}{$comName}{$init->_tagComName}‚ªs‚í‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<strong>â‡’</strong> {$init->tagName_}{$point}{$init->_tagName}",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§{$init->tagComName_}{$comName}{$init->_tagComName}ãŒè¡Œã‚ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// –„‘ ‹à
+	// åŸ‹è”µé‡‘
 	function maizo($id, $name, $comName, $value) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}’†‚ÉA<strong>{$value}{$init->unitMoney}‚à‚Ì–„‘ ‹à</strong>‚ª”­Œ©‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§ã®{$init->tagComName_}{$comName}{$init->_tagComName}ä¸­ã«ã€<strong>{$value}{$init->unitMoney}ã‚‚ã®åŸ‹è”µé‡‘</strong>ãŒç™ºè¦‹ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
 	function noLandAround($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA—\’è’n‚Ì{$init->tagName_}{$point}{$init->_tagName}‚Ìü•Ó‚É—¤’n‚ª‚È‚©‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€äºˆå®šåœ°ã®{$init->tagName_}{$point}{$init->_tagName}ã®å‘¨è¾ºã«é™¸åœ°ãŒãªã‹ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// —‘”­Œ©
+	// åµç™ºè¦‹
 	function EggFound($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Å{$init->tagComName_}{$comName}{$init->_tagComName}’†‚ÉA<strong>‰½‚©‚Ì—‘</strong>‚ğ”­Œ©‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã§{$init->tagComName_}{$comName}{$init->_tagComName}ä¸­ã«ã€<strong>ä½•ã‹ã®åµ</strong>ã‚’ç™ºè¦‹ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// —‘›z‰»
+	// åµå­µåŒ–
 	function EggBomb($id, $name, $mName, $point, $lName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì{$lName}‚©‚ç<strong>‰öb{$mName}</strong>‚ª¶‚Ü‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®{$lName}ã‹ã‚‰<strong>æ€ªç£{$mName}</strong>ãŒç”Ÿã¾ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‚¨“yY
+	// ãŠåœŸç”£
 	function Miyage($id, $name, $lName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}‘¤‚Ì‚¨“yY‰®‚³‚ñ</strong>‚©‚ç<strong>{$value}{$str}</strong>‚à‚Ìû“ü‚ª‚ ‚è‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}å´ã®ãŠåœŸç”£å±‹ã•ã‚“</strong>ã‹ã‚‰<strong>{$value}{$str}</strong>ã‚‚ã®åå…¥ãŒã‚ã‚Šã¾ã—ãŸã€‚",$id);
 	}
-	// ûŠn
+	// åç©«
 	function Syukaku($id, $name, $lName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ª‚à‚½‚ç‚µ‚½–Lì‚É‚æ‚èA‚³‚ç‚É<strong>{$str}</strong>‚à‚ÌH—¿‚ªûŠn‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ãŒã‚‚ãŸã‚‰ã—ãŸè±Šä½œã«ã‚ˆã‚Šã€ã•ã‚‰ã«<strong>{$str}</strong>ã‚‚ã®{$init->nameFood}ãŒåç©«ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‹âs‰»
+	// éŠ€è¡ŒåŒ–
 	function Bank($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ª‹âs‚É‚È‚è‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ãŒéŠ€è¡Œã«ãªã‚Šã¾ã—ãŸã€‚",$id);
 	}
-	// ‰q¯‘Å‚¿ã‚°¬Œ÷
+	// è¡›æ˜Ÿæ‰“ã¡ä¸Šã’æˆåŠŸ
 	function Eiseisuc($id, $name, $kind, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å{$init->tagComName_}{$kind}{$str}{$init->_tagComName}‚É¬Œ÷‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§{$init->tagComName_}{$kind}{$str}{$init->_tagComName}ã«æˆåŠŸã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ‰q¯Œ‚’¾
+	// è¡›æ˜Ÿæ’ƒæ²ˆ
 	function Eiseifail($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å{$init->tagComName_}{$comName}{$init->_tagComName}‚ªs‚í‚ê‚Ü‚µ‚½‚ª‘Å‚¿ã‚°‚Í{$init->tagDisaster_}¸”s{$init->_tagDisaster}‚µ‚½‚æ‚¤‚Å‚·B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§{$init->tagComName_}{$comName}{$init->_tagComName}ãŒè¡Œã‚ã‚Œã¾ã—ãŸãŒæ‰“ã¡ä¸Šã’ã¯{$init->tagDisaster_}å¤±æ•—{$init->_tagDisaster}ã—ãŸã‚ˆã†ã§ã™ã€‚",$id);
 	}
-	// ‰q¯”j‰ó¬Œ÷
+	// è¡›æ˜Ÿç ´å£ŠæˆåŠŸ
 	function EiseiAtts($id, $tId, $name, $tName, $comName, $tEiseiname) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡{$init->_tagName}</A>‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}‚ÉŒü‚¯‚Ä{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢A<strong>{$tEiseiname}</strong>‚É–½’†B<strong>$tEiseiname</strong>‚ÍÕŒ`‚à‚È‚­Á‚µ”ò‚Ñ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶{$init->_tagName}</A>ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}ã«å‘ã‘ã¦{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã€<strong>{$tEiseiname}</strong>ã«å‘½ä¸­ã€‚<strong>$tEiseiname</strong>ã¯è·¡å½¢ã‚‚ãªãæ¶ˆã—é£›ã³ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‰q¯”j‰ó¸”s
+	// è¡›æ˜Ÿç ´å£Šå¤±æ•—
 	function EiseiAttf($id, $tId, $name, $tName, $comName, $tEiseiname) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}‚Ì<strong>{$tEiseiname}</strong>‚ÉŒü‚¯‚Ä{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢‚Ü‚µ‚½‚ªA‰½‚É‚à–½’†‚¹‚¸‰F’ˆ‚Ì”Ş•û‚Ö‚Æ”ò‚Ñ‹‚Á‚Ä‚µ‚Ü‚¢‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}ã®<strong>{$tEiseiname}</strong>ã«å‘ã‘ã¦{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã¾ã—ãŸãŒã€ä½•ã«ã‚‚å‘½ä¸­ã›ãšå®‡å®™ã®å½¼æ–¹ã¸ã¨é£›ã³å»ã£ã¦ã—ã¾ã„ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‰q¯ƒŒ[ƒU[
+	// è¡›æ˜Ÿãƒ¬ãƒ¼ã‚¶ãƒ¼
 	function EiseiLzr($id, $tId, $name, $tName, $comName, $tLname, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡{$init->_tagName}</A>‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$point}{$init->_tagName}‚ÉŒü‚¯‚Ä{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢A<strong>{$tLname}</strong>‚É–½’†Bˆê‘Ñ‚ª{$str}",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶{$init->_tagName}</A>ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$point}{$init->_tagName}ã«å‘ã‘ã¦{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã€<strong>{$tLname}</strong>ã«å‘½ä¸­ã€‚ä¸€å¸¯ãŒ{$str}",$id, $tId);
 	}
-	// –û“c”­Œ©
+	// æ²¹ç”°ç™ºè¦‹
 	function oilFound($id, $name, $point, $comName, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Å<strong>{$str}</strong>‚Ì—\Z‚ğ‚Â‚¬‚ñ‚¾{$init->tagComName_}{$comName}{$init->_tagComName}‚ªs‚í‚êA<strong>–û“c‚ªŒ@‚è“–‚Ä‚ç‚ê‚Ü‚µ‚½</strong>B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã§<strong>{$str}</strong>ã®äºˆç®—ã‚’ã¤ãè¾¼ã‚“ã {$init->tagComName_}{$comName}{$init->_tagComName}ãŒè¡Œã‚ã‚Œã€<strong>æ²¹ç”°ãŒæ˜ã‚Šå½“ã¦ã‚‰ã‚Œã¾ã—ãŸ</strong>ã€‚",$id);
 	}
-	// –û“c”­Œ©‚È‚ç‚¸
+	// æ²¹ç”°ç™ºè¦‹ãªã‚‰ãš
 	function oilFail($id, $name, $point, $comName, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Å<strong>{$str}</strong>‚Ì—\Z‚ğ‚Â‚¬‚ñ‚¾{$init->tagComName_}{$comName}{$init->_tagComName}‚ªs‚í‚ê‚Ü‚µ‚½‚ªA–û“c‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã§<strong>{$str}</strong>ã®äºˆç®—ã‚’ã¤ãè¾¼ã‚“ã {$init->tagComName_}{$comName}{$init->_tagComName}ãŒè¡Œã‚ã‚Œã¾ã—ãŸãŒã€æ²¹ç”°ã¯è¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚",$id);
 	}
-	// –h‰q{İA©”šƒZƒbƒg
+	// é˜²è¡›æ–½è¨­ã€è‡ªçˆ†ã‚»ãƒƒãƒˆ
 	function bombSet($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚Ì<strong>©”š‘•’u‚ªƒZƒbƒg</strong>‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã®<strong>è‡ªçˆ†è£…ç½®ãŒã‚»ãƒƒãƒˆ</strong>ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// –h‰q{İA©”šì“®
+	// é˜²è¡›æ–½è¨­ã€è‡ªçˆ†ä½œå‹•
 	function bombFire($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>A{$init->tagDisaster_}©”š‘•’uì“®II{$init->_tagDisaster}",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã€{$init->tagDisaster_}è‡ªçˆ†è£…ç½®ä½œå‹•ï¼ï¼{$init->_tagDisaster}",$id);
 	}
-	// ƒƒ‹ƒgƒ_ƒEƒ“”­¶
+	// ãƒ¡ãƒ«ãƒˆãƒ€ã‚¦ãƒ³ç™ºç”Ÿ
 	function CrushElector($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ÅA{$init->tagDisaster_}ƒƒ‹ƒgƒ_ƒEƒ“”­¶II{$init->_tagDisaster}ˆê‘Ñ‚ª…–v‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã§ã€{$init->tagDisaster_}ãƒ¡ãƒ«ãƒˆãƒ€ã‚¦ãƒ³ç™ºç”Ÿï¼ï¼{$init->_tagDisaster}ä¸€å¸¯ãŒæ°´æ²¡ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ’â“d”­¶
+	// åœé›»ç™ºç”Ÿ
 	function Teiden($id, $name) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ÅA{$init->tagDisaster_}’â“d”­¶II{$init->_tagDisaster}",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§ã€{$init->tagDisaster_}åœé›»ç™ºç”Ÿï¼ï¼{$init->_tagDisaster}",$id);
 	}
-	// “úÆ‚è”­¶
+	// æ—¥ç…§ã‚Šç™ºç”Ÿ
 	function Hideri($id, $name) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ÅA{$init->tagDisaster_}“úÆ‚è‚ª‘±‚«{$init->_tagDisaster}A“ss•”‚ÌlŒû‚ªŒ¸­‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§ã€{$init->tagDisaster_}æ—¥ç…§ã‚ŠãŒç¶šã{$init->_tagDisaster}ã€éƒ½å¸‚éƒ¨ã®{$init->namePopulation}ãŒæ¸›å°‘ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ‚É‚í‚©‰J”­¶
+	// ã«ã‚ã‹é›¨ç™ºç”Ÿ
 	function Niwakaame($id, $name) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ÅA{$init->tagDisaster_}‚É‚í‚©‰J{$init->_tagDisaster}‚ª~‚èAX‚ª‚¢‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§ã€{$init->tagDisaster_}ã«ã‚ã‹é›¨{$init->_tagDisaster}ãŒé™ã‚Šã€æ£®ãŒæ½¤ã„ã¾ã—ãŸã€‚",$id);
 	}
-	// A—Ñorƒ~ƒTƒCƒ‹Šî’n
+	// æ¤æ—orãƒŸã‚µã‚¤ãƒ«åŸºåœ°
 	function PBSuc($id, $name, $comName, $point) {
 		global $init;
-		$this->secret("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Å{$init->tagComName_}{$comName}{$init->_tagComName}‚ªs‚í‚ê‚Ü‚µ‚½B",$id);
-		$this->out("‚±‚±‚ë‚È‚µ‚©A{$init->tagName_}{$name}“‡{$init->_tagName}‚Ì<strong>X</strong>‚ª‘‚¦‚½‚æ‚¤‚Å‚·B",$id);
+		$this->secret("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã§{$init->tagComName_}{$comName}{$init->_tagComName}ãŒè¡Œã‚ã‚Œã¾ã—ãŸã€‚",$id);
+		$this->out("ã“ã“ã‚ãªã—ã‹ã€{$init->tagName_}{$name}å³¶{$init->_tagName}ã®<strong>æ£®</strong>ãŒå¢—ãˆãŸã‚ˆã†ã§ã™ã€‚",$id);
 	}
-	// ƒnƒŠƒ{ƒe
+	// ãƒãƒªãƒœãƒ†
 	function hariSuc($id, $name, $comName, $comName2, $point) {
 		global $init;
-		$this->secret("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Å{$init->tagComName_}{$comName}{$init->_tagComName}‚ªs‚í‚ê‚Ü‚µ‚½B",$id);
+		$this->secret("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã§{$init->tagComName_}{$comName}{$init->_tagComName}ãŒè¡Œã‚ã‚Œã¾ã—ãŸã€‚",$id);
 		$this->landSuc($id, $name, $comName2, $point);
 	}
-	// ‹L”O”èA”­Ë
+	// è¨˜å¿µç¢‘ã€ç™ºå°„
 	function monFly($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ª<strong>Œ‰¹‚Æ‚Æ‚à‚É”ò‚Ñ—§‚¿‚Ü‚µ‚½</strong>B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ãŒ<strong>è½ŸéŸ³ã¨ã¨ã‚‚ã«é£›ã³ç«‹ã¡ã¾ã—ãŸ</strong>ã€‚",$id);
 	}
-	// Às‹–‰Âƒ^[ƒ“
+	// å®Ÿè¡Œè¨±å¯ã‚¿ãƒ¼ãƒ³
 	function Forbidden($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍAÀs‚ª‹–‰Â‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚",$id);
 	}
-	// ŠÇ—l—a‚©‚è’†‚Ì‚½‚ß‹–‰Â‚³‚ê‚È‚¢
+	// ç®¡ç†äººé ã‹ã‚Šä¸­ã®ãŸã‚è¨±å¯ã•ã‚Œãªã„
 	function CheckKP($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA–Ú•W‚Ì“‡‚ªŠÇ—l—a‚©‚è’†‚Ì‚½‚ßÀs‚ª‹–‰Â‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€ç›®æ¨™ã®å³¶ãŒç®¡ç†äººé ã‹ã‚Šä¸­ã®ãŸã‚å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚",$id);
 	}
-	// “d—Í•s‘«
+	// é›»åŠ›ä¸è¶³
 	function Enehusoku($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA“d—Í•s‘«‚Ì‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€é›»åŠ›ä¸è¶³ã®ãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ƒ~ƒTƒCƒ‹Œ‚‚Æ‚¤‚Æ‚µ‚½‚ª“V‹C‚ªˆ«‚¢
+	// ãƒŸã‚µã‚¤ãƒ«æ’ƒã¨ã†ã¨ã—ãŸãŒå¤©æ°—ãŒæ‚ªã„
 	function msNoTenki($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍAˆ«“VŒó‚Ì‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€æ‚ªå¤©å€™ã®ãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ƒ~ƒTƒCƒ‹Œ‚‚Æ‚¤‚Æ‚µ‚½(or ‰öb”hŒ­‚µ‚æ‚¤‚Æ‚µ‚½)‚ªƒ^[ƒQƒbƒg‚ª‚¢‚È‚¢
+	// ãƒŸã‚µã‚¤ãƒ«æ’ƒã¨ã†ã¨ã—ãŸ(or æ€ªç£æ´¾é£ã—ã‚ˆã†ã¨ã—ãŸ)ãŒã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã„ãªã„
 	function msNoTarget($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA–Ú•W‚Ì“‡‚Él‚ªŒ©“–‚½‚ç‚È‚¢‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€ç›®æ¨™ã®å³¶ã«äººãŒè¦‹å½“ãŸã‚‰ãªã„ãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ƒ~ƒTƒCƒ‹Œ‚‚Æ‚¤‚Æ‚µ‚½‚ªŠî’n‚ª‚È‚¢
+	// ãƒŸã‚µã‚¤ãƒ«æ’ƒã¨ã†ã¨ã—ãŸãŒåŸºåœ°ãŒãªã„
 	function msNoBase($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA<strong>ƒ~ƒTƒCƒ‹İ”õ‚ğ•Û—L‚µ‚Ä‚¢‚È‚¢</strong>‚½‚ß‚ÉÀs‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€<strong>ãƒŸã‚µã‚¤ãƒ«è¨­å‚™ã‚’ä¿æœ‰ã—ã¦ã„ãªã„</strong>ãŸã‚ã«å®Ÿè¡Œã§ãã¾ã›ã‚“ã§ã—ãŸã€‚",$id);
 	}
-	// ƒ~ƒTƒCƒ‹Œ‚‚Æ‚¤‚Æ‚µ‚½‚ªÅ‘å”­Ë”‚ğ’´‚¦‚½
+	// ãƒŸã‚µã‚¤ãƒ«æ’ƒã¨ã†ã¨ã—ãŸãŒæœ€å¤§ç™ºå°„æ•°ã‚’è¶…ãˆãŸ
 	function msMaxOver($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA<strong>Å‘å”­Ë”‚ğ’´‚¦‚½</strong>‚½‚ß‚ÉÀs‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€<strong>æœ€å¤§ç™ºå°„æ•°ã‚’è¶…ãˆãŸ</strong>ãŸã‚ã«å®Ÿè¡Œã§ãã¾ã›ã‚“ã§ã—ãŸã€‚",$id);
 	}
-	// ƒXƒeƒ‹ƒXƒ~ƒTƒCƒ‹ƒƒO
+	// ã‚¹ãƒ†ãƒ«ã‚¹ãƒŸã‚µã‚¤ãƒ«ãƒ­ã‚°
 	function mslogS($id, $tId, $name, $tName, $comName, $point, $missiles, $missileA, $missileB, $missileC, $missileD, $missileE) {
 		global $init;
 		$missileBE = $missileB + $missileE;
 		$missileH = $missiles - $missileA - $missileC - $missileBE;
-		$this->secret("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$point}{$init->_tagName}’n“_‚ÉŒü‚¯‚Ä{$init->tagComName_}{$missiles}”­{$init->_tagComName}‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢‚Ü‚µ‚½B(—LŒø{$missileH}”­/‰öb–½’†{$missileD}”­/‰öb–³Œø{$missileC}”­/–h‰q{$missileBE}”­/–³Œø{$missileA}”­)",$id, $tId);
-		$this->late("<strong>‰½Ò‚©</strong>‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$point}{$init->_tagName}’n“_‚ÉŒü‚¯‚Ä{$init->tagComName_}{$missiles}”­{$init->_tagComName}‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢‚Ü‚µ‚½B(—LŒø{$missileH}”­/‰öb–½’†{$missileD}”­/‰öb–³Œø{$missileC}”­/–h‰q{$missileBE}”­/–³Œø{$missileA}”­)",$tId);
+		$this->secret("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã«å‘ã‘ã¦{$init->tagComName_}{$missiles}ç™º{$init->_tagComName}ã®{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã¾ã—ãŸã€‚(æœ‰åŠ¹{$missileH}ç™º/æ€ªç£å‘½ä¸­{$missileD}ç™º/æ€ªç£ç„¡åŠ¹{$missileC}ç™º/é˜²è¡›{$missileBE}ç™º/ç„¡åŠ¹{$missileA}ç™º)",$id, $tId);
+		$this->late("<strong>ä½•è€…ã‹</strong>ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã«å‘ã‘ã¦{$init->tagComName_}{$missiles}ç™º{$init->_tagComName}ã®{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã¾ã—ãŸã€‚(æœ‰åŠ¹{$missileH}ç™º/æ€ªç£å‘½ä¸­{$missileD}ç™º/æ€ªç£ç„¡åŠ¹{$missileC}ç™º/é˜²è¡›{$missileBE}ç™º/ç„¡åŠ¹{$missileA}ç™º)",$tId);
 	}
-	// ‚»‚Ì‘¼ƒ~ƒTƒCƒ‹ƒƒO
+	// ãã®ä»–ãƒŸã‚µã‚¤ãƒ«ãƒ­ã‚°
 	function mslog($id, $tId, $name, $tName, $comName, $point, $missiles, $missileA, $missileB, $missileC, $missileD, $missileE) {
 		global $init;
 		$missileBE = $missileB + $missileE;
 		$missileH = $missiles - $missileA - $missileC - $missileBE;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$point}{$init->_tagName}’n“_‚ÉŒü‚¯‚Ä{$init->tagComName_}{$missiles}”­{$init->_tagComName}‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢‚Ü‚µ‚½B(—LŒø{$missileH}”­/‰öb–½’†{$missileD}”­/‰öb–³Œø{$missileC}”­/–h‰q{$missileBE}”­/–³Œø{$missileA}”­)",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã«å‘ã‘ã¦{$init->tagComName_}{$missiles}ç™º{$init->_tagComName}ã®{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã¾ã—ãŸã€‚(æœ‰åŠ¹{$missileH}ç™º/æ€ªç£å‘½ä¸­{$missileD}ç™º/æ€ªç£ç„¡åŠ¹{$missileC}ç™º/é˜²è¡›{$missileBE}ç™º/ç„¡åŠ¹{$missileA}ç™º)",$id, $tId);
 	}
-	// —¤’n”j‰ó’eAR‚É–½’†
+	// é™¸åœ°ç ´å£Šå¼¾ã€å±±ã«å‘½ä¸­
 	function msLDMountain($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É–½’†B<strong>{$tLname}</strong>‚ÍÁ‚µ”ò‚ÑAr’n‚Æ‰»‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>{$tLname}</strong>ã«å‘½ä¸­ã€‚<strong>{$tLname}</strong>ã¯æ¶ˆã—é£›ã³ã€è’åœ°ã¨åŒ–ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// —¤’n”j‰ó’eAŠC’êŠî’n‚É–½’†
+	// é™¸åœ°ç ´å£Šå¼¾ã€æµ·åº•åŸºåœ°ã«å‘½ä¸­
 	function msLDSbase($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚É’……Œã”š”­A“¯’n“_‚É‚ ‚Á‚½<strong>{$tLname}</strong>‚ÍÕŒ`‚à‚È‚­‚«”ò‚Ñ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã«ç€æ°´å¾Œçˆ†ç™ºã€åŒåœ°ç‚¹ã«ã‚ã£ãŸ<strong>{$tLname}</strong>ã¯è·¡å½¢ã‚‚ãªãå¹ãé£›ã³ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// —¤’n”j‰ó’eA‰öb‚É–½’†
+	// é™¸åœ°ç ´å£Šå¼¾ã€æ€ªç£ã«å‘½ä¸­
 	function msLDMonster($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚É’…’e‚µ”š”­B—¤’n‚Í<strong>‰öb{$tLname}</strong>‚à‚ë‚Æ‚à…–v‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã«ç€å¼¾ã—çˆ†ç™ºã€‚é™¸åœ°ã¯<strong>æ€ªç£{$tLname}</strong>ã‚‚ã‚ã¨ã‚‚æ°´æ²¡ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// —¤’n”j‰ó’eAó£‚É–½’†
+	// é™¸åœ°ç ´å£Šå¼¾ã€æµ…ç€¬ã«å‘½ä¸­
 	function msLDSea1($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É’…’eBŠC’ê‚ª‚¦‚®‚ç‚ê‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>{$tLname}</strong>ã«ç€å¼¾ã€‚æµ·åº•ãŒãˆãã‚‰ã‚Œã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// —¤’n”j‰ó’eA‚»‚Ì‘¼‚Ì’nŒ`‚É–½’†
+	// é™¸åœ°ç ´å£Šå¼¾ã€ãã®ä»–ã®åœ°å½¢ã«å‘½ä¸­
 	function msLDLand($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É’…’eB—¤’n‚Í…–v‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>{$tLname}</strong>ã«ç€å¼¾ã€‚é™¸åœ°ã¯æ°´æ²¡ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ’nŒ`—²‹N’eAŠC’êŠî’n‚É–½’†
+	// åœ°å½¢éš†èµ·å¼¾ã€æµ·åº•åŸºåœ°ã«å‘½ä¸­
 	function msLUSbase($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚É’……Œã”š”­A“¯’n“_‚É‚ ‚Á‚½<strong>{$tLname}</strong>‚Íó£‚É–„‚Ü‚è‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã«ç€æ°´å¾Œçˆ†ç™ºã€åŒåœ°ç‚¹ã«ã‚ã£ãŸ<strong>{$tLname}</strong>ã¯æµ…ç€¬ã«åŸ‹ã¾ã‚Šã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ’nŒ`—²‹N’eA[‚¢ŠC‚É–½’†
+	// åœ°å½¢éš†èµ·å¼¾ã€æ·±ã„æµ·ã«å‘½ä¸­
 	function msLUSea0($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É’……BŠC’ê‚ª—²‹N‚µó£‚Æ‚È‚è‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>{$tLname}</strong>ã«ç€æ°´ã€‚æµ·åº•ãŒéš†èµ·ã—æµ…ç€¬ã¨ãªã‚Šã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ’nŒ`—²‹N’eAó£‚É–½’†
+	// åœ°å½¢éš†èµ·å¼¾ã€æµ…ç€¬ã«å‘½ä¸­
 	function msLUSea1($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É’…’eBŠC’ê‚ª—²‹N‚µr’n‚Æ‚È‚è‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>{$tLname}</strong>ã«ç€å¼¾ã€‚æµ·åº•ãŒéš†èµ·ã—è’åœ°ã¨ãªã‚Šã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ’nŒ`—²‹N’eA‰öb‚É–½’†
+	// åœ°å½¢éš†èµ·å¼¾ã€æ€ªç£ã«å‘½ä¸­
 	function msLUMonster($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚É’…’eB—¤’n‚Í—²‹N‚µR‚Æ‚È‚èA<strong>‰öb{$tLname}</strong>‚Í¶–„‚ß‚Æ‚È‚è‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã«ç€å¼¾ã€‚é™¸åœ°ã¯éš†èµ·ã—å±±ã¨ãªã‚Šã€<strong>æ€ªç£{$tLname}</strong>ã¯ç”ŸåŸ‹ã‚ã¨ãªã‚Šã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ’nŒ`—²‹N’eA‚»‚Ì‘¼‚Ì’nŒ`‚É–½’†
+	// åœ°å½¢éš†èµ·å¼¾ã€ãã®ä»–ã®åœ°å½¢ã«å‘½ä¸­
 	function msLULand($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É’…’eB—¤’n‚Í—²‹N‚µR‚Æ‚È‚è‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>{$tLname}</strong>ã«ç€å¼¾ã€‚é™¸åœ°ã¯éš†èµ·ã—å±±ã¨ãªã‚Šã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ƒoƒCƒIƒ~ƒTƒCƒ‹’…’eA‰˜õ
+	// ãƒã‚¤ã‚ªãƒŸã‚µã‚¤ãƒ«ç€å¼¾ã€æ±šæŸ“
 	function msPollution($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É’…’eBˆê‘Ñ‚ª‰˜õ‚³‚ê‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>{$tLname}</strong>ã«ç€å¼¾ã€‚ä¸€å¸¯ãŒæ±šæŸ“ã•ã‚Œã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ƒXƒeƒ‹ƒXƒ~ƒTƒCƒ‹A‰öb‚É–½’†Ad‰»’†‚É‚Ä–³
+	// ã‚¹ãƒ†ãƒ«ã‚¹ãƒŸã‚µã‚¤ãƒ«ã€æ€ªç£ã«å‘½ä¸­ã€ç¡¬åŒ–ä¸­ã«ã¦ç„¡å‚·
 	function msMonNoDamageS($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->secret("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É–½’†A‚µ‚©‚µd‰»ó‘Ô‚¾‚Á‚½‚½‚ßŒø‰Ê‚ª‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",$id, $tId);
-		$this->out("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É–½’†A‚µ‚©‚µd‰»ó‘Ô‚¾‚Á‚½‚½‚ßŒø‰Ê‚ª‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",$tId);
+		$this->secret("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å‘½ä¸­ã€ã—ã‹ã—ç¡¬åŒ–çŠ¶æ…‹ã ã£ãŸãŸã‚åŠ¹æœãŒã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å‘½ä¸­ã€ã—ã‹ã—ç¡¬åŒ–çŠ¶æ…‹ã ã£ãŸãŸã‚åŠ¹æœãŒã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚",$tId);
 	}
-	// ’Êíƒ~ƒTƒCƒ‹A‰öb‚É–½’†Ad‰»’†‚É‚Ä–³
+	// é€šå¸¸ãƒŸã‚µã‚¤ãƒ«ã€æ€ªç£ã«å‘½ä¸­ã€ç¡¬åŒ–ä¸­ã«ã¦ç„¡å‚·
 	function msMonNoDamage($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É–½’†A‚µ‚©‚µd‰»ó‘Ô‚¾‚Á‚½‚½‚ßŒø‰Ê‚ª‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å‘½ä¸­ã€ã—ã‹ã—ç¡¬åŒ–çŠ¶æ…‹ã ã£ãŸãŸã‚åŠ¹æœãŒã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚",$id, $tId);
 	}
-	// ƒXƒeƒ‹ƒXƒ~ƒTƒCƒ‹Œ‚‚Á‚½‚ª‰öb‚É’@‚«—‚Æ‚³‚ê‚é
+	// ã‚¹ãƒ†ãƒ«ã‚¹ãƒŸã‚µã‚¤ãƒ«æ’ƒã£ãŸãŒæ€ªç£ã«å©ãè½ã¨ã•ã‚Œã‚‹
 	function msMonsCaughtS($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->secret("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É’@‚«—‚Æ‚³‚ê‚Ü‚µ‚½B",$id, $tId);
-	$this->late("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É’@‚«—‚Æ‚³‚ê‚Ü‚µ‚½B",$tId);
+		$this->secret("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å©ãè½ã¨ã•ã‚Œã¾ã—ãŸã€‚",$id, $tId);
+	$this->late("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å©ãè½ã¨ã•ã‚Œã¾ã—ãŸã€‚",$tId);
 	}
-	// ’Êíƒ~ƒTƒCƒ‹Œ‚‚Á‚½‚ª‰öb‚É’@‚«—‚Æ‚³‚ê‚é
+	// é€šå¸¸ãƒŸã‚µã‚¤ãƒ«æ’ƒã£ãŸãŒæ€ªç£ã«å©ãè½ã¨ã•ã‚Œã‚‹
 	function msMonsCaught($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É’@‚«—‚Æ‚³‚ê‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å©ãè½ã¨ã•ã‚Œã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ƒXƒeƒ‹ƒXƒ~ƒTƒCƒ‹A‰öb‚É–½’†AE
+	// ã‚¹ãƒ†ãƒ«ã‚¹ãƒŸã‚µã‚¤ãƒ«ã€æ€ªç£ã«å‘½ä¸­ã€æ®ºå‚·
 	function msMonsKillS($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->secret("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É–½’†B<strong>‰öb{$tLname}</strong>‚Í—Ís‚«A“|‚ê‚Ü‚µ‚½B",$id, $tId);
-		$this->late("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É–½’†B<strong>‰öb{$tLname}</strong>‚Í—Ís‚«A“|‚ê‚Ü‚µ‚½B", $tId);
+		$this->secret("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å‘½ä¸­ã€‚<strong>æ€ªç£{$tLname}</strong>ã¯åŠ›å°½ãã€å€’ã‚Œã¾ã—ãŸã€‚",$id, $tId);
+		$this->late("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å‘½ä¸­ã€‚<strong>æ€ªç£{$tLname}</strong>ã¯åŠ›å°½ãã€å€’ã‚Œã¾ã—ãŸã€‚", $tId);
 	}
-	// ’Êíƒ~ƒTƒCƒ‹A‰öb‚É–½’†AE
+	// é€šå¸¸ãƒŸã‚µã‚¤ãƒ«ã€æ€ªç£ã«å‘½ä¸­ã€æ®ºå‚·
 	function msMonsKill($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É–½’†B<strong>‰öb{$tLname}</strong>‚Í—Ís‚«A“|‚ê‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å‘½ä¸­ã€‚<strong>æ€ªç£{$tLname}</strong>ã¯åŠ›å°½ãã€å€’ã‚Œã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‰öb‚Ì€‘ÌiƒXƒeƒ‹ƒXj
+	// æ€ªç£ã®æ­»ä½“ï¼ˆã‚¹ãƒ†ãƒ«ã‚¹ï¼‰
 	function msMonMoneyS($id, $tId, $tLname, $value) {
 		global $init;
-		$this->secret("-<strong>‰öb{$tLname}</strong>‚ÌcŠ[‚É‚ÍA<strong>{$value}{$init->unitMoney}</strong>‚Ì’l‚ª•t‚«‚Ü‚µ‚½B",$id, $tId);
-		$this->late("-<strong>‰öb{$tLname}</strong>‚ÌcŠ[‚É‚ÍA<strong>{$value}{$init->unitMoney}</strong>‚Ì’l‚ª•t‚«‚Ü‚µ‚½B",$tId);
+		$this->secret("-<strong>æ€ªç£{$tLname}</strong>ã®æ®‹éª¸ã«ã¯ã€<strong>{$value}{$init->unitMoney}</strong>ã®å€¤ãŒä»˜ãã¾ã—ãŸã€‚",$id, $tId);
+		$this->late("-<strong>æ€ªç£{$tLname}</strong>ã®æ®‹éª¸ã«ã¯ã€<strong>{$value}{$init->unitMoney}</strong>ã®å€¤ãŒä»˜ãã¾ã—ãŸã€‚",$tId);
 	}
-	// ‰öb‚Ì€‘Ìi’Êíj
+	// æ€ªç£ã®æ­»ä½“ï¼ˆé€šå¸¸ï¼‰
 	function msMonMoney($id, $tId, $tLname, $value) {
 		global $init;
-		$this->out("-<strong>‰öb{$tLname}</strong>‚ÌcŠ[‚É‚ÍA<strong>{$value}{$init->unitMoney}</strong>‚Ì’l‚ª•t‚«‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-<strong>æ€ªç£{$tLname}</strong>ã®æ®‹éª¸ã«ã¯ã€<strong>{$value}{$init->unitMoney}</strong>ã®å€¤ãŒä»˜ãã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ƒXƒeƒ‹ƒXƒ~ƒTƒCƒ‹A‰öb‚É–½’†Aƒ_ƒ[ƒW
+	// ã‚¹ãƒ†ãƒ«ã‚¹ãƒŸã‚µã‚¤ãƒ«ã€æ€ªç£ã«å‘½ä¸­ã€ãƒ€ãƒ¡ãƒ¼ã‚¸
 	function msMonsterS($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->secret("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É–½’†B<strong>‰öb{$tLname}</strong>‚Í‹ê‚µ‚»‚¤‚É™ôšK‚µ‚Ü‚µ‚½B",$id, $tId);
-		$this->late("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É–½’†B<strong>‰öb{$tLname}</strong>‚Í‹ê‚µ‚»‚¤‚É™ôšK‚µ‚Ü‚µ‚½B",$tId);
+		$this->secret("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å‘½ä¸­ã€‚<strong>æ€ªç£{$tLname}</strong>ã¯è‹¦ã—ãã†ã«å’†å“®ã—ã¾ã—ãŸã€‚",$id, $tId);
+		$this->late("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å‘½ä¸­ã€‚<strong>æ€ªç£{$tLname}</strong>ã¯è‹¦ã—ãã†ã«å’†å“®ã—ã¾ã—ãŸã€‚",$tId);
 	}
-	// ƒoƒCƒIƒ~ƒTƒCƒ‹A‰öb‚É–½’†A“Ë‘R•ÏˆÙ
+	// ãƒã‚¤ã‚ªãƒŸã‚µã‚¤ãƒ«ã€æ€ªç£ã«å‘½ä¸­ã€çªç„¶å¤‰ç•°
 	function msMutation($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É–½’†B<strong>‰öb{$tLname}</strong>‚É“Ë‘R•ÏˆÙ‚ª¶‚¶‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å‘½ä¸­ã€‚<strong>æ€ªç£{$tLname}</strong>ã«çªç„¶å¤‰ç•°ãŒç”Ÿã˜ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// Ã–°’e‚ª‰öb‚É–½’†
+	// å‚¬çœ å¼¾ãŒæ€ªç£ã«å‘½ä¸­
 	function MsSleeper($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Ì<strong>‰öb{$tLname}</strong>‚ÍÃ–°’e‚É‚æ‚Á‚Ä–°‚Á‚Ä‚µ‚Ü‚Á‚½‚æ‚¤‚Å‚·B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã®<strong>æ€ªç£{$tLname}</strong>ã¯å‚¬çœ å¼¾ã«ã‚ˆã£ã¦çœ ã£ã¦ã—ã¾ã£ãŸã‚ˆã†ã§ã™ã€‚",$id, $tId);
 	}
-	// ‡–°’†‚Ì‰öb‚Éƒ~ƒTƒCƒ‹–½’†
+	// ç¡çœ ä¸­ã®æ€ªç£ã«ãƒŸã‚µã‚¤ãƒ«å‘½ä¸­
 	function MsWakeup($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å–°‚Á‚Ä‚¢‚½<strong>‰öb{$tLname}</strong>‚Éƒ~ƒTƒCƒ‹‚ª–½’†A<strong>‰öb{$tLname}</strong>‚Í–Ú‚ğŠo‚Ü‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§çœ ã£ã¦ã„ãŸ<strong>æ€ªç£{$tLname}</strong>ã«ãƒŸã‚µã‚¤ãƒ«ãŒå‘½ä¸­ã€<strong>æ€ªç£{$tLname}</strong>ã¯ç›®ã‚’è¦šã¾ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‡–°’†‚Ì‰öb‚ª–ÚŠo‚ß‚é
+	// ç¡çœ ä¸­ã®æ€ªç£ãŒç›®è¦šã‚ã‚‹
 	function MonsWakeup($id, $name, $lName, $point, $mName) {
 		global $init;
-			$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å–°‚Á‚Ä‚¢‚½<strong>‰öb{$mName}</strong>‚Í–Ú‚ğŠo‚Ü‚µ‚Ü‚µ‚½B",$id);
+			$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§çœ ã£ã¦ã„ãŸ<strong>æ€ªç£{$mName}</strong>ã¯ç›®ã‚’è¦šã¾ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ’Êíƒ~ƒTƒCƒ‹A‰öb‚É–½’†Aƒ_ƒ[ƒW
+	// é€šå¸¸ãƒŸã‚µã‚¤ãƒ«ã€æ€ªç£ã«å‘½ä¸­ã€ãƒ€ãƒ¡ãƒ¼ã‚¸
 	function msMonster($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>‰öb{$tLname}</strong>‚É–½’†B<strong>‰öb{$tLname}</strong>‚Í‹ê‚µ‚»‚¤‚É™ôšK‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>æ€ªç£{$tLname}</strong>ã«å‘½ä¸­ã€‚<strong>æ€ªç£{$tLname}</strong>ã¯è‹¦ã—ãã†ã«å’†å“®ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ƒXƒeƒ‹ƒXƒ~ƒTƒCƒ‹’Êí’nŒ`‚É–½’†
+	// ã‚¹ãƒ†ãƒ«ã‚¹ãƒŸã‚µã‚¤ãƒ«é€šå¸¸åœ°å½¢ã«å‘½ä¸­
 	function msNormalS($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->secret("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É–½’†Aˆê‘Ñ‚ª‰ó–Å‚µ‚Ü‚µ‚½B",$id, $tId);
-		$this->late("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É–½’†Aˆê‘Ñ‚ª‰ó–Å‚µ‚Ü‚µ‚½B",$tId);
+		$this->secret("-{$tPoint}ã®<strong>{$tLname}</strong>ã«å‘½ä¸­ã€ä¸€å¸¯ãŒå£Šæ»…ã—ã¾ã—ãŸã€‚",$id, $tId);
+		$this->late("-{$tPoint}ã®<strong>{$tLname}</strong>ã«å‘½ä¸­ã€ä¸€å¸¯ãŒå£Šæ»…ã—ã¾ã—ãŸã€‚",$tId);
 	}
-	// ’Êíƒ~ƒTƒCƒ‹’Êí’nŒ`‚É–½’†
+	// é€šå¸¸ãƒŸã‚µã‚¤ãƒ«é€šå¸¸åœ°å½¢ã«å‘½ä¸­
 	function msNormal($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É–½’†Aˆê‘Ñ‚ª‰ó–Å‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>{$tLname}</strong>ã«å‘½ä¸­ã€ä¸€å¸¯ãŒå£Šæ»…ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ƒXƒeƒ‹ƒXƒ~ƒTƒCƒ‹‹K–ÍŒ¸­
+	// ã‚¹ãƒ†ãƒ«ã‚¹ãƒŸã‚µã‚¤ãƒ«è¦æ¨¡æ¸›å°‘
 	function msGensyoS($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->secret("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É–½’†A‹K–Í‚ªŒ¸­‚µ‚Ü‚µ‚½B",$id, $tId);
-		$this->late("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É–½’†A‹K–Í‚ªŒ¸­‚µ‚Ü‚µ‚½B",$tId);
+		$this->secret("-{$tPoint}ã®<strong>{$tLname}</strong>ã«å‘½ä¸­ã€è¦æ¨¡ãŒæ¸›å°‘ã—ã¾ã—ãŸã€‚",$id, $tId);
+		$this->late("-{$tPoint}ã®<strong>{$tLname}</strong>ã«å‘½ä¸­ã€è¦æ¨¡ãŒæ¸›å°‘ã—ã¾ã—ãŸã€‚",$tId);
 	}
-	// ’Êíƒ~ƒTƒCƒ‹‹K–ÍŒ¸­
+	// é€šå¸¸ãƒŸã‚µã‚¤ãƒ«è¦æ¨¡æ¸›å°‘
 	function msGensyo($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É–½’†A‹K–Í‚ªŒ¸­‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>{$tLname}</strong>ã«å‘½ä¸­ã€è¦æ¨¡ãŒæ¸›å°‘ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ’Êíƒ~ƒTƒCƒ‹–h‰q{İ‚É–½’†
+	// é€šå¸¸ãƒŸã‚µã‚¤ãƒ«é˜²è¡›æ–½è¨­ã«å‘½ä¸­
 	function msDefence($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->out("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É–½’†‚µ‚Ü‚µ‚½‚ª”íŠQ‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",$id, $tId);
+		$this->out("-{$tPoint}ã®<strong>{$tLname}</strong>ã«å‘½ä¸­ã—ã¾ã—ãŸãŒè¢«å®³ã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚",$id, $tId);
 	}
-	// ƒXƒeƒ‹ƒXƒ~ƒTƒCƒ‹–h‰q{İ‚É–½’†
+	// ã‚¹ãƒ†ãƒ«ã‚¹ãƒŸã‚µã‚¤ãƒ«é˜²è¡›æ–½è¨­ã«å‘½ä¸­
 	function msDefenceS($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
 		global $init;
-		$this->secret("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É–½’†‚µ‚Ü‚µ‚½‚ª”íŠQ‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",$id, $tId);
-	$this->late("-{$tPoint}‚Ì<strong>{$tLname}</strong>‚É–½’†‚µ‚Ü‚µ‚½‚ª”íŠQ‚Í‚ ‚è‚Ü‚¹‚ñ‚Å‚µ‚½B",$tId);
+		$this->secret("-{$tPoint}ã®<strong>{$tLname}</strong>ã«å‘½ä¸­ã—ã¾ã—ãŸãŒè¢«å®³ã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚",$id, $tId);
+	$this->late("-{$tPoint}ã®<strong>{$tLname}</strong>ã«å‘½ä¸­ã—ã¾ã—ãŸãŒè¢«å®³ã¯ã‚ã‚Šã¾ã›ã‚“ã§ã—ãŸã€‚",$tId);
 	}
-	// ƒ~ƒTƒCƒ‹“ï–¯“’…
+	// ãƒŸã‚µã‚¤ãƒ«é›£æ°‘åˆ°ç€
 	function msBoatPeople($id, $name, $achive) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚É‚Ç‚±‚©‚ç‚Æ‚à‚È‚­<strong>{$achive}{$init->unitPop}‚à‚Ì“ï–¯</strong>‚ª•Y’…‚µ‚Ü‚µ‚½B<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Í‰õ‚­ó‚¯“ü‚ê‚½‚æ‚¤‚Å‚·B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã«ã©ã“ã‹ã‚‰ã¨ã‚‚ãªã<strong>{$achive}{$init->unitPop}ã‚‚ã®é›£æ°‘</strong>ãŒæ¼‚ç€ã—ã¾ã—ãŸã€‚<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã¯å¿«ãå—ã‘å…¥ã‚ŒãŸã‚ˆã†ã§ã™ã€‚",$id);
 	}
-	// ‰öb”hŒ­
+	// æ€ªç£æ´¾é£
 	function monsSend($id, $tId, $name, $tName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<strong>l‘¢‰öb</strong>‚ğŒš‘¢B<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}‚Ö‘—‚è‚±‚İ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<strong>äººé€ æ€ªç£</strong>ã‚’å»ºé€ ã€‚<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}ã¸é€ã‚Šã“ã¿ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‰q¯Á–ÅHI
+	// è¡›æ˜Ÿæ¶ˆæ»…ï¼Ÿï¼
 	function EiseiEnd($id, $name, $tEiseiname) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Ì<strong>{$tEiseiname}</strong>‚Í{$init->tagDisaster_}•ö‰ó{$init->_tagDisaster}‚µ‚½‚æ‚¤‚Å‚·II",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã®<strong>{$tEiseiname}</strong>ã¯{$init->tagDisaster_}å´©å£Š{$init->_tagDisaster}ã—ãŸã‚ˆã†ã§ã™ï¼ï¼",$id);
 	}
-	// íŠÍA‰öb‚ÉUŒ‚
+	// æˆ¦è‰¦ã€æ€ªç£ã«æ”»æ’ƒ
 	function SenkanMissile($id, $tId, $name, $tName, $lName, $point, $tPoint, $tmonsName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}<strong>{$lName}</strong>‚ª‘½’e“ªƒ~ƒTƒCƒ‹‚ğ”­Ë‚µA{$tPoint}‚Ì<strong>{$tmonsName}</strong>‚É–½’†‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}<strong>{$lName}</strong>ãŒå¤šå¼¾é ­ãƒŸã‚µã‚¤ãƒ«ã‚’ç™ºå°„ã—ã€{$tPoint}ã®<strong>{$tmonsName}</strong>ã«å‘½ä¸­ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‰öb‚ ‚¤‚¿
+	// æ€ªç£ã‚ã†ã¡
 	function BariaAttack($id, $name, $lName, $point, $mName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>‰öb{$mName}</strong>‚ª‹­—Í‚È—Íê‚É‰Ÿ‚µ’×‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>æ€ªç£{$mName}</strong>ãŒå¼·åŠ›ãªåŠ›å ´ã«æŠ¼ã—æ½°ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‰öb—A‘—‚É¸”s
+	// æ€ªç£è¼¸é€ã«å¤±æ•—
 	function MonsNoSleeper($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA‡–°’†‚Ì‰öb‚ª‚¢‚È‚©‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€ç¡çœ ä¸­ã®æ€ªç£ãŒã„ãªã‹ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‰öb—A‘—
+	// æ€ªç£è¼¸é€
 	function monsSendSleeper($id, $tId, $name, $tName, $lName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å–°‚Á‚Ä‚¢‚½<strong>‰öb{$lName}</strong>‚ªA<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}‚Ö‘—‚è‚±‚Ü‚ê‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§çœ ã£ã¦ã„ãŸ<strong>æ€ªç£{$lName}</strong>ãŒã€<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}ã¸é€ã‚Šã“ã¾ã‚Œã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// —Ao
+	// è¼¸å‡º
 	function sell($id, $name, $comName, $value, $unit) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<strong>{$value}{$unit}</strong>‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<strong>{$value}{$unit}</strong>ã®{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã¾ã—ãŸã€‚",$id);
 	}
-	// ‰‡•
+	// æ´åŠ©
 	function aid($id, $tId, $name, $tName, $comName, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}‚Ö<strong>{$str}</strong>‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}ã¸<strong>{$str}</strong>ã®{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// —U’vŠˆ“®
+	// èª˜è‡´æ´»å‹•
 	function propaganda($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å{$init->tagComName_}{$comName}{$init->_tagComName}‚ªs‚í‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§{$init->tagComName_}{$comName}{$init->_tagComName}ãŒè¡Œã‚ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// •úŠü
+	// æ”¾æ£„
 	function giveup($id, $name) {
 		global $init;
-		$this->out("{$init->tagName_}{$name}“‡{$init->_tagName}‚Í•úŠü‚³‚êA<strong>–³l“‡</strong>‚É‚È‚è‚Ü‚µ‚½B",$id);
-		$this->history("{$init->tagName_}{$name}“‡{$init->_tagName}A•úŠü‚³‚ê<strong>–³l“‡</strong>‚Æ‚È‚éB");
+		$this->out("{$init->tagName_}{$name}å³¶{$init->_tagName}ã¯æ”¾æ£„ã•ã‚Œã€<strong>æ»…äº¡</strong>ã—ã¾ã—ãŸã€‚",$id);
+		$this->history("{$init->tagName_}{$name}å³¶{$init->_tagName}ã€æ”¾æ£„ã•ã‚Œ<strong>æ»…äº¡</strong>ã™ã‚‹ã€‚");
 	}
-	// –û“c‚©‚ç‚Ìû“ü
+	// æ²¹ç”°ã‹ã‚‰ã®åå…¥
 	function oilMoney($id, $name, $lName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚©‚çA<strong>{$str}</strong>‚Ìû‰v‚ªã‚ª‚è‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã‹ã‚‰ã€<strong>{$str}</strong>ã®åç›ŠãŒä¸ŠãŒã‚Šã¾ã—ãŸã€‚",$id);
 	}
-	// –û“cŒÍŠ‰
+	// æ²¹ç”°æ¯æ¸‡
 	function oilEnd($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ÍŒÍŠ‰‚µ‚½‚æ‚¤‚Å‚·B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¯æ¯æ¸‡ã—ãŸã‚ˆã†ã§ã™ã€‚",$id);
 	}
-	// •ó‚­‚¶w“ü
+	// å®ãã˜è³¼å…¥
 	function buyLot($id, $name, $comName, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å<strong>{$str}</strong>•ª‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}‚ªs‚í‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§<strong>{$str}</strong>åˆ†ã®{$init->tagComName_}{$comName}{$init->_tagComName}ãŒè¡Œã‚ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// •ó‚­‚¶Š®”„
+	// å®ãã˜å®Œå£²
 	function noLot($id, $name, $comName) {
 		global $init;
-		$this->out("<strong>•ó‚­‚¶Š®”„‚Ì‚½‚ß</strong>A<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ÍA{$init->tagComName_}{$comName}{$init->_tagComName}‚ªo—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½B",$id);
+		$this->out("<strong>å®ãã˜å®Œå£²ã®ãŸã‚</strong>ã€<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã¯ã€{$init->tagComName_}{$comName}{$init->_tagComName}ãŒå‡ºæ¥ã¾ã›ã‚“ã§ã—ãŸã€‚",$id);
 	}
-	// •ó‚­‚¶û“ü
+	// å®ãã˜åå…¥
 	function LotteryMoney($id, $name, $str, $syo) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<strong>•ó‚­‚¶{$syo}“™Ü</strong>‚É“–‘II<strong>{$str}</strong>‚Ì“–‘I‹à‚ğó‚¯æ‚è‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<strong>å®ãã˜{$syo}ç­‰è³</strong>ã«å½“é¸ï¼<strong>{$str}</strong>ã®å½“é¸é‡‘ã‚’å—ã‘å–ã‚Šã¾ã—ãŸã€‚",$id);
 	}
-	// —V‰€’n‚©‚ç‚Ìû“ü
+	// éŠåœ’åœ°ã‹ã‚‰ã®åå…¥
 	function ParkMoney($id, $name, $lName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<B>{$lName}</B>‚©‚çA<B>{$str}</B>‚Ìû‰v‚ªã‚ª‚è‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<B>{$lName}</B>ã‹ã‚‰ã€<B>{$str}</B>ã®åç›ŠãŒä¸ŠãŒã‚Šã¾ã—ãŸã€‚",$id);
 	}
-	// —V‰€’n‚ÌƒCƒxƒ“ƒg
+	// éŠåœ’åœ°ã®ã‚¤ãƒ™ãƒ³ãƒˆ
 	function ParkEvent($id, $name, $lName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<B>{$lName}</B>‚ÅƒCƒxƒ“ƒg‚ªŠJÃ‚³‚êA<B>{$str}</B>‚ÌH—¿‚ªÁ”ï‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<B>{$lName}</B>ã§ã‚¤ãƒ™ãƒ³ãƒˆãŒé–‹å‚¬ã•ã‚Œã€<B>{$str}</B>ã®{$init->nameFood}ãŒæ¶ˆè²»ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// —V‰€’n‚ÌƒCƒxƒ“ƒg‘û
+	// éŠåœ’åœ°ã®ã‚¤ãƒ™ãƒ³ãƒˆå¢—å
 	function ParkEventLuck($id, $name, $lName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<B>{$lName}</B>‚ÅŠJÃ‚³‚ê‚½ƒCƒxƒ“ƒg‚ª¬Œ÷‚µ‚Ä<B>{$str}</B>‚Ìû‰v‚ªã‚ª‚è‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<B>{$lName}</B>ã§é–‹å‚¬ã•ã‚ŒãŸã‚¤ãƒ™ãƒ³ãƒˆãŒæˆåŠŸã—ã¦<B>{$str}</B>ã®åç›ŠãŒä¸ŠãŒã‚Šã¾ã—ãŸã€‚",$id);
 	}
-	// —V‰€’n‚ÌƒCƒxƒ“ƒgŒ¸û
+	// éŠåœ’åœ°ã®ã‚¤ãƒ™ãƒ³ãƒˆæ¸›å
 	function ParkEventLoss($id, $name, $lName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<B>{$lName}</B>‚ÅŠJÃ‚³‚ê‚½ƒCƒxƒ“ƒg‚ª¸”s‚µ‚Ä<B>{$str}</B>‚Ì‘¹¸‚ª‚Å‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<B>{$lName}</B>ã§é–‹å‚¬ã•ã‚ŒãŸã‚¤ãƒ™ãƒ³ãƒˆãŒå¤±æ•—ã—ã¦<B>{$str}</B>ã®æå¤±ãŒã§ã¾ã—ãŸã€‚",$id);
 	}
-	// —V‰€’n‚ª•Â‰€
+	// éŠåœ’åœ°ãŒé–‰åœ’
 	function ParkEnd($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<B>{$lName}</B>‚Í{İ‚ª˜V‹€‰»‚µ‚½‚½‚ß•Â‰€‚Æ‚È‚è‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<B>{$lName}</B>ã¯æ–½è¨­ãŒè€æœ½åŒ–ã—ãŸãŸã‚é–‰åœ’ã¨ãªã‚Šã¾ã—ãŸã€‚",$id);
 	}
-	// ‰öbA–h‰q{İ‚ğ“¥‚Ş
+	// æ€ªç£ã€é˜²è¡›æ–½è¨­ã‚’è¸ã‚€
 	function monsMoveDefence($id, $name, $lName, $point, $mName) {
 		global $init;
-		$this->out("<strong>‰öb{$mName}</strong>‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚Ö“’BA<strong>{$lName}‚Ì©”š‘•’u‚ªì“®II</strong>",$id);
+		$this->out("<strong>æ€ªç£{$mName}</strong>ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¸åˆ°é”ã€<strong>{$lName}ã®è‡ªçˆ†è£…ç½®ãŒä½œå‹•ï¼ï¼</strong>",$id);
 	}
-	// ‰öb‚ª©”š‚·‚é
+	// æ€ªç£ãŒè‡ªçˆ†ã™ã‚‹
 	function MonsExplosion($id, $name, $point, $mName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>‰öb{$mName}</strong>‚ª<strong>‘å”š”­</strong>‚ğ‹N‚±‚µ‚Ü‚µ‚½I",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>æ€ªç£{$mName}</strong>ãŒ<strong>å¤§çˆ†ç™º</strong>ã‚’èµ·ã“ã—ã¾ã—ãŸï¼",$id);
 	}
-	// ‰öb•ª—ô
+	// æ€ªç£åˆ†è£‚
 	function monsBunretu($id, $name, $lName, $point, $mName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚É<strong>‰öb{$mName}</strong>‚ª•ª—ô‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã«<strong>æ€ªç£{$mName}</strong>ãŒåˆ†è£‚ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ‰öb“®‚­
+	// æ€ªç£å‹•ã
 	function monsMove($id, $name, $lName, $point, $mName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ª<strong>‰öb{$mName}</strong>‚É“¥‚İr‚ç‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ãŒ<strong>æ€ªç£{$mName}</strong>ã«è¸ã¿è’ã‚‰ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‚¼‚ç‚·“®‚­
+	// ãã‚‰ã™å‹•ã
 	function ZorasuMove($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ª<strong>‚¼‚ç‚·</strong>‚É”j‰ó‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ãŒ<strong>ãã‚‰ã™</strong>ã«ç ´å£Šã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‰ÎĞ
+	// ç«ç½
 	function fire($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ª{$init->tagDisaster_}‰ÎĞ{$init->_tagDisaster}‚É‚æ‚è‰ó–Å‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ãŒ{$init->tagDisaster_}ç«ç½{$init->_tagDisaster}ã«ã‚ˆã‚Šå£Šæ»…ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ‰ÎĞ–¢‹
+	// ç«ç½æœªé‚
 	function firenot($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ª{$init->tagDisaster_}‰ÎĞ{$init->_tagDisaster}‚É‚æ‚è”íŠQ‚ğó‚¯‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ãŒ{$init->tagDisaster_}ç«ç½{$init->_tagDisaster}ã«ã‚ˆã‚Šè¢«å®³ã‚’å—ã‘ã¾ã—ãŸã€‚",$id);
 	}
-	// Lˆæ”íŠQAŠC‚ÌŒšİ
+	// åºƒåŸŸè¢«å®³ã€æµ·ã®å»ºè¨­
 	function wideDamageSea2($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ÍÕŒ`‚à‚È‚­‚È‚è‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¯è·¡å½¢ã‚‚ãªããªã‚Šã¾ã—ãŸã€‚",$id);
 	}
-	// Lˆæ”íŠQA‰öb…–v
+	// åºƒåŸŸè¢«å®³ã€æ€ªç£æ°´æ²¡
 	function wideDamageMonsterSea($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì—¤’n‚Í<strong>‰öb{$lName}</strong>‚à‚ë‚Æ‚à…–v‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®é™¸åœ°ã¯<strong>æ€ªç£{$lName}</strong>ã‚‚ã‚ã¨ã‚‚æ°´æ²¡ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// Lˆæ”íŠQA…–v
+	// åºƒåŸŸè¢«å®³ã€æ°´æ²¡
 	function wideDamageSea($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚Í<strong>…–v</strong>‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¯<strong>æ°´æ²¡</strong>ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// Lˆæ”íŠQA‰öb
+	// åºƒåŸŸè¢«å®³ã€æ€ªç£
 	function wideDamageMonster($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>‰öb{$lName}</strong>‚ÍÁ‚µ”ò‚Ñ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>æ€ªç£{$lName}</strong>ã¯æ¶ˆã—é£›ã³ã¾ã—ãŸã€‚",$id);
 	}
-	// Lˆæ”íŠQAr’n
+	// åºƒåŸŸè¢«å®³ã€è’åœ°
 	function wideDamageWaste($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚Íˆêu‚É‚µ‚Ä<strong>r’n</strong>‚Æ‰»‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¯ä¸€ç¬ã«ã—ã¦<strong>è’åœ°</strong>ã¨åŒ–ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ’nk”­¶
+	// åœ°éœ‡ç™ºç”Ÿ
 	function earthquake($id, $name) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å‘å‹K–Í‚È{$init->tagDisaster_}’nk{$init->_tagDisaster}‚ª”­¶II",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§å¤§è¦æ¨¡ãª{$init->tagDisaster_}åœ°éœ‡{$init->_tagDisaster}ãŒç™ºç”Ÿï¼ï¼",$id);
 	}
-	// ’nk”íŠQ
+	// åœ°éœ‡è¢«å®³
 	function eQDamage($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚Í{$init->tagDisaster_}’nk{$init->_tagDisaster}‚É‚æ‚è‰ó–Å‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¯{$init->tagDisaster_}åœ°éœ‡{$init->_tagDisaster}ã«ã‚ˆã‚Šå£Šæ»…ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ’nk”íŠQ–¢‹
+	// åœ°éœ‡è¢«å®³æœªé‚
 	function eQDamagenot($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚Í{$init->tagDisaster_}’nk{$init->_tagDisaster}‚É‚æ‚è”íŠQ‚ğó‚¯‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¯{$init->tagDisaster_}åœ°éœ‡{$init->_tagDisaster}ã«ã‚ˆã‚Šè¢«å®³ã‚’å—ã‘ã¾ã—ãŸã€‚",$id);
 	}
-	// ‹Q‰ì
+	// é£¢é¤“
 	function starve($id, $name) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Ì{$init->tagDisaster_}H—¿‚ª•s‘«{$init->_tagDisaster}‚µ‚Ä‚¢‚Ü‚·II",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã®{$init->tagDisaster_}{$init->nameFood}ãŒä¸è¶³{$init->_tagDisaster}ã—ã¦ã„ã¾ã™ï¼ï¼",$id);
 	}
-	// –\“®”­¶
+	// æš´å‹•ç™ºç”Ÿ
 	function pooriot($id, $name) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å<strong>¸‹Æ—¦ˆ«‰»‚É‚æ‚é</strong>{$init->tagDisaster_}–\“®{$init->_tagDisaster}‚ª”­¶II",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§<strong>å¤±æ¥­ç‡æ‚ªåŒ–ã«ã‚ˆã‚‹</strong>{$init->tagDisaster_}æš´å‹•{$init->_tagDisaster}ãŒç™ºç”Ÿï¼ï¼",$id);
 	}
-	// –\“®”íŠQilŒûŒ¸j
+	// æš´å‹•è¢«å®³ï¼ˆäººå£æ¸›ï¼‰
 	function riotDamage1($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚Å{$init->tagDisaster_}–\“®{$init->_tagDisaster}‚É‚æ‚è€Ò‚ª‘½”o‚½–Í—l‚Å‚·B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã§{$init->tagDisaster_}æš´å‹•{$init->_tagDisaster}ã«ã‚ˆã‚Šæ­»å‚·è€…ãŒå¤šæ•°å‡ºãŸæ¨¡æ§˜ã§ã™ã€‚",$id);
 	}
-	// –\“®”íŠQi‰ó–Åj
+	// æš´å‹•è¢«å®³ï¼ˆå£Šæ»…ï¼‰
 	function riotDamage2($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ª{$init->tagDisaster_}–\“®{$init->_tagDisaster}‚É‚æ‚è‰ó–Å‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ãŒ{$init->tagDisaster_}æš´å‹•{$init->_tagDisaster}ã«ã‚ˆã‚Šå£Šæ»…ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// H—¿•s‘«”íŠQ
+	// é£Ÿæ–™ä¸è¶³è¢«å®³
 	function svDamage($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚É<strong>H—¿‚ğ‹‚ß‚ÄZ–¯‚ªE“</strong>B<strong>{$lName}</strong>‚Í‰ó–Å‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã«<strong>{$init->nameFood}ã‚’æ±‚ã‚ã¦ä½æ°‘ãŒæ®ºåˆ°</strong>ã€‚<strong>{$lName}</strong>ã¯å£Šæ»…ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ’Ã”g”­¶
+	// æ´¥æ³¢ç™ºç”Ÿ
 	function tsunami($id, $name) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}•t‹ß‚Å{$init->tagDisaster_}’Ã”g{$init->_tagDisaster}”­¶II",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ä»˜è¿‘ã§{$init->tagDisaster_}æ´¥æ³¢{$init->_tagDisaster}ç™ºç”Ÿï¼ï¼",$id);
 	}
-	// ’Ã”g”íŠQ
+	// æ´¥æ³¢è¢«å®³
 	function tsunamiDamage($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚Í{$init->tagDisaster_}’Ã”g{$init->_tagDisaster}‚É‚æ‚è•ö‰ó‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¯{$init->tagDisaster_}æ´¥æ³¢{$init->_tagDisaster}ã«ã‚ˆã‚Šå´©å£Šã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ‰öbŒ»‚é
+	// æ€ªç£ç¾ã‚‹
 	function monsCome($id, $name, $mName, $point, $lName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚É<strong>‰öb{$mName}</strong>oŒ»II{$init->tagName_}{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ª“¥‚İr‚ç‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã«<strong>æ€ªç£{$mName}</strong>å‡ºç¾ï¼ï¼{$init->tagName_}{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ãŒè¸ã¿è’ã‚‰ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‘D”hŒ­‚µ‚½
+	// èˆ¹æ´¾é£ã—ãŸ
 	function shipSend($id, $tId, $name, $sName, $point, $tName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>‚ª{$point}{$init->_tagName}‚Ì<strong>{$sName}</strong>‚ğ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}‚É{$init->tagComName_}”hŒ­{$init->_tagComName}‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>ãŒ{$point}{$init->_tagName}ã®<strong>{$sName}</strong>ã‚’<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}ã«{$init->tagComName_}æ´¾é£{$init->_tagComName}ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‘D‹AŠÒ‚µ‚½
+	// èˆ¹å¸°é‚„ã—ãŸ
 	function shipReturn($id, $tId, $name, $sName, $point, $tName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}{$point}‚Ì<strong>{$sName}</strong>‚ğ{$init->tagComName_}‹AŠÒ{$init->_tagComName}‚³‚¹‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}{$point}ã®<strong>{$sName}</strong>ã‚’{$init->tagComName_}å¸°é‚„{$init->_tagComName}ã•ã›ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// à•ó‰ñû
+	// è²¡å®å›å
 	function RecoveryTreasure($id, $name, $sName, $value) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<strong>{$sName}</strong>‚ª”­Œ©‚µ‚½<strong>{$value}‰­‰~‘Š“–</strong>‚Ì{$init->tagDisaster_}à•ó{$init->_tagDisaster}‚ğ‰ñû‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<strong>{$sName}</strong>ãŒç™ºè¦‹ã—ãŸ<strong>{$value}å„„å††ç›¸å½“</strong>ã®{$init->tagDisaster_}è²¡å®{$init->_tagDisaster}ã‚’å›åã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ‘D¸”s
+	// èˆ¹å¤±æ•—
 	function shipFail($id, $name, $comName, $kind) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA<strong>{$kind}</strong>‚¾‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€<strong>{$kind}</strong>ã ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‚¼‚ç‚·Œ»‚é
+	// ãã‚‰ã™ç¾ã‚‹
 	function ZorasuCome($id, $name, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚É<strong>‚¼‚ç‚·</strong>oŒ»II",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã«<strong>ãã‚‰ã™</strong>å‡ºç¾ï¼ï¼",$id);
 	}
-	// ‰öbŒÄ‚Î‚ê‚é
+	// æ€ªç£å‘¼ã°ã‚Œã‚‹
 	function monsCall($id, $name, $mName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>‰öb{$mName}</strong>‚ª“V‚ÉŒü‚©‚Á‚Ä™ôšK‚µ‚Ü‚µ‚½I",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>æ€ªç£{$mName}</strong>ãŒå¤©ã«å‘ã‹ã£ã¦å’†å“®ã—ã¾ã—ãŸï¼",$id);
 	}
-	// ‰öbƒ[ƒv
+	// æ€ªç£ãƒ¯ãƒ¼ãƒ—
 	function monsWarp($id, $tId, $name, $mName, $point, $tName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>‰öb{$mName}</strong>‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}‚Éƒ[ƒv‚µ‚Ü‚µ‚½I",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>æ€ªç£{$mName}</strong>ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}ã«ãƒ¯ãƒ¼ãƒ—ã—ã¾ã—ãŸï¼",$id, $tId);
 	}
-	// ‰öb‚É‚æ‚é‘‹à‘‰Á
+	// æ€ªç£ã«ã‚ˆã‚‹è³‡é‡‘å¢—åŠ 
 	function MonsMoney($id, $name, $mName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>‰öb{$mName}</strong>‚ª<strong>{$str}</strong>‚Ì‹à‚ğ‚Î‚çT‚«‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>æ€ªç£{$mName}</strong>ãŒ<strong>{$str}</strong>ã®é‡‘ã‚’ã°ã‚‰æ’’ãã¾ã—ãŸã€‚",$id);
 	}
-	// ‰öb‚É‚æ‚éH—¿‘‰Á
+	// æ€ªç£ã«ã‚ˆã‚‹é£Ÿæ–™å¢—åŠ 
 	function MonsFood($id, $name, $mName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>‰öb{$mName}</strong>‚ªT‚«U‚ç‚µ‚½‰h—{‚½‚Á‚Õ‚èƒEƒ“ƒR‚Ì‰e‹¿‚ÅAH—¿‚ª<strong>{$str}</strong>‘Y‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>æ€ªç£{$mName}</strong>ãŒæ’’ãæ•£ã‚‰ã—ãŸæ „é¤ŠãŸã£ã·ã‚ŠğŸ’©ã®å½±éŸ¿ã§ã€{$init->nameFood}ãŒ<strong>{$str}</strong>å¢—ç”£ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‰öb‚É‚æ‚é‘‹àŒ¸­
+	// æ€ªç£ã«ã‚ˆã‚‹è³‡é‡‘æ¸›å°‘
 	function MonsMoney2($id, $name, $mName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>‰öb{$mName}</strong>‚É‚æ‚Á‚ÄA“‡‚Ì‘‹à<strong>{$str}</strong>‚ª‹­’D‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>æ€ªç£{$mName}</strong>ã«ã‚ˆã£ã¦ã€å³¶ã®è³‡é‡‘<strong>{$str}</strong>ãŒå¼·å¥ªã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‰öb‚É‚æ‚éH—¿Œ¸­
+	// æ€ªç£ã«ã‚ˆã‚‹é£Ÿæ–™æ¸›å°‘
 	function MonsFood2($id, $name, $mName, $point, $str) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>‰öb{$mName}</strong>‚ªT‚«U‚ç‚µ‚½ˆ«L•Y‚¤ƒEƒ“ƒR‚Ì‰e‹¿‚ÅAH—¿‚ª<strong>{$str}</strong>•…”s‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>æ€ªç£{$mName}</strong>ãŒæ’’ãæ•£ã‚‰ã—ãŸæ‚ªè‡­æ¼‚ã†ğŸ’©ã®å½±éŸ¿ã§ã€{$init->nameFood}ãŒ<strong>{$str}</strong>è…æ•—ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ’n”Õ’¾‰º”­¶
+	// åœ°ç›¤æ²ˆä¸‹ç™ºç”Ÿ
 	function falldown($id, $name) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å{$init->tagDisaster_}’n”Õ’¾‰º{$init->_tagDisaster}‚ª”­¶‚µ‚Ü‚µ‚½II",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§{$init->tagDisaster_}åœ°ç›¤æ²ˆä¸‹{$init->_tagDisaster}ãŒç™ºç”Ÿã—ã¾ã—ãŸï¼ï¼",$id);
 	}
-	// ’n”Õ’¾‰º”íŠQ
+	// åœ°ç›¤æ²ˆä¸‹è¢«å®³
 	function falldownLand($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ÍŠC‚Ì’†‚Ö’¾‚İ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¯æµ·ã®ä¸­ã¸æ²ˆã¿ã¾ã—ãŸã€‚",$id);
 	}
-	// ‘ä•—”­¶
+	// å°é¢¨ç™ºç”Ÿ
 	function typhoon($id, $name) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚É{$init->tagDisaster_}‘ä•—{$init->_tagDisaster}ã—¤II",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã«{$init->tagDisaster_}å°é¢¨{$init->_tagDisaster}ä¸Šé™¸ï¼ï¼",$id);
 	}
-	// ‘ä•—”íŠQ
+	// å°é¢¨è¢«å®³
 	function typhoonDamage($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚Í{$init->tagDisaster_}‘ä•—{$init->_tagDisaster}‚Å”ò‚Î‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã¯{$init->tagDisaster_}å°é¢¨{$init->_tagDisaster}ã§é£›ã°ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ƒXƒgƒ‰ƒCƒL
+	// ã‚¹ãƒˆãƒ©ã‚¤ã‚­
 	function Sto($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>Ğˆõ‚ª{$init->tagDisaster_}ƒXƒgƒ‰ƒCƒL{$init->_tagDisaster}‚ğ‹N‚±‚µ<strong>¤‹Æ‹K–Í</strong>‚ªŒ¸­‚µ‚½–Í—l‚Å‚·B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ç¤¾å“¡ãŒ{$init->tagDisaster_}ã‚¹ãƒˆãƒ©ã‚¤ã‚­{$init->_tagDisaster}ã‚’èµ·ã“ã—<strong>å•†æ¥­è¦æ¨¡</strong>ãŒæ¸›å°‘ã—ãŸæ¨¡æ§˜ã§ã™ã€‚",$id);
 	}
-	// è¦ÎA‚»‚Ì‘¼
+	// éš•çŸ³ã€ãã®ä»–
 	function hugeMeteo($id, $name, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}’n“_‚É{$init->tagDisaster_}‹‘åè¦Î{$init->_tagDisaster}‚ª—‰ºII",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã«{$init->tagDisaster_}å·¨å¤§éš•çŸ³{$init->_tagDisaster}ãŒè½ä¸‹ï¼ï¼",$id);
 	}
-	// ‹L”O”èA—‰º
+	// è¨˜å¿µç¢‘ã€è½ä¸‹
 	function monDamage($id, $name, $point) {
 		global $init;
-		$this->out("<strong>‰½‚©‚Æ‚Ä‚Â‚à‚È‚¢‚à‚Ì</strong>‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}’n“_‚É—‰º‚µ‚Ü‚µ‚½II",$id);
+		$this->out("<strong>ä½•ã‹ã¨ã¦ã¤ã‚‚ãªã„ã‚‚ã®</strong>ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã«è½ä¸‹ã—ã¾ã—ãŸï¼ï¼",$id);
 	}
-	// ‰Æ‘°‚Ì—Í
+	// å®¶æ—ã®åŠ›
 	function kazokuPower($id, $name, $power) {
 		global $init;
-		$this->out("<strong>‰½‚©‚Æ‚Ä‚Â‚à‚È‚¢‚à‚Ì</strong>‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ÉÚ‹ßI<strong>{$power}”­“®I</strong>“‡‚ÌŠë‹@‚Í–Æ‚ê‚½‚ªA{$init->tagDisaster_}‚Pl‚Ì‹]µÒ{$init->_tagDisaster}‚ªo‚Ä‚µ‚Ü‚¢‚Ü‚µ‚½cB",$id);
+		$this->out("<strong>ä½•ã‹ã¨ã¦ã¤ã‚‚ãªã„ã‚‚ã®</strong>ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã«æ¥è¿‘ï¼<strong>{$power}ç™ºå‹•ï¼</strong>å³¶ã®å±æ©Ÿã¯å…ã‚ŒãŸãŒã€{$init->tagDisaster_}ï¼‘äººã®çŠ ç‰²è€…{$init->_tagDisaster}ãŒå‡ºã¦ã—ã¾ã„ã¾ã—ãŸâ€¦ã€‚",$id);
 	}
-	// è¦ÎAŠC
+	// éš•çŸ³ã€æµ·
 	function meteoSea($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚É{$init->tagDisaster_}è¦Î{$init->_tagDisaster}‚ª—‰º‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã«{$init->tagDisaster_}éš•çŸ³{$init->_tagDisaster}ãŒè½ä¸‹ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// è¦ÎAR
+	// éš•çŸ³ã€å±±
 	function meteoMountain($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚É{$init->tagDisaster_}è¦Î{$init->_tagDisaster}‚ª—‰ºA<strong>{$lName}</strong>‚ÍÁ‚µ”ò‚Ñ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã«{$init->tagDisaster_}éš•çŸ³{$init->_tagDisaster}ãŒè½ä¸‹ã€<strong>{$lName}</strong>ã¯æ¶ˆã—é£›ã³ã¾ã—ãŸã€‚",$id);
 	}
-	// è¦ÎAŠC’êŠî’n
+	// éš•çŸ³ã€æµ·åº•åŸºåœ°
 	function meteoSbase($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚É{$init->tagDisaster_}è¦Î{$init->_tagDisaster}‚ª—‰ºA<strong>{$lName}</strong>‚Í•ö‰ó‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã«{$init->tagDisaster_}éš•çŸ³{$init->_tagDisaster}ãŒè½ä¸‹ã€<strong>{$lName}</strong>ã¯å´©å£Šã—ã¾ã—ãŸã€‚",$id);
 	}
-	// è¦ÎA‰öb
+	// éš•çŸ³ã€æ€ªç£
 	function meteoMonster($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<strong>‰öb{$lName}</strong>‚ª‚¢‚½<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}’n“_‚É{$init->tagDisaster_}è¦Î{$init->_tagDisaster}‚ª—‰ºA—¤’n‚Í<strong>‰öb{$lName}</strong>‚à‚ë‚Æ‚à…–v‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<strong>æ€ªç£{$lName}</strong>ãŒã„ãŸ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã«{$init->tagDisaster_}éš•çŸ³{$init->_tagDisaster}ãŒè½ä¸‹ã€é™¸åœ°ã¯<strong>æ€ªç£{$lName}</strong>ã‚‚ã‚ã¨ã‚‚æ°´æ²¡ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// è¦ÎAó£
+	// éš•çŸ³ã€æµ…ç€¬
 	function meteoSea1($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}’n“_‚É{$init->tagDisaster_}è¦Î{$init->_tagDisaster}‚ª—‰ºAŠC’ê‚ª‚¦‚®‚ç‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã«{$init->tagDisaster_}éš•çŸ³{$init->_tagDisaster}ãŒè½ä¸‹ã€æµ·åº•ãŒãˆãã‚‰ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// è¦ÎA‚»‚Ì‘¼
+	// éš•çŸ³ã€ãã®ä»–
 	function meteoNormal($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}’n“_‚Ì<strong>{$lName}</strong>‚É{$init->tagDisaster_}è¦Î{$init->_tagDisaster}‚ª—‰ºAˆê‘Ñ‚ª…–v‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã®<strong>{$lName}</strong>ã«{$init->tagDisaster_}éš•çŸ³{$init->_tagDisaster}ãŒè½ä¸‹ã€ä¸€å¸¯ãŒæ°´æ²¡ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// •¬‰Î
+	// å™´ç«
 	function eruption($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}’n“_‚Å{$init->tagDisaster_}‰ÎR‚ª•¬‰Î{$init->_tagDisaster}A<strong>R</strong>‚ªo—ˆ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã§{$init->tagDisaster_}ç«å±±ãŒå™´ç«{$init->_tagDisaster}ã€<strong>å±±</strong>ãŒå‡ºæ¥ã¾ã—ãŸã€‚",$id);
 	}
-	// •¬‰ÎAó£
+	// å™´ç«ã€æµ…ç€¬
 	function eruptionSea1($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}’n“_‚Ì<strong>{$lName}</strong>‚ÍA{$init->tagDisaster_}•¬‰Î{$init->_tagDisaster}‚Ì‰e‹¿‚Å—¤’n‚É‚È‚è‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã®<strong>{$lName}</strong>ã¯ã€{$init->tagDisaster_}å™´ç«{$init->_tagDisaster}ã®å½±éŸ¿ã§é™¸åœ°ã«ãªã‚Šã¾ã—ãŸã€‚",$id);
 	}
-	// •¬‰ÎAŠCorŠCŠî
+	// å™´ç«ã€æµ·oræµ·åŸº
 	function eruptionSea($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}’n“_‚Ì<strong>{$lName}</strong>‚ÍA{$init->tagDisaster_}•¬‰Î{$init->_tagDisaster}‚Ì‰e‹¿‚ÅŠC’ê‚ª—²‹NAó£‚É‚È‚è‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã®<strong>{$lName}</strong>ã¯ã€{$init->tagDisaster_}å™´ç«{$init->_tagDisaster}ã®å½±éŸ¿ã§æµ·åº•ãŒéš†èµ·ã€æµ…ç€¬ã«ãªã‚Šã¾ã—ãŸã€‚",$id);
 	}
-	// •¬‰ÎA‚»‚Ì‘¼
+	// å™´ç«ã€ãã®ä»–
 	function eruptionNormal($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}’n“_‚Ì<strong>{$lName}</strong>‚ÍA{$init->tagDisaster_}•¬‰Î{$init->_tagDisaster}‚Ì‰e‹¿‚Å‰ó–Å‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}åœ°ç‚¹ã®<strong>{$lName}</strong>ã¯ã€{$init->tagDisaster_}å™´ç«{$init->_tagDisaster}ã®å½±éŸ¿ã§å£Šæ»…ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ŠC’ê’Tõ‚Ì–û“c
+	// æµ·åº•æ¢ç´¢ã®æ²¹ç”°
 	function tansakuoil($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ª–û“c‚ğ”­Œ©I",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ãŒæ²¹ç”°ã‚’ç™ºè¦‹ï¼",$id);
 	}
-	// ü‚è‚ÉŠC‚ª‚È‚­‚Ä¸”s
+	// å‘¨ã‚Šã«æµ·ãŒãªãã¦å¤±æ•—
 	function NoSeaAround($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA—\’è’n‚Ì{$init->tagName_}{$point}{$init->_tagName}‚Ìü•Ó‚ÉŠC‚ª‚È‚©‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€äºˆå®šåœ°ã®{$init->tagName_}{$point}{$init->_tagName}ã®å‘¨è¾ºã«æµ·ãŒãªã‹ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ü‚è‚Éó£‚ª‚È‚­‚Ä¸”s
+	// å‘¨ã‚Šã«æµ…ç€¬ãŒãªãã¦å¤±æ•—
 	function NoShoalAround($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA—\’è’n‚Ì{$init->tagName_}{$point}{$init->_tagName}‚Ìü•Ó‚Éó£‚ª‚È‚©‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€äºˆå®šåœ°ã®{$init->tagName_}{$point}{$init->_tagName}ã®å‘¨è¾ºã«æµ…ç€¬ãŒãªã‹ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ŠC‚ª‚È‚­‚Ä¸”s
+	// æµ·ãŒãªãã¦å¤±æ•—
 	function NoSea($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA—\’è’n‚ªŠC‚Å‚È‚©‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€äºˆå®šåœ°ãŒæµ·ã§ãªã‹ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// `‚ª‚È‚¢‚Ì‚ÅA‘¢‘D¸”s
+	// æ¸¯ãŒãªã„ã®ã§ã€é€ èˆ¹å¤±æ•—
 	function NoPort($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍAü•Ó‚É<b>`</b>‚ª‚È‚©‚Á‚½‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€å‘¨è¾ºã«<b>æ¸¯</b>ãŒãªã‹ã£ãŸãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ‘D”jŠü
+	// èˆ¹ç ´æ£„
 	function ComeBack($id, $name, $comName, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<strong>{$lName}</strong>‚ğ{$init->tagComName_}{$comName}{$init->_tagComName}‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<strong>{$lName}</strong>ã‚’{$init->tagComName_}{$comName}{$init->_tagComName}ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ‘D‚ÌÅ‘åŠ—L”
+	// èˆ¹ã®æœ€å¤§æ‰€æœ‰æ•°
 	function maxShip($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA<strong>‘D‚ÌÅ‘åŠ—L”ğ–ñ‚Éˆá”½‚µ‚Ä‚µ‚Ü‚¤</strong>‚½‚ß‹–‰Â‚³‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€<strong>èˆ¹ã®æœ€å¤§æ‰€æœ‰æ•°æ¡ç´„ã«é•åã—ã¦ã—ã¾ã†</strong>ãŸã‚è¨±å¯ã•ã‚Œã¾ã›ã‚“ã§ã—ãŸã€‚",$id);
 	}
-	// `•Â½
+	// æ¸¯é–‰é–
 	function ClosedPort($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<B>{$lName}</B>‚Í•Â½‚µ‚½‚æ‚¤‚Å‚·B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<B>{$lName}</B>ã¯é–‰é–ã—ãŸã‚ˆã†ã§ã™ã€‚",$id);
 	}
-	// ‘‹à•s‘«‚Ì‚½‚ß‘D”••úŠü
+	// è³‡é‡‘ä¸è¶³ã®ãŸã‚èˆ¹èˆ¶æ”¾æ£„
 	function shipRelease($id, $tId, $name, $tName, $point, $tshipName) {
 		global $init;
-		$this->late("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡Š‘®</A>{$init->_tagName}<b>{$tshipName}</b>‚ÍA‘‹à•s‘«‚Ì‚½‚ß”jŠü‚³‚ê‚Ü‚µ‚½B",$id, $tId);
+		$this->late("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶æ‰€å±</A>{$init->_tagName}<b>{$tshipName}</b>ã¯ã€è³‡é‡‘ä¸è¶³ã®ãŸã‚ç ´æ£„ã•ã‚Œã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ŠC‘¯‘DŒ»‚é
+	// æµ·è³Šèˆ¹ç¾ã‚‹
 	function VikingCome($id, $name, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚É<B>ŠC‘¯‘D</B>oŒ»II",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã«<B>æµ·è³Šèˆ¹</B>å‡ºç¾ï¼ï¼",$id);
 	}
-	// ŠC‘¯‘D‹‚é
+	// æµ·è³Šèˆ¹å»ã‚‹
 	function VikingAway($id, $name, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚©‚ç<B>ŠC‘¯‘D</B>‚ª‚Ç‚±‚©‚É‹‚Á‚Ä‚¢‚«‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã‹ã‚‰<B>æµ·è³Šèˆ¹</B>ãŒã©ã“ã‹ã«å»ã£ã¦ã„ãã¾ã—ãŸã€‚",$id);
 	}
-	// ŠC‘¯‘DUŒ‚
+	// æµ·è³Šèˆ¹æ”»æ’ƒ
 	function VikingAttack($id, $tId, $name, $tName, $lName, $point, $tPoint, $tshipName) {
 		global $init;
-		$this->late("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<b>{$lName}</b>‚ª{$tPoint}‚Ì<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}<B>{$tshipName}</B>‚ğUŒ‚‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->late("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<b>{$lName}</b>ãŒ{$tPoint}ã®<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}<B>{$tshipName}</B>ã‚’æ”»æ’ƒã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// íŠÍUŒ‚
+	// æˆ¦è‰¦æ”»æ’ƒ
 	function SenkanAttack($id, $tId, $name, $tName, $lName, $point, $tpoint, $tshipName) {
 		global $init;
-		$this->late("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}<b>{$lName}</b>‚ª{$tpoint}‚Ì<B>{$tshipName}</B>‚ğUŒ‚‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->late("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}<b>{$lName}</b>ãŒ{$tpoint}ã®<B>{$tshipName}</B>ã‚’æ”»æ’ƒã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ŠCí’¾–v
+	// æµ·æˆ¦æ²ˆæ²¡
 	function BattleSinking($id, $tId, $name, $lName, $point) {
 		global $init;
-		$this->late("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<b>{$lName}</b>‚Í’¾–v‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->late("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<b>{$lName}</b>ã¯æ²ˆæ²¡ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‘D”•’¾–v
+	// èˆ¹èˆ¶æ²ˆæ²¡
 	function ShipSinking($id, $tId, $name, $tName, $lName, $point) {
 		global $init;
-		$this->late("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}<b>{$lName}</b>‚Í’¾–v‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->late("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}<b>{$lName}</b>ã¯æ²ˆæ²¡ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ŠC‘¯‘D‚Ìà•ó
+	// æµ·è³Šèˆ¹ã®è²¡å®
 	function VikingTreasure($id, $name, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚É{$init->tagDisaster_}à•ó‚ª–°‚Á‚Ä‚¢‚é{$init->_tagDisaster}‚Æ‰\‚³‚ê‚Ä‚¢‚Ü‚·B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã«{$init->tagDisaster_}è²¡å®ãŒçœ ã£ã¦ã„ã‚‹{$init->_tagDisaster}ã¨å™‚ã•ã‚Œã¦ã„ã¾ã™ã€‚",$id);
 	}
-	// à•ó”­Œ©
+	// è²¡å®ç™ºè¦‹
 	function FindTreasure($id, $tId, $name, $tName, $point, $tshipName, $value) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}<B>{$tshipName}</B>‚ª<b>{$value}‰­‰~‘Š“–</b>‚Ì{$init->tagDisaster_}à•ó{$init->_tagDisaster}‚ğ”­Œ©‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}<B>{$tshipName}</B>ãŒ<b>{$value}å„„å††ç›¸å½“</b>ã®{$init->tagDisaster_}è²¡å®{$init->_tagDisaster}ã‚’ç™ºè¦‹ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ŠC‘¯‘DA‹­’D
+	// æµ·è³Šèˆ¹ã€å¼·å¥ª
 	function RobViking($id, $name, $point, $tshipName, $money, $food) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<b>{$tshipName}</b>‚ª<b>{$money}{$init->unitMoney}</b>‚Ì‹à‚Æ<b>{$food}{$init->unitFood}</b>‚ÌH—¿‚ğ‹­’D‚µ‚Ä‚¢‚«‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<b>{$tshipName}</b>ãŒ<b>{$money}{$init->unitMoney}</b>ã®é‡‘ã¨<b>{$food}{$init->unitFood}</b>ã®{$init->nameFood}ã‚’å¼·å¥ªã—ã¦ã„ãã¾ã—ãŸã€‚",$id);
 	}
-	// ‘DÀÊ
+	// èˆ¹åº§ç¤
 	function RunAground($id, $name, $lName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$point}{$init->_tagName}‚Ì<b>$lName</b>‚Í{$init->tagDisaster_}ÀÊ{$init->_tagDisaster}‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$point}{$init->_tagName}ã®<b>$lName</b>ã¯{$init->tagDisaster_}åº§ç¤{$init->_tagDisaster}ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// íŠÍƒXƒeƒ‹ƒXƒ~ƒTƒCƒ‹Œ}Œ‚
+	// æˆ¦è‰¦ã‚¹ãƒ†ãƒ«ã‚¹ãƒŸã‚µã‚¤ãƒ«è¿æ’ƒ
 	function msInterceptS($id, $tId, $name, $tName, $comName, $point, $missileE) {
 		global $init;
-		$this->secret("-{$init->tagName_}{$missileE}”­{$init->_tagName}‚Í<strong>íŠÍ</strong>‚É‚æ‚Á‚ÄŒ}Œ‚‚³‚ê‚½‚æ‚¤‚Å‚·B",$id, $tId);
-		$this->late("-{$init->tagName_}{$missileE}”­{$init->_tagName}‚Í<strong>íŠÍ</strong>‚É‚æ‚Á‚ÄŒ}Œ‚‚³‚ê‚½‚æ‚¤‚Å‚·B",$tId);
+		$this->secret("-{$init->tagName_}{$missileE}ç™º{$init->_tagName}ã¯<strong>æˆ¦è‰¦</strong>ã«ã‚ˆã£ã¦è¿æ’ƒã•ã‚ŒãŸã‚ˆã†ã§ã™ã€‚",$id, $tId);
+		$this->late("-{$init->tagName_}{$missileE}ç™º{$init->_tagName}ã¯<strong>æˆ¦è‰¦</strong>ã«ã‚ˆã£ã¦è¿æ’ƒã•ã‚ŒãŸã‚ˆã†ã§ã™ã€‚",$tId);
 	}
-	// íŠÍ’Êíƒ~ƒTƒCƒ‹Œ}Œ‚
+	// æˆ¦è‰¦é€šå¸¸ãƒŸã‚µã‚¤ãƒ«è¿æ’ƒ
 	function msIntercept($id, $tId, $name, $tName, $comName, $point, $missileE) {
 		global $init;
-		$this->out("-{$init->tagName_}{$missileE}”­{$init->_tagName}‚Í<strong>íŠÍ</strong>‚É‚æ‚Á‚ÄŒ}Œ‚‚³‚ê‚½‚æ‚¤‚Å‚·B",$id, $tId);
+		$this->out("-{$init->tagName_}{$missileE}ç™º{$init->_tagName}ã¯<strong>æˆ¦è‰¦</strong>ã«ã‚ˆã£ã¦è¿æ’ƒã•ã‚ŒãŸã‚ˆã†ã§ã™ã€‚",$id, $tId);
 	}
-	// ƒAƒCƒeƒ€’TõƒƒOŠJn
-	// ƒAƒCƒeƒ€”­Œ©
+	// ã‚¢ã‚¤ãƒ†ãƒ æ¢ç´¢ãƒ­ã‚°é–‹å§‹
+	// ã‚¢ã‚¤ãƒ†ãƒ ç™ºè¦‹
 	function ItemFound($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}’†‚ÉA<strong>{$point}</strong>‚ª”­Œ©‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§ã®{$init->tagComName_}{$comName}{$init->_tagComName}ä¸­ã«ã€<strong>{$point}</strong>ãŒç™ºè¦‹ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ƒ}ƒXƒ^[ƒ\[ƒh”­Œ©
+	// ãƒã‚¹ã‚¿ãƒ¼ã‚½ãƒ¼ãƒ‰ç™ºè¦‹
 	function SwordFound($id, $name, $mName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Ì<strong>‰öb{$mName}</strong>‚ÌcŠ[‚©‚ç“V‹ó‚ğØ‚è—ô‚­á¿‚¢‘MŒõ‚ª‹ì‚¯”²‚¯‚éI<strong>ƒ}ƒXƒ^[ƒ\[ƒh</strong>‚ª”­Œ©‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã®<strong>æ€ªç£{$mName}</strong>ã®æ®‹éª¸ã‹ã‚‰å¤©ç©ºã‚’åˆ‡ã‚Šè£‚ãçœ©ã„é–ƒå…‰ãŒé§†ã‘æŠœã‘ã‚‹ï¼<strong>ãƒã‚¹ã‚¿ãƒ¼ã‚½ãƒ¼ãƒ‰</strong>ãŒç™ºè¦‹ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ƒŒƒbƒhƒ_ƒCƒ„”­Œ©
+	// ãƒ¬ãƒƒãƒ‰ãƒ€ã‚¤ãƒ¤ç™ºè¦‹
 	function RedFound($id, $name, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Ì<strong>ŠC’ê’Tõ‘D</strong>‚ª<strong>{$point}</strong>‚ğ”­Œ©‚µ‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã®<strong>æµ·åº•æ¢ç´¢èˆ¹</strong>ãŒ<strong>{$point}</strong>ã‚’ç™ºè¦‹ã—ã¾ã—ãŸã€‚",$id);
 	}
-	// ƒWƒ“”­Œ©
+	// ã‚¸ãƒ³ç™ºè¦‹
 	function ZinFound($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}’†‚ÉA<strong>{$point}</strong>‚ğ•ß‚Ü‚¦‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§ã®{$init->tagComName_}{$comName}{$init->_tagComName}ä¸­ã«ã€<strong>{$point}</strong>ã‚’æ•ã¾ãˆã¾ã—ãŸã€‚",$id);
 	}
-	// ƒEƒBƒXƒv”­Œ©
+	// ã‚¦ã‚£ã‚¹ãƒ—ç™ºè¦‹
 	function Zin3Found($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}’†‚ÉA<strong>{$point}</strong>‚ªPŒ‚‚µ‚Ä‚«‚Ü‚µ‚½I<strong>ƒ}ƒXƒ^[ƒ\[ƒh</strong>‚ğU‚è‚©‚´‚µAŒ©–<strong>{$point}</strong>‚ğ•ß‚Ü‚¦‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§ã®{$init->tagComName_}{$comName}{$init->_tagComName}ä¸­ã«ã€<strong>{$point}</strong>ãŒè¥²æ’ƒã—ã¦ãã¾ã—ãŸï¼<strong>ãƒã‚¹ã‚¿ãƒ¼ã‚½ãƒ¼ãƒ‰</strong>ã‚’æŒ¯ã‚Šã‹ã–ã—ã€è¦‹äº‹<strong>{$point}</strong>ã‚’æ•ã¾ãˆã¾ã—ãŸã€‚",$id);
 	}
-	// ƒ‹ƒi”­Œ©
+	// ãƒ«ãƒŠç™ºè¦‹
 	function Zin5Found($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}’†‚ÉA—‹–Â‚Æ‚Æ‚à‚ÉA<strong>ƒ}ƒiEƒNƒŠƒXƒ^ƒ‹</strong>‚ª‹P‚­B‚»‚Ì”’Œõ‚Ì’†‚©‚ç<strong>{$point}</strong>‚ªŒ»‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§ã®{$init->tagComName_}{$comName}{$init->_tagComName}ä¸­ã«ã€é›·é³´ã¨ã¨ã‚‚ã«ã€<strong>ãƒãƒŠãƒ»ã‚¯ãƒªã‚¹ã‚¿ãƒ«</strong>ãŒè¼ãã€‚ãã®ç™½å…‰ã®ä¸­ã‹ã‚‰<strong>{$point}</strong>ãŒç¾ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ƒWƒ“”­Œ©
+	// ã‚¸ãƒ³ç™ºè¦‹
 	function Zin6Found($id, $name, $comName, $point) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å‚Ì{$init->tagComName_}{$comName}{$init->_tagComName}’†‚ÉA“y‚Ì’†‚©‚ç<strong>{$point}</strong>‚ğ”­Œ©I<strong>{$point}</strong>‚ğ•ß‚Ü‚¦‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§ã®{$init->tagComName_}{$comName}{$init->_tagComName}ä¸­ã«ã€åœŸã®ä¸­ã‹ã‚‰<strong>{$point}</strong>ã‚’ç™ºè¦‹ï¼<strong>{$point}</strong>ã‚’æ•ã¾ãˆã¾ã—ãŸã€‚",$id);
 	}
-	// ‚·‚Å‚É‚ ‚é
+	// ã™ã§ã«ã‚ã‚‹
 	function IsFail($id, $name, $comName, $land) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA‚·‚Å‚É<strong>{$land}</strong>‚ª‚ ‚é‚½‚ß’†~‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€ã™ã§ã«<strong>{$land}</strong>ãŒã‚ã‚‹ãŸã‚ä¸­æ­¢ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ƒTƒbƒJ[¬Œ÷
+	// ã‚µãƒƒã‚«ãƒ¼æˆåŠŸ
 	function SoccerSuc($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å{$init->tagComName_}{$comName}{$init->_tagComName}‚ªÀ{‚³‚ê‚Ü‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§{$init->tagComName_}{$comName}{$init->_tagComName}ãŒå®Ÿæ–½ã•ã‚Œã¾ã—ãŸã€‚",$id);
 	}
-	// ƒTƒbƒJ[¸”s
+	// ã‚µãƒƒã‚«ãƒ¼å¤±æ•—
 	function SoccerFail($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA<strong>ƒXƒ^ƒWƒAƒ€</strong>‚ª–³‚©‚Á‚½‚½‚ßÀso—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€<strong>ã‚¹ã‚¿ã‚¸ã‚¢ãƒ </strong>ãŒç„¡ã‹ã£ãŸãŸã‚å®Ÿè¡Œå‡ºæ¥ã¾ã›ã‚“ã§ã—ãŸã€‚",$id);
 	}
-	// ƒTƒbƒJ[¸”s‚Q
+	// ã‚µãƒƒã‚«ãƒ¼å¤±æ•—ï¼’
 	function SoccerFail2($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA<strong>‘Îí‘Šè</strong>‚ª³í‚É‘I‘ğ‚³‚ê‚Ä‚¢‚È‚©‚Á‚½‚½‚ßÀso—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€<strong>å¯¾æˆ¦ç›¸æ‰‹</strong>ãŒæ­£å¸¸ã«é¸æŠã•ã‚Œã¦ã„ãªã‹ã£ãŸãŸã‚å®Ÿè¡Œå‡ºæ¥ã¾ã›ã‚“ã§ã—ãŸã€‚",$id);
 	}
-	// ‡¸”s
+	// è©¦åˆå¤±æ•—
 	function GameFail($id, $name, $comName) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚Å—\’è‚³‚ê‚Ä‚¢‚½{$init->tagComName_}{$comName}{$init->_tagComName}‚ÍA‘Šè“‡‚É<strong>ƒXƒ^ƒWƒAƒ€</strong>‚ª–³‚©‚Á‚½‚½‚ßÀso—ˆ‚Ü‚¹‚ñ‚Å‚µ‚½B",$id);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ã§äºˆå®šã•ã‚Œã¦ã„ãŸ{$init->tagComName_}{$comName}{$init->_tagComName}ã¯ã€ç›¸æ‰‹å³¶ã«<strong>ã‚¹ã‚¿ã‚¸ã‚¢ãƒ </strong>ãŒç„¡ã‹ã£ãŸãŸã‚å®Ÿè¡Œå‡ºæ¥ã¾ã›ã‚“ã§ã—ãŸã€‚",$id);
 	}
-	// ‡Ÿ—˜
+	// è©¦åˆå‹åˆ©
 	function GameWin($id, $tId, $name, $tName, $comName, $it, $tt) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}‚Æ{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢A<strong>{$it}“_‘Î{$tt}“_</strong>‚ÅŸ—˜‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}ã¨{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã€<strong>{$it}ç‚¹å¯¾{$tt}ç‚¹</strong>ã§å‹åˆ©ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‡”s‘Ş
+	// è©¦åˆæ•—é€€
 	function GameLose($id, $tId, $name, $tName, $comName, $it, $tt) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}‚Æ{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢A<strong>{$it}“_‘Î{$tt}“_</strong>‚Å”s‘Ş‚µ‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}ã¨{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã€<strong>{$it}ç‚¹å¯¾{$tt}ç‚¹</strong>ã§æ•—é€€ã—ã¾ã—ãŸã€‚",$id, $tId);
 	}
-	// ‡ˆø‚«•ª‚¯
+	// è©¦åˆå¼•ãåˆ†ã‘
 	function GameDraw($id, $tId, $name, $tName, $comName, $it, $tt) {
 		global $init;
-		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}“‡</A>{$init->_tagName}‚ª<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}“‡</A>{$init->_tagName}‚Æ{$init->tagComName_}{$comName}{$init->_tagComName}‚ğs‚¢A<strong>{$it}“_‘Î{$tt}“_</strong>‚Åˆø‚«•ª‚¯‚Ü‚µ‚½B",$id, $tId);
+		$this->out("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}å³¶</A>{$init->_tagName}ãŒ<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$tId}\">{$init->tagName_}{$tName}å³¶</A>{$init->_tagName}ã¨{$init->tagComName_}{$comName}{$init->_tagComName}ã‚’è¡Œã„ã€<strong>{$it}ç‚¹å¯¾{$tt}ç‚¹</strong>ã§å¼•ãåˆ†ã‘ã¾ã—ãŸã€‚",$id, $tId);
 	}
 }
-
-?>

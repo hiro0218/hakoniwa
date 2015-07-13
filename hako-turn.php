@@ -2,41 +2,42 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- ƒ^[ƒ“XV—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- ã‚¿ãƒ¼ãƒ³æ›´æ–°ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-turn.php by SERA - 2013/06/01
 
 *******************************************************************/
 
-require 'hako-log.php';
-require 'hako-make.php';
+require_once 'config.php';// ã‚ã¨ã¥ã‘
+require_once ABSOLUTE_PATH.'hako-log.php';
+require_once ABSOLUTE_PATH.'hako-make.php';
 
 //--------------------------------------------------------------------
 class MakeJS extends Make {
 
 	//---------------------------------------------------
-	// ƒRƒ}ƒ“ƒhƒ‚[ƒh
+	// ã‚³ãƒãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰
 	//---------------------------------------------------
 	function commandMain($hako, $data) {
 		global $init;
-		
+
 		$id = $data['ISLANDID'];
 		$num = $hako->idToNumber[$id];
 		$island = $hako->islands[$num];
 		$name = $island['name'];
-		
-		// ƒpƒXƒ[ƒh
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
-		// ƒ‚[ƒh‚Å•ªŠò
+		// ãƒ¢ãƒ¼ãƒ‰ã§åˆ†å²
 		$command = $island['command'];
-		$comary = split(" " , $data['COMARY']);
-		
+		$comary = explode(" " , $data['COMARY']);
+
 		for($i = 0; $i < $init->commandMax; $i++) {
 			$pos = $i * 5;
 			$kind   = $comary[$pos];
@@ -44,8 +45,8 @@ class MakeJS extends Make {
 			$y      = $comary[$pos + 2];
 			$arg    = $comary[$pos + 3];
 			$target = $comary[$pos + 4];
-			
-			// ƒRƒ}ƒ“ƒh“o˜^
+
+			// ã‚³ãƒãƒ³ãƒ‰ç™»éŒ²
 			if($kind == 0) {
 				$kind = $init->comDoNothing;
 			}
@@ -58,13 +59,13 @@ class MakeJS extends Make {
 			);
 		}
 		HtmlSetted::commandAdd();
-		
-		// ƒf[ƒ^‚Ì‘‚«o‚µ
+
+		// ãƒ‡ãƒ¼ã‚¿ã®æ›¸ãå‡ºã—
 		$island['command'] = $command;
 		$hako->islands[$num] = $island;
 		$hako->writeIslandsFile($island['id']);
-		
-		// owner mode‚Ö
+
+		// owner modeã¸
 		$html = new HtmlJS;
 		$html->owner($hako, $data);
 	}
@@ -75,179 +76,182 @@ class Turn {
 	var $log;
 	var $rpx;
 	var $rpy;
-	
+
 	//---------------------------------------------------
-	// ƒ^[ƒ“isƒ‚[ƒh
+	// ã‚¿ãƒ¼ãƒ³é€²è¡Œãƒ¢ãƒ¼ãƒ‰
 	//---------------------------------------------------
 	function turnMain(&$hako, $data) {
 		global $init;
-		
+
 		$this->log = new Log;
-		
-		// ÅIXVŠÔ‚ğXV
+
+		// æœ€çµ‚æ›´æ–°æ™‚é–“ã‚’æ›´æ–°
 		if($init->contUpdate == 1) {
 			$uptime = 1;
 		} else {
-			$uptime = (int)((time() - $hako->islandLastTime) / $init->unitTime);
+			$uptime = (int)(($_SERVER['REQUEST_TIME'] - $hako->islandLastTime) / $init->unitTime);
 		}
 		$hako->islandLastTime += $init->unitTime * $uptime;
-		
-		// ƒƒOƒtƒ@ƒCƒ‹‚ğŒã‚ë‚É‚¸‚ç‚·
+
+		// ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å¾Œã‚ã«ãšã‚‰ã™
 		$this->log->slideBackLogFile();
-		
-		// ƒ^[ƒ“”Ô†
+
+		// ã‚¿ãƒ¼ãƒ³ç•ªå·
 		$hako->islandTurn++;
 		$GLOBALS['ISLAND_TURN'] = $hako->islandTurn;
-		
+
 		if($hako->islandNumber == 0) {
-			// “‡‚ª‚È‚¯‚ê‚Îƒ^[ƒ“”‚ğ•Û‘¶‚µ‚ÄˆÈ~‚Ìˆ—‚ÍÈ‚­
-			// ƒtƒ@ƒCƒ‹‚É‘‚«o‚µ
+			// å³¶ãŒãªã‘ã‚Œã°ã‚¿ãƒ¼ãƒ³æ•°ã‚’ä¿å­˜ã—ã¦ä»¥é™ã®å‡¦ç†ã¯çœã
+			// ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã—
 			$hako->writeIslandsFile();
 			return;
 		}
-		// ƒvƒŒƒ[ƒ“ƒgƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş(I‚ê‚ÎÁ‹)
+		// ãƒ—ãƒ¬ã‚¼ãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«ã‚’èª­ã¿è¾¼ã‚€(çµ‚ã‚Œã°æ¶ˆå»)
 		$hako->readPresentFile(true);
-		
-		// À•W”z—ñ‚ğì‚é
+
+		// åº§æ¨™é…åˆ—ã‚’ä½œã‚‹
 		$randomPoint = Util::makeRandomPointArray();
 		$this->rpx = $randomPoint[0];
 		$this->rpy = $randomPoint[1];
-		
-		// ‡”ÔŒˆ‚ß
+
+		// é †ç•ªæ±ºã‚
 		$order = Util::randomArray($hako->islandNumber);
-		
-		// ‘D”•‰Šú‰»
+
+		// èˆ¹èˆ¶åˆæœŸåŒ–
 		for($i = 0; $i < $hako->islandNumber; $i++) {
 			$this->shipcounter($hako, $hako->islands[$order[$i]]);
 		}
-		
-		// XV‘O‚Ìî•ñƒƒ‚
+
+		// æ›´æ–°å‰ã®æƒ…å ±ãƒ¡ãƒ¢
 		for($i = 0; $i < $hako->islandNumber; $i++) {
-			// ŠÇ—l—a‚©‚è’†‚Ìê‡ƒXƒLƒbƒv
+			// ç®¡ç†äººé ã‹ã‚Šä¸­ã®å ´åˆã‚¹ã‚­ãƒƒãƒ—
 			if($hako->islands[$order[$i]]['keep']) {
 				continue;
 			}
-			// lŒûA‘‹àAH—¿Aƒ|ƒCƒ“ƒg‚ğƒƒ‚‚·‚é
+			// äººå£ã€è³‡é‡‘ã€é£Ÿæ–™ã€ãƒã‚¤ãƒ³ãƒˆã‚’ãƒ¡ãƒ¢ã™ã‚‹
 			$hako->islands[$order[$i]]['oldMoney'] = $hako->islands[$order[$i]]['money'];
 			$hako->islands[$order[$i]]['oldFood']  = $hako->islands[$order[$i]]['food'];
 			$hako->islands[$order[$i]]['oldPop']   = $hako->islands[$order[$i]]['pop'];
 			$hako->islands[$order[$i]]['oldPoint'] = $hako->islands[$order[$i]]['point'];
 			$this->estimate($hako, $hako->islands[$order[$i]]);
 		}
-		
-		// û“üEÁ”ï
+
+		// åå…¥ãƒ»æ¶ˆè²»
 		for($i = 0; $i < $hako->islandNumber; $i++) {
-			// ŠÇ—l—a‚©‚è’†‚Ìê‡ƒXƒLƒbƒv
+			// ç®¡ç†äººé ã‹ã‚Šä¸­ã®å ´åˆã‚¹ã‚­ãƒƒãƒ—
 			if($hako->islands[$order[$i]]['keep']) {
 				continue;
 			}
 			$this->income($hako->islands[$order[$i]]);
 		}
-		
-		// ƒRƒ}ƒ“ƒhˆ—
+
+		// ã‚³ãƒãƒ³ãƒ‰å‡¦ç†
 		for($i = 0; $i < $hako->islandNumber; $i++) {
-			// ŠÇ—l—a‚©‚è’†‚Ìê‡ƒXƒLƒbƒv
+			// ç®¡ç†äººé ã‹ã‚Šä¸­ã®å ´åˆã‚¹ã‚­ãƒƒãƒ—
 			if($hako->islands[$order[$i]]['keep']) {
 				continue;
 			}
-			
-			// –ß‚è’l1‚É‚È‚é‚Ü‚ÅŒJ‚è•Ô‚µ
+
+			// æˆ»ã‚Šå€¤1ã«ãªã‚‹ã¾ã§ç¹°ã‚Šè¿”ã—
 			while($this->doCommand($hako, $hako->islands[$order[$i]]) == 0);
-			
-			// ®’nƒƒO (‚Ü‚Æ‚ß‚ÄƒƒOo—Í)
+
+			// æ•´åœ°ãƒ­ã‚° (ã¾ã¨ã‚ã¦ãƒ­ã‚°å‡ºåŠ›)
 			if($init->logOmit) {
 				$this->logMatome($hako->islands[$order[$i]]);
 			}
 		}
-		
-		// ¬’·‚¨‚æ‚Ñ’PƒwƒbƒNƒXĞŠQ
+
+		// æˆé•·ãŠã‚ˆã³å˜ãƒ˜ãƒƒã‚¯ã‚¹ç½å®³
 		for($i = 0; $i < $hako->islandNumber; $i++) {
-			// ŠÇ—l—a‚©‚è’†‚Ìê‡ƒXƒLƒbƒv
+			// ç®¡ç†äººé ã‹ã‚Šä¸­ã®å ´åˆã‚¹ã‚­ãƒƒãƒ—
 			if($hako->islands[$order[$i]]['keep']) {
 				continue;
 			}
 			$this->doEachHex($hako, $hako->islands[$order[$i]]);
 		}
-		// “‡‘S‘Ìˆ—
+		// å³¶å…¨ä½“å‡¦ç†
 		$remainNumber = $hako->islandNumber;
-		
+
 		for($i = 0; $i < $hako->islandNumber; $i++) {
-			// ŠÇ—l—a‚©‚è’†‚Ìê‡ƒXƒLƒbƒv
+			// ç®¡ç†äººé ã‹ã‚Šä¸­ã®å ´åˆã‚¹ã‚­ãƒƒãƒ—
 			if($hako->islands[$order[$i]]['keep']) {
 				continue;
 			}
 			$island = $hako->islands[$order[$i]];
 			$this->doIslandProcess($hako, $island);
-			
-			// €–Å”»’è
-			if($island['dead'] == 1) {
-				$island['pop']   = 0;
-				$island['point'] = 0;
-				$remainNumber--;
-			} elseif((($island['pop'] == 0) || ($island['point'] == 0)) && ($island['isBF'] != 1)) {
-				$island['dead'] = 1;
-				$remainNumber--;
-				// €–ÅƒƒbƒZ[ƒW
-				$tmpid = $island['id'];
-				$this->log->dead($tmpid, $island['name']);
-				if(is_file("{$init->dirName}/island.{$tmpid}")) {
-					unlink("{$init->dirName}/island.{$tmpid}");
+
+			// æ­»æ»…åˆ¤å®š
+			if ( isset($island['dead']) ) {
+				if($island['dead'] == 1) {
+					$island['pop']   = 0;
+					$island['point'] = 0;
+					$remainNumber--;
+				} elseif((($island['pop'] == 0) || ($island['point'] == 0)) && ($island['isBF'] != 1)) {
+					$island['dead'] = 1;
+					$remainNumber--;
+					// æ­»æ»…ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+					$tmpid = $island['id'];
+					$this->log->dead($tmpid, $island['name']);
+					if(is_file("{$init->dirName}/island.{$tmpid}")) {
+						unlink("{$init->dirName}/island.{$tmpid}");
+					}
 				}
 			}
 			$hako->islands[$order[$i]] = $island;
 		}
-		
-		// lŒû‡‚Éƒ\[ƒg
+
+		// äººå£é †ã«ã‚½ãƒ¼ãƒˆ
 		$this->islandSort($hako);
-		
-		// ƒ^[ƒ“”t‘ÎÛƒ^[ƒ“‚¾‚Á‚½‚çA‚»‚Ìˆ—
+
+		// ã‚¿ãƒ¼ãƒ³æ¯å¯¾è±¡ã‚¿ãƒ¼ãƒ³ã ã£ãŸã‚‰ã€ãã®å‡¦ç†
 		if(($hako->islandTurn % $init->turnPrizeUnit) == 0) {
 			$island = $hako->islands[0];
 			$this->log->prize($island['id'], $island['name'], "{$hako->islandTurn}{$init->prizeName[0]}");
 			$hako->islands[0]['prize'] .= "{$hako->islandTurn},";
 		}
-		// “‡”ƒJƒbƒg
+		// å³¶æ•°ã‚«ãƒƒãƒˆ
 		$hako->islandNumber = $remainNumber;
-		
-		// ‘D”•‰Šú‰»
+
+		// èˆ¹èˆ¶åˆæœŸåŒ–
 		for($i = 0; $i < $hako->islandNumber; $i++) {
 			$this->shipcounter($hako, $hako->islands[$order[$i]]);
 		}
-		
+
 		for($i = 0; $i < $hako->islandNumber; $i++) {
 			$this->estimate($hako, $hako->islands[$order[$i]]);
 		}
-		
-		// ƒoƒbƒNƒAƒbƒvƒ^[ƒ“‚Å‚ ‚ê‚ÎA‘‚­‘O‚Érename
+
+		// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚¿ãƒ¼ãƒ³ã§ã‚ã‚Œã°ã€æ›¸ãå‰ã«rename
 		if(!($init->safemode) && (($hako->islandTurn % $init->backupTurn) == 0)) {
 			$hako->backUp();
 		}
-		// ƒoƒbƒNƒAƒbƒvƒ^[ƒ“‚Å‚ ‚ê‚ÎAƒZ[ƒtƒ‚[ƒhƒoƒbƒNƒAƒbƒvæ“¾
+		// ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—ã‚¿ãƒ¼ãƒ³ã§ã‚ã‚Œã°ã€ã‚»ãƒ¼ãƒ•ãƒ¢ãƒ¼ãƒ‰ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—å–å¾—
 		if(($init->safemode) && (($hako->islandTurn % $init->backupTurn) == 0)) {
 			$hako->safemode_backup();
 		}
-		// ƒtƒ@ƒCƒ‹‚É‘‚«o‚µ
+		// ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã—
 		$hako->writeIslandsFile(-1);
-		
-		// ƒƒO‘‚«o‚µ
+
+		// ãƒ­ã‚°æ›¸ãå‡ºã—
 		$this->log->flush();
-		
-		// ‹L˜^ƒƒO’²®
+
+		// è¨˜éŒ²ãƒ­ã‚°èª¿æ•´
 		$this->log->historyTrim();
 	}
-	
+
 	//---------------------------------------------------
-	// ƒƒO‚ğ‚Ü‚Æ‚ß‚é
+	// ãƒ­ã‚°ã‚’ã¾ã¨ã‚ã‚‹
 	//---------------------------------------------------
 	function logMatome($island) {
 		global $init;
-		
+
 		$sno = $island['seichi'];
 		$point = "";
+		$i = 0;
 		if($sno > 0) {
 			if($init->logOmit == 1) {
 				$sArray = $island['seichipnt'];
-				for($i = 0; $i < $sno; $i++) {
+				for($i; $i < $sno; $i++) {
 					$spnt = $sArray[$i];
 					if($spnt == "") {
 						break;
@@ -256,33 +260,33 @@ class Turn {
 					$y = $spnt['y'];
 					$point .= "($x, $y) ";
 					if(!(($i+1)%20)) {
-						// ‘SŠp‹ó”’‚R‚Â
-						$point .= "<br>@@@";
+						// å…¨è§’ç©ºç™½ï¼“ã¤
+						$point .= "<br>ã€€ã€€ã€€";
 					}
 				}
 			}
 			if($i > 1 || ($init->logOmit != 1)) {
-				$point .= "‚Ì<strong>{$sno}ƒPŠ</strong>";
+				$point .= "ã®<strong>{$sno}ã‚±æ‰€</strong>";
 			}
 		}
 		if($point != "") {
 			if(($init->logOmit == 1) && ($sno > 1)) {
-				$this->log->landSucMatome($island['id'], $island['name'], '®’n', $point);
+				$this->log->landSucMatome($island['id'], $island['name'], 'æ•´åœ°', $point);
 			} else {
-				$this->log->landSuc($island['id'], $island['name'], '®’n', $point);
+				$this->log->landSuc($island['id'], $island['name'], 'æ•´åœ°', $point);
 			}
 		}
 	}
-	
+
 	//---------------------------------------------------
-	// ƒRƒ}ƒ“ƒhƒtƒFƒCƒY
+	// ã‚³ãƒãƒ³ãƒ‰ãƒ•ã‚§ã‚¤ã‚º
 	//---------------------------------------------------
 	function doCommand(&$hako, &$island) {
 		global $init;
-		
+
 		$comArray  = &$island['command'];
 		$command   = $comArray[0];
-		Util::slideFront(&$comArray, 0);
+		Util::slideFront($comArray, 0);
 		$island['command'] = $comArray;
 		$kind      = $command['kind'];
 		$target    = $command['target'];
@@ -300,7 +304,7 @@ class Turn {
 		$point     = "({$x},{$y})";
 		$landName  = $this->landName($landKind, $lv);
 		$prize     = &$island['prize'];
-		
+
 		if($kind == $init->comDoNothing) {
 			//$this->log->doNothing($id, $name, $comName);
 			if($island['isBF'] == 1) {
@@ -309,8 +313,8 @@ class Turn {
 			} else {
 				$island['money'] += 10;
 				$island['absent']++;
-				
-				// ©“®•úŠü
+
+				// è‡ªå‹•æ”¾æ£„
 				if($island['absent'] >= $init->giveupTurn) {
 					$comArray[0] = array (
 						'kind'   => $init->comGiveup,
@@ -326,16 +330,16 @@ class Turn {
 		}
 		$island['command'] = $comArray;
 		$island['absent']  = 0;
-		
-		// ƒRƒXƒgƒ`ƒFƒbƒN
+
+		// ã‚³ã‚¹ãƒˆãƒã‚§ãƒƒã‚¯
 		if($cost > 0) {
-			// ‹à‚Ìê‡
+			// é‡‘ã®å ´åˆ
 			if($island['money'] < $cost) {
 				$this->log->noMoney($id, $name, $comName);
 				return 0;
 			}
 		} elseif($cost < 0) {
-			// H—¿E–ØŞ‚Ìê‡
+			// é£Ÿæ–™ãƒ»æœ¨æã®å ´åˆ
 			if(($kind == $init->comSell || $kind == $init->comSoukoF) && ($island['food'] < (-$cost))) {
 				$this->log->noFood($id, $name, $comName);
 				return 0;
@@ -345,11 +349,11 @@ class Turn {
 			}
 		}
 		$returnMode = 1;
-		
+
 		switch($kind) {
 			case $init->comPrepare:
 			case $init->comPrepare2:
-				// ®’nA’n‚È‚ç‚µ
+				// æ•´åœ°ã€åœ°ãªã‚‰ã—
 				if (($landKind == $init->landSea) ||
 					($landKind == $init->landPoll) ||
 					($landKind == $init->landSbase) ||
@@ -365,97 +369,97 @@ class Turn {
 					($landKind == $init->landMonster) ||
 					($landKind == $init->landSleeper) ||
 					($landKind == $init->landZorasu)) {
-					// ŠCA»•lA‰˜õ“yëAŠC’êŠî’nAŠC’ê–h‰q{İAŠC’ê“ss
-					// ŠCã“ssAŠC’ê”_êA—{BêA–û“cA`ARA‰öb‚Í®’n‚Å‚«‚È‚¢
+					// æµ·ã€ç ‚æµœã€æ±šæŸ“åœŸå£Œã€æµ·åº•åŸºåœ°ã€æµ·åº•é˜²è¡›æ–½è¨­ã€æµ·åº•éƒ½å¸‚
+					// æµ·ä¸Šéƒ½å¸‚ã€æµ·åº•è¾²å ´ã€é¤Šæ®–å ´ã€æ²¹ç”°ã€æ¸¯ã€å±±ã€æ€ªç£ã¯æ•´åœ°ã§ããªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
-				// Î‚Í®’nE’n‚È‚ç‚µ‚Å‹à‚ÉA—‘‚ÍH—¿‚É‚È‚é
+				// çŸ³ã¯æ•´åœ°ãƒ»åœ°ãªã‚‰ã—ã§é‡‘ã«ã€åµã¯é£Ÿæ–™ã«ãªã‚‹
 				if($landKind == $init->landMonument) {
 					if((33 < $lv) && ($lv < 40)) {
-						// ‹à‚É‚È‚é
+						// é‡‘ã«ãªã‚‹
 						$island['money'] += 9999;
 					} elseif((39 < $lv) && ($lv < 44)) {
-						// H—¿‚É‚È‚é
+						// é£Ÿæ–™ã«ãªã‚‹
 						$island['food'] += 5000;
 					}
 				}
-				// –Ú“I‚ÌêŠ‚ğ•½’n‚É‚·‚é
+				// ç›®çš„ã®å ´æ‰€ã‚’å¹³åœ°ã«ã™ã‚‹
 				$land[$x][$y] = $init->landPlains;
 				$landValue[$x][$y] = 0;
-				
-				// ®’nƒƒO‚Ì‚Ü‚Æ‚ß
+
+				// æ•´åœ°ãƒ­ã‚°ã®ã¾ã¨ã‚
 				if($init->logOmit) {
 					$sno = $island['seichi'];
 					$island['seichi']++;
-					
-					// À•W‚ ‚è‚Ì‚Ü‚Æ‚ß
+
+					// åº§æ¨™ã‚ã‚Šã®ã¾ã¨ã‚
 					if($init->logOmit == 1) {
 						$seichipnt['x'] = $x;
 						$seichipnt['y'] = $y;
 						$island['seichipnt'][$sno] = $seichipnt;
 					}
 				} else {
-					$this->log->landSuc($id, $name, '®’n', $point);
+					$this->log->landSuc($id, $name, 'æ•´åœ°', $point);
 				}
-				// ‰½‚©‚Ì—‘”­Œ©
+				// ä½•ã‹ã®åµç™ºè¦‹
 				if(Util::random(100) < 3) {
 					$this->log->EggFound($id, $name, $comName, $point);
 					$land[$x][$y] = $init->landMonument;
 					$landValue[$x][$y] = 40 + Util::random(3);
 				}
-				// ƒAƒCƒeƒ€”­Œ©”»’è
+				// ã‚¢ã‚¤ãƒ†ãƒ ç™ºè¦‹åˆ¤å®š
 				if(Util::random(100) < 7) {
-					// ’n}‚P”­Œ©
+					// åœ°å›³ï¼‘ç™ºè¦‹
 					if(($island['tenki'] == 1) && ($island['item'][0] != 1)) {
 						$island['item'][0] = 1;
-						$this->log->ItemFound($id, $name, $comName, '‰½‚©‚Ì’n}');
+						$this->log->ItemFound($id, $name, $comName, 'ä½•ã‹ã®åœ°å›³');
 					} elseif($island['tenki'] == 4) {
-						// “V‹C‚ª—‹‚Ì‚Æ‚«
+						// å¤©æ°—ãŒé›·ã®ã¨ã
 						if(($island['item'][3] == 1) && ($island['item'][4] != 1)) {
-							// ƒ|ƒ`ƒ‡ƒ€ƒLƒ“”­Œ©
+							// ãƒãƒãƒ§ãƒ ã‚­ãƒ³ç™ºè¦‹
 							$island['item'][4] = 1;
-							$this->log->ItemFound($id, $name, $comName, '“ä‚ÌlŒ`');
+							$this->log->ItemFound($id, $name, $comName, 'è¬ã®äººå½¢');
 						} elseif(($island['item'][6] == 1) && ($island['item'][7] == 1) && ($island['item'][8] != 1)) {
-							// ‘æO‚Ì”]”­Œ©
+							// ç¬¬ä¸‰ã®è„³ç™ºè¦‹
 							$island['item'][8] = 1;
-							$this->log->ItemFound($id, $name, $comName, '”]‚ÌŒ`‚ğ‚µ‚½‰½‚©');
+							$this->log->ItemFound($id, $name, $comName, 'è„³ã®å½¢ã‚’ã—ãŸä½•ã‹');
 						} elseif(($island['item'][9] == 1) && ($island['taiji'] >= 7) && ($island['zin'][2] != 1)) {
-							// ƒVƒFƒCƒh”­Œ©
-							$itemName = "ƒVƒFƒCƒh";
+							// ã‚·ã‚§ã‚¤ãƒ‰ç™ºè¦‹
+							$itemName = "ã‚·ã‚§ã‚¤ãƒ‰";
 							$island['zin'][2] = 1;
-							$this->log->Zin3Found($id, $name, $comName, 'ƒVƒFƒCƒh');
+							$this->log->Zin3Found($id, $name, $comName, 'ã‚·ã‚§ã‚¤ãƒ‰');
 						}
 					} elseif($island['tenki'] == 5) {
-						// “V‹C‚ªá‚Ì‚Æ‚«
+						// å¤©æ°—ãŒé›ªã®ã¨ã
 						if(($island['item'][4] == 1) && ($island['item'][5] != 1)) {
-							// ’n}‚Q”­Œ©
+							// åœ°å›³ï¼’ç™ºè¦‹
 							$island['item'][5] = 1;
-							$this->log->ItemFound($id, $name, $comName, '‰½‚©‚Ì’n}');
+							$this->log->ItemFound($id, $name, $comName, 'ä½•ã‹ã®åœ°å›³');
 						} elseif(($island['item'][17] == 1) && ($island['item'][18] != 1)) {
-							// ƒŠƒ“ƒO”­Œ©
+							// ãƒªãƒ³ã‚°ç™ºè¦‹
 							$island['item'][18] = 1;
-							$this->log->ItemFound($id, $name, $comName, 'ƒŠƒ“ƒO');
+							$this->log->ItemFound($id, $name, $comName, 'ãƒªãƒ³ã‚°');
 						}
 					} elseif(($island['item'][0] == 1) && ($island['zin'][0] != 1)) {
-						// ƒm[ƒ€”­Œ©
+						// ãƒãƒ¼ãƒ ç™ºè¦‹
 						$island['zin'][0] = 1;
-						$this->log->ZinFound($id, $name, $comName, 'ƒm[ƒ€');
+						$this->log->ZinFound($id, $name, $comName, 'ãƒãƒ¼ãƒ ');
 					}
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				if($kind == $init->comPrepare2) {
-					// ’n‚È‚ç‚µ
+					// åœ°ãªã‚‰ã—
 					$island['prepare2']++;
-					// ƒ^[ƒ“Á”ï‚¹‚¸
+					// ã‚¿ãƒ¼ãƒ³æ¶ˆè²»ã›ãš
 					$returnMode = 0;
 				} else {
-					// ®’n‚È‚çA–„‘ ‹à‚Ì‰Â”\«‚ ‚è
+					// æ•´åœ°ãªã‚‰ã€åŸ‹è”µé‡‘ã®å¯èƒ½æ€§ã‚ã‚Š
 					if($island['zin'][0] == 1) {
-						// ƒm[ƒ€Š–„‘ ‹àŠm—¦
+						// ãƒãƒ¼ãƒ æ‰€æŒæ™‚åŸ‹è”µé‡‘ç¢ºç‡
 						$r = Util::random(500);
 					} else {
 						$r = Util::random(1000);
@@ -468,9 +472,9 @@ class Turn {
 					$returnMode = 1;
 				}
 				break;
-				
+
 			case $init->comReclaim:
-				// –„‚ß—§‚Ä
+				// åŸ‹ã‚ç«‹ã¦
 				if(!(($landKind == $init->landSea) && ($lv < 2)) &&
 					($landKind != $init->landOil) &&
 					($landKind != $init->landPort) &&
@@ -482,24 +486,24 @@ class Turn {
 					($landKind != $init->landFroCity) &&
 					($landKind != $init->landSdefence) &&
 					($landKind != $init->landSbase)) {
-					// ŠCA»•lAŠC’êŠî’nA–û“cA`AŠC’êÁ–hAŠC’ê–h‰q{İ
-					// ŠC’ê“ssAŠCã“ssAŠC’ê”_êA—{Bê‚µ‚©–„‚ß—§‚Ä‚Å‚«‚È‚¢
+					// æµ·ã€ç ‚æµœã€æµ·åº•åŸºåœ°ã€æ²¹ç”°ã€æ¸¯ã€æµ·åº•æ¶ˆé˜²ç½²ã€æµ·åº•é˜²è¡›æ–½è¨­
+					// æµ·åº•éƒ½å¸‚ã€æµ·ä¸Šéƒ½å¸‚ã€æµ·åº•è¾²å ´ã€é¤Šæ®–å ´ã—ã‹åŸ‹ã‚ç«‹ã¦ã§ããªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
-				// ü‚è‚É—¤‚ª‚ ‚é‚©ƒ`ƒFƒbƒN
+				// å‘¨ã‚Šã«é™¸ãŒã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
 				$seaCount = Turn::countAround($land, $x, $y, 7, array($init->landSea, $init->landSeaSide, $init->landSeaCity, $init->landFroCity,$init->landOil, $init->landNursery, $init->landSfarm, $init->landPort, $init->landSdefence, $init->landSbase));
-				
+
 				if($seaCount == 7) {
-					// ‘S•”ŠC‚¾‚©‚ç–„‚ß—§‚Ä•s”\
+					// å…¨éƒ¨æµ·ã ã‹ã‚‰åŸ‹ã‚ç«‹ã¦ä¸èƒ½
 					$this->log->noLandAround($id, $name, $comName, $point);
 					$returnMode = 0;
 					break;
 				}
 				if((($landKind == $init->landSea) && ($lv == 1)) || ($landKind == $init->landSeaSide)) {
-					// ó£‚©»•l‚Ìê‡
-					// –Ú“I‚ÌêŠ‚ğr’n‚É‚·‚é
+					// æµ…ç€¬ã‹ç ‚æµœã®å ´åˆ
+					// ç›®çš„ã®å ´æ‰€ã‚’è’åœ°ã«ã™ã‚‹
 					$land[$x][$y] = $init->landWaste;
 					$landValue[$x][$y] = 0;
 					$this->log->landSuc($id, $name, $comName, $point);
@@ -507,17 +511,17 @@ class Turn {
 						$island['area']++;
 					}
 					if($seaCount <= 4) {
-						// ü‚è‚ÌŠC‚ª3ƒwƒbƒNƒXˆÈ“à‚È‚Ì‚ÅAó£‚É‚·‚é
+						// å‘¨ã‚Šã®æµ·ãŒ3ãƒ˜ãƒƒã‚¯ã‚¹ä»¥å†…ãªã®ã§ã€æµ…ç€¬ã«ã™ã‚‹
 						for($i = 1; $i < 7; $i++) {
 							$sx = $x + $init->ax[$i];
 							$sy = $y + $init->ay[$i];
-							// s‚É‚æ‚éˆÊ’u’²®
+							// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 							if((($sy % 2) == 0) && (($y % 2) == 1)) {
 								$sx--;
 							}
 							if(($sx < 0) || ($sx >= $init->islandSize) || ($sy < 0) || ($sy >= $init->islandSize)) {
 							} else {
-								// ”ÍˆÍ“à‚Ìê‡
+								// ç¯„å›²å†…ã®å ´åˆ
 								if($land[$sx][$sy] == $init->landSea) {
 									$landValue[$sx][$sy] = 1;
 								}
@@ -525,25 +529,25 @@ class Turn {
 						}
 					}
 				} else {
-					// ŠC‚È‚çA–Ú“I‚ÌêŠ‚ğó£‚É‚·‚é
+					// æµ·ãªã‚‰ã€ç›®çš„ã®å ´æ‰€ã‚’æµ…ç€¬ã«ã™ã‚‹
 					$land[$x][$y] = $init->landSea;
 					$landValue[$x][$y] = 1;
 					$this->log->landSuc($id, $name, $comName, $point);
-					
-					// ‹Ö’f‚Ì‘”­Œ©
+
+					// ç¦æ–­ã®æ›¸ç™ºè¦‹
 					if((Util::random(100) < 7) && ($island['tenki'] == 2) && ($island['item'][2] != 1)) {
 						$island['item'][2] = 1;
-						$this->log->ItemFound($id, $name, $comName, 'ŒÃ‚Ú‚¯‚½‘•¨');
+						$this->log->ItemFound($id, $name, $comName, 'å¤ã¼ã‘ãŸæ›¸ç‰©');
 					}
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comDestroy:
-				// Œ@í
+				// æ˜å‰Š
 				if((($landKind == $init->landSea) && ($lv > 1)) ||
 					($landKind == $init->landPoll) ||
 					($landKind == $init->landOil) ||
@@ -557,15 +561,15 @@ class Turn {
 					($landKind == $init->landMonster) ||
 					($landKind == $init->landSleeper) ||
 					($landKind == $init->landZorasu)) {
-					// ‘D”•A‰˜õ“yëA–û“cA`AŠC’ê“ssAŠCã“ssAŠC’ê”_êA—{Bê
-					// ŠC’êŠî’nAŠC’ê–h‰q{İA‰öbA‚¼‚ç‚·‚ÍŒ@í‚Å‚«‚È‚¢
+					// èˆ¹èˆ¶ã€æ±šæŸ“åœŸå£Œã€æ²¹ç”°ã€æ¸¯ã€æµ·åº•éƒ½å¸‚ã€æµ·ä¸Šéƒ½å¸‚ã€æµ·åº•è¾²å ´ã€é¤Šæ®–å ´
+					// æµ·åº•åŸºåœ°ã€æµ·åº•é˜²è¡›æ–½è¨­ã€æ€ªç£ã€ãã‚‰ã™ã¯æ˜å‰Šã§ããªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
 				if(($landKind == $init->landSea) && ($lv == 0)) {
-					// ŠC‚È‚çA–û“c’T‚µ
-					// “Š‘ŠzŒˆ’è
+					// æµ·ãªã‚‰ã€æ²¹ç”°æ¢ã—
+					// æŠ•è³‡é¡æ±ºå®š
 					if($arg == 0) {
 						$arg = 1;
 					}
@@ -573,22 +577,22 @@ class Turn {
 					$str = "{$value}{$init->unitMoney}";
 					$p = round($value / $cost);
 					$island['money'] -= $value;
-					
-					// –û“cŒ©‚Â‚©‚é‚©”»’è
+
+					// æ²¹ç”°è¦‹ã¤ã‹ã‚‹ã‹åˆ¤å®š
 					if($p > Util::random(100)) {
-						// –û“cŒ©‚Â‚©‚é
+						// æ²¹ç”°è¦‹ã¤ã‹ã‚‹
 						$this->log->oilFound($id, $name, $point, $comName, $str);
 						$island['oil']++;
 						$land[$x][$y] = $init->landOil;
 						$landValue[$x][$y] = 0;
 					} else {
-						// –³‘ÊŒ‚‚¿‚ÉI‚í‚é
+						// ç„¡é§„æ’ƒã¡ã«çµ‚ã‚ã‚‹
 						$this->log->oilFail($id, $name, $point, $comName, $str);
 					}
 					$returnMode = 1;
 					break;
 				}
-				// –Ú“I‚ÌêŠ‚ğŠC‚É‚·‚éBR‚È‚çr’n‚ÉBó£‚È‚çŠC‚ÉB
+				// ç›®çš„ã®å ´æ‰€ã‚’æµ·ã«ã™ã‚‹ã€‚å±±ãªã‚‰è’åœ°ã«ã€‚æµ…ç€¬ãªã‚‰æµ·ã«ã€‚
 				if($landKind == $init->landMountain) {
 					$land[$x][$y] = $init->landWaste;
 					$landValue[$x][$y] = 0;
@@ -603,48 +607,48 @@ class Turn {
 					$island['area']--;
 				}
 				$this->log->landSuc($id, $name, $comName, $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				if((Util::random(100) < 7) && ($island['tenki'] == 2) && ($island['item'][15] != 1)) {
-					// ƒ}ƒiEƒNƒŠƒXƒ^ƒ‹”­Œ©
+					// ãƒãƒŠãƒ»ã‚¯ãƒªã‚¹ã‚¿ãƒ«ç™ºè¦‹
 					$island['item'][15] = 1;
-					$this->log->ItemFound($id, $name, $comName, '‚«‚ç‚ß‚­•óÎ');
+					$this->log->ItemFound($id, $name, $comName, 'ãã‚‰ã‚ãå®çŸ³');
 				}
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comDeForest:
-				// ”°Ì
+				// ä¼æ¡
 				if($landKind != $init->landForest) {
-					// XˆÈŠO‚Í”°Ì‚Å‚«‚È‚¢
+					// æ£®ä»¥å¤–ã¯ä¼æ¡ã§ããªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
-				// –Ú“I‚ÌêŠ‚ğ•½’n‚É‚·‚é
+				// ç›®çš„ã®å ´æ‰€ã‚’å¹³åœ°ã«ã™ã‚‹
 				$land[$x][$y] = $init->landPlains;
 				$landValue[$x][$y] = 0;
 				$this->log->landSuc($id, $name, $comName, $point);
-				
+
 				if((Util::random(100) < 7) && ($island['tenki'] == 1)) {
-					// “V‹C‚ª°‚ê‚Ì‚Æ‚«
+					// å¤©æ°—ãŒæ™´ã‚Œã®ã¨ã
 					if($island['item'][1] != 1) {
-						// ƒmƒRƒMƒŠ”­Œ©
+						// ãƒã‚³ã‚®ãƒªç™ºè¦‹
 						$island['item'][1] = 1;
-						$this->log->ItemFound($id, $name, $comName, 'ƒmƒRƒMƒŠ');
+						$this->log->ItemFound($id, $name, $comName, 'ãƒã‚³ã‚®ãƒª');
 					} elseif(($island['item'][5] == 1) && ($island['zin'][1] != 1)) {
-						// ƒEƒBƒXƒv”­Œ©
+						// ã‚¦ã‚£ã‚¹ãƒ—ç™ºè¦‹
 						$island['zin'][1] = 1;
-						$this->log->ZinFound($id, $name, $comName, 'ƒEƒBƒXƒv');
+						$this->log->ZinFound($id, $name, $comName, 'ã‚¦ã‚£ã‚¹ãƒ—');
 					}
 				}
 				if($island['item'][20] >= $init->maxWood) {
-					// –ØŞÅ‘å’l‚ğ’´‚¦‚½ê‡A”„‹p‹à‚ğ“¾‚é
+					// æœ¨ææœ€å¤§å€¤ã‚’è¶…ãˆãŸå ´åˆã€å£²å´é‡‘ã‚’å¾—ã‚‹
 					$island['money'] += $init->treeValue * $lv;
 				} else {
-					// –ØŞ‚ğ“¾‚é
+					// æœ¨æã‚’å¾—ã‚‹
 					$island['item'][20] += $lv;
 				}
 				if($island['item'][1] == 1) {
@@ -653,18 +657,18 @@ class Turn {
 				}
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comSeaSide:
-				// »•l®”õ
+				// ç ‚æµœæ•´å‚™
 				if(($landKind == $init->landSea) && ($lv != 1)) {
-					// ó£ˆÈŠO‚Í®”õ‚Å‚«‚È‚¢
+					// æµ…ç€¬ä»¥å¤–ã¯æ•´å‚™ã§ããªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
-					
+
 					$returnMode = 0;
 					break;
 				}
 				if((($landKind == $init->landSea) && ($lv == 1)) || ($landKind == $init->landSeaSide)) {
-					// ü‚è‚É—¤‚ª‚ ‚é‚©ƒ`ƒFƒbƒN
+					// å‘¨ã‚Šã«é™¸ãŒã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
 					$seaCount = Turn::countAround($land, $x, $y, 7, array($init->landSea, $init->landSeaSide, $init->landPort,
 					$init->landOil, $init->landNursery, $init->landSbase));
 					if($seaCount == 7) {
@@ -676,59 +680,59 @@ class Turn {
 					$landValue[$x][$y] = 0;
 				}
 				$this->log->LandSuc($id, $name, $comName, $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comPort:
-				// `
+				// æ¸¯
 				if(!($landKind == $init->landSea && $lv == 1)){
-					// ó£ˆÈŠO‚É‚ÍŒšİ•s‰Â
+					// æµ…ç€¬ä»¥å¤–ã«ã¯å»ºè¨­ä¸å¯
 					$this->log->LandFail($id, $name, $comName, $landName, $point);
-					
+
 					$returnMode = 0;
 					break;
 				}
 				$seaCount = Turn::countAround($land, $x, $y, 7, array($init->landSea));
-				
+
 				if($seaCount <= 1){
-					// üˆÍ‚ÉÅ’á1Hex‚ÌŠC‚à–³‚¢ê‡‚àŒšİ•s‰Â
+					// å‘¨å›²ã«æœ€ä½1Hexã®æµ·ã‚‚ç„¡ã„å ´åˆã‚‚å»ºè¨­ä¸å¯
 					$this->log->NoSeaAround($id, $name, $comName, $point);
-					
+
 					$returnMode = 0;
 					break;
 				}
 				if($seaCount == 7){
-					// ü‚è‚ª‘S•”ŠC‚È‚Ì‚Å`‚ÍŒšİ‚Å‚«‚È‚¢
+					// å‘¨ã‚ŠãŒå…¨éƒ¨æµ·ãªã®ã§æ¸¯ã¯å»ºè¨­ã§ããªã„
 					$this->log->NoLandAround($id, $name, $comName, $point);
-					
+
 					$returnMode = 0;
 					break;
 				}
 				$land[$x][$y] = $init->landPort;
 				$landValue[$x][$y] = 0;
 				$this->log->LandSuc($id, $name, $comName, $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comMakeShip:
-				// ‘¢‘D
+				// é€ èˆ¹
 				$countPort = Turn::countAround($land, $x, $y, 7, array($init->landPort));
 				if($countPort < 1){
-					// üˆÍ1ƒwƒbƒNƒX‚É`‚ª‚È‚¢‚Æ¸”s
+					// å‘¨å›²1ãƒ˜ãƒƒã‚¯ã‚¹ã«æ¸¯ãŒãªã„ã¨å¤±æ•—
 					$this->log->NoPort($id, $name, $comName, $point);
 					$returnMode = 0;
 					break;
 				}
 				if(!($landKind == $init->landSea && $lv == 0)){
-					// ‘D‚ğİ’u‚·‚éêŠ‚ªŠC‚Å–³‚¢ê‡‚Í¸”s
+					// èˆ¹ã‚’è¨­ç½®ã™ã‚‹å ´æ‰€ãŒæµ·ã§ç„¡ã„å ´åˆã¯å¤±æ•—
 					$this->log->NoSea($id, $name, $comName, $point);
 					$returnMode = 0;
 					break;
@@ -738,64 +742,64 @@ class Turn {
 					$ownShip += $island['ship'][$i];
 				}
 				if($init->shipMax <= $ownShip){
-					// ‘D‚ªÅ‘åŠ—L—Ê‚ğ’´‚¦‚Ä‚¢‚½ê‡A‹p‰º
+					// èˆ¹ãŒæœ€å¤§æ‰€æœ‰é‡ã‚’è¶…ãˆã¦ã„ãŸå ´åˆã€å´ä¸‹
 					$this->log->maxShip($id, $name, $comName, $point);
 					$returnMode = 0;
 					break;
 				}
 				$land[$x][$y] = $init->landShip;
 				$landValue[$x][$y] = Util::navyPack($island['id'], $arg, $init->shipHP[$arg], 0, 0);
-				$this->log->LandSuc($id, $name, $init->shipName[$arg]."‚Ì".$comName, $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+				$this->log->LandSuc($id, $name, $init->shipName[$arg]."ã®".$comName, $point);
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comSendShip:
-				// ‘D”hŒ­
-				// ƒ^[ƒQƒbƒgæ“¾
+				// èˆ¹æ´¾é£
+				// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 				$tn = $hako->idToNumber[$target];
 				if($tn != 0 && empty($tn)) {
-					// ƒ^[ƒQƒbƒg‚ª‚·‚Å‚É‚È‚¢
+					// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã™ã§ã«ãªã„
 					$this->log->ssNoTarget($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
-				// –‘O€”õ
+				// äº‹å‰æº–å‚™
 				$tIsland    = $hako->islands[$tn];
 				$tId        = $tIsland['id'];
 				$tName      = $tIsland['name'];
 				$tLand      = $tIsland['land'];
 				$tLandValue = $tIsland['landValue'];
-				
+
 				$ship = Util::navyUnpack($landValue[$x][$y]);
-				
-				// Às”»’è
+
+				// å®Ÿè¡Œåˆ¤å®š
 				if($land[$x][$y] != $init->landShip) {
-					// ‘ÎÛ‚ª‘D”•ˆÈŠO‚Ìê‡
-					$this->log->landFail($id, $name, $comName, "‘D”•ˆÈŠO‚Ì’nŒ`", $point);
+					// å¯¾è±¡ãŒèˆ¹èˆ¶ä»¥å¤–ã®å ´åˆ
+					$this->log->landFail($id, $name, $comName, "èˆ¹èˆ¶ä»¥å¤–ã®åœ°å½¢", $point);
 					$returnMode = 0;
 					break;
 				} elseif($ship[1] >= 10) {
-					// ‘ÎÛ‚ªŠC‘¯‘D‚Ìê‡
+					// å¯¾è±¡ãŒæµ·è³Šèˆ¹ã®å ´åˆ
 					$this->log->landFail($id, $name, $comName, $init->shipName[$ship[1]], $point);
 					$returnMode = 0;
 					break;
 				} elseif($ship[0] != $island['id']) {
-					// ‘ÎÛ‚ª‘¼“‡‚Ì‘D”•‚Ìê‡
-					$this->log->landFail($id, $name, $comName, "‘¼“‡Š‘®‚Ì‘D”•", $point);
+					// å¯¾è±¡ãŒä»–å³¶ã®èˆ¹èˆ¶ã®å ´åˆ
+					$this->log->landFail($id, $name, $comName, "ä»–å³¶æ‰€å±ã®èˆ¹èˆ¶", $point);
 					$returnMode = 0;
 					break;
 				} elseif($tId == $island['id']) {
-					// ”hŒ­æ‚ª©“‡‚Ì‚½‚ß’†~
-					$this->log->shipFail($id, $name, $comName, "”hŒ­æ‚ª©“‡");
+					// æ´¾é£å…ˆãŒè‡ªå³¶ã®ãŸã‚ä¸­æ­¢
+					$this->log->shipFail($id, $name, $comName, "æ´¾é£å…ˆãŒè‡ªå³¶");
 					$returnMode = 0;
 					break;
 				}
-				
-				// ”hŒ­’n“_‚ğŒˆ‚ß‚é
+
+				// æ´¾é£åœ°ç‚¹ã‚’æ±ºã‚ã‚‹
 				for ($i = 0; $i < $init->pointNumber; $i++) {
 					$bx = $this->rpx[$i];
 					$by = $this->rpy[$i];
@@ -803,76 +807,76 @@ class Turn {
 						break;
 					}
 				}
-				// ”hŒ­æ
+				// æ´¾é£å…ˆ
 				$tLand[$bx][$by]      = $init->landShip;
 				$tLandValue[$bx][$by] = $lv;
-				// ”hŒ­Œ³
+				// æ´¾é£å…ƒ
 				$land[$x][$y]      = $init->landSea;
 				$landValue[$x][$y] = 0;
-				
-				// ”hŒ­ƒƒO
+
+				// æ´¾é£ãƒ­ã‚°
 				$this->log->shipSend($id, $tId, $name, $init->shipName[$ship[1]], "({$x}, {$y})", $tName);
-				
+
 				$tIsland['land']      = $tLand;
 				$tIsland['landValue'] = $tLandValue;
 				$hako->islands[$tn]   = $tIsland;
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comReturnShip:
-				// ‘D‹AŠÒ
-				// ƒ^[ƒQƒbƒgæ“¾
+				// èˆ¹å¸°é‚„
+				// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 				$tn = $hako->idToNumber[$target];
 				if($tn != 0 && empty($tn)) {
-					// ƒ^[ƒQƒbƒg‚ª‚·‚Å‚É‚È‚¢
+					// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã™ã§ã«ãªã„
 					$this->log->ssNoTarget($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
-				// –‘O€”õ
+				// äº‹å‰æº–å‚™
 				$tIsland    = $hako->islands[$tn];
 				$tId        = $tIsland['id'];
 				$tName      = $tIsland['name'];
 				$tLand      = $tIsland['land'];
 				$tLandValue = $tIsland['landValue'];
 				$ship = Util::navyUnpack($tLandValue[$x][$y]);
-				
-				// Às”»’è
+
+				// å®Ÿè¡Œåˆ¤å®š
 				if($tLand[$x][$y] != $init->landShip) {
-					// ‘ÎÛ‚ª‘D”•ˆÈŠO‚Ìê‡
-					$this->log->landFail($id, $name, $comName, "‘D”•ˆÈŠO‚Ì’nŒ`", $point);
+					// å¯¾è±¡ãŒèˆ¹èˆ¶ä»¥å¤–ã®å ´åˆ
+					$this->log->landFail($id, $name, $comName, "èˆ¹èˆ¶ä»¥å¤–ã®åœ°å½¢", $point);
 					$returnMode = 0;
 					break;
 				} elseif($ship[1] >= 10) {
-					// ‘ÎÛ‚ªŠC‘¯‘D‚Ìê‡
+					// å¯¾è±¡ãŒæµ·è³Šèˆ¹ã®å ´åˆ
 					$this->log->landFail($id, $name, $comName, $init->shipName[$ship[1]], $point);
 					$returnMode = 0;
 					break;
 				} elseif($ship[0] != $island['id']) {
-					// ‘ÎÛ‚ª‘¼“‡‚Ì‘D”•‚Ìê‡
-					$this->log->landFail($id, $name, $comName, "‘¼“‡Š‘®‚Ì‘D”•", $point);
+					// å¯¾è±¡ãŒä»–å³¶ã®èˆ¹èˆ¶ã®å ´åˆ
+					$this->log->landFail($id, $name, $comName, "ä»–å³¶æ‰€å±ã®èˆ¹èˆ¶", $point);
 					$returnMode = 0;
 					break;
 				} elseif($tId == $island['id']) {
-					// ‚·‚Å‚É©“‡‚É‹AŠÒÏ‚İ‚Ìê‡
-					$this->log->shipFail($id, $name, $comName, "‘ÎÛ‚Ì‘D”•‚ª‚·‚Å‚É‹AŠÒÏ‚İ");
+					// ã™ã§ã«è‡ªå³¶ã«å¸°é‚„æ¸ˆã¿ã®å ´åˆ
+					$this->log->shipFail($id, $name, $comName, "å¯¾è±¡ã®èˆ¹èˆ¶ãŒã™ã§ã«å¸°é‚„æ¸ˆã¿");
 					$returnMode = 0;
 					break;
 				}
-				
+
 				if($ship[1] == 2 && ($ship[1] > 0 || $ship[4] > 0)) {
-					// ‹AŠÒ‚ÉŠC’ê’Tõ‘D‚Ìà•ó‚ğ‰ñû
+					// å¸°é‚„æ™‚ã«æµ·åº•æ¢ç´¢èˆ¹ã®è²¡å®ã‚’å›å
 					$treasure = $ship[3] * 1000 + $ship[4] * 100;
 					$tLandValue[$x][$y] = Util::navyPack($ship[0], $ship[1], $ship[2], 0, 0);
 					$island['money'] += $treasure;
 					$this->log->RecoveryTreasure($id, $name, $init->shipName[$ship[1]], $treasure);
 				}
-				
-				// ”hŒ­’n“_‚ğŒˆ‚ß‚é
+
+				// æ´¾é£åœ°ç‚¹ã‚’æ±ºã‚ã‚‹
 				for ($i = 0; $i < $init->pointNumber; $i++) {
 					$bx = $this->rpx[$i];
 					$by = $this->rpy[$i];
@@ -880,57 +884,57 @@ class Turn {
 						break;
 					}
 				}
-				// ‹AŠÒæi©“‡j
+				// å¸°é‚„å…ˆï¼ˆè‡ªå³¶ï¼‰
 				$land[$bx][$by]      = $init->landShip;
 				$landValue[$bx][$by] = $tLandValue[$x][$y];
-				// ”hŒ­æi‘¼“‡j
+				// æ´¾é£å…ˆï¼ˆä»–å³¶ï¼‰
 				$tLand[$x][$y]      = $init->landSea;
 				$tLandValue[$x][$y] = 0;
-				
-				// ‹AŠÒƒƒO
+
+				// å¸°é‚„ãƒ­ã‚°
 				$this->log->shipReturn($id, $tId, $name, $init->shipName[$ship[1]], "({$x}, {$y})", $tName);
-				
+
 				$tIsland['land']      = $tLand;
 				$tIsland['landValue'] = $tLandValue;
 				$hako->islands[$tn]   = $tIsland;
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comShipBack:
-				// ‘D”jŠü
+				// èˆ¹ç ´æ£„
 				$ship = Util::navyUnpack($landValue[$x][$y]);
-				
-				// Às”»’è
+
+				// å®Ÿè¡Œåˆ¤å®š
 				if($land[$x][$y] != $init->landShip) {
-					// ‘ÎÛ‚ª‘D”•ˆÈŠO‚Ìê‡
-					$this->log->landFail($id, $name, $comName, "‘D”•ˆÈŠO‚Ì’nŒ`", $point);
+					// å¯¾è±¡ãŒèˆ¹èˆ¶ä»¥å¤–ã®å ´åˆ
+					$this->log->landFail($id, $name, $comName, "èˆ¹èˆ¶ä»¥å¤–ã®åœ°å½¢", $point);
 					$returnMode = 0;
 					break;
 				} elseif($landKind == $init->landShip && $ship[1] >= 10) {
-					// ‘ÎÛ‚ªŠC‘¯‘D‚Ìê‡
+					// å¯¾è±¡ãŒæµ·è³Šèˆ¹ã®å ´åˆ
 					$this->log->landFail($id, $name, $comName, $init->shipName[$ship[1]], $point);
 					$returnMode = 0;
 					break;
 				} elseif($landKind == $init->landShip && $ship[0] != $island['id']) {
-					// ‘ÎÛ‚ª‘¼“‡‚Ì‘D”•‚Ìê‡
-					$this->log->landFail($id, $name, $comName, "‘¼“‡Š‘®‚Ì‘D”•", $point);
+					// å¯¾è±¡ãŒä»–å³¶ã®èˆ¹èˆ¶ã®å ´åˆ
+					$this->log->landFail($id, $name, $comName, "ä»–å³¶æ‰€å±ã®èˆ¹èˆ¶", $point);
 					$returnMode = 0;
 					break;
 				}
 				$land[$x][$y] = $init->landSea;
 				$landValue[$x][$y] = 0;
 				$this->log->ComeBack($id, $name, $comName, $init->shipName[$ship[1]], $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comPlant:
 			case $init->comFarm:
 			case $init->comNursery:
@@ -953,7 +957,7 @@ class Turn {
 			case $init->comFusya:
 			case $init->comSyoubou:
 			case $init->comSoccer:
-				// ’nãŒšİŒn
+				// åœ°ä¸Šå»ºè¨­ç³»
 				if(!(($landKind == $init->landPlains) ||
 					($landKind == $init->landTown) ||
 					(($landKind == $init->landMyhome) && ($kind == $init->comMyhome)) ||
@@ -975,76 +979,76 @@ class Turn {
 					(($landKind == $init->landFusya) && ($kind == $init->comFusya)) ||
 					(($landKind == $init->landSyoubou) && ($kind == $init->comSyoubou)) ||
 					(($landKind == $init->landDefence) && ($kind == $init->comDbase)))) {
-					// •s“K“–‚È’nŒ`
+					// ä¸é©å½“ãªåœ°å½¢
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
-				
-				// í—Ş‚Å•ªŠò
+
+				// ç¨®é¡ã§åˆ†å²
 				switch($kind) {
 					case $init->comPlant:
-						// –Ú“I‚ÌêŠ‚ğX‚É‚·‚éB
+						// ç›®çš„ã®å ´æ‰€ã‚’æ£®ã«ã™ã‚‹ã€‚
 						$land[$x][$y] = $init->landForest;
-						// –Ø‚ÍÅ’á’PˆÊ
+						// æœ¨ã¯æœ€ä½å˜ä½
 						$landValue[$x][$y] = 1;
 						$this->log->PBSuc($id, $name, $comName, $point);
-						
+
 						if(Util::random(100) < 7) {
 							if($island['item'][10] != 1) {
-								// A•¨}ŠÓ”­Œ©
+								// æ¤ç‰©å›³é‘‘ç™ºè¦‹
 								$island['item'][10] = 1;
-								$this->log->ItemFound($id, $name, $comName, 'A•¨}ŠÓ');
+								$this->log->ItemFound($id, $name, $comName, 'æ¤ç‰©å›³é‘‘');
 							} elseif(($island['item'][10] == 1) && ($island['item'][11] != 1)) {
-								// ƒ‹[‚Ø”­Œ©
+								// ãƒ«ãƒ¼ãºç™ºè¦‹
 								$island['item'][11] = 1;
-								$this->log->ItemFound($id, $name, $comName, 'ƒ‹[‚Ø');
+								$this->log->ItemFound($id, $name, $comName, 'ãƒ«ãƒ¼ãº');
 							} elseif(($island['item'][11] == 1) && ($island['item'][12] != 1)) {
-								// •c–Ø”­Œ©
+								// è‹—æœ¨ç™ºè¦‹
 								$island['item'][12] = 1;
-								$this->log->ItemFound($id, $name, $comName, '•c–Ø');
+								$this->log->ItemFound($id, $name, $comName, 'è‹—æœ¨');
 							} elseif(($island['item'][12] == 1) && ($island['tenki'] == 3) && ($island['zin'][3] != 1)) {
-								// ƒhƒŠƒA[ƒh”­Œ©
+								// ãƒ‰ãƒªã‚¢ãƒ¼ãƒ‰ç™ºè¦‹
 								$island['zin'][3] = 1;
-								$this->log->ZinFound($id, $name, $comName, 'ƒhƒŠƒA[ƒh');
+								$this->log->ZinFound($id, $name, $comName, 'ãƒ‰ãƒªã‚¢ãƒ¼ãƒ‰');
 							}
 						}
 						break;
-						
+
 					case $init->comBase:
-						// –Ú“I‚ÌêŠ‚ğƒ~ƒTƒCƒ‹Šî’n‚É‚·‚éB
+						// ç›®çš„ã®å ´æ‰€ã‚’ãƒŸã‚µã‚¤ãƒ«åŸºåœ°ã«ã™ã‚‹ã€‚
 						$land[$x][$y] = $init->landBase;
-						// ŒoŒ±’l0
+						// çµŒé¨“å€¤0
 						$landValue[$x][$y] = 0;
 						$this->log->PBSuc($id, $name, $comName, $point);
-						
+
 						if((Util::random(100) < 7) && ($island['item'][6] != 1)) {
-							// ‰ÈŠw‘”­Œ©
+							// ç§‘å­¦æ›¸ç™ºè¦‹
 							$island['item'][6] = 1;
-							$this->log->ItemFound($id, $name, $comName, '“ï‚µ‚»‚¤‚È‘•¨');
+							$this->log->ItemFound($id, $name, $comName, 'é›£ã—ãã†ãªæ›¸ç‰©');
 						}
 						break;
-						
+
 					case $init->comHaribote:
-						// –Ú“I‚ÌêŠ‚ğƒnƒŠƒ{ƒe‚É‚·‚é
+						// ç›®çš„ã®å ´æ‰€ã‚’ãƒãƒªãƒœãƒ†ã«ã™ã‚‹
 						$land[$x][$y] = $init->landHaribote;
 						$landValue[$x][$y] = 0;
 						$this->log->hariSuc($id, $name, $comName, $init->comName[$init->comDbase], $point);
 						break;
-						
+
 					case $init->comNewtown:
-						// –Ú“I‚ÌêŠ‚ğƒjƒ…[ƒ^ƒEƒ“‚É‚·‚é
+						// ç›®çš„ã®å ´æ‰€ã‚’ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³ã«ã™ã‚‹
 						$land[$x][$y] = $init->landNewtown;
 						$landValue[$x][$y] = 1;
 						$this->log->landSuc($id, $name, $comName, $point);
 						break;
-						
+
 					case $init->comSoccer:
-						// –Ú“I‚ÌêŠ‚ğƒXƒ^ƒWƒAƒ€‚É‚·‚é
+						// ç›®çš„ã®å ´æ‰€ã‚’ã‚¹ã‚¿ã‚¸ã‚¢ãƒ ã«ã™ã‚‹
 						if($island['soccer'] > 0){
-							// ƒXƒ^ƒWƒAƒ€‚Í“‡‚É‚P‚Â‚¾‚¯‚µ‚©ì‚ê‚È‚¢
-							$this->log->IsFail($id, $name, $comName, 'ƒXƒ^ƒWƒAƒ€');
-							
+							// ã‚¹ã‚¿ã‚¸ã‚¢ãƒ ã¯å³¶ã«ï¼‘ã¤ã ã‘ã—ã‹ä½œã‚Œãªã„
+							$this->log->IsFail($id, $name, $comName, 'ã‚¹ã‚¿ã‚¸ã‚¢ãƒ ');
+
 							$returnMode = 0;
 							break;
 						}
@@ -1052,9 +1056,9 @@ class Turn {
 						$landValue[$x][$y] = 0;
 						$this->log->LandSuc($id, $name, $comName, $point);
 						break;
-						
+
 					case $init->comRail:
-						// –Ú“I‚ÌêŠ‚ğü˜H‚É‚·‚é
+						// ç›®çš„ã®å ´æ‰€ã‚’ç·šè·¯ã«ã™ã‚‹
 						if($arg > 8) {
 							$arg = 8;
 						}
@@ -1062,17 +1066,17 @@ class Turn {
 						$landValue[$x][$y] = $arg;
 						$this->log->LandSuc($id, $name, $comName, $point);
 						break;
-						
+
 					case $init->comStat:
-						// –Ú“I‚ÌêŠ‚ğ‰w‚É‚·‚é
+						// ç›®çš„ã®å ´æ‰€ã‚’é§…ã«ã™ã‚‹
 						$land[$x][$y] = $init->landStat;
 						$landValue[$x][$y] = 0;
 						$island['stat']++;
 						$this->log->LandSuc($id, $name, $comName, $point);
 						break;
-						
+
 					case $init->comPark:
-						// –Ú“I‚ÌêŠ‚ğ—V‰€’n‚É‚·‚é
+						// ç›®çš„ã®å ´æ‰€ã‚’éŠåœ’åœ°ã«ã™ã‚‹
 						$land[$x][$y] = $init->landPark;
 						if($arg > 4) {
 							$arg = 4;
@@ -1081,229 +1085,229 @@ class Turn {
 						$island['park']++;
 						$this->log->LandSuc($id, $name, $comName, $point);
 						break;
-						
+
 					case $init->comFusya:
-						// –Ú“I‚ÌêŠ‚ğ•—Ô‚É‚·‚é
+						// ç›®çš„ã®å ´æ‰€ã‚’é¢¨è»Šã«ã™ã‚‹
 						$land[$x][$y] = $init->landFusya;
 						$landValue[$x][$y] = 0;
 						$this->log->LandSuc($id, $name, $comName, $point);
 						break;
-						
+
 					case $init->comSyoubou:
-						// –Ú“I‚ÌêŠ‚ğÁ–h‚É‚·‚é
+						// ç›®çš„ã®å ´æ‰€ã‚’æ¶ˆé˜²ç½²ã«ã™ã‚‹
 						$land[$x][$y] = $init->landSyoubou;
 						$landValue[$x][$y] = 0;
 						$this->log->LandSuc($id, $name, $comName, $point);
 						break;
-						
+
 					case $init->comFarm:
-						// ”_ê
+						// è¾²å ´
 						if($landKind == $init->landFarm) {
-							// ‚·‚Å‚É”_ê‚Ìê‡
-							$landValue[$x][$y] += 2; // ‹K–Í + 2000l
+							// ã™ã§ã«è¾²å ´ã®å ´åˆ
+							$landValue[$x][$y] += 2; // è¦æ¨¡ + 2000äºº
 							if($landValue[$x][$y] > 50) {
-								$landValue[$x][$y] = 50; // Å‘å 50000l
+								$landValue[$x][$y] = 50; // æœ€å¤§ 50000äºº
 							}
 						} else {
-							// –Ú“I‚ÌêŠ‚ğ”_ê‚É
+							// ç›®çš„ã®å ´æ‰€ã‚’è¾²å ´ã«
 							$land[$x][$y] = $init->landFarm;
-							$landValue[$x][$y] = 10; // ‹K–Í = 10000l
+							$landValue[$x][$y] = 10; // è¦æ¨¡ = 10000äºº
 						}
 						$this->log->landSuc($id, $name, $comName, $point);
-						
+
 						if((Util::random(100) < 7) && ($island['tenki'] == 1) && ($island['zin'][3] == 1)) {
 							if($island['item'][16] != 1) {
-								// ”_ì•¨}ŠÓ”­Œ©
+								// è¾²ä½œç‰©å›³é‘‘ç™ºè¦‹
 								$island['item'][16] = 1;
-								$this->log->ItemFound($id, $name, $comName, '”_ì•¨}ŠÓ');
+								$this->log->ItemFound($id, $name, $comName, 'è¾²ä½œç‰©å›³é‘‘');
 							} elseif(($island['item'][16] == 1) && ($island['zin'][5] != 1)) {
-								// ƒWƒ“”­Œ©
+								// ã‚¸ãƒ³ç™ºè¦‹
 								$island['zin'][5] = 1;
-								$this->log->Zin6Found($id, $name, $comName, 'ƒWƒ“');
+								$this->log->Zin6Found($id, $name, $comName, 'ã‚¸ãƒ³');
 							}
 						}
 						break;
-						
+
 					case $init->comNursery:
-						// —{Bê
+						// é¤Šæ®–å ´
 						if($landKind == $init->landNursery) {
-							// ‚·‚Å‚É—{Bê‚Ìê‡
-							$landValue[$x][$y] += 2; // ‹K–Í + 2000l
+							// ã™ã§ã«é¤Šæ®–å ´ã®å ´åˆ
+							$landValue[$x][$y] += 2; // è¦æ¨¡ + 2000äºº
 							if($landValue[$x][$y] > 50) {
-								$landValue[$x][$y] = 50; // Å‘å 50000l
+								$landValue[$x][$y] = 50; // æœ€å¤§ 50000äºº
 							}
 						} elseif(($landKind == $init->landSea) && ($lv == 1)) {
-							// –Ú“I‚ÌêŠ‚ğ—{Bê‚É
+							// ç›®çš„ã®å ´æ‰€ã‚’é¤Šæ®–å ´ã«
 							$land[$x][$y] = $init->landNursery;
-							$landValue[$x][$y] = 10; // ‹K–Í = 10000l
+							$landValue[$x][$y] = 10; // è¦æ¨¡ = 10000äºº
 						} else {
-							// •s“K“–‚È’nŒ`
+							// ä¸é©å½“ãªåœ°å½¢
 							$this->log->landFail($id, $name, $comName, $landName, $point);
 							return 0;
 						}
 						$this->log->landSuc($id, $name, $comName, $point);
 						break;
-						
+
 					case $init->comFactory:
-						// Hê
+						// å·¥å ´
 						if($landKind == $init->landFactory) {
-							// ‚·‚Å‚ÉHê‚Ìê‡
-							$landValue[$x][$y] += 10; // ‹K–Í + 10000l
+							// ã™ã§ã«å·¥å ´ã®å ´åˆ
+							$landValue[$x][$y] += 10; // è¦æ¨¡ + 10000äºº
 							if($landValue[$x][$y] > 200) {
-								$landValue[$x][$y] = 200; // Å‘å 200000l
+								$landValue[$x][$y] = 200; // æœ€å¤§ 200000äºº
 							}
 						} else {
-							// –Ú“I‚ÌêŠ‚ğHê‚É
+							// ç›®çš„ã®å ´æ‰€ã‚’å·¥å ´ã«
 							$land[$x][$y] = $init->landFactory;
-							$landValue[$x][$y] = 30; // ‹K–Í = 30000l
+							$landValue[$x][$y] = 30; // è¦æ¨¡ = 30000äºº
 						}
 						$this->log->landSuc($id, $name, $comName, $point);
 						break;
-						
+
 					case $init->comHatuden:
-						// ”­“dŠ
+						// ç™ºé›»æ‰€
 						if($landKind == $init->landHatuden) {
-							// ‚·‚Å‚É”­“dŠ‚Ìê‡
-							$landValue[$x][$y] += 40; // ‹K–Í + 40000kw
+							// ã™ã§ã«ç™ºé›»æ‰€ã®å ´åˆ
+							$landValue[$x][$y] += 40; // è¦æ¨¡ + 40000kw
 							if($landValue[$x][$y] > 250) {
-								$landValue[$x][$y] = 250; // Å‘å 250000kw
+								$landValue[$x][$y] = 250; // æœ€å¤§ 250000kw
 							}
 						} else {
-							// –Ú“I‚ÌêŠ‚ğ”­“dŠ‚É
+							// ç›®çš„ã®å ´æ‰€ã‚’ç™ºé›»æ‰€ã«
 							$land[$x][$y] = $init->landHatuden;
-							$landValue[$x][$y] = 40; // ‹K–Í = 40000kw
+							$landValue[$x][$y] = 40; // è¦æ¨¡ = 40000kw
 						}
 						$this->log->landSuc($id, $name, $comName, $point);
-						
+
 						if(Util::random(100) < 7) {
 							if(($island['tenki'] == 1) && ($island['item'][13] != 1)) {
-								// ”Šw‘”­Œ©
-								$this->log->ItemFound($id, $name, $comName, '“ï‚µ‚»‚¤‚È‘•¨');
+								// æ•°å­¦æ›¸ç™ºè¦‹
+								$this->log->ItemFound($id, $name, $comName, 'é›£ã—ãã†ãªæ›¸ç‰©');
 								$island['item'][13] = 1;
 							} elseif(($island['tenki'] == 3) && ($island['item'][14] != 1)) {
-								// ‹Zp‘”­Œ©
-								$this->log->ItemFound($id, $name, $comName, '“ï‚µ‚»‚¤‚È‘•¨');
+								// æŠ€è¡“æ›¸ç™ºè¦‹
+								$this->log->ItemFound($id, $name, $comName, 'é›£ã—ãã†ãªæ›¸ç‰©');
 								$island['item'][14] = 1;
 							} elseif(($island['tenki'] == 4) && ($island['item'][15] == 1) && ($island['zin'][4] != 1)) {
-								// ƒ‹ƒi”­Œ©
-								$this->log->Zin5Found($id, $name, $comName, 'ƒ‹ƒi');
+								// ãƒ«ãƒŠç™ºè¦‹
+								$this->log->Zin5Found($id, $name, $comName, 'ãƒ«ãƒŠ');
 								$island['zin'][4] = 1;
 							}
 						}
 						break;
-						
+
 					case $init->comCommerce:
-						// ¤‹Æƒrƒ‹
+						// å•†æ¥­ãƒ“ãƒ«
 						if($landKind == $init->landCommerce) {
-							// ‚·‚Å‚É¤‹Æƒrƒ‹‚Ìê‡
-							$landValue[$x][$y] += 20; // ‹K–Í + 20000l
+							// ã™ã§ã«å•†æ¥­ãƒ“ãƒ«ã®å ´åˆ
+							$landValue[$x][$y] += 20; // è¦æ¨¡ + 20000äºº
 							if($landValue[$x][$y] > 250) {
-								$landValue[$x][$y] = 250; // Å‘å 250000l
+								$landValue[$x][$y] = 250; // æœ€å¤§ 250000äºº
 							}
 						} else {
-							// –Ú“I‚ÌêŠ‚ğ¤‹Æƒrƒ‹‚É
+							// ç›®çš„ã®å ´æ‰€ã‚’å•†æ¥­ãƒ“ãƒ«ã«
 							$land[$x][$y] = $init->landCommerce;
-							$landValue[$x][$y] = 30; // ‹K–Í = 30000l
+							$landValue[$x][$y] = 30; // è¦æ¨¡ = 30000äºº
 						}
 						$this->log->landSuc($id, $name, $comName, $point);
-						
+
 						if(Util::random(100) < 7) {
 							if($island['item'][17] != 1) {
-								// ŒoÏ‘”­Œ©
+								// çµŒæ¸ˆæ›¸ç™ºè¦‹
 								$island['item'][17] = 1;
-								$this->log->ItemFound($id, $name, $comName, '“ï‚µ‚»‚¤‚È‘•¨');
+								$this->log->ItemFound($id, $name, $comName, 'é›£ã—ãã†ãªæ›¸ç‰©');
 							} elseif((($landKind == $init->landCommerce) > 0) && ($island['item'][19] == 1) && ($island['zin'][6] != 1)) {
-								// ƒTƒ‰ƒ}ƒ“ƒ_[”­Œ©
+								// ã‚µãƒ©ãƒãƒ³ãƒ€ãƒ¼ç™ºè¦‹
 								$island['zin'][6] = 1;
-								$this->log->ZinFound($id, $name, $comName, 'ƒTƒ‰ƒ}ƒ“ƒ_[');
+								$this->log->ZinFound($id, $name, $comName, 'ã‚µãƒ©ãƒãƒ³ãƒ€ãƒ¼');
 							}
 						}
 						break;
-						
+
 					case $init->comSeaResort:
-						// ŠC‚Ì‰Æ
+						// æµ·ã®å®¶
 						if (Turn::countAround($land, $x, $y, 19, array($init->landSeaResort))) {
-							// üˆÍ‚QƒwƒbƒNƒX‚ÉŠC‚Ì‰Æ‚ª‚ ‚é
-							$this->log->LandFail($id, $name, $comName, 'ŠC‚Ì‰Æ‚Ì‹ß‚­', $point);
-							
+							// å‘¨å›²ï¼’ãƒ˜ãƒƒã‚¯ã‚¹ã«æµ·ã®å®¶ãŒã‚ã‚‹
+							$this->log->LandFail($id, $name, $comName, 'æµ·ã®å®¶ã®è¿‘ã', $point);
+
 							$returnMode = 0;
 							break 2;
 						} else {
-							// üˆÍ‚QƒwƒbƒNƒX‚ÉŠC‚Ì‰Æ‚ª‚È‚¢
+							// å‘¨å›²ï¼’ãƒ˜ãƒƒã‚¯ã‚¹ã«æµ·ã®å®¶ãŒãªã„
 							$land[$x][$y] = $init->landSeaResort;
 							$landValue[$x][$y] = 0;
-							
+
 							$this->log->LandSuc($id, $name, $comName, $point);
 						}
 						break;
-						
+
 					case $init->comMyhome:
-						// ©‘îŒšİ
+						// è‡ªå®…å»ºè¨­
 						if(!($island['home'])) {
 							$landValue[$x][$y] = 0;
 						}
 						$cost = ($landValue[$x][$y] + 1) * $cost;
 						if($island['item'][20] < ($landValue[$x][$y] + 1) * 200) {
-							// –ØŞ‚ª‘«‚ç‚È‚¢
+							// æœ¨æãŒè¶³ã‚‰ãªã„
 							$this->log->noWood($id, $name, $comName);
 							$returnMode = 0;
 							break 2;
 						}
-						
+
 						if($island['money'] < $cost) {
-							// ‘‹àƒ`ƒFƒbƒN
-							$island['money'] += $cost; // •Ô‹à
-							
+							// è³‡é‡‘ãƒã‚§ãƒƒã‚¯
+							$island['money'] += $cost; // è¿”é‡‘
+
 							$this->log->noMoney($id, $name, $comName);
-							
+
 							$returnMode = 0;
 							break 2;
 						}
 						if($landKind == $init->landMyhome) {
-							// ‚·‚Å‚É©‘î‚Ìê‡
-							$landValue[$x][$y] += 1; // ‹K–Í + 1l
+							// ã™ã§ã«è‡ªå®…ã®å ´åˆ
+							$landValue[$x][$y] += 1; // è¦æ¨¡ + 1äºº
 							if($landValue[$x][$y] >= 11) {
 								$returnMode = 0;
 								break;
 							}
-							$this->log->landSuc($id, $name, 'ƒŠƒtƒH[ƒ€', $point);
+							$this->log->landSuc($id, $name, 'ãƒªãƒ•ã‚©ãƒ¼ãƒ ', $point);
 						} else {
-							// –Ú“I‚ÌêŠ‚ğƒ}ƒCƒz[ƒ€‚É
+							// ç›®çš„ã®å ´æ‰€ã‚’ãƒã‚¤ãƒ›ãƒ¼ãƒ ã«
 							if($island['home'] > 0) {
-								// ‚·‚Å‚Éƒ}ƒCƒz[ƒ€‚ª‚ ‚é
-								$this->log->IsFail($id, $name, $comName, 'ƒ}ƒCƒz[ƒ€');
-								
+								// ã™ã§ã«ãƒã‚¤ãƒ›ãƒ¼ãƒ ãŒã‚ã‚‹
+								$this->log->IsFail($id, $name, $comName, 'ãƒã‚¤ãƒ›ãƒ¼ãƒ ');
+
 								$returnMode = 0;
 								break 2;
 							}
 							$land[$x][$y] = $init->landMyhome;
-							$landValue[$x][$y] = 1; // ‹K–Í = 1l
-							
+							$landValue[$x][$y] = 1; // è¦æ¨¡ = 1äºº
+
 							$this->log->landSuc($id, $name, $comName, $point);
 						}
-						// –ØŞ‚ğ·‚µˆø‚­
+						// æœ¨æã‚’å·®ã—å¼•ã
 						$island['item'][20] -= $landValue[$x][$y] * 100;
 						break;
-						
+
 					case $init->comSoukoM:
 						$flagm = 1;
 					case $init->comSoukoF:
-						// ‘qŒÉŒšİ
+						// å€‰åº«å»ºè¨­
 						if($arg == 0) {
 							$flags = 1;
 							$arg = 1;
 						}
-						// ƒZƒLƒ…ƒŠƒeƒB‚Æ’™’~‚ğZo
+						// ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ã¨è²¯è“„ã‚’ç®—å‡º
 						$sec = (int)($landValue[$x][$y] / 100);
 						$tyo = $landValue[$x][$y] % 100;
 						if($tyo == 99 && $flags != 1) {
-							$str = "‘qŒÉ‚ªˆê”t‚¾‚Á‚½";
+							$str = "å€‰åº«ãŒä¸€æ¯ã ã£ãŸ";
 							$cost = 0;
 							$this->log->SoukoMax($id, $name, $comName, $point, $str);
 							return 0;
 							break;
 						} elseif($sec == 10 && $flags == 1) {
-							$str = "‘qŒÉ‚ÌƒZƒLƒ…ƒŠƒeƒBƒŒƒxƒ‹‚ªÅ‘å’l‚É’B‚µ‚Ä‚¢‚½";
+							$str = "å€‰åº«ã®ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ãƒ¬ãƒ™ãƒ«ãŒæœ€å¤§å€¤ã«é”ã—ã¦ã„ãŸ";
 							$cost = 0;
 							$this->log->SoukoMax($id, $name, $comName, $point, $str);
 							return 0;
@@ -1322,14 +1326,14 @@ class Turn {
 							$str = "({$ryo}{$init->unitFood})";
 						}
 						if($landKind == $init->landSoukoM || $landKind == $init->landSoukoF) {
-							// ‚·‚Å‚É‘qŒÉ‚Ìê‡
+							// ã™ã§ã«å€‰åº«ã®å ´åˆ
 							if($flags == 1) {
 								$arg = 0;
 								$sec += 1;
 								if($sec > 10) {
 									$sec = 10;
 								}
-								$str ="(ƒZƒLƒ…ƒŠƒeƒB‹­‰»)";
+								$str ="(ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£å¼·åŒ–)";
 							} else {
 								$tyo += $arg;
 								if($tyo > 99) {
@@ -1337,26 +1341,26 @@ class Turn {
 								}
 							}
 						} else {
-							// –Ú“I‚ÌêŠ‚ğ‘qŒÉ‚É
+							// ç›®çš„ã®å ´æ‰€ã‚’å€‰åº«ã«
 							if($flagm == 1) {
 								$land[$x][$y] = $init->landSoukoM;
 							} else {
 								$land[$x][$y] = $init->landSoukoF;
 							}
-							
+
 							if($flags == 1) {
 								$arg = 0;
 								$sec = 1;
-								$str ="(ƒZƒLƒ…ƒŠƒeƒB‹­‰»)";
+								$str ="(ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£å¼·åŒ–)";
 							}
 							$tyo = $arg;
 						}
 						$landValue[$x][$y] = $sec * 100 + $tyo;
 						$this->log->Souko($id, $name, $comName, $point, $str);
 						break;
-						
+
 					case $init->comHikidasi:
-						// ‘qŒÉˆø‚«o‚µ
+						// å€‰åº«å¼•ãå‡ºã—
 						if($arg == 0) {
 							$arg = 1;
 						}
@@ -1365,7 +1369,7 @@ class Turn {
 						} else {
 							$flagm = 0;
 						}
-						// ƒZƒLƒ…ƒŠƒeƒB‚Æ’™’~‚ğZo
+						// ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ã¨è²¯è“„ã‚’ç®—å‡º
 						$sec = (int)($landValue[$x][$y] / 100);
 						$tyo = $landValue[$x][$y] % 100;
 						if($arg > $tyo) {
@@ -1392,15 +1396,15 @@ class Turn {
 						$this->log->Souko($id, $name, $comName, $point, $str);
 						$returnMode = 0;
 						break;
-						
+
 					case $init->comDbase:
-						// –h‰q{İ
+						// é˜²è¡›æ–½è¨­
 						if($landKind == $init->landDefence) {
-							// ‚·‚Å‚É–h‰q{İ‚Ìê‡
-							$landValue[$x][$y] = 0; // ©”š‘•’uƒZƒbƒg
+							// ã™ã§ã«é˜²è¡›æ–½è¨­ã®å ´åˆ
+							$landValue[$x][$y] = 0; // è‡ªçˆ†è£…ç½®ã‚»ãƒƒãƒˆ
 							$this->log->bombSet($id, $name, $landName, $point);
 						} else {
-							// –Ú“I‚ÌêŠ‚ğ–h‰q{İ‚É
+							// ç›®çš„ã®å ´æ‰€ã‚’é˜²è¡›æ–½è¨­ã«
 							$land[$x][$y] = $init->landDefence;
 							if ($arg == 0) {
 								$arg = 1;
@@ -1414,45 +1418,45 @@ class Turn {
 							$this->log->landSuc($id, $name, $comName, $point);
 						}
 						if((Util::random(100) < 7) && ($island['item'][7] != 1)) {
-							// ‹Zp‘”­Œ©
+							// æŠ€è¡“æ›¸ç™ºè¦‹
 							$island['item'][7] = 1;
-							$this->log->ItemFound($id, $name, $comName, '“ï‚µ‚»‚¤‚È‘•¨');
+							$this->log->ItemFound($id, $name, $comName, 'é›£ã—ãã†ãªæ›¸ç‰©');
 						}
 						$returnMode = 1;
 						break;
-						
+
 					case $init->comMonument:
-						// ‹L”O”è
+						// è¨˜å¿µç¢‘
 						if($landKind == $init->landMonument) {
-							// ‚·‚Å‚É‹L”O”è‚Ìê‡
-							// ƒ^[ƒQƒbƒgæ“¾
+							// ã™ã§ã«è¨˜å¿µç¢‘ã®å ´åˆ
+							// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 							$tn = $hako->idToNumber[$target];
 							if($tn !== 0 && empty($tn)) {
-								// ƒ^[ƒQƒbƒg‚ª‚·‚Å‚É‚È‚¢
-								// ‰½‚àŒ¾‚í‚¸‚É’†~
+								// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã™ã§ã«ãªã„
+								// ä½•ã‚‚è¨€ã‚ãšã«ä¸­æ­¢
 								$returnMode = 0;
 								break 2;
 							}
 							if($hako->islands[$tn]['keep']) {
-								// –Ú•W‚Ì“‡‚ªŠÇ—l—a‚©‚è’†‚Ì‚½‚ßÀs‚ª‹–‰Â‚³‚ê‚È‚¢
+								// ç›®æ¨™ã®å³¶ãŒç®¡ç†äººé ã‹ã‚Šä¸­ã®ãŸã‚å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œãªã„
 								$this->log->CheckKP($id, $name, $comName);
 								$returnMode = 0;
 								break 2;
 							}
 							if((($hako->islandTurn - $island['starturn']) < $init->noMissile) || (($hako->islandTurn - $hako->islands[$tn]['starturn']) < $init->noMissile)) {
-								// Às‹–‰Âƒ^[ƒ“‚ğŒo‰ß‚µ‚½‚©H
+								// å®Ÿè¡Œè¨±å¯ã‚¿ãƒ¼ãƒ³ã‚’çµŒéã—ãŸã‹ï¼Ÿ
 								$this->log->Forbidden($id, $name, $comName);
 								$returnMode = 0;
 								break 2;
 							}
 							$hako->islands[$tn]['bigmissile']++;
-							
-							// ‚»‚ÌêŠ‚Ír’n‚É
+
+							// ãã®å ´æ‰€ã¯è’åœ°ã«
 							$land[$x][$y] = $init->landWaste;
 							$landValue[$x][$y] = 0;
 							$this->log->monFly($id, $name, $landName, $point);
 						} else {
-							// –Ú“I‚ÌêŠ‚ğ‹L”O”è‚É
+							// ç›®çš„ã®å ´æ‰€ã‚’è¨˜å¿µç¢‘ã«
 							$land[$x][$y] = $init->landMonument;
 							if($arg >= $init->monumentNumber) {
 								$arg = 0;
@@ -1462,10 +1466,10 @@ class Turn {
 						}
 						break;
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
-				// ‰ñ”•t‚«‚È‚çAƒRƒ}ƒ“ƒh‚ğ–ß‚·
+
+				// å›æ•°ä»˜ããªã‚‰ã€ã‚³ãƒãƒ³ãƒ‰ã‚’æˆ»ã™
 				if (($kind == $init->comFarm) ||
 					($kind == $init->comSfarm) ||
 					($kind == $init->comNursery) ||
@@ -1486,33 +1490,33 @@ class Turn {
 				}
 				$returnMode = 1;
 				break;
-				
-				// ‚±‚±‚Ü‚Å’nãŒšİŒn
-				
+
+				// ã“ã“ã¾ã§åœ°ä¸Šå»ºè¨­ç³»
+
 			case $init->comMountain:
-				// ÌŒ@ê
+				// æ¡æ˜å ´
 				if($landKind != $init->landMountain) {
-					// RˆÈŠO‚É‚Íì‚ê‚È‚¢
+					// å±±ä»¥å¤–ã«ã¯ä½œã‚Œãªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
-				$landValue[$x][$y] += 5; // ‹K–Í + 5000l
+				$landValue[$x][$y] += 5; // è¦æ¨¡ + 5000äºº
 				if($landValue[$x][$y] > 200) {
-					$landValue[$x][$y] = 200; // Å‘å 200000l
+					$landValue[$x][$y] = 200; // æœ€å¤§ 200000äºº
 				}
 				$this->log->landSuc($id, $name, $comName, $point);
 				if((Util::random(100) < 7) && ($island['tenki'] == 3) &&
 					($island['item'][2] == 1) && ($island['item'][3] != 1)) {
-					// ƒ}ƒXƒN”­Œ©
+					// ãƒã‚¹ã‚¯ç™ºè¦‹
 					$island['item'][3] = 1;
-					$this->log->ItemFound($id, $name, $comName, '•s‹C–¡‚Èƒ}ƒXƒN');
+					$this->log->ItemFound($id, $name, $comName, 'ä¸æ°—å‘³ãªãƒã‚¹ã‚¯');
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
 				if($arg > 1) {
 					$arg--;
-					Util::slideBack(&$comArray, 0);
+					Util::slideBack($comArray, 0);
 					$comArray[0] = array (
 						'kind'   => $kind,
 						'target' => $target,
@@ -1523,32 +1527,32 @@ class Turn {
 				}
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comSfarm:
-				// ŠC’ê”_ê
+				// æµ·åº•è¾²å ´
 				if($landKind == $init->landSfarm) {
-					// ‚·‚Å‚É”_ê‚Ìê‡
-					$landValue[$x][$y] += 2; // ‹K–Í + 2000l
+					// ã™ã§ã«è¾²å ´ã®å ´åˆ
+					$landValue[$x][$y] += 2; // è¦æ¨¡ + 2000äºº
 					if($landValue[$x][$y] > 30) {
-						$landValue[$x][$y] = 30; // Å‘å 30000l
+						$landValue[$x][$y] = 30; // æœ€å¤§ 30000äºº
 					}
 				} elseif(($landKind != $init->landSea) || ($lv != 0)) {
-					// ŠCˆÈŠO‚É‚Íì‚ê‚È‚¢
+					// æµ·ä»¥å¤–ã«ã¯ä½œã‚Œãªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				} else {
-					// –Ú“I‚ÌêŠ‚ğ”_ê‚É
+					// ç›®çš„ã®å ´æ‰€ã‚’è¾²å ´ã«
 					$land[$x][$y] = $init->landSfarm;
-					$landValue[$x][$y] = 10; // ‹K–Í = 10000l
+					$landValue[$x][$y] = 10; // è¦æ¨¡ = 10000äºº
 				}
 				$this->log->landSuc($id, $name, $comName, $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
 				if($arg > 1) {
 					$arg--;
-					Util::slideBack(&$comArray, 0);
+					Util::slideBack($comArray, 0);
 					$comArray[0] = array (
 						'kind'   => $kind,
 						'target' => $target,
@@ -1559,57 +1563,57 @@ class Turn {
 				}
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comSeaCity:
-				//ŠC’ê“ss
+				//æµ·åº•éƒ½å¸‚
 				if(($landKind != $init->landSea) || ($lv != 0)) {
-					// ŠCˆÈŠO‚É‚Íì‚ê‚È‚¢
+					// æµ·ä»¥å¤–ã«ã¯ä½œã‚Œãªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
 				$cntL = Turn::countAround($land, $x, $y, 7, array($init->landSea));
 				$cntS = Turn::countAroundValue($island, $x, $y, $init->landSea, 1, 7);
-				
+
 				if($cntL == 0 && $cntS == 0) {
-					// —¤’nAó£‚Ì‚Ç‚¿‚ç‚àüˆÍ‚É‚È‚¢
+					// é™¸åœ°ã€æµ…ç€¬ã®ã©ã¡ã‚‰ã‚‚å‘¨å›²ã«ãªã„
 					if($cntL == 0) {
-						// —¤’n‚ª‚È‚¢‚Ì‚Å’†~
+						// é™¸åœ°ãŒãªã„ã®ã§ä¸­æ­¢
 						$this->log->NoLandAround($id, $name, $comName, $point);
 					} else {
-						// ó£‚ª‚È‚¢‚Ì‚Å’†~
+						// æµ…ç€¬ãŒãªã„ã®ã§ä¸­æ­¢
 						$this->log->NoShoalAround($id, $name, $comName, $point);
 					}
 					$returnMode = 0;
 					break;
 				}
 				if ($arg == 77) {
-					// ŠCã“ss‚É‚·‚é
+					// æµ·ä¸Šéƒ½å¸‚ã«ã™ã‚‹
 					$land[$x][$y] = $init->landFroCity;
-					$landValue[$x][$y] = 1; // ‰ŠúlŒû
+					$landValue[$x][$y] = 1; // åˆæœŸäººå£
 				} else {
 					$land[$x][$y] = $init->landSeaCity;
-					$landValue[$x][$y] = 5; // ‰ŠúlŒû
+					$landValue[$x][$y] = 5; // åˆæœŸäººå£
 				}
 				$this->log->landSuc($id, $name, $comName, $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comSdbase:
-				// ŠC’ê–h‰q{İ
+				// æµ·åº•é˜²è¡›æ–½è¨­
 				if(($landKind != $init->landSea) || ($lv != 0)){
-					// ŠCˆÈŠO‚É‚Íì‚ê‚È‚¢
+					// æµ·ä»¥å¤–ã«ã¯ä½œã‚Œãªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
-				// –Ú“I‚ÌêŠ‚ğ–h‰q{İ‚É
+				// ç›®çš„ã®å ´æ‰€ã‚’é˜²è¡›æ–½è¨­ã«
 				$land[$x][$y] = $init->landSdefence;
-				
+
 				if ($arg == 0) {
 					$arg = 1;
 				} elseif ($arg > $init->sdBaseHP) {
@@ -1619,45 +1623,45 @@ class Turn {
 				$p = round($value / $cost);
 				$landValue[$x][$y] = $p;
 				$this->log->landSuc($id, $name, $comName, $point);
-				
+
 				if((Util::random(100) < 7) && ($island['item'][7] != 1)) {
-					// ‹Zp‘”­Œ©
+					// æŠ€è¡“æ›¸ç™ºè¦‹
 					$island['item'][7] = 1;
-					$this->log->ItemFound($id, $name, $comName, '“ï‚µ‚»‚¤‚È‘•¨');
+					$this->log->ItemFound($id, $name, $comName, 'é›£ã—ãã†ãªæ›¸ç‰©');
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $value;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comSbase:
-				// ŠC’êŠî’n
+				// æµ·åº•åŸºåœ°
 				if(($landKind != $init->landSea) || ($lv != 0)){
-					// ŠCˆÈŠO‚É‚Íì‚ê‚È‚¢
+					// æµ·ä»¥å¤–ã«ã¯ä½œã‚Œãªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
 				$land[$x][$y] = $init->landSbase;
-				$landValue[$x][$y] = 0; // ŒoŒ±’l0
+				$landValue[$x][$y] = 0; // çµŒé¨“å€¤0
 				$this->log->landSuc($id, $name, $comName, '(?, ?)');
-				
+
 				if((Util::random(100) < 7) && ($island['item'][6] != 1)) {
-					// ‰ÈŠw‘”­Œ©
+					// ç§‘å­¦æ›¸ç™ºè¦‹
 					$island['item'][6] = 1;
-					$this->log->ItemFound($id, $name, $comName, '“ï‚µ‚»‚¤‚È‘•¨');
+					$this->log->ItemFound($id, $name, $comName, 'é›£ã—ãã†ãªæ›¸ç‰©');
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comSsyoubou:
-				// –Ú“I‚ÌêŠ‚ğŠC’êÁ–h‚É‚·‚é
+				// ç›®çš„ã®å ´æ‰€ã‚’æµ·åº•æ¶ˆé˜²ç½²ã«ã™ã‚‹
 				if(($landKind != $init->landSea) || ($lv != 0)){
-					// ŠCˆÈŠO‚É‚Íì‚ê‚È‚¢
+					// æµ·ä»¥å¤–ã«ã¯ä½œã‚Œãªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
@@ -1665,48 +1669,48 @@ class Turn {
 				$land[$x][$y] = $init->landSsyoubou;
 				$landValue[$x][$y] = 0;
 				$this->log->LandSuc($id, $name, $comName, $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comProcity:
-				// –hĞ“ss
+				// é˜²ç½éƒ½å¸‚
 				if(($landKind != $init->landTown) || ($lv != 100)){
-					// ’¬ˆÈŠO‚É‚Íì‚ê‚È‚¢
+					// ç”ºä»¥å¤–ã«ã¯ä½œã‚Œãªã„
 					$this->log->landFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
 				$land[$x][$y] = $init->landProcity;
-				$landValue[$x][$y] = 100; // ŒoŒ±’l0
+				$landValue[$x][$y] = 100; // çµŒé¨“å€¤0
 				$this->log->landSuc($id, $name, $comName, $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comBoku;
-				// –l‚Ìˆø‰z‚µ
+				// åƒ•ã®å¼•è¶Šã—
 				if($landKind != $init->landProcity) {
 					$this->log->BokuFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
 				$townCount = Turn::countAround($land, $x, $y, 19, array($init->landTown));
-				
+
 				if($townCount == 0) {
 					$this->log->noTownAround($id, $name, $comName, $point);
 					$returnMode = 0;
 					break;
 				}
-				$landValue[$x][$y] += 10; // ‹K–Í + 1000l
+				$landValue[$x][$y] += 10; // è¦æ¨¡ + 1000äºº
 				if($landValue[$x][$y] > 250) {
-					$landValue[$x][$y] = 250; // Å‘å 25000l
+					$landValue[$x][$y] = 250; // æœ€å¤§ 25000äºº
 				}
 				for($i = 1; $i < 19; $i++) {
 					$sx = $x + $init->ax[$i];
@@ -1714,21 +1718,21 @@ class Turn {
 					if($land[$sx][$sy] == $init->landTown){
 						$landValue[$sx][$sy] -= round(20/$townCount);
 						if($landValue[$sx][$sy] <= 0) {
-							// •½’n‚É–ß‚·
+							// å¹³åœ°ã«æˆ»ã™
 							$land[$sx][$sy] = $init->landPlains;
 							$landValue[$sx][$sy] = 0;
-							
+
 							continue;
 						}
 					}
 				}
 				$this->log->landSuc($id, $name, $comName, $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
 				if($arg > 1) {
 					$arg--;
-					Util::slideBack(&$comArray, 0);
+					Util::slideBack($comArray, 0);
 					$comArray[0] = array (
 						'kind'   => $kind,
 						'target' => $target,
@@ -1739,127 +1743,127 @@ class Turn {
 				}
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comBigtown:
-				// Œ»‘ã‰»
+				// ç¾ä»£åŒ–
 				if(!(($landKind == $init->landNewtown) && ($lv >= 150))){
-					// ƒjƒ…[ƒ^ƒEƒ“ˆÈŠO‚É‚Íì‚ê‚È‚¢
+					// ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³ä»¥å¤–ã«ã¯ä½œã‚Œãªã„
 					$this->log->JoFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
 				$townCount = Turn::countAround($land, $x, $y, 19, array($init->landTown, $init->landNewtown, $init->landBigtown));
-				
+
 				if($townCount < 16) {
-					// ‘S•”ŠC‚¾‚©‚ç–„‚ß—§‚Ä•s”\
+					// å…¨éƒ¨æµ·ã ã‹ã‚‰åŸ‹ã‚ç«‹ã¦ä¸èƒ½
 					$this->log->JoFail($id, $name, $comName, $landName, $point);
 					$returnMode = 0;
 					break;
 				}
 				$land[$x][$y] = $init->landBigtown;
 				$this->log->landSuc($id, $name, $comName, $point);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comEisei;
-				// lH‰q¯‘Å‚¿ã‚°
+				// äººå·¥è¡›æ˜Ÿæ‰“ã¡ä¸Šã’
 				if($arg > 5) {
 					$arg = 0;
 				}
 				$value = ($arg + 1) * $cost;
-				// ‹CÛ, ŠÏ‘ª, Œ}Œ‚, ŒR–, –h‰q, ƒCƒŒ
+				// æ°—è±¡, è¦³æ¸¬, è¿æ’ƒ, è»äº‹, é˜²è¡›, ã‚¤ãƒ¬
 				$rocket = array(1, 1, 2, 2, 3, 4);
 				$tech   = array(10, 40, 100, 250, 300, 500);
 				$failp  = array(700, 500, 600, 400, 200, 3000);
 				$failq  = array(100, 100, 10, 10, 10, 1);
-				
+
 				if($island['m23'] < $rocket[$arg]) {
-					// ƒƒPƒbƒg‚ª$rocketˆÈã‚È‚¢‚Æƒ_ƒ
-					$this->log->NoAny($id, $name, $comName, "ƒƒPƒbƒg‚ª‘«‚è‚È‚¢");
+					// ãƒ­ã‚±ãƒƒãƒˆãŒ$rocketä»¥ä¸Šãªã„ã¨ãƒ€ãƒ¡
+					$this->log->NoAny($id, $name, $comName, "ãƒ­ã‚±ãƒƒãƒˆãŒè¶³ã‚Šãªã„");
 					$returnMode = 0;
 					break;
 				} elseif($island['rena'] < $tech[$arg]) {
-					// ŒR–‹ZpLv$techˆÈã‚È‚¢‚Æƒ_ƒ
-					$this->log->NoAny($id, $name, $comName, "ŒR–‹Zp‚ª‘«‚è‚È‚¢");
+					// è»äº‹æŠ€è¡“Lv$techä»¥ä¸Šãªã„ã¨ãƒ€ãƒ¡
+					$this->log->NoAny($id, $name, $comName, "è»äº‹æŠ€è¡“ãŒè¶³ã‚Šãªã„");
 					$returnMode = 0;
 					break;
 				} elseif($island['money'] < $value) {
-					$this->log->NoAny($id, $name, $comName, "‘‹à•s‘«‚Ì");
+					$this->log->NoAny($id, $name, $comName, "è³‡é‡‘ä¸è¶³ã®");
 					$returnMode = 0;
 					break;
 				} elseif(Util::random(10000) > $failp[$arg] + $failq[$arg] * $island['rena']) {
 					$this->log->Eiseifail($id, $name, $comName, $point);
-					
-					// ‹à‚ğ·‚µˆø‚­
+
+					// é‡‘ã‚’å·®ã—å¼•ã
 					$island['money'] -= $value;
-					
+
 					$returnMode = 1;
 					break;
 				}
 				$island['eisei'][$arg] = ($arg == 5) ? 250 : 100;
-				$this->log->Eiseisuc($id, $name, $init->EiseiName[$arg], "‚Ì‘Å‚¿ã‚°");
-				
-				// ‹à‚ğ·‚µˆø‚­
+				$this->log->Eiseisuc($id, $name, $init->EiseiName[$arg], "ã®æ‰“ã¡ä¸Šã’");
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $value;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comEiseimente;
-				// lH‰q¯‘ÅC•œ
+				// äººå·¥è¡›æ˜Ÿæ‰“ä¿®å¾©
 				if($arg > 5) {
 					$arg = 0;
 				}
 				if($island['eisei'][$arg] > 0) {
 					$island['eisei'][$arg] = 150;
-					$this->log->Eiseisuc($id, $name, $init->EiseiName[$arg], "‚ÌC•œ");
+					$this->log->Eiseisuc($id, $name, $init->EiseiName[$arg], "ã®ä¿®å¾©");
 				} else {
-					$this->log->NoAny($id, $name, $comName, "w’è‚ÌlH‰q¯‚ª‚È‚¢");
+					$this->log->NoAny($id, $name, $comName, "æŒ‡å®šã®äººå·¥è¡›æ˜ŸãŒãªã„");
 					$returnMode = 0;
 					break;
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comEiseiAtt;
-				// ‰q¯”j‰ó–C
+				// è¡›æ˜Ÿç ´å£Šç ²
 				if($island['enehusoku'] < 0) {
-					// “d—Í•s‘«
+					// é›»åŠ›ä¸è¶³
 					$this->log->Enehusoku($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
-				
-				// ƒ^[ƒQƒbƒgæ“¾
+
+				// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 				$tn = $hako->idToNumber[$target];
 				if($tn !== 0 && empty($tn)) {
-					// ƒ^[ƒQƒbƒg‚ª‚·‚Å‚É‚È‚¢
+					// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã™ã§ã«ãªã„
 					$this->log->msNoTarget($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
 				if($hako->islands[$tn]['keep']) {
-					// –Ú•W‚Ì“‡‚ªŠÇ—l—a‚©‚è’†‚Ì‚½‚ßÀs‚ª‹–‰Â‚³‚ê‚È‚¢
+					// ç›®æ¨™ã®å³¶ãŒç®¡ç†äººé ã‹ã‚Šä¸­ã®ãŸã‚å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œãªã„
 					$this->log->CheckKP($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
-				// –‘O€”õ
+				// äº‹å‰æº–å‚™
 				if($arg > 5) {
 					$arg = 0;
 				}
 				$tIsland = &$hako->islands[$tn];
 				$tName = &$tIsland['name'];
-				
+
 				if($island['eisei'][5] > 0 || $island['eisei'][3] > 0) {
-					// ƒCƒŒƒMƒ…ƒ‰[‚©ŒR–‰q¯‚ª‚ ‚éê‡
+					// ã‚¤ãƒ¬ã‚®ãƒ¥ãƒ©ãƒ¼ã‹è»äº‹è¡›æ˜ŸãŒã‚ã‚‹å ´åˆ
 					$eName = $init->EiseiName[$arg];
 					$p = ($island['eisei'][5] >= 1) ? 110 : 70;
 					if($tIsland['eisei'][$arg] > 0) {
@@ -1870,91 +1874,91 @@ class Turn {
 							$this->log->EiseiAttf($id, $tId, $name, $tName, $comName, $eName);
 						}
 					} else {
-						$this->log->NoAny($id, $name, $comName, "w’è‚ÌlH‰q¯‚ª‚È‚¢");
+						$this->log->NoAny($id, $name, $comName, "æŒ‡å®šã®äººå·¥è¡›æ˜ŸãŒãªã„");
 						$returnMode = 0;
 						break;
 					}
 					$nkind = ($island['eisei'][5] >= 1) ? '5' : '3';
 					$island['eisei'][$nkind] -= 30;
-					
+
 					if($island['eisei'][$nkind] < 1) {
 						$island['eisei'][$nkind] = 0;
 						$this->log->EiseiEnd($id, $name, ($island['eisei'][5] >= 1) ? $init->EiseiName[5] : $init->EiseiName[3]);
 					}
 				} else {
-					// ƒCƒŒƒMƒ…ƒ‰[‚àŒR–‰q¯‚à‚È‚¢ê‡
-					$this->log->NoAny($id, $name, $comName, "•K—v‚ÈlH‰q¯‚ª‚È‚¢");
+					// ã‚¤ãƒ¬ã‚®ãƒ¥ãƒ©ãƒ¼ã‚‚è»äº‹è¡›æ˜Ÿã‚‚ãªã„å ´åˆ
+					$this->log->NoAny($id, $name, $comName, "å¿…è¦ãªäººå·¥è¡›æ˜ŸãŒãªã„");
 					$returnMode = 0;
 					break;
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comEiseiLzr:
-				// ‰q¯ƒŒ[ƒU[
+				// è¡›æ˜Ÿãƒ¬ãƒ¼ã‚¶ãƒ¼
 				if($island['enehusoku'] < 0) {
-					// “d—Í•s‘«
+					// é›»åŠ›ä¸è¶³
 					$this->log->Enehusoku($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
-				// ƒ^[ƒQƒbƒgæ“¾
+				// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 				$tn = $hako->idToNumber[$target];
 				if($tn != 0 && empty($tn)) {
-					// ƒ^[ƒQƒbƒg‚ª‚·‚Å‚É‚È‚¢
+					// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã™ã§ã«ãªã„
 					$this->log->msNoTarget($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
 				if($hako->islands[$tn]['keep']) {
-					// –Ú•W‚Ì“‡‚ªŠÇ—l—a‚©‚è’†‚Ì‚½‚ßÀs‚ª‹–‰Â‚³‚ê‚È‚¢
+					// ç›®æ¨™ã®å³¶ãŒç®¡ç†äººé ã‹ã‚Šä¸­ã®ãŸã‚å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œãªã„
 					$this->log->CheckKP($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
-				// –‘O€”õ
+				// äº‹å‰æº–å‚™
 				$tIsland    = &$hako->islands[$tn];
 				$tName      = &$tIsland['name'];
 				$tLand      = &$tIsland['land'];
 				$tLandValue = &$tIsland['landValue'];
-				
+
 				if((($hako->islandTurn - $island['starturn']) < $init->noMissile) || (($hako->islandTurn - $tIsland['starturn']) < $init->noMissile)) {
-					// Às‹–‰Âƒ^[ƒ“‚ğŒo‰ß‚µ‚½‚©H
+					// å®Ÿè¡Œè¨±å¯ã‚¿ãƒ¼ãƒ³ã‚’çµŒéã—ãŸã‹ï¼Ÿ
 					$this->log->Forbidden($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
-				// ’…’e“_‚Ì’nŒ`“™Zo
+				// ç€å¼¾ç‚¹ã®åœ°å½¢ç­‰ç®—å‡º
 				$tL     = $tLand[$x][$y];
 				$tLv    = $tLandValue[$x][$y];
 				$tLname = $this->landName($tL, $tLv);
 				$tPoint = "({$x}, {$y})";
-				
+
 				if($island['id'] == $tIsland['id']) {
 					$tLand[$x][$y] = &$land[$x][$y];
 				}
 				if($island['eisei'][5] > 0 || $island['eisei'][3] > 0) {
-					// ƒCƒŒƒMƒ…ƒ‰[‚©ŒR–‰q¯‚ª‚ ‚éê‡
-					if((($tL == $init->landSea) && ($tLv < 2)) || ($tL == $init->landSeaCity) || 
+					// ã‚¤ãƒ¬ã‚®ãƒ¥ãƒ©ãƒ¼ã‹è»äº‹è¡›æ˜ŸãŒã‚ã‚‹å ´åˆ
+					if((($tL == $init->landSea) && ($tLv < 2)) || ($tL == $init->landSeaCity) ||
 						($tL == $init->landSbase) || ($tL == $init->landSdefence) || ($tL == $init->landMountain)) {
-						// Œø‰Ê‚Ì‚È‚¢’nŒ`
-						$this->log->EiseiLzr($id, $target, $name, $tName, $comName, $tLname, $tPoint, "’g‚©‚­‚È‚è‚Ü‚µ‚½B");
+						// åŠ¹æœã®ãªã„åœ°å½¢
+						$this->log->EiseiLzr($id, $target, $name, $tName, $comName, $tLname, $tPoint, "æš–ã‹ããªã‚Šã¾ã—ãŸã€‚");
 					} elseif((($tL == $init->landSea) && ($tLv >= 2)) || ($tL == $init->landOil) || ($tL == $init->landZorasu) || ($tL == $init->landFroCity)) {
-						// ‘D‚Æ–û“c‚Æ‚¼‚ç‚·‚ÆŠCã“ss‚ÍŠC‚É‚È‚é
-						$this->log->EiseiLzr($id, $target, $name, $tName, $comName, $tLname, $tPoint, "Ä‚«•¥‚í‚ê‚Ü‚µ‚½B");
+						// èˆ¹ã¨æ²¹ç”°ã¨ãã‚‰ã™ã¨æµ·ä¸Šéƒ½å¸‚ã¯æµ·ã«ãªã‚‹
+						$this->log->EiseiLzr($id, $target, $name, $tName, $comName, $tLname, $tPoint, "ç„¼ãæ‰•ã‚ã‚Œã¾ã—ãŸã€‚");
 						$tLand[$x][$y] = $init->landSea;
 						$tLandValue[$x][$y] = 0;
 					} elseif(($tL == $init->landNursery) || ($tL == $init->landSeaSide) || ($tL == $init->landPort)) {
-						// —{Bê‚Æ»•l‚Æ`‚Íó£‚É‚È‚é
-						$this->log->EiseiLzr($id, $target, $name, $tName, $comName, $tLname, $tPoint, "Ä‚«•¥‚í‚ê‚Ü‚µ‚½B");
+						// é¤Šæ®–å ´ã¨ç ‚æµœã¨æ¸¯ã¯æµ…ç€¬ã«ãªã‚‹
+						$this->log->EiseiLzr($id, $target, $name, $tName, $comName, $tLname, $tPoint, "ç„¼ãæ‰•ã‚ã‚Œã¾ã—ãŸã€‚");
 						$tLand[$x][$y] = $init->landSea;
 						$tLandValue[$x][$y] = 1;
 					} else {
-						// ‚»‚Ì‘¼‚Ír’n‚É
-						$this->log->EiseiLzr($id, $target, $name, $tName, $comName, $tLname, $tPoint, "Ä‚«•¥‚í‚ê‚Ü‚µ‚½B");
+						// ãã®ä»–ã¯è’åœ°ã«
+						$this->log->EiseiLzr($id, $target, $name, $tName, $comName, $tLname, $tPoint, "ç„¼ãæ‰•ã‚ã‚Œã¾ã—ãŸã€‚");
 						$tLand[$x][$y] = $init->landWaste;
 						$tLandValue[$x][$y] = 1;
 					}
@@ -1963,17 +1967,17 @@ class Turn {
 					$nkind = ($island['eisei'][5] >= 1) ? '5' : '3';
 					$island['eisei'][$nkind] -= (($island['eisei'][5] >= 1) ? 5 : 10);
 				} else {
-					// ƒCƒŒƒMƒ…ƒ‰[‚àŒR–‰q¯‚à‚È‚¢ê‡
-					$this->log->NoAny($id, $name, $comName, "•K—v‚ÈlH‰q¯‚ª‚È‚¢");
+					// ã‚¤ãƒ¬ã‚®ãƒ¥ãƒ©ãƒ¼ã‚‚è»äº‹è¡›æ˜Ÿã‚‚ãªã„å ´åˆ
+					$this->log->NoAny($id, $name, $comName, "å¿…è¦ãªäººå·¥è¡›æ˜ŸãŒãªã„");
 					$returnMode = 0;
 					break;
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comMissileNM:
 			case $init->comMissilePP:
 			case $init->comMissileST:
@@ -1981,15 +1985,15 @@ class Turn {
 			case $init->comMissileSP:
 			case $init->comMissileLD:
 			case $init->comMissileLU:
-				// ƒ~ƒTƒCƒ‹Œn
+				// ãƒŸã‚µã‚¤ãƒ«ç³»
 				if((($island['tenki'] == 4) || ($island['tenki'] == 5)) && ($island['zin'][1] != 1)){
-					// —‹Eá‚Ì“ú‚Í‘Å‚Ä‚È‚¢
+					// é›·ãƒ»é›ªã®æ—¥ã¯æ‰“ã¦ãªã„
 					$this->log->msNoTenki($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
 				if($island['enehusoku'] < 0) {
-					// “d—Í•s‘«
+					// é›»åŠ›ä¸è¶³
 					$this->log->Enehusoku($id, $name, $comName);
 					$returnMode = 0;
 					break;
@@ -1997,57 +2001,57 @@ class Turn {
 				$flag = 0;
 				do {
 					if(($arg == 0) || ($arg > $island['fire'])) {
-						// 0‚Ìê‡‚ÍŒ‚‚Ä‚é‚¾‚¯
+						// 0ã®å ´åˆã¯æ’ƒã¦ã‚‹ã ã‘
 						$arg = $island['fire'];
 					}
 					$comp = $arg;
-					// ƒ^[ƒQƒbƒgæ“¾
+					// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 					$tn = $hako->idToNumber[$target];
 					if($tn !== 0 && empty($tn)) {
-						// ƒ^[ƒQƒbƒg‚ª‚·‚Å‚É‚È‚¢
+						// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã™ã§ã«ãªã„
 						$this->log->msNoTarget($id, $name, $comName);
 						$returnMode = 0;
 						break 2;
 					}
 					if($hako->islands[$tn]['keep']) {
-						// –Ú•W‚Ì“‡‚ªŠÇ—l—a‚©‚è’†‚Ì‚½‚ßÀs‚ª‹–‰Â‚³‚ê‚È‚¢
+						// ç›®æ¨™ã®å³¶ãŒç®¡ç†äººé ã‹ã‚Šä¸­ã®ãŸã‚å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œãªã„
 						$this->log->CheckKP($id, $name, $comName);
 						$returnMode = 0;
 						break 2;
 					}
-					// –‘O€”õ
+					// äº‹å‰æº–å‚™
 					$tIsland    = &$hako->islands[$tn];
 					$tName      = &$tIsland['name'];
 					$tLand      = &$tIsland['land'];
 					$tLandValue = &$tIsland['landValue'];
-					
+
 					if((($hako->islandTurn - $island['starturn']) < $init->noMissile) || (($hako->islandTurn - $tIsland['starturn']) < $init->noMissile)) {
-						// Às‹–‰Âƒ^[ƒ“‚ğŒo‰ß‚µ‚½‚©H
+						// å®Ÿè¡Œè¨±å¯ã‚¿ãƒ¼ãƒ³ã‚’çµŒéã—ãŸã‹ï¼Ÿ
 						$this->log->Forbidden($id, $name, $comName);
 						$returnMode = 0;
 						break 2;
 					}
-					// “ï–¯‚Ì”
+					// é›£æ°‘ã®æ•°
 					$boat = 0;
-					
-					// ƒ~ƒTƒCƒ‹‚Ì“à–ó
-					$missiles = 0; // ”­Ë”
-					$missileA = 0; // ”ÍˆÍŠOAŒø‰Ê‚È‚µAr’n
-					$missileB = 0; // ‹ó’†”š”j
-					$missileC = 0; // d‰»’†AŒ}Œ‚
-					$missileD = 0; // ‰öb–½’†
-					$missileE = 0; // íŠÍŒ}Œ‚
-					
-					// Œë·
+
+					// ãƒŸã‚µã‚¤ãƒ«ã®å†…è¨³
+					$missiles = 0; // ç™ºå°„æ•°
+					$missileA = 0; // ç¯„å›²å¤–ã€åŠ¹æœãªã—ã€è’åœ°
+					$missileB = 0; // ç©ºä¸­çˆ†ç ´
+					$missileC = 0; // ç¡¬åŒ–ä¸­ã€è¿æ’ƒ
+					$missileD = 0; // æ€ªç£å‘½ä¸­
+					$missileE = 0; // æˆ¦è‰¦è¿æ’ƒ
+
+					// èª¤å·®
 					if(($kind == $init->comMissilePP) || ($kind == $init->comMissileBT) || ($kind == $init->comMissileSP)) {
 						$err = 7;
 					} else {
 						$err = 19;
 					}
 					$bx = $by = 0;
-					// ‹à‚ªs‚«‚é‚©w’è”‚É‘«‚è‚é‚©Šî’n‘S•”‚ªŒ‚‚Â‚Ü‚Åƒ‹[ƒv
+					// é‡‘ãŒå°½ãã‚‹ã‹æŒ‡å®šæ•°ã«è¶³ã‚Šã‚‹ã‹åŸºåœ°å…¨éƒ¨ãŒæ’ƒã¤ã¾ã§ãƒ«ãƒ¼ãƒ—
 					while(($arg > 0) && ($island['money'] >= $cost)) {
-						// Šî’n‚ğŒ©‚Â‚¯‚é‚Ü‚Åƒ‹[ƒv
+						// åŸºåœ°ã‚’è¦‹ã¤ã‘ã‚‹ã¾ã§ãƒ«ãƒ¼ãƒ—
 						while($count < $init->pointNumber) {
 							$bx = $this->rpx[$count];
 							$by = $this->rpy[$count];
@@ -2057,43 +2061,43 @@ class Turn {
 							$count++;
 						}
 						if($count >= $init->pointNumber) {
-							// Œ©‚Â‚©‚ç‚È‚©‚Á‚½‚ç‚»‚±‚Ü‚Å
+							// è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸã‚‰ãã“ã¾ã§
 							break;
 						}
-						// Å’áˆê‚ÂŠî’n‚ª‚ ‚Á‚½‚Ì‚ÅAflag‚ğ—§‚Ä‚é
+						// æœ€ä½ä¸€ã¤åŸºåœ°ãŒã‚ã£ãŸã®ã§ã€flagã‚’ç«‹ã¦ã‚‹
 						$flag = 1;
-						
-						// Šî’n‚ÌƒŒƒxƒ‹‚ğZo
+
+						// åŸºåœ°ã®ãƒ¬ãƒ™ãƒ«ã‚’ç®—å‡º
 						$level = Util::expToLevel($land[$bx][$by], $landValue[$bx][$by]);
-						
-						// Šî’n“à‚Åƒ‹[ƒv
+
+						// åŸºåœ°å†…ã§ãƒ«ãƒ¼ãƒ—
 						while(($level > 0) && ($arg > 0) && ($island['money'] > $cost)) {
-							// Œ‚‚Á‚½‚Ì‚ªŠm’è‚È‚Ì‚ÅAŠe’l‚ğÁ–Õ‚³‚¹‚é
+							// æ’ƒã£ãŸã®ãŒç¢ºå®šãªã®ã§ã€å„å€¤ã‚’æ¶ˆè€—ã•ã›ã‚‹
 							$level--;
 							$arg--;
 							$island['money'] -= $cost;
 							$missiles++;
-							
-							// ’…’e“_Zo
+
+							// ç€å¼¾ç‚¹ç®—å‡º
 							$r = Util::random($err);
 							$tx = $x + $init->ax[$r];
 							$ty = $y + $init->ay[$r];
 							if((($ty % 2) == 0) && (($y % 2) == 1)) {
 								$tx--;
 							}
-							// ’…’e“_”ÍˆÍ“àŠOƒ`ƒFƒbƒN
+							// ç€å¼¾ç‚¹ç¯„å›²å†…å¤–ãƒã‚§ãƒƒã‚¯
 							if(($tx < 0) || ($tx >= $init->islandSize) || ($ty < 0) || ($ty >= $init->islandSize)) {
-								// ”ÍˆÍŠO
+								// ç¯„å›²å¤–
 								$missileA++;
 								continue;
 							}
-							// ’…’e“_‚Ì’nŒ`“™Zo
+							// ç€å¼¾ç‚¹ã®åœ°å½¢ç­‰ç®—å‡º
 							$tL     = $tLand[$tx][$ty];
 							$tLv    = $tLandValue[$tx][$ty];
 							$tLname = $this->landName($tL, $tLv);
 							$tPoint = "({$tx}, {$ty})";
-							
-							// –h‰q{İ”»’è
+
+							// é˜²è¡›æ–½è¨­åˆ¤å®š
 							$defence = 0;
 							if($defenceHex[$id][$tx][$ty] == 1) {
 								$defence = 1;
@@ -2101,35 +2105,35 @@ class Turn {
 								$defence = 0;
 							} else {
 								if(($tL == $init->landDefence) || ($tL == $init->landSdefence) || ($tL == $init->landProcity)) {
-									// –h‰q{İ‚É–½’†
+									// é˜²è¡›æ–½è¨­ã«å‘½ä¸­
 									if(($tLv > 1) &&
 										(($kind == $init->comMissileNM) ||
 										($kind == $init->comMissilePP) ||
 										($kind == $init->comMissileST))) {
-										// –h‰q{İ‚Ì‘Ï‹v—Í‚ğ‰º‚°‚é
+										// é˜²è¡›æ–½è¨­ã®è€ä¹…åŠ›ã‚’ä¸‹ã’ã‚‹
 										$tLv --;
 									} elseif($kind == $init->comMissileSP) {
 										break;
 									} else {
-										// ‘Ï‹v—Í‚ª‚P‚©A‘¼‚Ìƒ~ƒTƒCƒ‹’¼Œ‚‚È‚çA–h‰q{İ”j‰ó
+										// è€ä¹…åŠ›ãŒï¼‘ã‹ã€ä»–ã®ãƒŸã‚µã‚¤ãƒ«ç›´æ’ƒãªã‚‰ã€é˜²è¡›æ–½è¨­ç ´å£Š
 										$tLv = 0;
-										// ƒtƒ‰ƒO‚ğƒNƒŠƒA
+										// ãƒ•ãƒ©ã‚°ã‚’ã‚¯ãƒªã‚¢
 										for($i = 0; $i < 19; $i++) {
 											$sx = $tx + $init->ax[$i];
 											$sy = $ty + $init->ay[$i];
-											// s‚É‚æ‚éˆÊ’u’²®
+											// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 											if((($sy % 2) == 0) && (($ty % 2) == 1)) {
 												$sx--;
 											}
 											if(($sx < 0) || ($sx >= $init->islandSize) || ($sy < 0) || ($sy >= $init->islandSize)) {
-												// ”ÍˆÍŠO‚Ìê‡‰½‚à‚µ‚È‚¢
+												// ç¯„å›²å¤–ã®å ´åˆä½•ã‚‚ã—ãªã„
 											} else {
-												// ”ÍˆÍ“à‚Ìê‡
+												// ç¯„å›²å†…ã®å ´åˆ
 												$defenceHex[$id][$sx][$sy] = 0;
 											}
 										}
 									}
-								} elseif(Turn::countAround($tLand, $tx, $ty, 19, array($init->landDefence, $init->landSdefence)) + 
+								} elseif(Turn::countAround($tLand, $tx, $ty, 19, array($init->landDefence, $init->landSdefence)) +
 									Turn::countAround($tLand, $tx, $ty, 7, array($init->landProcity))) {
 									$defenceHex[$id][$tx][$ty] = 1;
 									$defence = 1;
@@ -2139,12 +2143,12 @@ class Turn {
 								}
 							}
 							if($defence == 1) {
-								// ‹ó’†”š”j
+								// ç©ºä¸­çˆ†ç ´
 								$missileB++;
 								continue;
 							}
 							if($island['id'] != $tIsland['id']) {
-								// –h‰q‰q¯‚ª‚ ‚éê‡
+								// é˜²è¡›è¡›æ˜ŸãŒã‚ã‚‹å ´åˆ
 								if($tIsland['eisei'][4] && (Util::random(5000) < $tIsland['rena'])) {
 									$tIsland['eisei'][4] -= 2;
 									if($tIsland['eisei'][4] < 1) {
@@ -2155,18 +2159,18 @@ class Turn {
 									continue;
 								}
 							}
-							// uŒø‰Ê‚È‚µvhex‚ğÅ‰‚É”»’è
-							if (($kind != $init->comMissileLU) && // ’nŒ`—²‹N’e‚Å‚È‚­
-								((($tL == $init->landSea) && ($tLv == 0))|| // [‚¢ŠC
-								(((($tL == $init->landSea) && ($tLv < 2)) || // ŠC‚Ü‚½‚ÍEEE
-								(($tL == $init->landPoll) && ($kind != $init->comMissileBT)) || // ‰˜õ“yë‚Ü‚½‚ÍEEE
-								($tL == $init->landSbase) || // ŠC’êŠî’n‚Ü‚½‚ÍEEE
-								(($tL == $init->landProcity) && 
-								(Turn::countAround($tLand, $tx, $ty, 19, array($init->landDefence, $init->landSdefence)))) || // –hĞ“ss‚Ü‚½‚ÍEEE
-								($tL == $init->landSeaCity) || // ŠC’ê“ss‚Ü‚½‚ÍEEE
-								($tL == $init->landMountain)) // R‚ÅEEE
-								&& ($kind != $init->comMissileLD)))) { // —¤”j’eˆÈŠO
-								// ŠC’êŠî’n‚Ìê‡AŠC‚ÌƒtƒŠ
+							// ã€ŒåŠ¹æœãªã—ã€hexã‚’æœ€åˆã«åˆ¤å®š
+							if (($kind != $init->comMissileLU) && // åœ°å½¢éš†èµ·å¼¾ã§ãªã
+								((($tL == $init->landSea) && ($tLv == 0))|| // æ·±ã„æµ·
+								(((($tL == $init->landSea) && ($tLv < 2)) || // æµ·ã¾ãŸã¯ãƒ»ãƒ»ãƒ»
+								(($tL == $init->landPoll) && ($kind != $init->comMissileBT)) || // æ±šæŸ“åœŸå£Œã¾ãŸã¯ãƒ»ãƒ»ãƒ»
+								($tL == $init->landSbase) || // æµ·åº•åŸºåœ°ã¾ãŸã¯ãƒ»ãƒ»ãƒ»
+								(($tL == $init->landProcity) &&
+								(Turn::countAround($tLand, $tx, $ty, 19, array($init->landDefence, $init->landSdefence)))) || // é˜²ç½éƒ½å¸‚ã¾ãŸã¯ãƒ»ãƒ»ãƒ»
+								($tL == $init->landSeaCity) || // æµ·åº•éƒ½å¸‚ã¾ãŸã¯ãƒ»ãƒ»ãƒ»
+								($tL == $init->landMountain)) // å±±ã§ãƒ»ãƒ»ãƒ»
+								&& ($kind != $init->comMissileLD)))) { // é™¸ç ´å¼¾ä»¥å¤–
+								// æµ·åº•åŸºåœ°ã®å ´åˆã€æµ·ã®ãƒ•ãƒª
 								if($tL == $init->landSbase) {
 									$tL = $init->landSea;
 								}
@@ -2174,71 +2178,71 @@ class Turn {
 								$missileA++;
 								continue;
 							}
-							// ’e‚Ìí—Ş‚Å•ªŠò
+							// å¼¾ã®ç¨®é¡ã§åˆ†å²
 							if($kind == $init->comMissileLD) {
-								// —¤’n”j‰ó’e
+								// é™¸åœ°ç ´å£Šå¼¾
 								switch($tL) {
 									case $init->landMountain:
-										// R(r’n‚É‚È‚é)
+										// å±±(è’åœ°ã«ãªã‚‹)
 										$this->log->msLDMountain($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
-										
-										// r’n‚É‚È‚é
+
+										// è’åœ°ã«ãªã‚‹
 										$tLand[$tx][$ty] = $init->landWaste;
 										$tLandValue[$tx][$ty] = 0;
 										continue 2;
-										
+
 									case $init->landSbase:
 									case $init->landSdefence:
 									case $init->landSeaCity:
 									case $init->landFroCity:
 									case $init->landSsyoubou:
 									case $init->landSfarm:
-										// ŠC’êŠî’nAŠC’ê“ssAŠCã“ssAŠC’êÁ–hAŠC’ê–h‰q{İAŠC’ê”_ê
+										// æµ·åº•åŸºåœ°ã€æµ·åº•éƒ½å¸‚ã€æµ·ä¸Šéƒ½å¸‚ã€æµ·åº•æ¶ˆé˜²ç½²ã€æµ·åº•é˜²è¡›æ–½è¨­ã€æµ·åº•è¾²å ´
 										$this->log->msLDSbase($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										break;
-										
+
 									case $init->landMonster:
 									case $init->landSleeper:
 									case $init->landZorasu:
-										// ‰öb
+										// æ€ªç£
 										$this->log->msLDMonster($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										break;
-										
+
 									case $init->landSea:
-										// ó£
+										// æµ…ç€¬
 										$this->log->msLDSea1($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										break;
-										
+
 									case $init->landSeaSide:
-										// »•l‚È‚ç…–v
+										// ç ‚æµœãªã‚‰æ°´æ²¡
 										$this->log->msLDSea1($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										$tLand[$tx][$ty] = $init->landSea;
 										$tIsland['area']--;
 										$tLandValue[$tx][$ty] = 1;
 										break;
-										
+
 									default:
-										// ‚»‚Ì‘¼
+										// ãã®ä»–
 										$this->log->msLDLand($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 								}
-								// ŒoŒ±’l
-								if(($tL == $init->landTown) || ($tL == $init->landSeaCity) || ($tL == $init->landFroCity) || 
+								// çµŒé¨“å€¤
+								if(($tL == $init->landTown) || ($tL == $init->landSeaCity) || ($tL == $init->landFroCity) ||
 									($tL == $init->landNewtown) || ($tL == $init->landBigtown)) {
 									if(($land[$bx][$by] == $init->landBase) ||
 										($land[$bx][$by] == $init->landSbase)) {
-										// ‚Ü‚¾Šî’n‚Ìê‡‚Ì‚İ
+										// ã¾ã åŸºåœ°ã®å ´åˆã®ã¿
 										$landValue[$bx][$by] += round($tLv / 20);
 										if($landValue[$bx][$by] > $init->maxExpPoint) {
 											$landValue[$bx][$by] = $init->maxExpPoint;
 										}
 									}
 								}
-								// ó£‚É‚È‚é
+								// æµ…ç€¬ã«ãªã‚‹
 								$tLand[$tx][$ty] = $init->landSea;
 								$tIsland['area']--;
 								$tLandValue[$tx][$ty] = 1;
-								
-								// ‚Å‚à–û“cAó£AŠC’êŠî’nAŠC’ê“ssAŠC’êÁ–hAŠC’ê”_êAŠC’ê–h‰q{İ‚¾‚Á‚½‚çŠC
+
+								// ã§ã‚‚æ²¹ç”°ã€æµ…ç€¬ã€æµ·åº•åŸºåœ°ã€æµ·åº•éƒ½å¸‚ã€æµ·åº•æ¶ˆé˜²ç½²ã€æµ·åº•è¾²å ´ã€æµ·åº•é˜²è¡›æ–½è¨­ã ã£ãŸã‚‰æµ·
 								if(($tL == $init->landOil) ||
 									($tL == $init->landSea) ||
 									($tL == $init->landSeaCity) ||
@@ -2249,17 +2253,17 @@ class Turn {
 									($tL == $init->landZorasu)) {
 									$tLandValue[$tx][$ty] = 0;
 								}
-								// ‚Å‚à—{Bê‚¾‚Á‚½‚çó£
+								// ã§ã‚‚é¤Šæ®–å ´ã ã£ãŸã‚‰æµ…ç€¬
 								if($tL == $init->landNursery) {
 									$tLandValue[$tx][$ty] = 1;
 								}
 							} elseif($kind == $init->comMissileLU) {
-								// ’nŒ`—²‹N’e
+								// åœ°å½¢éš†èµ·å¼¾
 								switch($tL) {
 									case $init->landMountain:
-										// R
+										// å±±
 										continue;
-										
+
 									case $init->landSbase:
 									case $init->landSdefence:
 									case $init->landSeaCity:
@@ -2267,31 +2271,31 @@ class Turn {
 									case $init->landSsyoubou:
 									case $init->landSfarm:
 									case $init->landZorasu:
-										// ŠC’êŠî’nAŠC’ê“ssAŠCã“ssAŠC’êÁ–hAŠC’ê–h‰q{İAŠC’ê”_êA‚¼‚ç‚·
+										// æµ·åº•åŸºåœ°ã€æµ·åº•éƒ½å¸‚ã€æµ·ä¸Šéƒ½å¸‚ã€æµ·åº•æ¶ˆé˜²ç½²ã€æµ·åº•é˜²è¡›æ–½è¨­ã€æµ·åº•è¾²å ´ã€ãã‚‰ã™
 										$this->log->msLUSbase($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										$tLand[$tx][$ty] = $init->landSea;
 										$tLandValue[$tx][$ty] = 1;
 										continue;
-										
+
 									case $init->landSea:
-										// ŠC‚Ìê‡
+										// æµ·ã®å ´åˆ
 										if ($tLv == 1) {
-											// r’n‚É‚È‚é
+											// è’åœ°ã«ãªã‚‹
 											$this->log->msLUSea1($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 											$tLand[$tx][$ty] = $init->landWaste;
 											$tLandValue[$tx][$ty] = 1;
 											$tIsland['area']++;
 											if($seaCount <= 4) {
-												// ü‚è‚ÌŠC‚ª3ƒwƒbƒNƒXˆÈ“à‚È‚Ì‚ÅAó£‚É‚·‚é
+												// å‘¨ã‚Šã®æµ·ãŒ3ãƒ˜ãƒƒã‚¯ã‚¹ä»¥å†…ãªã®ã§ã€æµ…ç€¬ã«ã™ã‚‹
 												for($i = 1; $i < 7; $i++) {
 													$sx = $x + $init->ax[$i];
 													$sy = $y + $init->ax[$i];
-													// s‚É‚æ‚éˆÊ’u’²®
+													// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 													if((($sy % 2) == 0) && (($y % 2) == 1)) {
 														$sx--;
 													}
 													if(!(($sx < 0) || ($sx >= $init->islandSize) || ($sy < 0) || ($sy >= $init->islandSize))) {
-														// ”ÍˆÍ“à‚Ìê‡
+														// ç¯„å›²å†…ã®å ´åˆ
 														if($tLand[$sx][$sy] == $init->landSea) {
 															$tLandValue[$sx][$sy] = 1;
 														}
@@ -2299,70 +2303,70 @@ class Turn {
 												}
 											}
 										} else {
-											// ó£‚É‚È‚é
+											// æµ…ç€¬ã«ãªã‚‹
 											$this->log->msLUSea0($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 											$tLandValue[$tx][$ty] = 1;
 										}
 										continue;
-										
+
 									case $init->landMonster:
 									case $init->landSleeper:
-										// ‰öb
+										// æ€ªç£
 										$missileD++;
-										// R‚É‚È‚é
+										// å±±ã«ãªã‚‹
 										$tLand[$tx][$ty] = $init->landMountain;
 										$tLandValue[$tx][$ty] = 0;
 										$this->log->msLUMonster($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										continue;
-										
+
 									default:
-										// ‚»‚Ì‘¼
+										// ãã®ä»–
 										$this->log->msLULand($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
-										// ŒoŒ±’l
+										// çµŒé¨“å€¤
 										if($tL == $init->landTown) {
 											if(($land[$bx][$by] == $init->landBase) || ($land[$bx][$by] == $init->landSbase)) {
-												// ‚Ü‚¾Šî’n‚Ìê‡‚Ì‚İ
+												// ã¾ã åŸºåœ°ã®å ´åˆã®ã¿
 												$landValue[$bx][$by] += round($tLv / 20);
 												if($landValue[$bx][$by] > $init->maxExpPoint) {
 													$landValue[$bx][$by] = $init->maxExpPoint;
 												}
 											}
 										}
-										// R‚É‚È‚é
+										// å±±ã«ãªã‚‹
 										$tLand[$tx][$ty] = $init->landMountain;
 										$tLandValue[$tx][$ty] = 0;
 								}
 								continue;
 							} elseif($kind != $init->comMissileSP) {
-								// ‚»‚Ì‘¼ƒ~ƒTƒCƒ‹
+								// ãã®ä»–ãƒŸã‚µã‚¤ãƒ«
 								if($tL == $init->landWaste) {
-									// r’n
+									// è’åœ°
 									if($kind == $init->comMissileBT) {
 										$this->log->msPollution($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									}else{
 										$missileA++;
 									}
 								} elseif(($tL == $init->landMonster) || ($tL == $init->landSleeper)) {
-									// ‰öb
+									// æ€ªç£
 									$monsSpec = Util::monsterSpec($tLv);
 									$special = $init->monsterSpecial[$monsSpec['kind']];
-									
-									// d‰»’†?
+
+									// ç¡¬åŒ–ä¸­?
 									if((($special & 0x4) && (($hako->islandTurn % 2) == 1)) || (($special & 0x10) && (($hako->islandTurn % 2) == 0))) {
-										// d‰»’†
+										// ç¡¬åŒ–ä¸­
 										if($kind == $init->comMissileST) {
-											// ƒXƒeƒ‹ƒX
+											// ã‚¹ãƒ†ãƒ«ã‚¹
 											$this->log->msMonNoDamageS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										} else {
-											// ’Êí’e
+											// é€šå¸¸å¼¾
 											$this->log->msMonNoDamage($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										}
 										$missileC++;
 										continue;
 									} else {
-										// d‰»’†‚¶‚á‚È‚¢
+										// ç¡¬åŒ–ä¸­ã˜ã‚ƒãªã„
 										if(($special & 0x100) && (Util::random(100) < 30)) {
-											// ƒ~ƒTƒCƒ‹’@‚«—‚Æ‚·
+											// ãƒŸã‚µã‚¤ãƒ«å©ãè½ã¨ã™
 											if($kind == $init->comMissileST) {
 												$this->log->msMonsCaughtS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 											} else {
@@ -2372,7 +2376,7 @@ class Turn {
 											continue;
 										}
 										if(($kind == $init->comMissileBT) && (Util::random(100) < 10)) {
-											// ƒoƒCƒIƒ~ƒTƒCƒ‹‚Å“Ë‘R•ÏˆÙ
+											// ãƒã‚¤ã‚ªãƒŸã‚µã‚¤ãƒ«ã§çªç„¶å¤‰ç•°
 											$kind = Util::random($init->monsterNumber);
 											$lv = $kind * 100 + $init->monsterBHP[$kind] + Util::random($init->monsterDHP[$kind]);
 											$tLand[$tx][$ty] = $init->landMonster;
@@ -2380,22 +2384,22 @@ class Turn {
 											$this->log->msMutation($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										}
 										if($monsSpec['hp'] == 1) {
-											// ‰öb‚µ‚Æ‚ß‚½
+											// æ€ªç£ã—ã¨ã‚ãŸ
 											if(($land[$bx][$by] == $init->landBase) || ($land[$bx][$by] == $init->landSbase)) {
-												// ŒoŒ±’l
+												// çµŒé¨“å€¤
 												$landValue[$bx][$by] += $init->monsterExp[$monsSpec['kind']];
 												if($landValue[$bx][$by] > $init->maxExpPoint) {
 													$landValue[$bx][$by] = $init->maxExpPoint;
 												}
 											}
 											$missileD++;
-											
+
 											if((Util::random(100) < 7) && ($island['item'][8] == 1) && ($island['item'][9] != 1)) {
-												// ƒ}ƒXƒ^[ƒ\[ƒh”­Œ©
+												// ãƒã‚¹ã‚¿ãƒ¼ã‚½ãƒ¼ãƒ‰ç™ºè¦‹
 												$island['item'][9] = 1;
 												$this->log->SwordFound($id, $name, $tLname);
 											}
-											// û“ü
+											// åå…¥
 											$value = $init->monsterValue[$monsSpec['kind']];
 											if($value > 0) {
 												if(($id != $target) && ($target != 1)) {
@@ -2406,83 +2410,83 @@ class Turn {
 												}
 											}
 											if($kind == $init->comMissileST) {
-												// ƒXƒeƒ‹ƒX
+												// ã‚¹ãƒ†ãƒ«ã‚¹
 												$this->log->msMonMoneyS($id, $target, $tLname, $value);
 												$this->log->msMonsKillS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 											} else {
-												// ’Êí
+												// é€šå¸¸
 												$this->log->msMonMoney($id, $target, $tLname, $value);
 												$this->log->msMonsKill($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 											}
-											// ‰öb‘Ş¡”
+											// æ€ªç£é€€æ²»æ•°
 											$island['taiji']++;
-											
-											// ÜŠÖŒW
+
+											// è³é–¢ä¿‚
 											// $prize = $island['prize'];
-											list($flags, $monsters, $turns) = split(",", $prize, 3);
+											list($flags, $monsters, $turns) = explode(",", $prize, 3);
 											$v = 1 << $monsSpec['kind'];
 											$monsters |= $v;
-											
+
 											if ((!($flags & 512)) && $island['taiji'] == 100) {
-												// 100•C‘Ş¡‚Å‘fl“¢”°Ü
+												// 100åŒ¹é€€æ²»ã§ç´ äººè¨ä¼è³
 												$flags |= 512;
 												$this->log->prize($id, $name, $init->prizeName[10]);
 											} elseif ((!($flags & 1024)) && $island['taiji'] == 300) {
-												// 300•C‘Ş¡‚Å“¢”°Ü
+												// 300åŒ¹é€€æ²»ã§è¨ä¼è³
 												$flags |= 1024;
 												$this->log->prize($id, $name, $init->prizeName[11]);
 											} elseif ((!($flags & 2048)) && $island['taiji'] == 500) {
-												// 500•C‘Ş¡‚Å’´“¢”°Ü
+												// 500åŒ¹é€€æ²»ã§è¶…è¨ä¼è³
 												$flags |= 2048;
 												$this->log->prize($id, $name, $init->prizeName[12]);
 											} elseif ((!($flags & 4096)) && $island['taiji'] == 700) {
-												// 700•C‘Ş¡‚Å‹†‹É“¢”°Ü
+												// 700åŒ¹é€€æ²»ã§ç©¶æ¥µè¨ä¼è³
 												$flags |= 4096;
 												$this->log->prize($id, $name, $init->prizeName[13]);
 											} elseif ((!($flags & 8192)) && $island['taiji'] == 1000) {
-												// 1000•C‘Ş¡‚Å“¢”°‰¤
+												// 1000åŒ¹é€€æ²»ã§è¨ä¼ç‹
 												$flags |= 8192;
 												$this->log->prize($id, $name, $init->prizeName[14]);
 											}
 											$prize = "{$flags},{$monsters},{$turns}";
 											// $island['prize'] = "{$flags},{$monsters},{$turns}";
-											
-											// r‚ê’n‚É‚È‚é
+
+											// è’ã‚Œåœ°ã«ãªã‚‹
 											$tLand[$tx][$ty] = $init->landWaste;
-											$tLandValue[$tx][$ty] = 1; // ’…’e“_
+											$tLandValue[$tx][$ty] = 1; // ç€å¼¾ç‚¹
 											continue;
 										} else {
-											// ‰öb¶‚«‚Ä‚é
+											// æ€ªç£ç”Ÿãã¦ã‚‹
 											if($kind == $init->comMissileST) {
-												// ƒXƒeƒ‹ƒX
+												// ã‚¹ãƒ†ãƒ«ã‚¹
 												$this->log->msMonsterS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 											} else {
-												// ’Êí
+												// é€šå¸¸
 												$this->log->msMonster($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 											}
-											// HP‚ª1Œ¸‚é
+											// HPãŒ1æ¸›ã‚‹
 											$tLandValue[$tx][$ty]--;
 											$missileD++;
 											continue;
 										}
 									}
 								} elseif($tL == $init->landShip) {
-									// ‘D”•
+									// èˆ¹èˆ¶
 									$ship = Util::navyUnpack($tLv);
 									if(($ship[1] == 3) && (Util::random(1000) < $init->shipIntercept)) {
-										// íŠÍƒ~ƒTƒCƒ‹Œ}Œ‚
+										// æˆ¦è‰¦ãƒŸã‚µã‚¤ãƒ«è¿æ’ƒ
 										$missileE++;
 										continue;
 									}
 									if(($ship[1] == 2 || $ship[1] == 3) && ($ship[2] > 20)) {
-										// ŠC’ê’Tõ‘D‚Ü‚½‚ÍíŠÍ‚Ìê‡
+										// æµ·åº•æ¢ç´¢èˆ¹ã¾ãŸã¯æˆ¦è‰¦ã®å ´åˆ
 										$tLname = $init->shipName[$ship[1]];
-										$tLname .= "i{$this->islands[$ship[0]]['name']}“‡Š‘®j";
+										$tLname .= "ï¼ˆ{$this->islands[$ship[0]]['name']}å³¶æ‰€å±ï¼‰";
 										if($kind == $init->comMissileST) {
-											// ƒXƒeƒ‹ƒX
+											// ã‚¹ãƒ†ãƒ«ã‚¹
 											$this->log->msGensyoS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										} else {
-											// ’Êí
+											// é€šå¸¸
 											$this->log->msGensyo($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										}
 										$ship[2] -= 2;
@@ -2492,22 +2496,22 @@ class Turn {
 										$tLandValue[$tx][$ty] = 0;
 									}
 								} elseif(($tL == $init->landDefence || $tL == $init->landSdefence) && ($tLv > 1)) {
-									// –h‰q{İi‹K–ÍŒ¸­j
+									// é˜²è¡›æ–½è¨­ï¼ˆè¦æ¨¡æ¸›å°‘ï¼‰
 									if($kind == $init->comMissileST) {
-										// ƒXƒeƒ‹ƒX
+										// ã‚¹ãƒ†ãƒ«ã‚¹
 										$this->log->msGensyoS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									} else {
-										// ’Êí
+										// é€šå¸¸
 										$this->log->msGensyo($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									}
 									$tLandValue[$tx][$ty] = $tLv;
 								} elseif((($tL == $init->landFarm) && ($tLv > 25)) || (($tL == $init->landSfarm) && ($tLv > 20))) {
-									// ”_êAŠC’ê”_êi‹K–ÍŒ¸­j
+									// è¾²å ´ã€æµ·åº•è¾²å ´ï¼ˆè¦æ¨¡æ¸›å°‘ï¼‰
 									if($kind == $init->comMissileST) {
-										// ƒXƒeƒ‹ƒX
+										// ã‚¹ãƒ†ãƒ«ã‚¹
 										$this->log->msGensyoS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									} else {
-										// ’Êí
+										// é€šå¸¸
 										$this->log->msGensyo($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									}
 									$tLandValue[$tx][$ty] -= 5;
@@ -2515,22 +2519,22 @@ class Turn {
 									(($tL == $init->landHatuden) && ($tLv > 500)) ||
 									(($tL == $init->landCommerce) && ($tLv > 150)) ||
 									(($tL == $init->landProcity) && ($tLv >= 160))) {
-									// HêA”­“dŠA¤‹Æƒrƒ‹A–hĞ“ssi‹K–ÍŒ¸­j
+									// å·¥å ´ã€ç™ºé›»æ‰€ã€å•†æ¥­ãƒ“ãƒ«ã€é˜²ç½éƒ½å¸‚ï¼ˆè¦æ¨¡æ¸›å°‘ï¼‰
 									if($kind == $init->comMissileST) {
-										// ƒXƒeƒ‹ƒX
+										// ã‚¹ãƒ†ãƒ«ã‚¹
 										$this->log->msGensyoS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									} else {
-										// ’Êí
+										// é€šå¸¸
 										$this->log->msGensyo($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									}
 									$tLandValue[$tx][$ty] -= 20;
 								} elseif(($tL == $init->landNursery) || ($tL == $init->landSeaSide)) {
-									// —{BêA»•l‚¾‚Á‚½‚çó£
+									// é¤Šæ®–å ´ã€ç ‚æµœã ã£ãŸã‚‰æµ…ç€¬
 									if($kind == $init->comMissileST) {
-										// ƒXƒeƒ‹ƒX
+										// ã‚¹ãƒ†ãƒ«ã‚¹
 										$this->log->msNormalS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									} else {
-										// ’Êí
+										// é€šå¸¸
 										$this->log->msNormal($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									}
 									$tLand[$tx][$ty] = $init->landSea;
@@ -2538,48 +2542,48 @@ class Turn {
 								} elseif(($tL == $init->landShip) || ($tL == $init->landFroCity) ||
 									($tL == $init->landOil) || ($tL == $init->landSdefence) ||
 									($tL == $init->landSsyoubou) || ($tL == $init->landSfarm) || ($tL == $init->landZorasu)) {
-									// ‘DAŠCã“ssA–û“cAŠC’ê–h‰q{İAŠC’êÁ–hAŠC’ê”_ê‚¾‚Á‚½‚çŠC
+									// èˆ¹ã€æµ·ä¸Šéƒ½å¸‚ã€æ²¹ç”°ã€æµ·åº•é˜²è¡›æ–½è¨­ã€æµ·åº•æ¶ˆé˜²ç½²ã€æµ·åº•è¾²å ´ã ã£ãŸã‚‰æµ·
 									if($kind == $init->comMissileST) {
-										// ƒXƒeƒ‹ƒX
+										// ã‚¹ãƒ†ãƒ«ã‚¹
 										$this->log->msNormalS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									} else {
-										// ’Êí
+										// é€šå¸¸
 										$this->log->msNormal($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									}
 									$tLand[$tx][$ty] = $init->landSea;
 									$tLandValue[$tx][$ty] = 0;
 								} else {
-									// ’Êí’nŒ`
+									// é€šå¸¸åœ°å½¢
 									if($kind == $init->comMissileST) {
-										// ƒXƒeƒ‹ƒX
+										// ã‚¹ãƒ†ãƒ«ã‚¹
 										$this->log->msNormalS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
-										// r’n‚É‚È‚é
+										// è’åœ°ã«ãªã‚‹
 										$tLand[$tx][$ty] = $init->landWaste;
-										$tLandValue[$tx][$ty] = 1; // ’…’e“_
+										$tLandValue[$tx][$ty] = 1; // ç€å¼¾ç‚¹
 									} elseif($kind == $init->comMissileBT) {
-										// ƒoƒCƒIƒ~ƒTƒCƒ‹‚Ì‚Í‰˜õ
+										// ãƒã‚¤ã‚ªãƒŸã‚µã‚¤ãƒ«ã®æ™‚ã¯æ±šæŸ“
 										if(($tL == $init->landPoll) && ($tLandValue[$tx][$ty] < 3)) {
 											$tLandValue[$tx][$ty]++;
 										} elseif($tL != $init->landPoll) {
-											// ‰˜õ“yë‚É‚È‚é
+											// æ±šæŸ“åœŸå£Œã«ãªã‚‹
 											$tLand[$tx][$ty] = $init->landPoll;
 											$tLandValue[$tx][$ty] = Util::random(2) + 1;
 										}
 										$this->log->msPollution($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 									} else {
-										// ’Êí
+										// é€šå¸¸
 										$this->log->msNormal($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
-										// r’n‚É‚È‚é
+										// è’åœ°ã«ãªã‚‹
 										$tLand[$tx][$ty] = $init->landWaste;
-										$tLandValue[$tx][$ty] = 1; // ’…’e“_
+										$tLandValue[$tx][$ty] = 1; // ç€å¼¾ç‚¹
 									}
 								}
-								// ŒoŒ±’l
+								// çµŒé¨“å€¤
 								if(($tL == $init->landTown) || ($tL == $init->landSeaCity) || ($tL == $init->landFroCity) ||
 									($tL == $init->landNewtown) || ($tL == $init->landBigtown)) {
 									if(($land[$bx][$by] == $init->landBase) || ($land[$bx][$by] == $init->landSbase)) {
 										$landValue[$bx][$by] += round($tLv / 20);
-										$boat += $tLv; // ’Êíƒ~ƒTƒCƒ‹‚È‚Ì‚Å“ï–¯‚Éƒvƒ‰ƒX
+										$boat += $tLv; // é€šå¸¸ãƒŸã‚µã‚¤ãƒ«ãªã®ã§é›£æ°‘ã«ãƒ—ãƒ©ã‚¹
 										if($landValue[$bx][$by] > $init->maxExpPoint) {
 											$landValue[$bx][$by] = $init->maxExpPoint;
 										}
@@ -2587,30 +2591,30 @@ class Turn {
 								}
 							} else {
 								if(($tL == $init->landMonster) && (Util::random(100) < 20)) {
-									// •ßŠl‚É¬Œ÷
+									// æ•ç²ã«æˆåŠŸ
 									$tLand[$tx][$ty] = $init->landSleeper;
-									
+
 									$this->log->MsSleeper($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 								} else {
 									$missileA++;
 								}
 							}
 						}
-						// ƒJƒEƒ“ƒg‘‚â‚µ‚Æ‚­
+						// ã‚«ã‚¦ãƒ³ãƒˆå¢—ã‚„ã—ã¨ã
 						$count++;
 					}
-					// ƒ~ƒTƒCƒ‹ƒƒO
+					// ãƒŸã‚µã‚¤ãƒ«ãƒ­ã‚°
 					if($missiles > 0){
 						if($kind == $init->comMissileST) {
-							// ƒXƒeƒ‹ƒX
+							// ã‚¹ãƒ†ãƒ«ã‚¹
 							$this->log->mslogS($id, $target, $name, $tName, $comName, $point, $missiles, $missileA, $missileB, $missileC, $missileD, $missileE);
 						} else {
-							// ’Êí
+							// é€šå¸¸
 							$this->log->mslog($id, $target, $name, $tName, $comName, $point, $missiles, $missileA, $missileB, $missileC, $missileD, $missileE);
 						}
 					}
 					if($flag == 0) {
-						// Šî’n‚ªˆê‚Â‚à–³‚©‚Á‚½ê‡
+						// åŸºåœ°ãŒä¸€ã¤ã‚‚ç„¡ã‹ã£ãŸå ´åˆ
 						$this->log->msNoBase($id, $name, $comName);
 						$returnMode = 0;
 						break;
@@ -2619,18 +2623,18 @@ class Turn {
 					$tIsland['landValue'] = $tLandValue;
 					unset($hako->islands[$tn]);
 					$hako->islands[$tn] = $tIsland;
-					
-					// “ï–¯”»’è
+
+					// é›£æ°‘åˆ¤å®š
 					$boat = round($boat / 2);
 					if(($boat > 0) && ($id != $target) && ($kind != $init->comMissileST)) {
-						// “ï–¯•Y’…
-						$achive = 0; // “’B“ï–¯
+						// é›£æ°‘æ¼‚ç€
+						$achive = 0; // åˆ°é”é›£æ°‘
 						for($i = 0; ($i < $init->pointNumber && $boat > 0); $i++) {
 							$bx = $this->rpx[$i];
 							$by = $this->rpy[$i];
 							if(($land[$bx][$by] == $init->landTown) || ($land[$bx][$by] == $init->landSeaCity) ||
 								($land[$bx][$by] == $init->landFroCity)) {
-								// ’¬‚Ìê‡
+								// ç”ºã®å ´åˆ
 								$lv = $landValue[$bx][$by];
 								if($boat > 50) {
 									$lv += 50;
@@ -2648,7 +2652,7 @@ class Turn {
 								}
 								$landValue[$bx][$by] = $lv;
 							} elseif($land[$bx][$by] == $init->landPlains) {
-								// •½’n‚Ìê‡
+								// å¹³åœ°ã®å ´åˆ
 								$land[$bx][$by] = $init->landTown;;
 								if($boat > 10) {
 									$landValue[$bx][$by] = 5;
@@ -2665,13 +2669,13 @@ class Turn {
 							}
 						}
 						if($achive > 0) {
-							// ­‚µ‚Å‚à“’…‚µ‚½ê‡AƒƒO‚ğ“f‚­
+							// å°‘ã—ã§ã‚‚åˆ°ç€ã—ãŸå ´åˆã€ãƒ­ã‚°ã‚’åã
 							$this->log->msBoatPeople($id, $name, $achive);
-							
-							// “ï–¯‚Ì”‚ªˆê’è”ˆÈã‚È‚çA•½˜aÜ‚Ì‰Â”\«‚ ‚è
+
+							// é›£æ°‘ã®æ•°ãŒä¸€å®šæ•°ä»¥ä¸Šãªã‚‰ã€å¹³å’Œè³ã®å¯èƒ½æ€§ã‚ã‚Š
 							if($achive >= 200) {
 								$prize = $island['prize'];
-								list($flags, $monsters, $turns) = split(",", $prize, 3);
+								list($flags, $monsters, $turns) = explode(",", $prize, 3);
 								if((!($flags & 8)) && $achive >= 200){
 									$flags |= 8;
 									$this->log->prize($id, $name, $init->prizeName[4]);
@@ -2688,7 +2692,7 @@ class Turn {
 					}
 					$command = $comArray[0];
 					$kind    = $command['kind'];
-					if((($kind == $init->comMissileNM) || // Ÿ‚àƒ~ƒTƒCƒ‹Œn‚È‚ç...
+					if((($kind == $init->comMissileNM) || // æ¬¡ã‚‚ãƒŸã‚µã‚¤ãƒ«ç³»ãªã‚‰...
 						($kind == $init->comMissilePP) ||
 						($kind == $init->comMissileST) ||
 						($kind == $init->comMissileBT) ||
@@ -2698,15 +2702,15 @@ class Turn {
 						($init->multiMissiles)) {
 						$island['fire'] -= $comp;
 						$cost = $init->comCost[$kind];
-						
+
 						if($island['fire'] < 1) {
-							// Å‘å”­Ë”‚ğ’´‚¦‚½ê‡
+							// æœ€å¤§ç™ºå°„æ•°ã‚’è¶…ãˆãŸå ´åˆ
 							$this->log->msMaxOver($id, $name, $comName);
 							$returnMode = 0;
 							break;
 						}
-						if (($island['fire'] > 0) && ($island['money'] >= $cost)) { // ­‚È‚­‚Æ‚à1”­‚ÍŒ‚‚Ä‚é
-							Util::slideFront(&$comArray, 0);
+						if (($island['fire'] > 0) && ($island['money'] >= $cost)) { // å°‘ãªãã¨ã‚‚1ç™ºã¯æ’ƒã¦ã‚‹
+							Util::slideFront($comArray, 0);
 							$island['command'] = $comArray;
 							$kind = $command['kind'];
 							$target   = $command['target'];
@@ -2720,7 +2724,7 @@ class Turn {
 							break;
 						}
 					} else if($kind == $init->comMissileSM) {
-						Util::slideFront(&$comArray, 0);
+						Util::slideFront($comArray, 0);
 						break;
 					} else {
 						break;
@@ -2728,114 +2732,114 @@ class Turn {
 				} while ($island['fire'] > 0);
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comSendMonster:
-				// ‰öb”hŒ­
-				// ƒ^[ƒQƒbƒgæ“¾
+				// æ€ªç£æ´¾é£
+				// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 				$tn = $hako->idToNumber[$target];
 				$tIsland = $hako->islands[$tn];
 				$tName = $tIsland['name'];
-				
+
 				if($tn !== 0 && empty($tn)) {
-					// ƒ^[ƒQƒbƒg‚ª‚·‚Å‚É‚È‚¢
+					// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã™ã§ã«ãªã„
 					$this->log->msNoTarget($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
 				if($tIsland['keep']) {
-					// –Ú•W‚Ì“‡‚ªŠÇ—l—a‚©‚è’†‚Ì‚½‚ßÀs‚ª‹–‰Â‚³‚ê‚È‚¢
+					// ç›®æ¨™ã®å³¶ãŒç®¡ç†äººé ã‹ã‚Šä¸­ã®ãŸã‚å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œãªã„
 					$this->log->CheckKP($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
 				if((($hako->islandTurn - $island['starturn']) < $init->noMissile) || (($hako->islandTurn - $tIsland['starturn']) < $init->noMissile) || ($island['zin'][2] != 1)) {
-					// Às‹–‰Âƒ^[ƒ“‚ğŒo‰ß‚µ‚½‚©H
+					// å®Ÿè¡Œè¨±å¯ã‚¿ãƒ¼ãƒ³ã‚’çµŒéã—ãŸã‹ï¼Ÿ
 					$this->log->Forbidden($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
-				// ƒƒbƒZ[ƒW
+				// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 				$this->log->monsSend($id, $target, $name, $tName);
 				$tIsland['monstersend']++;
 				$hako->islands[$tn] = $tIsland;
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comSendSleeper:
-				// ‰öb—A‘—
-				// ƒ^[ƒQƒbƒgæ“¾
+				// æ€ªç£è¼¸é€
+				// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 				$tn = &$hako->idToNumber[$target];
 				$tIsland = &$hako->islands[$tn];
 				$tName = &$tIsland['name'];
-				
+
 				if($tn != 0 && empty($tn)) {
-					// ƒ^[ƒQƒbƒg‚ª‚·‚Å‚É‚È‚¢
+					// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã™ã§ã«ãªã„
 					$this->log->msNoTarget($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
 				if($tIsland['keep']) {
-					// –Ú•W‚Ì“‡‚ªŠÇ—l—a‚©‚è’†‚Ì‚½‚ßÀs‚ª‹–‰Â‚³‚ê‚È‚¢
+					// ç›®æ¨™ã®å³¶ãŒç®¡ç†äººé ã‹ã‚Šä¸­ã®ãŸã‚å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œãªã„
 					$this->log->CheckKP($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
 				if((($hako->islandTurn - $island['starturn']) < $init->noMissile) || (($hako->islandTurn - $tIsland['starturn']) < $init->noMissile)) {
-					// Às‹–‰Âƒ^[ƒ“‚ğŒo‰ß‚µ‚½‚©H
+					// å®Ÿè¡Œè¨±å¯ã‚¿ãƒ¼ãƒ³ã‚’çµŒéã—ãŸã‹ï¼Ÿ
 					$this->log->Forbidden($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
-				// ‡–°’†‚Ì‰öb‚ª‚¢‚é‚©’²‚×‚é
+				// ç¡çœ ä¸­ã®æ€ªç£ãŒã„ã‚‹ã‹èª¿ã¹ã‚‹
 				$tLand = &$tIsland['land'];
 				$tLandValue = &$tIsland['landValue'];
-				
+
 				if($landKind != $init->landSleeper) {
-					// ‡–°’†‚Ì‰öb‚ª‚¢‚È‚¢
+					// ç¡çœ ä¸­ã®æ€ªç£ãŒã„ãªã„
 					$this->log->MonsNoSleeper($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
-				// ƒƒbƒZ[ƒW
+				// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 				$this->log->monsSendSleeper($id, $target, $name, $tName, $landName);
-				
-				// ‚Ç‚±‚ÉŒ»‚ê‚é‚©Œˆ‚ß‚é
+
+				// ã©ã“ã«ç¾ã‚Œã‚‹ã‹æ±ºã‚ã‚‹
 				for($i = 0; $i < $init->pointNumber; $i++) {
 					$bx = $this->rpx[$i];
 					$by = $this->rpy[$i];
 					if($tLand[$bx][$by] == $init->landTown) {
-						// ’nŒ`–¼
+						// åœ°å½¢å
 						$lName = &$this->landName($init->landTown, $tLandValue[$bx][$by]);
-						
-						// ‚»‚ÌƒwƒbƒNƒX‚ğ‰öb‚É
+
+						// ãã®ãƒ˜ãƒƒã‚¯ã‚¹ã‚’æ€ªç£ã«
 						$tLand[$bx][$by] = $init->landMonster;
 						$tLandValue[$bx][$by] = $lv;
-						
-						// ‡–°’†‚Ì‰öb‚ğr‚ê’n‚É
+
+						// ç¡çœ ä¸­ã®æ€ªç£ã‚’è’ã‚Œåœ°ã«
 						$land[$x][$y] = $init->landWaste;
 						$landValue[$x][$y] = 0;
-						
-						// ‰öbî•ñ
+
+						// æ€ªç£æƒ…å ±
 						$monsSpec = Util::monsterSpec($lv);
 						$mName    = $monsSpec['name'];
-						
-						// ƒƒbƒZ[ƒW
+
+						// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 						$this->log->monsCome($target, $tName, $mName, "({$bx}, {$by})", $lName);
 						break;
 					}
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comOffense:
-				// UŒ‚—Í‹­‰»
+				// æ”»æ’ƒåŠ›å¼·åŒ–
 				if($island['soccer'] <= 0){
 					$this->log->SoccerFail($id, $name, $comName);
 					$returnMode = 0;
@@ -2845,10 +2849,10 @@ class Turn {
 					$island['kougeki'] += Util::random(3) + 1;
 				}
 				$this->log->SoccerSuc($id, $name, $comName);
-				
+
 				if($arg > 1) {
 					$arg--;
-					Util::slideBack(&$comArray, 0);
+					Util::slideBack($comArray, 0);
 					$comArray[0] = array (
 						'kind'   => $kind,
 						'target' => $target,
@@ -2857,14 +2861,14 @@ class Turn {
 						'arg'    => $arg,
 					);
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comDefense:
-				// ç”õ—Í‹­‰»
+				// å®ˆå‚™åŠ›å¼·åŒ–
 				if($island['soccer'] <= 0){
 					$this->log->SoccerFail($id, $name, $comName);
 					$returnMode = 0;
@@ -2874,10 +2878,10 @@ class Turn {
 					$island['bougyo'] += Util::random(3) + 1;
 				}
 				$this->log->SoccerSuc($id, $name, $comName);
-				
+
 				if($arg > 1) {
 					$arg--;
-					Util::slideBack(&$comArray, 0);
+					Util::slideBack($comArray, 0);
 					$comArray[0] = array (
 						'kind'   => $kind,
 						'target' => $target,
@@ -2886,14 +2890,14 @@ class Turn {
 						'arg'    => $arg,
 					);
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comPractice:
-				// ‘‡—ûK
+				// ç·åˆç·´ç¿’
 				if($island['soccer'] <= 0){
 					$this->log->SoccerFail($id, $name, $comName);
 					$returnMode = 0;
@@ -2904,10 +2908,10 @@ class Turn {
 					$island['kougeki'] += Util::random(3) + 1;
 				}
 				$this->log->SoccerSuc($id, $name, $comName);
-				
+
 				if($arg > 1) {
 					$arg--;
-					Util::slideBack(&$comArray, 0);
+					Util::slideBack($comArray, 0);
 					$comArray[0] = array (
 						'kind'   => $kind,
 						'target' => $target,
@@ -2916,14 +2920,14 @@ class Turn {
 						'arg'    => $arg,
 					);
 				}
-				// ‹à‚ğ·‚µˆø‚­
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comPlaygame:
-				// Œğ—¬‡
+				// äº¤æµè©¦åˆ
 				if($island['soccer'] <= 0) {
 					$this->log->SoccerFail($id, $name, $comName);
 					$returnMode = 0;
@@ -2934,15 +2938,15 @@ class Turn {
 					$returnMode = 0;
 					break;
 				}
-				// ƒ^[ƒQƒbƒgæ“¾
+				// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 				$tn = $hako->idToNumber[$target];
 				$tIsland = &$hako->islands[$tn];
 				$tName   = $tIsland['name'];
 				$tLand   = $tIsland['land'];
 				$tLandValue = $tIsland['landValue'];
-				
+
 				if($tn !== 0 && empty($tn)) {
-					// ƒ^[ƒQƒbƒg‚ª‚·‚Å‚É‚È‚¢
+					// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã™ã§ã«ãªã„
 					$this->log->msNoTarget($id, $name, $comName);
 					$returnMode = 0;
 					break;
@@ -2953,13 +2957,13 @@ class Turn {
 					break;
 				}
 				if($tIsland['keep']) {
-					// –Ú•W‚Ì“‡‚ªŠÇ—l—a‚©‚è’†‚Ì‚½‚ßÀs‚ª‹–‰Â‚³‚ê‚È‚¢
+					// ç›®æ¨™ã®å³¶ãŒç®¡ç†äººé ã‹ã‚Šä¸­ã®ãŸã‚å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œãªã„
 					$this->log->CheckKP($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
 				if(($island['kougeki'] > $tIsland['kougeki']) && ($island['bougyo'] > $tIsland['bougyo'])) {
-					// UŒ‚—ÍAç”õ—Í‚Æ‚à‚Éã
+					// æ”»æ’ƒåŠ›ã€å®ˆå‚™åŠ›ã¨ã‚‚ã«ä¸Š
 					$da = Util::random(7) + 3;
 					$db = Util::random(5) + 3;
 					$ba = Util::random(7);
@@ -2969,7 +2973,7 @@ class Turn {
 					if($it < 0) { $it = 0; }
 					if($tt < 0) { $tt = 0; }
 					if($it > $tt) {
-						// Ÿ‚¿
+						// å‹ã¡
 						$island['kachi'] ++;
 						$tIsland['make'] ++;
 						$island['tokuten'] += $it;
@@ -2982,7 +2986,7 @@ class Turn {
 						$tIsland['bougyo'] += Util::random(3) + 1;
 						$this->log->GameWin($id, $tId, $name, $tName, $comName, $it, $tt);
 					} elseif($it < $tt) {
-						// •‰‚¯
+						// è² ã‘
 						$island['make'] ++;
 						$tIsland['kachi'] ++;
 						$island['tokuten'] += $it;
@@ -2995,7 +2999,7 @@ class Turn {
 						$tIsland['bougyo'] += Util::random(5) + 3;
 						$this->log->GameLose($id, $tId, $name, $tName, $comName, $it, $tt);
 					} elseif($it == $tt) {
-						// ˆø‚«•ª‚¯
+						// å¼•ãåˆ†ã‘
 						$island['hikiwake'] ++;
 						$tIsland['hikiwake'] ++;
 						$island['tokuten'] += $it;
@@ -3009,7 +3013,7 @@ class Turn {
 						$this->log->GameDraw($id, $tId, $name, $tName, $comName, $it, $tt);
 					}
 				} elseif(($island['kougeki'] > $tIsland['kougeki']) && ($island['bougyo'] < $tIsland['bougyo'])) {
-					// UŒ‚—Í‚ÍãAç”õ—Í‚Í‰º
+					// æ”»æ’ƒåŠ›ã¯ä¸Šã€å®ˆå‚™åŠ›ã¯ä¸‹
 					$da = Util::random(7) + 3;
 					$db = Util::random(5) + 3;
 					$ba = Util::random(5);
@@ -3019,7 +3023,7 @@ class Turn {
 					if($it < 0) { $it = 0; }
 					if($tt < 0) { $tt = 0; }
 					if($it > $tt) {
-						// Ÿ‚¿
+						// å‹ã¡
 						$island['kachi'] ++;
 						$tIsland['make'] ++;
 						$island['tokuten'] += $it;
@@ -3032,7 +3036,7 @@ class Turn {
 						$tIsland['bougyo'] += Util::random(3) + 1;
 						$this->log->GameWin($id, $tId, $name, $tName, $comName, $it, $tt);
 					} elseif($it < $tt) {
-						// •‰‚¯
+						// è² ã‘
 						$island['make'] ++;
 						$tIsland['kachi'] ++;
 						$island['tokuten'] += $it;
@@ -3045,7 +3049,7 @@ class Turn {
 						$tIsland['bougyo'] += Util::random(5) + 3;
 						$this->log->GameLose($id, $tId, $name, $tName, $comName, $it, $tt);
 					} elseif($it == $tt) {
-						// ˆø‚«•ª‚¯
+						// å¼•ãåˆ†ã‘
 						$island['hikiwake'] ++;
 						$tIsland['hikiwake'] ++;
 						$island['tokuten'] += $it;
@@ -3059,7 +3063,7 @@ class Turn {
 						$this->log->GameDraw($id, $tId, $name, $tName, $comName, $it, $tt);
 					}
 				} elseif(($island['kougeki'] < $tIsland['kougeki']) && ($island['bougyo'] > $tIsland['bougyo'])) {
-					// UŒ‚—Í‚Í‰ºAç”õ—Í‚Íã
+					// æ”»æ’ƒåŠ›ã¯ä¸‹ã€å®ˆå‚™åŠ›ã¯ä¸Š
 					$da = Util::random(5) + 3;
 					$db = Util::random(7) + 3;
 					$ba = Util::random(7);
@@ -3069,7 +3073,7 @@ class Turn {
 					if($it < 0) { $it = 0; }
 					if($tt < 0) { $tt = 0; }
 					if($it > $tt) {
-						// Ÿ‚¿
+						// å‹ã¡
 						$island['kachi'] ++;
 						$tIsland['make'] ++;
 						$island['tokuten'] += $it;
@@ -3082,7 +3086,7 @@ class Turn {
 						$tIsland['bougyo'] += Util::random(3) + 1;
 						$this->log->GameWin($id, $tId, $name, $tName, $comName, $it, $tt);
 					} elseif($it < $tt) {
-						// •‰‚¯
+						// è² ã‘
 						$island['make'] ++;
 						$tIsland['kachi'] ++;
 						$island['tokuten'] += $it;
@@ -3095,7 +3099,7 @@ class Turn {
 						$tIsland['bougyo'] += Util::random(5) + 3;
 						$this->log->GameLose($id, $tId, $name, $tName, $comName, $it, $tt);
 					} elseif($it == $tt) {
-						// ˆø‚«•ª‚¯
+						// å¼•ãåˆ†ã‘
 						$island['hikiwake'] ++;
 						$tIsland['hikiwake'] ++;
 						$island['tokuten'] += $it;
@@ -3109,7 +3113,7 @@ class Turn {
 						$this->log->GameDraw($id, $tId, $name, $tName, $comName, $it, $tt);
 					}
 				} elseif(($island['kougeki'] < $tIsland['kougeki']) && ($island['bougyo'] < $tIsland['bougyo'])) {
-					// UŒ‚—ÍAç”õ—Í‚Æ‚à‚É‰º
+					// æ”»æ’ƒåŠ›ã€å®ˆå‚™åŠ›ã¨ã‚‚ã«ä¸‹
 					$da = Util::random(5) + 3;
 					$db = Util::random(7) + 3;
 					$ba = Util::random(5);
@@ -3119,7 +3123,7 @@ class Turn {
 					if($it < 0) { $it = 0; }
 					if($tt < 0) { $tt = 0; }
 					if($it > $tt) {
-						// Ÿ‚¿
+						// å‹ã¡
 						$island['kachi'] ++;
 						$tIsland['make'] ++;
 						$island['tokuten'] += $it;
@@ -3132,7 +3136,7 @@ class Turn {
 						$tIsland['bougyo'] += Util::random(3) + 1;
 						$this->log->GameWin($id, $tId, $name, $tName, $comName, $it, $tt);
 					} elseif($it < $tt) {
-						// •‰‚¯
+						// è² ã‘
 						$island['make'] ++;
 						$tIsland['kachi'] ++;
 						$island['tokuten'] += $it;
@@ -3145,7 +3149,7 @@ class Turn {
 						$tIsland['bougyo'] += Util::random(5) + 3;
 						$this->log->GameLose($id, $tId, $name, $tName, $comName, $it, $tt);
 					} elseif($it == $tt) {
-						// ˆø‚«•ª‚¯
+						// å¼•ãåˆ†ã‘
 						$island['hikiwake'] ++;
 						$tIsland['hikiwake'] ++;
 						$island['tokuten'] += $it;
@@ -3159,7 +3163,7 @@ class Turn {
 						$this->log->GameDraw($id, $tId, $name, $tName, $comName, $it, $tt);
 					}
 				} elseif(($island['kougeki'] == $tIsland['kougeki']) && ($island['bougyo'] == $tIsland['bougyo'])) {
-					// UŒ‚—ÍAç”õ—Í‚Æ‚à‚É‚¢‚Á‚µ‚å
+					// æ”»æ’ƒåŠ›ã€å®ˆå‚™åŠ›ã¨ã‚‚ã«ã„ã£ã—ã‚‡
 					$da = Util::random(5) + 3;
 					$db = Util::random(5) + 3;
 					$ba = Util::random(5);
@@ -3169,7 +3173,7 @@ class Turn {
 					if($it < 0) { $it = 0; }
 					if($tt < 0) { $tt = 0; }
 					if($it > $tt) {
-						// Ÿ‚¿
+						// å‹ã¡
 						$island['kachi'] ++;
 						$tIsland['make'] ++;
 						$island['tokuten'] += $it;
@@ -3182,7 +3186,7 @@ class Turn {
 						$tIsland['bougyo'] += Util::random(3) + 1;
 						$this->log->GameWin($id, $tId, $name, $tName, $comName, $it, $tt);
 					} elseif($it < $tt) {
-						// •‰‚¯
+						// è² ã‘
 						$island['make'] ++;
 						$tIsland['kachi'] ++;
 						$island['tokuten'] += $it;
@@ -3195,7 +3199,7 @@ class Turn {
 						$tIsland['bougyo'] += Util::random(5) + 3;
 						$this->log->GameLose($id, $tId, $name, $tName, $comName, $it, $tt);
 					} elseif($it == $tt) {
-						// ˆø‚«•ª‚¯
+						// å¼•ãåˆ†ã‘
 						$island['hikiwake'] ++;
 						$tIsland['hikiwake'] ++;
 						$island['tokuten'] += $it;
@@ -3211,70 +3215,70 @@ class Turn {
 				}
 				$island['shiai'] ++;
 				$tIsland['shiai'] ++;
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $cost;
-				
+
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comSell:
-				// —Ao—ÊŒˆ’è
+				// è¼¸å‡ºé‡æ±ºå®š
 				if($arg == 0) { $arg = 1; }
 				$value = min($arg * (-$cost), $island['food']);
 				$unit = $init->unitFood;
-				// —AoƒƒO
+				// è¼¸å‡ºãƒ­ã‚°
 				$this->log->sell($id, $name, $comName, $value, $unit);
 				$island['food'] -=  $value;
 				$island['money'] += ($value / 10);
-				
+
 				$returnMode = 0;
 				break;
-				
+
 			case $init->comSellTree:
-				// —Ao—ÊŒˆ’è
+				// è¼¸å‡ºé‡æ±ºå®š
 				if($arg == 0) { $arg = 1; }
 				$value = min($arg * (-$cost), $island['item'][20]);
 				$unit = $init->unitTree;
-				// —AoƒƒO
+				// è¼¸å‡ºãƒ­ã‚°
 				$this->log->sell($id, $name, $comName, $value, $unit);
 				$island['item'][20] -=  $value;
 				$island['money'] += $value * $init->treeValue;
-				
+
 				$returnMode = 0;
 				break;
-				
+
 			case $init->comFood:
 			case $init->comMoney:
-				// ‰‡•Œn
-				// ƒ^[ƒQƒbƒgæ“¾
+				// æ´åŠ©ç³»
+				// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆå–å¾—
 				$tn = $hako->idToNumber[$target];
 				$tIsland = &$hako->islands[$tn];
 				$tName = $tIsland['name'];
-				
+
 				if($tn !== 0 && empty($tn)) {
-					// ƒ^[ƒQƒbƒg‚ª‚·‚Å‚É‚È‚¢
+					// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒã™ã§ã«ãªã„
 					$this->log->msNoTarget($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
 				if($tIsland['keep']) {
-					// –Ú•W‚Ì“‡‚ªŠÇ—l—a‚©‚è’†‚Ì‚½‚ßÀs‚ª‹–‰Â‚³‚ê‚È‚¢
+					// ç›®æ¨™ã®å³¶ãŒç®¡ç†äººé ã‹ã‚Šä¸­ã®ãŸã‚å®Ÿè¡ŒãŒè¨±å¯ã•ã‚Œãªã„
 					$this->log->CheckKP($id, $name, $comName);
-					
+
 					$returnMode = 0;
 					break;
 				}
 				if((($hako->islandTurn - $island['starturn']) < $init->noAssist) || (($hako->islandTurn - $tIsland['starturn']) < $init->noAssist)) {
-					// Às‹–‰Âƒ^[ƒ“‚ğŒo‰ß‚µ‚½‚©H
+					// å®Ÿè¡Œè¨±å¯ã‚¿ãƒ¼ãƒ³ã‚’çµŒéã—ãŸã‹ï¼Ÿ
 					$this->log->Forbidden($id, $name, $comName);
-					
+
 					$returnMode = 0;
 					break;
 				}
-				// ‰‡•—ÊŒˆ’è
+				// æ´åŠ©é‡æ±ºå®š
 				if($arg == 0) { $arg = 1; }
-				
+
 				if($cost < 0) {
 					$value = min($arg * (-$cost), $island['food']);
 					$str = "{$value}{$init->unitFood}";
@@ -3282,9 +3286,9 @@ class Turn {
 					$value = min($arg * ($cost), $island['money']);
 					$str = "{$value}{$init->unitMoney}";
 				}
-				// ‰‡•ƒƒO
+				// æ´åŠ©ãƒ­ã‚°
 				$this->log->aid($id, $target, $name, $tName, $comName, $str);
-				
+
 				if($cost < 0) {
 					$island['food'] -= $value;
 					$tIsland['food'] += $value;
@@ -3295,41 +3299,41 @@ class Turn {
 				$hako->islands[$tn] = $tIsland;
 				$returnMode = 0;
 				break;
-				
+
 			case $init->comLot:
-				// •ó‚­‚¶w“ü
+				// å®ãã˜è³¼å…¥
 				if($island['lot'] > 30){
-					// •ó‚­‚¶Š®”„
+					// å®ãã˜å®Œå£²
 					$this->log->noLot($id, $name, $comName);
 					$returnMode = 0;
 					break;
 				}
 				if($arg == 0) { $arg = 1; }
 				if($arg > 30) { $arg = 30; }
-				
+
 				$value = min($arg * ($cost), $island['money']);
 				$str = "{$value}{$init->unitMoney}";
 				$p = round($value / $cost);
 				$island['lot'] += $p;
-				
-				// w“üƒƒO
+
+				// è³¼å…¥ãƒ­ã‚°
 				$this->log->buyLot($id, $name, $comName, $str);
-				
-				// ‹à‚ğ·‚µˆø‚­
+
+				// é‡‘ã‚’å·®ã—å¼•ã
 				$island['money'] -= $value;
-				
+
 				$returnMode =  1;
 				break;
-				
+
 			case $init->comPropaganda:
-				// —U’vŠˆ“®
+				// èª˜è‡´æ´»å‹•
 				$island['propaganda'] = 1;
 				$island['money'] -= $cost;
 				$this->log->propaganda($id, $name, $comName);
-				
+
 				if($arg > 1) {
 					$arg--;
-					Util::slideBack(&$comArray, 0);
+					Util::slideBack($comArray, 0);
 					$comArray[0] = array (
 						'kind'   => $kind,
 						'target' => $target,
@@ -3340,18 +3344,18 @@ class Turn {
 				}
 				$returnMode = 1;
 				break;
-				
+
 			case $init->comGiveup:
-				// •úŠü
+				// æ”¾æ£„
 				$this->log->giveup($id, $name);
 				$island['dead'] = 1;
 				unlink("{$init->dirName}/island.{$id}");
 				$returnMode = 1;
 				break;
 		}
-		// •ÏX‚³‚ê‚½‰Â”\«‚Ì‚ ‚é•Ï”‚ğ‘‚«–ß‚·
+		// å¤‰æ›´ã•ã‚ŒãŸå¯èƒ½æ€§ã®ã‚ã‚‹å¤‰æ•°ã‚’æ›¸ãæˆ»ã™
 		// $hako->islands[$hako->idToNumber[$id]] = $island;
-		// –Œãˆ—
+		// äº‹å¾Œå‡¦ç†
 		unset($island['prize']);
 		unset($island['land']);
 		unset($island['landValue']);
@@ -3360,68 +3364,76 @@ class Turn {
 		$island['land'] = $land;
 		$island['landValue'] = $landValue;
 		$island['command'] = $comArray;
-		
+
 		return $returnMode;
 	}
-	
+
 	//---------------------------------------------------
-	// ¬’·‚¨‚æ‚Ñ’PƒwƒbƒNƒXĞŠQ
+	// æˆé•·ãŠã‚ˆã³å˜ãƒ˜ãƒƒã‚¯ã‚¹ç½å®³
 	//---------------------------------------------------
 	function doEachHex(&$hako, &$island) {
 		global $init;
-		
-		// “±o’l
+
+		// å°å‡ºå€¤
 		$name = $island['name'];
 		$id = $island['id'];
 		$land = $island['land'];
 		$landValue = $island['landValue'];
 		$oilFlag = $island['oil'];
-		
-		// ‘‚¦‚élŒû‚Ìƒ^ƒl’l
-		$addpop  = 10; // ‘ºA’¬
-		$addpop2 = 0;  // “ss
-		
+
+		// å¢—ãˆã‚‹äººå£ã®ã‚¿ãƒå€¤
+		$addpop  = 10; // æ‘ã€ç”º
+		$addpop2 = 0;  // éƒ½å¸‚
+
+		//
+		if ( isset($island['food']) ) {}
+		if ( !isset($island['propaganda']) ) {
+			$island['propaganda'] = "";
+		}
+
 		if($island['food'] <= 0) {
-			// H—¿•s‘«
+			// é£Ÿæ–™ä¸è¶³
 			$addpop = -30;
 		} elseif(($island['ship'][10] + $island['ship'][11] + $island['ship'][12] + $island['ship'][13] + $island['ship'][14]) > 0) {
-			// ŠC‘¯‘D‚ªo–v’†‚Í¬’·‚µ‚È‚¢
+			// æµ·è³Šèˆ¹ãŒå‡ºæ²¡ä¸­ã¯æˆé•·ã—ãªã„
 			$addpop = 0;
 		} elseif($island['park'] > 0) {
-			// —V‰€’n‚ª‚ ‚é‚Æl‚ªW‚Ü‚é
+			// éŠåœ’åœ°ãŒã‚ã‚‹ã¨äººãŒé›†ã¾ã‚‹
 			$addpop  += 10;
 			$addpop2 += 1;
 		} elseif($island['propaganda'] == 1) {
-			// —U’vŠˆ“®’†
+			// èª˜è‡´æ´»å‹•ä¸­
 			$addpop = 30;
 			$addpop2 = 3;
+		} else {
+
 		}
 		$monsterMove = array();
-		
-		// ƒ‹[ƒv
+
+		// ãƒ«ãƒ¼ãƒ—
 		for($i = 0; $i < $init->pointNumber; $i++) {
 			$x = $this->rpx[$i];
 			$y = $this->rpy[$i];
 			$landKind = $land[$x][$y];
 			$lv = $landValue[$x][$y];
-			
+
 			switch($landKind) {
 				case $init->landWaste:
-					//r’n
+					//è’åœ°
 					if ($island['isBF'] == 1) {
 						$land[$x][$y] = $init->landPlains;
 						$landValue[$x][$y] = 0;
 					}
 					break;
-					
+
 				case $init->landTown:
 				case $init->landSeaCity:
-					// ’¬Œn
+					// ç”ºç³»
 					if($addpop < 0) {
-						// •s‘«
+						// ä¸è¶³
 						$lv -= (Util::random(-$addpop) + 1);
 						if(($lv <= 0) && ($landKind == $init->landSeaCity)) {
-							// ŠC‚É–ß‚·
+							// æµ·ã«æˆ»ã™
 							$land[$x][$y] = $init->landSea;
 							$landValue[$x][$y] = 0;
 							continue;
@@ -3431,14 +3443,14 @@ class Turn {
 							continue;
 						}
 					} else {
-						// ¬’·
+						// æˆé•·
 						if($lv < 100) {
 							$lv += Util::random($addpop) + 1;
 							if($lv > 100) {
 								$lv = 100;
 							}
 						} else {
-							// “ss‚É‚È‚é‚Æ¬’·’x‚¢
+							// éƒ½å¸‚ã«ãªã‚‹ã¨æˆé•·é…ã„
 							if($addpop2 > 0) {
 								$lv += Util::random($addpop2) + 1;
 							}
@@ -3449,9 +3461,9 @@ class Turn {
 					}
 					$landValue[$x][$y] = $lv;
 					break;
-					
+
 				case $init->landNewtown:
-					// ƒjƒ…[ƒ^ƒEƒ“Œn
+					// ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³ç³»
 					$townCount = Turn::countAround($land, $x, $y, 19, array($init->landTown, $init->landNewtown, $init->landBigtown));
 					if($townCount > 17) {
 						if(Util::random(1000) < 3) {
@@ -3461,23 +3473,23 @@ class Turn {
 						}
 					}
 					if($addpop < 0) {
-						// •s‘«
+						// ä¸è¶³
 						$lv -= (Util::random(-$addpop) + 1);
 						if($lv <= 0) {
-							// •½’n‚É–ß‚·
+							// å¹³åœ°ã«æˆ»ã™
 							$land[$x][$y] = $init->landPlains;
 							$landValue[$x][$y] = 0;
 							continue;
 						}
 					} else {
-						// ¬’·
+						// æˆé•·
 						if($lv < 100) {
 							$lv += Util::random($addpop) + 1;
 							if($lv > 100) {
 								$lv = 100;
 							}
 						} else {
-							// “ss‚É‚È‚é‚Æ¬’·’x‚¢
+							// éƒ½å¸‚ã«ãªã‚‹ã¨æˆé•·é…ã„
 							if($addpop2 > 0) {
 								$lv += Util::random($addpop2) + 1;
 							}
@@ -3488,27 +3500,27 @@ class Turn {
 					}
 					$landValue[$x][$y] = $lv;
 					break;
-					
+
 				case $init->landBigtown:
-					// Œ»‘ã“ssŒn
+					// ç¾ä»£éƒ½å¸‚ç³»
 					if($addpop < 0) {
-						// •s‘«
+						// ä¸è¶³
 						$lv -= (Util::random(-$addpop) + 1);
 						if($lv <= 0) {
-							// •½’n‚É–ß‚·
+							// å¹³åœ°ã«æˆ»ã™
 							$land[$x][$y] = $init->landPlains;
 							$landValue[$x][$y] = 0;
 							continue;
 						}
 					} else {
-						// ¬’·
+						// æˆé•·
 						if($lv < 200) {
 							$lv += Util::random($addpop) + 1;
 							if($lv > 200) {
 								$lv = 200;
 							}
 						} else {
-							// “ss‚É‚È‚é‚Æ¬’·’x‚¢
+							// éƒ½å¸‚ã«ãªã‚‹ã¨æˆé•·é…ã„
 							if($addpop2 > 0) {
 								$lv += Util::random($addpop2) + 1;
 							}
@@ -3519,14 +3531,14 @@ class Turn {
 					}
 					$landValue[$x][$y] = $lv;
 					break;
-					
+
 				case $init->landPlains:
-					// •½’n
-					if ($island['isBF'] == 1) { // BFŸè‚É‘º¶¬
+					// å¹³åœ°
+					if ($island['isBF'] == 1) { // BFå‹æ‰‹ã«æ‘ç”Ÿæˆ
 						$land[$x][$y] = $init->landTown;
 						$landValue[$x][$y] = 10;
 					} elseif(Util::random(5) == 0) {
-						// ü‚è‚É”_êA’¬‚ª‚ ‚ê‚ÎA‚±‚±‚à’¬‚É‚È‚é
+						// å‘¨ã‚Šã«è¾²å ´ã€ç”ºãŒã‚ã‚Œã°ã€ã“ã“ã‚‚ç”ºã«ãªã‚‹
 						if($this->countGrow($land, $landValue, $x, $y)){
 							$land[$x][$y] = $init->landTown;
 							$landValue[$x][$y] = 1;
@@ -3537,40 +3549,40 @@ class Turn {
 						}
 					}
 					break;
-					
+
 				case $init->landPoll:
-					// ‰˜õ“yë
+					// æ±šæŸ“åœŸå£Œ
 					if(Util::random(3) == 0) {
-						// ‰˜õò‰»
+						// æ±šæŸ“æµ„åŒ–
 						$land[$x][$y] = $init->landPoll;
 						$landValue[$x][$y]--;
 						if(($landKind == $init->landPoll) && ($landValue[$x][$y] == 0)) {
-							// ‰˜õò‰»‚³‚ê•½’n‚É‚È‚é
+							// æ±šæŸ“æµ„åŒ–ã•ã‚Œå¹³åœ°ã«ãªã‚‹
 							$land[$x][$y] = $init->landPlains;
 						}
 					}
 					break;
-					
+
 				case $init->landProcity:
-					// –hĞ“ss
+					// é˜²ç½éƒ½å¸‚
 					if($addpop < 0) {
-						// •s‘«
+						// ä¸è¶³
 						$lv -= (Util::random(-$addpop) + 1);
 						if($lv <= 0) {
-							// •½’n‚É–ß‚·
+							// å¹³åœ°ã«æˆ»ã™
 							$land[$x][$y] = $init->landPlains;
 							$landValue[$x][$y] = 0;
 							continue;
 						}
 					} else {
-						// ¬’·
+						// æˆé•·
 						if($lv < 100) {
 							$lv += Util::random($addpop) + 1;
 							if($lv > 100) {
 								$lv = 100;
 							}
 						} else {
-							// “ss‚É‚È‚é‚Æ¬’·’x‚¢
+							// éƒ½å¸‚ã«ãªã‚‹ã¨æˆé•·é…ã„
 							if($addpop2 > 0) {
 								$lv += Util::random($addpop2) + 1;
 							}
@@ -3581,26 +3593,26 @@ class Turn {
 					}
 					$landValue[$x][$y] = $lv;
 					break;
-					
+
 				case $init->landFroCity:
-					// ŠCã“ss
+					// æµ·ä¸Šéƒ½å¸‚
 					if($addpop < 0) {
-						// •s‘«
+						// ä¸è¶³
 						$lv -= (Util::random(-$addpop) + 1);
 						if($lv <= 0) {
-							// ŠC‚É–ß‚·
+							// æµ·ã«æˆ»ã™
 							$land[$x][$y] = $init->landSea;
 							$landValue[$x][$y] = 0;
 						}
 					} else {
-						// ¬’·
+						// æˆé•·
 						if($lv < 100) {
 							$lv += Util::random($addpop) + 1;
 							if($lv > 100) {
 								$lv = 100;
 							}
 						} else {
-							// “ss‚É‚È‚é‚Æ¬’·’x‚¢
+							// éƒ½å¸‚ã«ãªã‚‹ã¨æˆé•·é…ã„
 							if($addpop2 > 0) {
 								$lv += Util::random($addpop2) + 1;
 							}
@@ -3609,42 +3621,42 @@ class Turn {
 					if($lv > 250) {
 						$lv = 250;
 					}
-					// “®‚­•ûŒü‚ğŒˆ’è
+					// å‹•ãæ–¹å‘ã‚’æ±ºå®š
 					for($fro = 0; $fro < 3; $fro++) {
 						$d = Util::random(6) + 1;
 						$sx = $x + $init->ax[$d];
 						$sy = $y + $init->ay[$d];
-						// s‚É‚æ‚éˆÊ’u’²®
+						// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 						if((($sy % 2) == 0) && (($y % 2) == 1)) {
 							$sx--;
 						}
-						// ”ÍˆÍŠO”»’è
+						// ç¯„å›²å¤–åˆ¤å®š
 						if(($sx < 0) || ($sx >= $init->islandSize) ||
 							($sy < 0) || ($sy >= $init->islandSize)) {
 							continue;
 						}
-						// ŠC‚µ‚©“®‚©‚È‚¢
+						// æµ·ã—ã‹å‹•ã‹ãªã„
 						if(($land[$sx][$sy] == $init->landSea) && ($landValue[$sx][$sy] == 0)) {
 							break;
 						}
 					}
 					if($fro == 3) {
-						// “®‚©‚È‚©‚Á‚½
+						// å‹•ã‹ãªã‹ã£ãŸ
 						break;
 					}
-					// ˆÚ“®
+					// ç§»å‹•
 					$land[$sx][$sy] = $land[$x][$y];
 					$landValue[$sx][$sy] = $lv;
-					
-					// ‚à‚Æ‹‚½ˆÊ’u‚ğŠC‚É
+
+					// ã‚‚ã¨å±…ãŸä½ç½®ã‚’æµ·ã«
 					$land[$x][$y] = $init->landSea;
 					$landValue[$x][$y] = 0;
 					break;
-					
+
 				case $init->landForest:
-					// X
+					// æ£®
 					if($lv < 200) {
-						// –Ø‚ğ‘‚â‚·
+						// æœ¨ã‚’å¢—ã‚„ã™
 						if($island['zin'][3] == 1) {
 							$landValue[$x][$y] += 2;
 						} else {
@@ -3652,11 +3664,11 @@ class Turn {
 						}
 					}
 					break;
-					
+
 				case $init->landCommerce:
-					// ¤‹Æƒrƒ‹
+					// å•†æ¥­ãƒ“ãƒ«
 					if(Util::random(1000) < $init->disSto) {
-						// ƒXƒgƒ‰ƒCƒL
+						// ã‚¹ãƒˆãƒ©ã‚¤ã‚­
 						$landValue[$x][$y] -= 5;
 						if($landValue[$x][$y] <= 0){
 							$land[$x][$y] = $init->landCommerce;
@@ -3665,15 +3677,15 @@ class Turn {
 						$this->log->Sto($id, $name, $this->landName($landKind, $lv), "({$x}, {$y})");
 					}
 					break;
-					
+
 				case $init->landMonument:
-					// ‹L”O”è
+					// è¨˜å¿µç¢‘
 					$lv = $landValue[$x][$y];
 					$lName = $this->landName($landKind, $lv);
-					
+
 					if(($lv == 5) || ($lv == 6) || ($lv == 21) || ($lv == 24) || ($lv == 32)) {
 						if(util::random(100) < 5) {
-							// ‚¨“yY
+							// ãŠåœŸç”£
 							$value = 1+ Util::random(49);
 							if ($value > 0) {
 								$island['money'] += $value;
@@ -3684,9 +3696,9 @@ class Turn {
 						}
 					} elseif(($lv == 1) || ($lv == 7) || ($lv == 33)) {
 						if(util::random(100) < 5) {
-							// ûŠn
+							// åç©«
 							$value = round($island['pop'] / 100) * 10 + Util::random(11);
-							// lŒû‚P–œl‚²‚Æ‚É1000ƒgƒ“‚ÌûŠn
+							// äººå£ï¼‘ä¸‡äººã”ã¨ã«1000ãƒˆãƒ³ã®åç©«
 							if ($value > 0) {
 								$island['food'] += $value;
 								$str = "{$value}{$init->unitFood}";
@@ -3696,54 +3708,54 @@ class Turn {
 						}
 					} elseif($lv == 15) {
 						if(util::random(100) < 5) {
-							// ‹âs‰»
+							// éŠ€è¡ŒåŒ–
 							$land[$x][$y] = $init->landBank;
 							$landValue[$x][$y] = 1;
-							// ƒƒbƒZ[ƒW
+							// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 							$this->log->Bank($id, $name, $lName, "($x,$y)");
 							break;
 						}
 					} elseif(($lv == 40) || ($lv == 41) || ($lv == 42) || ($lv == 43)) {
 						if(util::random(100) < 1) {
-							// —‘›z‰»
+							// åµå­µåŒ–
 							$kind = Util::random($init->monsterLevel1) + 1;
 							$lv = $kind * 100
 								+ $init->monsterBHP[$kind] + Util::random($init->monsterDHP[$kind]);
-							// ‚»‚ÌƒwƒbƒNƒX‚ğ‰öb‚É
+							// ãã®ãƒ˜ãƒƒã‚¯ã‚¹ã‚’æ€ªç£ã«
 							$land[$x][$y] = $init->landMonster;
 							$landValue[$x][$y] = $lv;
-							// ‰öbî•ñ
+							// æ€ªç£æƒ…å ±
 							$monsSpec = Util::monsterSpec($lv);
-							// ƒƒbƒZ[ƒW
+							// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 							$this->log->EggBomb($id, $name, $mName, "($x,$y)", $lName);
 							break;
 						}
 					}
 					break;
-					
+
 				case $init->landSeaResort:
-					// ŠC‚Ì‰Æ
-					$nt = Turn::countAround($land, $x, $y, 19, array($init->landTown)); // üˆÍ2ƒwƒbƒNƒX‚ÌlŒû
-					$ns = Turn::countAround($land, $x, $y, 19, array($init->landSeaSide)); // üˆÍ2ƒwƒbƒNƒX‚Ì»•lû—el”
-					// û‰v‚ÌŒvZ
+					// æµ·ã®å®¶
+					$nt = Turn::countAround($land, $x, $y, 19, array($init->landTown)); // å‘¨å›²2ãƒ˜ãƒƒã‚¯ã‚¹ã®äººå£
+					$ns = Turn::countAround($land, $x, $y, 19, array($init->landSeaSide)); // å‘¨å›²2ãƒ˜ãƒƒã‚¯ã‚¹ã®ç ‚æµœåå®¹äººæ•°
+					// åç›Šã®è¨ˆç®—
 					if ($nt > 0) {
 						$value = $ns / $nt;
 					}
 					$value = (int)($lv * $value * $nt);
 					if ($value > 0) {
 						$island['money'] += $value;
-						// û“üƒƒO
+						// åå…¥ãƒ­ã‚°
 						$str = "{$value}{$init->unitMoney}";
 						$this->log->oilMoney($id, $name, $this->landName($landKind, $lv), "($x,$y)", $str);
 					}
 					if($lv < 30) {
-						// ŠC‚Ì‰Æ
+						// æµ·ã®å®¶
 						$n = 1;
 					} elseif($lv < 100) {
-						// –¯h
+						// æ°‘å®¿
 						$n = 2;
 					} else {
-						// ƒŠƒ][ƒgƒzƒeƒ‹
+						// ãƒªã‚¾ãƒ¼ãƒˆãƒ›ãƒ†ãƒ«
 						$n = 4;
 					}
 					$lv += (int)(Util::random($nt / $n) * (($nt < $ns) ? -1 : 1));
@@ -3754,39 +3766,39 @@ class Turn {
 					}
 					$landValue[$x][$y] = $lv;
 					break;
-					
+
 				case $init->landDefence:
 					if($lv == 0) {
-						// –h‰q{İ©”š
+						// é˜²è¡›æ–½è¨­è‡ªçˆ†
 						$lName = $this->landName($landKind, $lv);
 						$this->log->bombFire($id, $name, $lName, "($x, $y)");
-						// Lˆæ”íŠQƒ‹[ƒ`ƒ“
-						$this->wideDamage($id, $name, &$land, &$landValue, $x, $y);
+						// åºƒåŸŸè¢«å®³ãƒ«ãƒ¼ãƒãƒ³
+						$this->wideDamage($id, $name, $land, $landValue, $x, $y);
 					}
 					break;
-					
+
 				case $init->landHatuden:
-					// ”­“dŠ
+					// ç™ºé›»æ‰€
 					$lName = $this->landName($landKind, $lv);
 					if(Util::random(100000) < $landValue[$x][$y]) {
-						// ƒƒ‹ƒgƒ_ƒEƒ“
+						// ãƒ¡ãƒ«ãƒˆãƒ€ã‚¦ãƒ³
 						$land[$x][$y] = $init->landSea;
 						$landValue[$x][$y] = 0;
 						$this->log->CrushElector($id, $name, $lName, "($x, $y)");
 					}
 					break;
-					
+
 				case $init->landSoukoM:
 				case $init->landSoukoF:
-					// ‘qŒÉ
+					// å€‰åº«
 					$lName = $this->landName($landKind, $lv);
-					
-					// ƒZƒLƒ…ƒŠƒeƒB‚Æ’™’~‚ğZo
+
+					// ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£ã¨è²¯è“„ã‚’ç®—å‡º
 					$sec = (int)($landValue[$x][$y] / 100);
 					$tyo = $landValue[$x][$y] % 100;
-					
+
 					if(Util::random(100) < (10 - $sec)) {
-						// ‹­“
+						// å¼·ç›—
 						$tyo = (int)($tyo / 100 * Util::random(100));
 						$sec--;
 						if($sec < 0) {
@@ -3796,74 +3808,74 @@ class Turn {
 						$this->log->SoukoLupin($id, $name, $lName, "($x, $y)");
 					}
 					break;
-					
+
 				case $init->landOil:
-					// ŠC’ê–û“c
+					// æµ·åº•æ²¹ç”°
 					$lName = $this->landName($landKind, $lv);
 					$value = $init->oilMoney;
 					$island['money'] += $value;
 					$island['oilincome'] += $value;
-					
-					// ŒÍŠ‰”»’è
+
+					// æ¯æ¸‡åˆ¤å®š
 					if(Util::random(1000) < $init->oilRatio) {
-						// ŒÍŠ‰
+						// æ¯æ¸‡
 						$land[$x][$y] = $init->landSea;
 						$landValue[$x][$y] = 0;
 						$this->log->oilEnd($id, $name, $lName, "($x, $y)");
 					}
 					break;
-					
+
 				case $init->landBank:
-					// ‹âs
+					// éŠ€è¡Œ
 					$island['bank']++;
 					break;
-					
+
 				case $init->landSoccer:
-					// ƒXƒ^ƒWƒAƒ€
+					// ã‚¹ã‚¿ã‚¸ã‚¢ãƒ 
 					$lName = $this->landName($landKind, $lv);
 					$value = $island['team'];
-					
+
 					if($value > 200) {
 						$value = 200;
 					}
 					$island['money'] += $value;
 					$str = "{$value}{$init->unitMoney}";
-					// û“üƒƒO
+					// åå…¥ãƒ­ã‚°
 					if ($value > 0) {
 						$this->log->oilMoney($id, $name, $lName, "($x, $y)", $str);
 					}
 					break;
-					
+
 				case $init->landPark:
-					// —V‰€’n
+					// éŠåœ’åœ°
 					$lName = $this->landName($landKind, $lv);
-					//$value = floor($island['pop'] / 50); // lŒû‚Tçl‚²‚Æ‚É‚P‰­‰~‚Ìû“ü
-					//û‰v‚ÍlŒû‘‰Á‚Æ‚Æ‚à‚É‰¡‚Î‚¢ŒXŒü
-					//lŒû‚Ì•½•ûª‚Ì1`2”{ ex 1–œ=10`20‰­‰~ 100–œ=100`200‰­‰~
+					//$value = floor($island['pop'] / 50); // äººå£ï¼•åƒäººã”ã¨ã«ï¼‘å„„å††ã®åå…¥
+					//åç›Šã¯äººå£å¢—åŠ ã¨ã¨ã‚‚ã«æ¨ªã°ã„å‚¾å‘
+					//äººå£ã®å¹³æ–¹æ ¹ã®1ï½2å€ ex 1ä¸‡=10ï½20å„„å†† 100ä¸‡=100ï½200å„„å††
 					$value = floor(sqrt($island['pop'])*((Util::random(100)/100)+1));
 					$island['money'] += $value;
 					$str = "{$value}{$init->unitMoney}";
-					
-					//û“üƒƒO
+
+					//åå…¥ãƒ­ã‚°
 					if ($value > 0) {
 						$this->log->ParkMoney($id, $name, $lName, "($x,$y)", $str);
 					}
-					//ƒCƒxƒ“ƒg”»’è
+					//ã‚¤ãƒ™ãƒ³ãƒˆåˆ¤å®š
 					if(Util::random(100) < 30) {
-						// –ˆƒ^[ƒ“ 30% ‚ÌŠm—¦‚ÅƒCƒxƒ“ƒg‚ª”­¶‚·‚é
-						//—V‰€’n‚ÌƒCƒxƒ“ƒg
+						// æ¯ã‚¿ãƒ¼ãƒ³ 30% ã®ç¢ºç‡ã§ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºç”Ÿã™ã‚‹
+						//éŠåœ’åœ°ã®ã‚¤ãƒ™ãƒ³ãƒˆ
 						$value2=$value;
-						
-						//H—¿Á”ï
-						$value = floor($island['pop'] * $init->eatenFood / 2); // ‹K’èH—¿Á”ï‚Ì”¼•ªÁ”ï
+
+						//é£Ÿæ–™æ¶ˆè²»
+						$value = floor($island['pop'] * $init->eatenFood / 2); // è¦å®šé£Ÿæ–™æ¶ˆè²»ã®åŠåˆ†æ¶ˆè²»
 						$island['food'] -= $value;
 						$str = "{$value}{$init->unitFood}";
-						
+
 						if ($value > 0) {
 							$this->log->ParkEvent($id, $name, $lName, "($x,$y)", $str);
 						}
-						//ƒCƒxƒ“ƒg‚Ìûx
-						$value = floor((Util::random(200) - 100)/100 * $value2);//ƒ}ƒCƒiƒX100%`ƒvƒ‰ƒX100%
+						//ã‚¤ãƒ™ãƒ³ãƒˆã®åæ”¯
+						$value = floor((Util::random(200) - 100)/100 * $value2);//ãƒã‚¤ãƒŠã‚¹100%ï½ãƒ—ãƒ©ã‚¹100%
 						$island['money'] += $value;
 						if ($value > 0) {
 							$str = "{$value}{$init->unitMoney}";
@@ -3875,93 +3887,93 @@ class Turn {
 							$this->log->ParkEventLoss($id, $name, $lName, "($x,$y)", $str);
 						}
 					}
-					// ˜V’z‰»”»’è
+					// è€ç¯‰åŒ–åˆ¤å®š
 					if(Util::random(100) < 5) {
-						// {İ‚ª˜V’z‰»‚µ‚½‚½‚ß•Â‰€
+						// æ–½è¨­ãŒè€ç¯‰åŒ–ã—ãŸãŸã‚é–‰åœ’
 						$land[$x][$y] = $init->landPlains;
 						$landValue[$x][$y] = 0;
 						$this->log->ParkEnd($id, $name, $lName, "($x,$y)");
 					}
 					break;
-					
+
 				case $init->landPort:
-					// `
+					// æ¸¯
 					$lName = $this->landName($landKind, $lv);
 					$seaCount = Turn::countAround($land, $x, $y, 7, array($init->landSea));
 					if($seaCount == 0 || $seaCount == 6){
-						// üˆÍ‚ÉÅ’á1Hex‚ÌŠC‚à–³‚¢ê‡A•Â½
-						// üˆÍ‚ÉÅ’á1Hex‚Ì—¤’n‚ª–³‚¢ê‡A•Â½
+						// å‘¨å›²ã«æœ€ä½1Hexã®æµ·ã‚‚ç„¡ã„å ´åˆã€é–‰é–
+						// å‘¨å›²ã«æœ€ä½1Hexã®é™¸åœ°ãŒç„¡ã„å ´åˆã€é–‰é–
 						$land[$x][$y] = $init->landSea;
 						$landValue[$x][$y] = 1;
 						$this->log->ClosedPort($id, $name, $lName, "($x,$y)");
 					}
 					break;
-					
+
 				case $init->landTrain:
-					// “dÔ
+					// é›»è»Š
 					if($TrainMove[$x][$y] == 1) {
-						// ‚·‚Å‚É“®‚¢‚½Œã
+						// ã™ã§ã«å‹•ã„ãŸå¾Œ
 						break;
 					}
-					// “®‚­•ûŒü‚ğŒˆ’è
+					// å‹•ãæ–¹å‘ã‚’æ±ºå®š
 					for($t = 0; $t < 3; $t++) {
 						$d = Util::random(6) + 1;
 						$sx = $x + $init->ax[$d];
 						$sy = $y + $init->ay[$d];
-						// s‚É‚æ‚éˆÊ’u’²®
+						// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 						if((($sy % 2) == 0) && (($y % 2) == 1)) {
 							$sx--;
 						}
-						// ”ÍˆÍŠO”»’è
+						// ç¯„å›²å¤–åˆ¤å®š
 						if(($sx < 0) || ($sx >= $init->islandSize) ||
 							($sy < 0) || ($sy >= $init->islandSize)) {
 							continue;
 						}
-						// ü˜H‚µ‚©“®‚©‚È‚¢
+						// ç·šè·¯ã—ã‹å‹•ã‹ãªã„
 						if($land[$sx][$sy] == $init->landRail) {
 							break;
 						}
 					}
 					if($t == 3) {
-						// “®‚©‚È‚©‚Á‚½
+						// å‹•ã‹ãªã‹ã£ãŸ
 						break;
 					}
 					$l = $land[$sx][$sy];
 					$lv = $landValue[$sx][$sy];
 					$lName = $this->landName($l, $lv);
 					$point = "({$sx}, {$sy})";
-					
-					// ˆÚ“®
+
+					// ç§»å‹•
 					$land[$sx][$sy] = $land[$x][$y];
-					
-					// ‚à‚Æ‹‚½ˆÊ’u‚ğü˜H‚É
+
+					// ã‚‚ã¨å±…ãŸä½ç½®ã‚’ç·šè·¯ã«
 					$land[$x][$y] = $init->landRail;
-					
-					// ˆÚ“®‚¸‚İƒtƒ‰ƒOAƒZƒbƒg
+
+					// ç§»å‹•ãšã¿ãƒ•ãƒ©ã‚°ã€ã‚»ãƒƒãƒˆ
 					$TrainMove[$sx][$sy] = 1;
 					break;
-					
+
 				case $init->landZorasu:
-					// ŠC‰öb
+					// æµ·æ€ªç£
 					if($ZorasuMove[$x][$y] == 1) {
-						// ‚·‚Å‚É“®‚¢‚½Œã
+						// ã™ã§ã«å‹•ã„ãŸå¾Œ
 						break;
 					}
-					// “®‚­•ûŒü‚ğŒˆ’è
+					// å‹•ãæ–¹å‘ã‚’æ±ºå®š
 					for($j = 0; $j < 3; $j++) {
 						$d = Util::random(6) + 1;
 						$sx = $x + $init->ax[$d];
 						$sy = $y + $init->ay[$d];
-						// s‚É‚æ‚éˆÊ’u’²®
+						// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 						if((($sy % 2) == 0) && (($y % 2) == 1)) {
 							$sx--;
 						}
-						// ”ÍˆÍŠO”»’è
+						// ç¯„å›²å¤–åˆ¤å®š
 						if(($sx < 0) || ($sx >= $init->islandSize) ||
 							($sy < 0) || ($sy >= $init->islandSize)) {
 							continue;
 						}
-						// ŠCA‘D”•AŠCŠîAŠC–hAŠC’ê“ssAŠCã“ssAŠC’êÁ–hAŠC’ê”_êA–û“c
+						// æµ·ã€èˆ¹èˆ¶ã€æµ·åŸºã€æµ·é˜²ã€æµ·åº•éƒ½å¸‚ã€æµ·ä¸Šéƒ½å¸‚ã€æµ·åº•æ¶ˆé˜²ç½²ã€æµ·åº•è¾²å ´ã€æ²¹ç”°
 						if(($land[$sx][$sy] == $init->landSea) ||
 							($land[$sx][$sy] == $init->landShip) ||
 							($land[$sx][$sy] == $init->landSbase) ||
@@ -3975,10 +3987,10 @@ class Turn {
 						}
 					}
 					if($j == 3) {
-						// “®‚©‚È‚©‚Á‚½
+						// å‹•ã‹ãªã‹ã£ãŸ
 						break;
 					}
-					// “®‚¢‚½æ‚Ì’nŒ`‚É‚æ‚èƒƒbƒZ[ƒW
+					// å‹•ã„ãŸå…ˆã®åœ°å½¢ã«ã‚ˆã‚Šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 					$l = $land[$sx][$sy];
 					$lv = $landValue[$sx][$sy];
 					$lName = $this->landName($l, $lv);
@@ -3986,42 +3998,44 @@ class Turn {
 					if($land[$sx][$sy] != $init->landSea) {
 						$this->log->ZorasuMove($id, $name, $lName, $point);
 					}
-					// ˆÚ“®
+					// ç§»å‹•
 					$land[$sx][$sy] = $land[$x][$y];
 					$landValue[$sx][$sy] = $landValue[$x][$y];
-					
-					// ‚à‚Æ‹‚½ˆÊ’u‚ğŠC‚É
+
+					// ã‚‚ã¨å±…ãŸä½ç½®ã‚’æµ·ã«
 					$land[$x][$y] = $init->landSea;
 					$landValue[$x][$y] = 0;
-					
-					// ˆÚ“®‚¸‚İƒtƒ‰ƒOAƒZƒbƒg
+
+					// ç§»å‹•ãšã¿ãƒ•ãƒ©ã‚°ã€ã‚»ãƒƒãƒˆ
 					$ZorasuMove[$sx][$sy] = 1;
 					break;
-					
+
 				case $init->landMonster:
-					// ‰öb
-					if($monsterMove[$x][$y] == 2) {
-						// ‚·‚Å‚É“®‚¢‚½Œã
-						break;
+					// æ€ªç£
+					if ( isset($monsterMove[$x][$y])) {
+						if($monsterMove[$x][$y] == 2) {
+							// ã™ã§ã«å‹•ã„ãŸå¾Œ
+							break;
+						}
 					}
-					// Še—v‘f‚Ìæ‚èo‚µ
+					// å„è¦ç´ ã®å–ã‚Šå‡ºã—
 					$monsSpec = Util::monsterSpec($landValue[$x][$y]);
 					$special  = $init->monsterSpecial[$monsSpec['kind']];
 					$mName = $monsSpec['name'];
-					
-					// ‰öb‚Ì‘Ì—Í‰ñ•œ
+
+					// æ€ªç£ã®ä½“åŠ›å›å¾©
 					if(($monsSpec['hp'] < $init->monsterBHP[$monsSpec['kind']]) && (Util::random(100) < 20)) {
 						$landValue[$x][$y]++;
 					}
-					
+
 					if((Turn::countAroundValue($island, $x, $y, $init->landProcity, 200, 7)) && ($monsSpec['kind'] != 26)) {
-						// üˆÍ1Hex‚É•Ê‚Ì‰öb‚ª‚¢‚éê‡A‚»‚Ì‰öb‚ğUŒ‚‚·‚é
-						// ‘ÎÛ‚Ì‰öb‚ª“|‚ê‚Är’n‚É‚È‚é
+						// å‘¨å›²1Hexã«åˆ¥ã®æ€ªç£ãŒã„ã‚‹å ´åˆã€ãã®æ€ªç£ã‚’æ”»æ’ƒã™ã‚‹
+						// å¯¾è±¡ã®æ€ªç£ãŒå€’ã‚Œã¦è’åœ°ã«ãªã‚‹
 						$land[$x][$y] = $init->landWaste;
 						$landValue[$x][$y] = 0;
 						$this->log->BariaAttack($id, $name, $lName, "($x,$y)", $mName, $tPoint);
-						
-						// û“ü
+
+						// åå…¥
 						$value = $init->monsterValue[$monsSpec['kind']];
 						if($value > 0) {
 							$island['money'] += $value;
@@ -4029,83 +4043,83 @@ class Turn {
 						}
 						break;
 					}
-					// d‰»’†?
+					// ç¡¬åŒ–ä¸­?
 					if((($special & 0x4) && (($hako->islandTurn % 2) == 1)) ||
 						(($special & 0x10) && (($hako->islandTurn % 2) == 0))) {
-						// d‰»’†
+						// ç¡¬åŒ–ä¸­
 						break;
 					}
 					if($special & 0x20) {
-						// ’‡ŠÔ‚ğŒÄ‚Ô‰öb
+						// ä»²é–“ã‚’å‘¼ã¶æ€ªç£
 						if ((Util::random(100) < 5) && ($pop >= $init->disMonsBorder1)) {
-							// ‰öboŒ»
+							// æ€ªç£å‡ºç¾
 							$pop = $island['pop'];
 							$this->log->monsCall($id, $name, $mName, "({$x}, {$y})");
 							if ($pop >= $init->disMonsBorder5) {
-								// level5‚Ü‚Å
+								// level5ã¾ã§
 								$kind = Util::random($init->monsterLevel5) + 1;
 							} elseif($pop >= $init->disMonsBorder4) {
-								// level4‚Ì‚İ
+								// level4ã®ã¿
 								$kind = Util::random($init->monsterLevel4) + 1;
 							} elseif($pop >= $init->disMonsBorder3) {
-								// level3‚Ì‚İ
+								// level3ã®ã¿
 								$kind = Util::random($init->monsterLevel3) + 1;
 							} elseif($pop >= $init->disMonsBorder2) {
-								// level2‚Ì‚İ
+								// level2ã®ã¿
 								$kind = Util::random($init->monsterLevel2) + 1;
 							} else {
-								// level1‚Ì‚İ
+								// level1ã®ã¿
 								$kind = Util::random($init->monsterLevel1) + 1;
 							}
-							// lv‚Ì’l‚ğŒˆ‚ß‚é
+							// lvã®å€¤ã‚’æ±ºã‚ã‚‹
 							$lv = $kind * 100
 								+ $init->monsterBHP[$kind] + Util::random($init->monsterDHP[$kind]);
-							// ‚Ç‚±‚ÉŒ»‚ê‚é‚©Œˆ‚ß‚é
+							// ã©ã“ã«ç¾ã‚Œã‚‹ã‹æ±ºã‚ã‚‹
 							for($i = 0; $i < $init->pointNumber; $i++) {
 								$bx = $this->rpx[$i];
 								$by = $this->rpy[$i];
 								if($land[$bx][$by] == $init->landTown) {
-									// ’nŒ`–¼
+									// åœ°å½¢å
 									$lName = $this->landName($init->landTown, $landValue[$bx][$by]);
-									// ‚»‚ÌƒwƒbƒNƒX‚ğ‰öb‚É
+									// ãã®ãƒ˜ãƒƒã‚¯ã‚¹ã‚’æ€ªç£ã«
 									$land[$bx][$by] = $init->landMonster;
 									$landValue[$bx][$by] = $lv;
-									// ‰öbî•ñ
+									// æ€ªç£æƒ…å ±
 									$monsSpec = Util::monsterSpec($lv);
-									// ƒƒbƒZ[ƒW
+									// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 									$this->log->monsCome($id, $name, $mName, "({$bx}, {$by})", $lName);
 									break;
 								}
 							}
 						}
 					}
-					// ƒ[ƒv‚·‚é‰öb
+					// ãƒ¯ãƒ¼ãƒ—ã™ã‚‹æ€ªç£
 					if ($special & 0x40) {
 						$r = mt_rand(0,100);
 						if ($r < 20) { // 20%
-							// ƒ[ƒv‚·‚é
+							// ãƒ¯ãƒ¼ãƒ—ã™ã‚‹
 							$tg;
 							$tIsland = $island;
 							$r = mt_rand(0,100);
 							if ($r < 50) { // 50%
-								// ƒ[ƒv‚·‚é“‡‚ğŒˆ‚ß‚é
+								// ãƒ¯ãƒ¼ãƒ—ã™ã‚‹å³¶ã‚’æ±ºã‚ã‚‹
 								$tg = Util::random($hako->islandNumber);
 								$tIsland = $hako->islands[$tg];
 								if((($hako->islandTurn - $tIsland['starturn']) < $init->noAssist) && ($tIsland['isBF'] != 1)) {
-									// ‰SÒŠúŠÔ’†‚Ì“‡‚É‚Íƒ[ƒv‚µ‚È‚¢i©“‡‚Öƒ[ƒvj
+									// åˆå¿ƒè€…æœŸé–“ä¸­ã®å³¶ã«ã¯ãƒ¯ãƒ¼ãƒ—ã—ãªã„ï¼ˆè‡ªå³¶ã¸ãƒ¯ãƒ¼ãƒ—ï¼‰
 									$tIsland = $island;
 								}
 							}
 							$tId   = $tIsland['id'];
 							$tName = $tIsland['name'];
-							
-							// ƒ[ƒv’n“_‚ğŒˆ‚ß‚é
+
+							// ãƒ¯ãƒ¼ãƒ—åœ°ç‚¹ã‚’æ±ºã‚ã‚‹
 							$tLand      = $tIsland['land'];
 							$tLandValue = $tIsland['landValue'];
 							for ($w = 0; $w < $init->pointNumber; $w++) {
 								$bx = $this->rpx[$w];
 								$by = $this->rpy[$w];
-								// ŠCA‘D”•AŠCŠîAŠC–hAŠC’ê“ssAŠCã“ssAŠC’êÁ–hA—{BêA–û“cA`A‰öbARA‚¼‚ç‚·A‹L”O”èˆÈŠO
+								// æµ·ã€èˆ¹èˆ¶ã€æµ·åŸºã€æµ·é˜²ã€æµ·åº•éƒ½å¸‚ã€æµ·ä¸Šéƒ½å¸‚ã€æµ·åº•æ¶ˆé˜²ç½²ã€é¤Šæ®–å ´ã€æ²¹ç”°ã€æ¸¯ã€æ€ªç£ã€å±±ã€ãã‚‰ã™ã€è¨˜å¿µç¢‘ä»¥å¤–
 								if(($tLand[$bx][$by] != $init->landSea) &&
 									($tLand[$bx][$by] != $init->landShip) &&
 									($tLand[$bx][$by] != $init->landSbase) &&
@@ -4125,10 +4139,10 @@ class Turn {
 									break;
 								}
 							}
-							// ƒ[ƒvI
+							// ãƒ¯ãƒ¼ãƒ—ï¼
 							$this->log->monsWarp($id, $tId, $name, $mName, "({$x}, {$y})", $tName);
 							$this->log->monsCome($tId, $tName, $mName, "($bx, $by)", $this->landName($tLand[$bx][$by], $tLandValue[$bx][$by]));
-							
+
 							if($id == $tId) {
 								$land[$bx][$by]       = $init->landMonster;
 								$landValue[$bx][$by]  = $lv;
@@ -4139,81 +4153,81 @@ class Turn {
 							$monsterMove[$bx][$bx] = 2;
 							$land[$x][$y]      = $init->landWaste;
 							$landValue[$x][$y] = 0;
-							
+
 							if($id != $tId) {
-								// ƒ^[ƒQƒbƒg‚ªˆÙ‚È‚éê‡‚ÍA’l‚ğ–ß‚·
+								// ã‚¿ãƒ¼ã‚²ãƒƒãƒˆãŒç•°ãªã‚‹å ´åˆã¯ã€å€¤ã‚’æˆ»ã™
 								$tIsland['land']      = $tLand;
 								$tIsland['landValue'] = $tLandValue;
 								$hako->islands[$tg]   = $tIsland;
 							}
 							break;
 						} else {
-							// ƒ[ƒv‚µ‚È‚¢
+							// ãƒ¯ãƒ¼ãƒ—ã—ãªã„
 						}
 					}
 					if ($special & 0x400) {
-						// •m€‚É‚È‚é‚Æ‘å”š”­
-						if ($monsSpec['hp'] <= 1) { // c‚è‘Ì—Í‚P‚È‚ç
+						// ç€•æ­»ã«ãªã‚‹ã¨å¤§çˆ†ç™º
+						if ($monsSpec['hp'] <= 1) { // æ®‹ã‚Šä½“åŠ›ï¼‘ãªã‚‰
 							$point = "({$x}, {$y})";
-							// •m€‚É‚È‚Á‚½‚Ì‚Å”š”­‚·‚é
+							// ç€•æ­»ã«ãªã£ãŸã®ã§çˆ†ç™ºã™ã‚‹
 							$this->log->MonsExplosion($id, $name, $point, $mName);
-							// Lˆæ”íŠQƒ‹[ƒ`ƒ“
-							$this->wideDamage($id, $name, &$land, &$landValue, $x, $y);
+							// åºƒåŸŸè¢«å®³ãƒ«ãƒ¼ãƒãƒ³
+							$this->wideDamage($id, $name, $land, $landValue, $x, $y);
 							break;
 						}
 					}
 					if ($special & 0x1000) {
-						// oŒ»’†‚Í‚¨‹à‚ğ‘‚â‚µ‚Ä‚­‚ê‚é
+						// å‡ºç¾ä¸­ã¯ãŠé‡‘ã‚’å¢—ã‚„ã—ã¦ãã‚Œã‚‹
 						$point = "({$x}, {$y})";
-						$money = (Util::random(100) + 1); // 1‰­‰~`100‰­‰~
+						$money = (Util::random(100) + 1); // 1å„„å††ï½100å„„å††
 						$island['money'] += $money;
 						$str = "{$money}{$init->unitMoney}";
 						$this->log->MonsMoney($id, $name, $mName, $point, "$str");
 					}
 					if ($special & 0x2000) {
-						// oŒ»’†‚ÍH—¿‚ğ‘‚â‚µ‚Ä‚­‚ê‚é
+						// å‡ºç¾ä¸­ã¯é£Ÿæ–™ã‚’å¢—ã‚„ã—ã¦ãã‚Œã‚‹
 						$point = "({$x}, {$y})";
-						$food  = (Util::random(10) + 1); // 1000ƒgƒ“`10000ƒgƒ“
+						$food  = (Util::random(10) + 1); // 1000ãƒˆãƒ³ï½10000ãƒˆãƒ³
 						$island['food'] += $food;
 						$str = "{$food}{$init->unitFood}";
-						
+
 						$this->log->MonsFood($id, $name, $mName, $point, "$str");
 					}
 					if ($special & 0x4000) {
-						// oŒ»’†‚Í‚¨‹à‚ğŒ¸‚ç‚µ‚Ä‚µ‚Ü‚¤
+						// å‡ºç¾ä¸­ã¯ãŠé‡‘ã‚’æ¸›ã‚‰ã—ã¦ã—ã¾ã†
 						$point = "({$x}, {$y})";
-						$money = (Util::random(100) + 1); // 1‰­‰~`100‰­‰~
+						$money = (Util::random(100) + 1); // 1å„„å††ï½100å„„å††
 						$island['money'] -= $money;
 						$str = "{$money}{$init->unitMoney}";
 						$this->log->MonsMoney2($id, $name, $mName, $point, "$str");
 					}
 					if ($special & 0x10000) {
-						// oŒ»’†‚ÍH—¿‚ğ•…‚ç‚¹‚Ä‚µ‚Ü‚¤
+						// å‡ºç¾ä¸­ã¯é£Ÿæ–™ã‚’è…ã‚‰ã›ã¦ã—ã¾ã†
 						$point = "({$x}, {$y})";
-						$food  = (Util::random(10) + 1); // 1000ƒgƒ“`10000ƒgƒ“
+						$food  = (Util::random(10) + 1); // 1000ãƒˆãƒ³ï½10000ãƒˆãƒ³
 						$island['food'] -= $food;
 						$str = "{$food}{$init->unitFood}";
 						$this->log->MonsFood2($id, $name, $mName, $point, "$str");
 					}
-					// “®‚­•ûŒü‚ğŒˆ’è
+					// å‹•ãæ–¹å‘ã‚’æ±ºå®š
 					for($j = 0; $j < 3; $j++) {
 						$d = Util::random(6) + 1;
 						if($special & 0x200){
-							// ”òsˆÚ“®”\—Í
+							// é£›è¡Œç§»å‹•èƒ½åŠ›
 							$d = Util::random(12) + 7;
 						}
 						$sx = $x + $init->ax[$d];
 						$sy = $y + $init->ay[$d];
-						// s‚É‚æ‚éˆÊ’u’²®
+						// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 						if((($sy % 2) == 0) && (($y % 2) == 1)) {
 							$sx--;
 						}
-						// ”ÍˆÍŠO”»’è
+						// ç¯„å›²å¤–åˆ¤å®š
 						if(($sx < 0) || ($sx >= $init->islandSize) ||
 							($sy < 0) || ($sy >= $init->islandSize)) {
 							continue;
 						}
-						// ŠCA‘D”•AŠCŠîAŠC–hAŠC’ê“ssAŠCã“ssAŠC’êÁ–hA—{BêA–û“cA`A‰öbARA‚¼‚ç‚·A‹L”O”èˆÈŠO
+						// æµ·ã€èˆ¹èˆ¶ã€æµ·åŸºã€æµ·é˜²ã€æµ·åº•éƒ½å¸‚ã€æµ·ä¸Šéƒ½å¸‚ã€æµ·åº•æ¶ˆé˜²ç½²ã€é¤Šæ®–å ´ã€æ²¹ç”°ã€æ¸¯ã€æ€ªç£ã€å±±ã€ãã‚‰ã™ã€è¨˜å¿µç¢‘ä»¥å¤–
 						if(($land[$sx][$sy] != $init->landSea) &&
 							($land[$sx][$sy] != $init->landShip) &&
 							($land[$sx][$sy] != $init->landSbase) &&
@@ -4234,122 +4248,122 @@ class Turn {
 						}
 					}
 					if($j == 3) {
-						// “®‚©‚È‚©‚Á‚½
+						// å‹•ã‹ãªã‹ã£ãŸ
 						break;
 					}
-					// “®‚¢‚½æ‚Ì’nŒ`‚É‚æ‚èƒƒbƒZ[ƒW
+					// å‹•ã„ãŸå…ˆã®åœ°å½¢ã«ã‚ˆã‚Šãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 					$l = $land[$sx][$sy];
 					$lv = $landValue[$sx][$sy];
 					$lName = $this->landName($l, $lv);
 					$point = "({$sx}, {$sy})";
-					
-					// ˆÚ“®
+
+					// ç§»å‹•
 					$land[$sx][$sy] = $land[$x][$y];
 					$landValue[$sx][$sy] = $landValue[$x][$y];
-					
-					if (($special & 0x20000) && (Util::random(100) < 30)) { // •ª—ôŠm—¦30%
-						// •ª—ô‚·‚é‰öb
-						// ‚à‚Æ‹‚½ˆÊ’u‚ğ‰öb‚É
+
+					if (($special & 0x20000) && (Util::random(100) < 30)) { // åˆ†è£‚ç¢ºç‡30%
+						// åˆ†è£‚ã™ã‚‹æ€ªç£
+						// ã‚‚ã¨å±…ãŸä½ç½®ã‚’æ€ªç£ã«
 						$land[$bx][$by] = $init->landMonster;
 						$landValue[$bx][$by] = $lv;
-						// ‰öbî•ñ
+						// æ€ªç£æƒ…å ±
 						$monsSpec = Util::monsterSpec($lv);
-						// ƒƒbƒZ[ƒW
+						// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 						$this->log->monsBunretu($id, $name, $lName, $point, $mName);
 					} else {
-						// ‚à‚Æ‹‚½ˆÊ’u‚ğr’n‚É
+						// ã‚‚ã¨å±…ãŸä½ç½®ã‚’è’åœ°ã«
 						$land[$x][$y] = $init->landWaste;
 						$landValue[$x][$y] = 0;
 					}
-					// ˆÚ“®Ï‚İƒtƒ‰ƒO
+					// ç§»å‹•æ¸ˆã¿ãƒ•ãƒ©ã‚°
 					if($init->monsterSpecial[$monsSpec['kind']] & 0x2) {
-						// ˆÚ“®Ï‚İƒtƒ‰ƒO‚Í—§‚Ä‚È‚¢
+						// ç§»å‹•æ¸ˆã¿ãƒ•ãƒ©ã‚°ã¯ç«‹ã¦ãªã„
 					} elseif($init->monsterSpecial[$monsSpec['kind']] & 0x1) {
-						// ‘¬‚¢‰öb
+						// é€Ÿã„æ€ªç£
 						$monsterMove[$sx][$sy] = $monsterMove[$x][$y] + 1;
 					} else {
-						// •’Ê‚Ì‰öb
+						// æ™®é€šã®æ€ªç£
 						$monsterMove[$sx][$sy] = 2;
 					}
 					if(($l == $init->landDefence) && ($init->dBaseAuto == 1)) {
-						// –h‰q{İ‚ğ“¥‚ñ‚¾
+						// é˜²è¡›æ–½è¨­ã‚’è¸ã‚“ã 
 						$this->log->monsMoveDefence($id, $name, $lName, $point, $mName);
-						
-						// Lˆæ”íŠQƒ‹[ƒ`ƒ“
-						$this->wideDamage($id, $name, &$land, &$landValue, $sx, $sy);
+
+						// åºƒåŸŸè¢«å®³ãƒ«ãƒ¼ãƒãƒ³
+						$this->wideDamage($id, $name, $land, $landValue, $sx, $sy);
 					} else {
-						// s‚«æ‚ªr’n‚É‚È‚é
+						// è¡Œãå…ˆãŒè’åœ°ã«ãªã‚‹
 						if($island['isBF'] != 1)
 						$this->log->monsMove($id, $name, $lName, $point, $mName);
 					}
 					break;
-					
+
 				case $init->landSleeper:
-					// •ßŠl‰öb
-					// Še—v‘f‚Ìæ‚èo‚µ
+					// æ•ç²æ€ªç£
+					// å„è¦ç´ ã®å–ã‚Šå‡ºã—
 					$monsSpec = Util::monsterSpec($landValue[$x][$y]);
 					$special  = $init->monsterSpecial[$monsSpec['kind']];
 					$mName    = $monsSpec['name'];
 					if(Util::random(1000) < $monsSpec['hp'] * 10) {
-						// (‰öb‚Ì‘Ì—Í * 10)% ‚ÌŠm—¦‚Å•ßŠl‰ğœ
+						// (æ€ªç£ã®ä½“åŠ› * 10)% ã®ç¢ºç‡ã§æ•ç²è§£é™¤
 						$point = "({$x}, {$y})";
-						$land[$x][$y] = $init->landMonster; // •ßŠl‰ğœ
+						$land[$x][$y] = $init->landMonster; // æ•ç²è§£é™¤
 						$this->log->MonsWakeup($id, $name, $lName, $point, $mName);
 					}
 					break;
-					
+
 				case $init->landShip:
-					// ‘D”•
+					// èˆ¹èˆ¶
 					if($shipMove[$x][$y] != 1){
-						//‘D‚ª‚Ü‚¾“®‚¢‚Ä‚¢‚È‚¢
+						//èˆ¹ãŒã¾ã å‹•ã„ã¦ã„ãªã„æ™‚
 						$ship = Util::navyUnpack($landValue[$x][$y]);
 						$lName = $init->shipName[$ship[1]];
-						$tLname .= "i{$this->islands[$ship[0]]['name']}“‡Š‘®j";
-						
+						$tLname .= "ï¼ˆ{$this->islands[$ship[0]]['name']}å³¶æ‰€å±ï¼‰";
+
 						$tn = $hako->idToNumber[$ship[0]];
 						$tIsland = &$hako->islands[$tn];
 						$tName = $hako->idToName[$ship[0]];
-						
+
 						if($init->shipCost[$ship[1]] > $tIsland['money'] && $ship[0] != 0) {
-							// ˆÛ”ï‚ğ•¥‚¦‚È‚­‚È‚èŠC‚Ì‘”‹û‚Æ‚È‚é
+							// ç¶­æŒè²»ã‚’æ‰•ãˆãªããªã‚Šæµ·ã®è—»å±‘ã¨ãªã‚‹
 							$this->log->ShipRelease($id, $ship[0], $name, $tName, "($x,$y)", $init->shipName[$ship[1]]);
 							$land[$x][$y] = $init->landSea;
 							$landValue[$x][$y] = 0;
 							break;
 						}
-						
+
 						if($ship[1] == 2) {
-							// ŠC’ê’Tõ‘D
+							// æµ·åº•æ¢ç´¢èˆ¹
 							$cntTreasure = Turn::countAroundValue($island, $x, $y, $init->landSea, 100, 7);
 							if($cntTreasure) {
-								// üˆÍ1ƒwƒbƒNƒXˆÈ“à‚Éà•ó‚ ‚è
+								// å‘¨å›²1ãƒ˜ãƒƒã‚¯ã‚¹ä»¥å†…ã«è²¡å®ã‚ã‚Š
 								for($s1 = 0; $s1 < 7; $s1++) {
 									$sx = $x + $init->ax[$s1];
 									$sy = $y + $init->ay[$s1];
-									// s‚É‚æ‚éˆÊ’u’²®
+									// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 									if((($sy % 2) == 0) && (($y % 2) == 1)) {
 										$sx--;
 									}
 									if(($sx < 0) || ($sx >= $init->islandSize) || ($sy < 0) || ($sy >= $init->islandSize)) {
-										// ”ÍˆÍŠO‚Ìê‡‰½‚à‚µ‚È‚¢
+										// ç¯„å›²å¤–ã®å ´åˆä½•ã‚‚ã—ãªã„
 										continue;
 									} else {
-										// ”ÍˆÍ“à‚Ìê‡
+										// ç¯„å›²å†…ã®å ´åˆ
 										if($land[$sx][$sy] == $init->landSea && $landValue[$sx][$sy] >= 100) {
-											// à•ó”­Œ©
+											// è²¡å®ç™ºè¦‹
 											if($ship[0] == $island['id']) {
-												// ©“‡Š‘®‚Å‚ ‚ê‚Î‚·‚®‚Éà•ó‰ñû
+												// è‡ªå³¶æ‰€å±ã§ã‚ã‚Œã°ã™ãã«è²¡å®å›å
 												$island['money'] += $landValue[$sx][$sy];
 											} else {
-												// ‘¼“‡Š‘®‚Å‚ ‚ê‚ÎÏÚ‚µ‚Ä‹AŠÒ‚·‚é‚Ü‚Å‰ñû‚µ‚È‚¢
+												// ä»–å³¶æ‰€å±ã§ã‚ã‚Œã°ç©è¼‰ã—ã¦å¸°é‚„ã™ã‚‹ã¾ã§å›åã—ãªã„
 												$ship[3] = round($landValue[$sx][$sy] / 1000);
 												$ship[4] = round(($landValue[$sx][$sy] - $ship[3] * 1000) /100);
 												$landValue[$x][$y] = Util::navyPack($ship[0], $ship[1], $ship[2], $ship[3], $ship[4]);
 											}
 											$tName = $hako->idToName[$ship[0]];
 											$this->log->FindTreasure($id, $ship[0], $name, $tName, "($x,$y)", $init->shipName[$ship[1]], $landValue[$sx][$sy]);
-											
-											// à•ó‚ª‚ ‚Á‚½’nŒ`‚ÍŠC‚É‚È‚é
+
+											// è²¡å®ãŒã‚ã£ãŸåœ°å½¢ã¯æµ·ã«ãªã‚‹
 											$land[$sx][$sy] = $init->landSea;
 											$landValue[$sx][$sy] = 0;
 											break;
@@ -4358,33 +4372,33 @@ class Turn {
 								}
 							}
 						} elseif($ship[1] == 3) {
-							// íŠÍ
+							// æˆ¦è‰¦
 							if($island['monster'] > 0 && $ship[4] != intval($hako->islandTurn) % 10) {
-								// ‰öb‚ªoŒ»‚µ‚Ä‚¨‚èAŒ»İ‚Ìƒ^[ƒ“‚Å–¢UŒ‚‚Ìê‡
+								// æ€ªç£ãŒå‡ºç¾ã—ã¦ãŠã‚Šã€ç¾åœ¨ã®ã‚¿ãƒ¼ãƒ³ã§æœªæ”»æ’ƒã®å ´åˆ
 								for($s2 = 0; $s2 < $init->pointNumber; $s2++) {
 									$sx = $this->rpx[$s2];
 									$sy = $this->rpy[$s2];
 									if($land[$sx][$sy] == $init->landMonster || $land[$sx][$sy] == $init->landSleeper) {
-										// ‘ÎÛ‚Æ‚È‚é‰öb‚ÌŠe—v‘fæ‚èo‚µ
+										// å¯¾è±¡ã¨ãªã‚‹æ€ªç£ã®å„è¦ç´ å–ã‚Šå‡ºã—
 										$monsSpec = Util::monsterSpec($landValue[$sx][$sy]);
 										$tLv = $landValue[$sx][$sy];
 										$tspecial  = $init->monsterSpecial[$monsSpec['tkind']];
 										$tmonsName = $monsSpec['name'];
-										// d‰»’†?
+										// ç¡¬åŒ–ä¸­?
 										if((($special & 0x4) && (($hako->islandTurn % 2) == 1)) ||
 											(($special & 0x10) && (($hako->islandTurn % 2) == 0))) {
-											// d‰»’†‚È‚çŒø‰Ê‚È‚µ
+											// ç¡¬åŒ–ä¸­ãªã‚‰åŠ¹æœãªã—
 											break;
 										}
 										if($monsSpec['hp'] > 1){
-											// ‘ÎÛ‚Ì‘Ì—Í‚ğŒ¸‚ç‚·
+											// å¯¾è±¡ã®ä½“åŠ›ã‚’æ¸›ã‚‰ã™
 											$landValue[$sx][$sy]--;
 										} else {
-											// ‘ÎÛ‚Ì‰öb‚ª“|‚ê‚Är’n‚É‚È‚é
+											// å¯¾è±¡ã®æ€ªç£ãŒå€’ã‚Œã¦è’åœ°ã«ãªã‚‹
 											$land[$sx][$sy] = $init->landWaste;
 											$landValue[$sx][$sy] = 0;
-											
-											// û“ü
+
+											// åå…¥
 											$value = $init->monsterValue[$monsSpec['kind']];
 											if($value > 0) {
 												$island['money'] += $value;
@@ -4396,39 +4410,39 @@ class Turn {
 										break;
 									}
 								}
-								// 1ƒ^[ƒ“‚É1“x‚µ‚©UŒ‚‚Å‚«‚È‚¢
+								// 1ã‚¿ãƒ¼ãƒ³ã«1åº¦ã—ã‹æ”»æ’ƒã§ããªã„
 								$ship[4] = intval($hako->islandTurn) % 10;
 							} else {
 							}
-							// ŠC‘¯‘D‚ªoŒ»‚µ‚Ä‚¢‚½ê‡UŒ‚‚·‚é
+							// æµ·è³Šèˆ¹ãŒå‡ºç¾ã—ã¦ã„ãŸå ´åˆæ”»æ’ƒã™ã‚‹
 							$cntViking = Turn::countAround($land, $x, $y, 19, array($init->landShip));
 							if($cntViking && $ship[4] != intval($hako->islandTurn) % 10) {
-								//üˆÍ2ƒwƒbƒNƒXˆÈ“à‚É‘D”•‚ ‚è
+								//å‘¨å›²2ãƒ˜ãƒƒã‚¯ã‚¹ä»¥å†…ã«èˆ¹èˆ¶ã‚ã‚Š
 								for($s3 = 0; $s3 < 19; $s3++) {
 									$sx = $x + $init->ax[$s3];
 									$sy = $y + $init->ay[$s3];
-									// s‚É‚æ‚éˆÊ’u’²®
+									// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 									if((($sy % 2) == 0) && (($y % 2) == 1)) {
 										$sx--;
 									}
 									if(($sx < 0) || ($sx >= $init->islandSize) || ($sy < 0) || ($sy >= $init->islandSize)) {
-										// ”ÍˆÍŠO‚Ìê‡‰½‚à‚µ‚È‚¢
+										// ç¯„å›²å¤–ã®å ´åˆä½•ã‚‚ã—ãªã„
 										continue;
 									} else {
-										// ”ÍˆÍ“à‚Ìê‡
+										// ç¯„å›²å†…ã®å ´åˆ
 										if($land[$sx][$sy] == $init->landShip) {
 											$tShip = Util::navyUnpack($landValue[$sx][$sy]);
 											$tName = $hako->idToName[$ship[0]];
 											$tshipName = $init->shipName[$tShip[1]];
 											if($tShip[1] >= 10) {
-												// ŠC‘¯‘D‚¾‚Á‚½ê‡UŒ‚‚·‚é
+												// æµ·è³Šèˆ¹ã ã£ãŸå ´åˆæ”»æ’ƒã™ã‚‹
 												$tShip[2] -= 2;
 												if($tShip[2] <= 0) {
-													// ŠC‘¯‘D‚ğ’¾–v‚³‚¹‚½
+													// æµ·è³Šèˆ¹ã‚’æ²ˆæ²¡ã•ã›ãŸ
 													$land[$sx][$sy] = $init->landSea;
 													$this->log->SenkanAttack($id, $ship[0], $name, $tName, $init->shipName[$ship[1]], "($x,$y)", "($sx,$sy)", $tshipName);
 													$this->log->BattleSinking($id, $tShip[0], $name, $tshipName, "($sx,$sy)");
-													// 30%‚ÌŠm—¦‚Åà•ó‚É‚È‚é
+													// 30%ã®ç¢ºç‡ã§è²¡å®ã«ãªã‚‹
 													$treasure = $tShip[3] * 1000 + $tShip[4] * 100;
 													if(Util::random(100) < 30 && $treasure > 0) {
 														$landValue[$sx][$sy] = $treasure;
@@ -4437,7 +4451,7 @@ class Turn {
 														$landValue[$sx][$sy] = 0;
 													}
 												} else {
-													// ŠC‘¯‘D‚Éƒ_ƒ[ƒW—^‚¦‚½
+													// æµ·è³Šèˆ¹ã«ãƒ€ãƒ¡ãƒ¼ã‚¸ä¸ãˆãŸ
 													$landValue[$sx][$sy] = Util::navyPack($tShip[0], $tShip[1], $tShip[2], $tShip[3], $tShip[4]);
 													$this->log->SenkanAttack($id, $ship[0], $name, $tName, $init->shipName[$ship[1]], "($x,$y)", "($sx,$sy)", $tshipName);
 												}
@@ -4446,76 +4460,76 @@ class Turn {
 										}
 									}
 								}
-								// 1ƒ^[ƒ“‚É1“x‚µ‚©UŒ‚‚Å‚«‚È‚¢
+								// 1ã‚¿ãƒ¼ãƒ³ã«1åº¦ã—ã‹æ”»æ’ƒã§ããªã„
 								$ship[4] = intval($hako->islandTurn) % 10;
 							}
 						} elseif($ship[1] >= 10) {
-							// ŠC‘¯‘D
+							// æµ·è³Šèˆ¹
 							if(Util::random(1000) < $init->disVikingRob) {
-								// ‹­’D
+								// å¼·å¥ª
 								$vMoney = round(Util::random($island['money'])/10);
 								$vFood  = round(Util::random($island['food'])/10);
 								$island['money'] -= $vMoney;
 								$island['food'] -= $vFood;
 								$this->log->RobViking($island['id'], $island['name'], "($x,$y)", $init->shipName[$ship[1]], $vMoney, $vFood);
-								
-								// Š‹à
+
+								// æ‰€æŒé‡‘
 								$treasure = $ship[3] * 1000 + $ship[4] * 100;
 								$treasure += $vMoney;
 								$ship[3] = $treasure / 1000;
 								$ship[4] = ($treasure - $ship[1] * 1000) / 100;
 								if($ship[3] > 32) $ship[3] = 32;
-								// ŠC‘¯‘DƒXƒe[ƒ^ƒXXV
+								// æµ·è³Šèˆ¹ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹æ›´æ–°
 								$landValue[$x][$y] = Util::navyPack($ship[0], $ship[1], $ship[2], $ship[3], $ship[4]);
 							}
-							// UŒ‚
+							// æ”»æ’ƒ
 							$cntShip = Turn::countAround($land, $x, $y, 19, array($init->landPort, $init->landShip, $init->landFroCity));
 							if($cntShip) {
-								//üˆÍ2ƒwƒbƒNƒXˆÈ“à‚É`‚Ü‚½‚Í‘D”•‚Ü‚½‚ÍŠCã“ss‚ ‚è
+								//å‘¨å›²2ãƒ˜ãƒƒã‚¯ã‚¹ä»¥å†…ã«æ¸¯ã¾ãŸã¯èˆ¹èˆ¶ã¾ãŸã¯æµ·ä¸Šéƒ½å¸‚ã‚ã‚Š
 								if(Util::random(1000) < $init->disVikingAttack) {
-									// ŠC‘¯‘D‚ÌPŒ‚
+									// æµ·è³Šèˆ¹ã®è¥²æ’ƒ
 									for($s4 = 0; $s4 < 19; $s4++) {
 										$sx = $x + $init->ax[$s4];
 										$sy = $y + $init->ay[$s4];
-										// s‚É‚æ‚éˆÊ’u’²®
+										// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 										if((($sy % 2) == 0) && (($y % 2) == 1)) {
 											$sx--;
 										}
 										if(($sx < 0) || ($sx >= $init->islandSize) || ($sy < 0) || ($sy >= $init->islandSize)) {
-											// ”ÍˆÍŠO‚Ìê‡‰½‚à‚µ‚È‚¢
+											// ç¯„å›²å¤–ã®å ´åˆä½•ã‚‚ã—ãªã„
 											continue;
 										} else {
-											// ”ÍˆÍ“à‚Ìê‡
+											// ç¯„å›²å†…ã®å ´åˆ
 											if($land[$sx][$sy] == $init->landPort) {
-												// `‚Ìê‡ó£‚É‚È‚é
+												// æ¸¯ã®å ´åˆæµ…ç€¬ã«ãªã‚‹
 												$land[$sx][$sy] = $init->landSea;
 												$landValue[$sx][$sy] = 1;
 												$this->log->BattleSinking($id, 0, $name, $this->landName($init->landPort, 1), "($sx,$sy)");
 												$this->log->VikingAttack($id, $id, $name, $name, $init->shipName[$ship[1]], "($x,$y)", "($sx,$sy)", $this->landName($init->landPort, 1));
 												break;
 											} elseif($land[$sx][$sy] == $init->landShip) {
-												// ‘D”•‚Ìê‡
+												// èˆ¹èˆ¶ã®å ´åˆ
 												$tShip = Util::navyUnpack($landValue[$sx][$sy]);
 												$tName = $hako->idToName[$tShip[0]];
 												$tshipName = $init->shipName[$tShip[1]];
 												if($tShip[1] < 10) {
-													// ŠC‘¯‘D‚ÌUŒ‚
+													// æµ·è³Šèˆ¹ã®æ”»æ’ƒ
 													$tShip[2] -= ($init->disVikingMinAtc + Util::random($init->disVikingMaxAtc - $init->disVikingMinAtc));
 													if($tShip[2] <= 0) {
-														// ‘D”•’¾–v
+														// èˆ¹èˆ¶æ²ˆæ²¡
 														$land[$sx][$sy] = $init->landSea;
 														$landValue[$sx][$sy] = 0;
 														$this->log->ShipSinking($id, $tShip[0], $name, $tName, $tshipName, "($sx,$sy)");
 														break;
 													} else {
-														// ‘D”•ƒ_ƒ[ƒW
+														// èˆ¹èˆ¶ãƒ€ãƒ¡ãƒ¼ã‚¸
 														$landValue[$sx][$sy] = Util::navyPack($tShip[0], $tShip[1], $tShip[2], $tShip[3], $tShip[4]);
 														$this->log->VikingAttack($id, $tShip[0], $name, $tName, $init->shipName[$ship[1]], "($x,$y)", "($sx,$sy)", $tshipName);
 														break;
 													}
 												}
 											} elseif($land[$sx][$sy] == $init->landFroCity) {
-												// ŠCã“ss‚Ìê‡ŠC‚É‚È‚é
+												// æµ·ä¸Šéƒ½å¸‚ã®å ´åˆæµ·ã«ãªã‚‹
 												$land[$sx][$sy] = $init->landSea;
 												$landValue[$sx][$sy] = 0;
 												$this->log->BattleSinking($id, 0, $name, $this->landName($init->landFroCity, 0), "($sx,$sy)");
@@ -4527,49 +4541,49 @@ class Turn {
 								}
 							}
 							if(Util::random(1000) < $init->disVikingAway) {
-								// ŠC‘¯‘D ‹‚é
+								// æµ·è³Šèˆ¹ å»ã‚‹
 								$land[$x][$y] = $init->landSea;
 								$landValue[$x][$y] = 0;
 								$this->log->VikingAway($id, $name, "($x,$y)");
 								break;
 							}
 						}
-						
+
 						if ($landValue[$x][$y] != 0){
-							// ‘D‚ª‚Ü‚¾‘¶İ‚µ‚Ä‚¢‚½‚ç
-							// “®‚­•ûŒü‚ğŒˆ’è
+							// èˆ¹ãŒã¾ã å­˜åœ¨ã—ã¦ã„ãŸã‚‰
+							// å‹•ãæ–¹å‘ã‚’æ±ºå®š
 							for($s5 = 0; $s5 < 3; $s5++) {
 								$d = Util::random(6) + 1;
 								$sx = $x + $init->ax[$d];
 								$sy = $y + $init->ay[$d];
-								// s‚É‚æ‚éˆÊ’u’²®
+								// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 								if((($sy % 2) == 0) && (($y % 2) == 1)) {
 									$sx--;
 								}
-								// ”ÍˆÍŠO”»’è
+								// ç¯„å›²å¤–åˆ¤å®š
 								if(($sx < 0) || ($sx >= $init->islandSize) ||
 									($sy < 0) || ($sy >= $init->islandSize)) {
 									continue;
 								}
-								// ŠC‚Å‚ ‚ê‚ÎA“®‚­•ûŒü‚ğŒˆ’è
+								// æµ·ã§ã‚ã‚Œã°ã€å‹•ãæ–¹å‘ã‚’æ±ºå®š
 								if(($land[$sx][$sy] == $init->landSea) && ($landValue[$sx][$sy] < 1)){
 									break;
 								}
 							}
 							if($s5 == 3) {
-								// “®‚©‚È‚©‚Á‚½
+								// å‹•ã‹ãªã‹ã£ãŸ
 							} else {
-								// ˆÚ“®
+								// ç§»å‹•
 								$land[$sx][$sy] = $land[$x][$y];
 								$landValue[$sx][$sy] = Util::navyPack($ship[0], $ship[1], $ship[2], $ship[3], $ship[4]);
 								if ($ship[1] == 2) {
 									if((Util::random(100) < 7) && ($island['tenki'] == 1) &&
 										($island['item'][18] == 1) && ($island['item'][19] != 1)) {
-										// ƒŒƒbƒhƒ_ƒCƒ„”­Œ©
+										// ãƒ¬ãƒƒãƒ‰ãƒ€ã‚¤ãƒ¤ç™ºè¦‹
 										$island['item'][19] = 1;
-										$this->log->RedFound($id, $name, 'Ô‚¢•óÎ');
+										$this->log->RedFound($id, $name, 'èµ¤ã„å®çŸ³');
 									}
-									// –û“cŒ©‚Á‚¯
+									// æ²¹ç”°è¦‹ã£ã‘
 									if (Util::random(100) < 3) {
 										$lName = $init->shipName[$ship[1]];
 										$island['oil']++;
@@ -4577,16 +4591,16 @@ class Turn {
 										$landValue[$x][$y] = 0;
 										$this->log->tansakuoil($id, $name, $lName, $point);
 									} else {
-										// ‚à‚Æ‹‚½ˆÊ’u‚ğŠC‚É
+										// ã‚‚ã¨å±…ãŸä½ç½®ã‚’æµ·ã«
 										$land[$x][$y] = $init->landSea;
 										$landValue[$x][$y] = 0;
 									}
 								} else {
-									// ‚à‚Æ‹‚½ˆÊ’u‚ğŠC‚É
+									// ã‚‚ã¨å±…ãŸä½ç½®ã‚’æµ·ã«
 									$land[$x][$y] = $init->landSea;
 									$landValue[$x][$y] = 0;
 								}
-								// ˆÚ“®Ï‚İƒtƒ‰ƒO
+								// ç§»å‹•æ¸ˆã¿ãƒ•ãƒ©ã‚°
 								if(Util::random(2)){
 									$shipMove[$sx][$sy] = 1;
 								}
@@ -4595,7 +4609,7 @@ class Turn {
 					}
 					break;
 			}
-			// ‚·‚Å‚É$init->landTown‚ªcase•¶‚Åg‚í‚ê‚Ä‚¢‚é‚Ì‚Åswitch‚ğ•Ê‚É—pˆÓ
+			// ã™ã§ã«$init->landTownãŒcaseæ–‡ã§ä½¿ã‚ã‚Œã¦ã„ã‚‹ã®ã§switchã‚’åˆ¥ã«ç”¨æ„
 			switch($landKind) {
 				case $init->landTown:
 				case $init->landHaribote:
@@ -4609,7 +4623,7 @@ class Turn {
 				case $init->landFroCity:
 				case $init->landNewtown:
 				case $init->landBigtown:
-					// ‰ÎĞ”»’è
+					// ç«ç½åˆ¤å®š
 					if (Turn::countAround($land, $x, $y, 19, array($init->landSyoubou, $init->landSsyoubou)) > 0) {
 						break;
 					}
@@ -4620,15 +4634,15 @@ class Turn {
 						break;
 					}
 					if(Util::random(1000) < $init->disFire - (int)($island['eisei'][0] / 20)) {
-						// üˆÍ‚ÌX‚Æ‹L”O”è‚ğ”‚¦‚é
+						// å‘¨å›²ã®æ£®ã¨è¨˜å¿µç¢‘ã‚’æ•°ãˆã‚‹
 						if(Turn::countAround($land, $x, $y, 7, array($init->landForest, $init->landProcity, $init->landFusya, $init->landMonument)) == 0) {
-							// –³‚©‚Á‚½ê‡A‰ÎĞ‚Å‰ó–Å
+							// ç„¡ã‹ã£ãŸå ´åˆã€ç«ç½ã§å£Šæ»…
 							$l = $land[$x][$y];
 							$lv = $landValue[$x][$y];
 							$point = "({$x}, {$y})";
 							$lName = $this->landName($l, $lv);
 							if(($landKind == $init->landNewtown) || ($landKind == $init->landBigtown)) {
-								// ƒjƒ…[ƒ^ƒEƒ“AŒ»‘ã“ss‚Ìê‡
+								// ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³ã€ç¾ä»£éƒ½å¸‚ã®å ´åˆ
 								$landValue[$x][$y] -= Util::random(100) + 50;
 								$this->log->firenot($id, $name, $lName, $point);
 								if($landValue[$x][$y] <= 0) {
@@ -4650,106 +4664,118 @@ class Turn {
 					break;
 			}
 		}
-		// •ÏX‚³‚ê‚½‰Â”\«‚Ì‚ ‚é•Ï”‚ğ‘‚«–ß‚·
+		// å¤‰æ›´ã•ã‚ŒãŸå¯èƒ½æ€§ã®ã‚ã‚‹å¤‰æ•°ã‚’æ›¸ãæˆ»ã™
 		$island['land'] = $land;
 		$island['landValue'] = $landValue;
 	}
-	
+
 	//---------------------------------------------------
-	// “‡‘S‘Ì
+	// å³¶å…¨ä½“
 	//---------------------------------------------------
 	function doIslandProcess($hako, &$island) {
 		global $init;
-	    
-		// “±o’l
+
+		// å°å‡ºå€¤
 		$name = $island['name'];
-		$id = $island['id'];
+		$id   = $island['id'];
 		$land = $island['land'];
 		$landValue = $island['landValue'];
-		
-		// û“üƒƒO
-	    if($island['oilincome'] > 0) {
-			$this->log->oilMoney($id, $name, "ŠC’ê–û“c", "", "‘Šz{$island['oilincome']}{$init->unitMoney}");
+		$presentItem = isset($island['present']['item']) ? $island['present']['item'] : 0;
+
+		// åå…¥ãƒ­ã‚°
+		if( isset($island['oilincome']) ) {
+		  if($island['oilincome'] > 0) {
+				$this->log->oilMoney($id, $name, "æµ·åº•æ²¹ç”°", "", "ç·é¡{$island['oilincome']}{$init->unitMoney}");
+			}
 		}
-		// û“üƒƒO
-		if($island['bank'] > 0) {
-			$value = (int)($island['money'] * 0.005);
-			$island['money'] += $value;
-			$this->log->oilMoney($id, $name, "‹âs", "", "‘Šz{$value}{$init->unitMoney}");
+		// åå…¥ãƒ­ã‚°
+		if( isset($island['bank']) ) {
+			if($island['bank'] > 0) {
+				$value = (int)($island['money'] * 0.005);
+				$island['money'] += $value;
+				$this->log->oilMoney($id, $name, "éŠ€è¡Œ", "", "ç·é¡{$value}{$init->unitMoney}");
+			}
 		}
-		// “V‹C”»’è
-		if($island['tenki'] > 0) {
-			if(Util::random(100) < 5) {
-				$island['tenki'] = 5;
-			} elseif(Util::random(100) < 10) {
-				$island['tenki'] = 4;
-			} elseif(Util::random(100) < 15) {
-				$island['tenki'] = 3;
-			} elseif(Util::random(100) < 20) {
-				$island['tenki'] = 2;
+		// å¤©æ°—åˆ¤å®š
+		if( isset($island['tenki']) ) {
+			if($island['tenki'] > 0) {
+				$rnd = Util::random(100);
+				if($rnd < 5) {
+					$island['tenki'] = 5;
+				} elseif($rnd < 10) {
+					$island['tenki'] = 4;
+				} elseif($rnd < 15) {
+					$island['tenki'] = 3;
+				} elseif($rnd < 20) {
+					$island['tenki'] = 2;
+				} else {
+					$island['tenki'] = 1;
+				}
 			} else {
 				$island['tenki'] = 1;
 			}
-		} else {
-			$island['tenki'] = 1;
 		}
-		
-		// “úÆ‚è”»’è
-		if((Util::random(1000) < $init->disTenki) && ($island['tenki'] == 1)) {
-			// “úÆ‚è”­¶
-			$this->log->Hideri($id, $name);
-			for($i = 0; $i < $init->pointNumber; $i++) {
-				$x = $this->rpx[$i];
-				$y = $this->rpy[$i];
-				$landKind = $land[$x][$y];
-				$lv = $landValue[$x][$y];
-				if(($landKind == $init->landTown) && ($landValue[$x][$y] > 100)) {
-					// lŒû‚ªŒ¸‚é
-					$people = (Util::random(2) + 1);
-					$landValue[$x][$y] -= $people;
-				}
-			}
-		}
-		
-		// ‚É‚í‚©‰J”»’è
-		if((Util::random(1000) < $init->disTenki) && ($island['tenki'] == 3)) {
-			// ‚É‚í‚©‰J”­¶
-			$this->log->Niwakaame($id, $name);
-			for($i = 0; $i < $init->pointNumber; $i++) {
-				$x = $this->rpx[$i];
-				$y = $this->rpy[$i];
-				$landKind = $land[$x][$y];
-				$lv = $landValue[$x][$y];
-				if($landKind == $init->landForest) {
-					// –Ø‚ª‘‚¦‚é
-					$tree = (Util::random(5) + 1);
-					$landValue[$x][$y] += $tree;
-					if($landValue[$x][$y] > 200) {
-						$landValue[$x][$y] = 200;
+
+		// æ—¥ç…§ã‚Šåˆ¤å®š
+		if( isset($island['tenki']) ) {
+			if((Util::random(1000) < $init->disTenki) && ($island['tenki'] == 1)) {
+				// æ—¥ç…§ã‚Šç™ºç”Ÿ
+				$this->log->Hideri($id, $name);
+				for($i = 0; $i < $init->pointNumber; $i++) {
+					$x = $this->rpx[$i];
+					$y = $this->rpy[$i];
+					$landKind = $land[$x][$y];
+					$lv = $landValue[$x][$y];
+					if(($landKind == $init->landTown) && ($landValue[$x][$y] > 100)) {
+						// äººå£ãŒæ¸›ã‚‹
+						$people = (Util::random(2) + 1);
+						$landValue[$x][$y] -= $people;
 					}
 				}
 			}
 		}
-		
-		// •ó‚­‚¶”»’è
+
+		// ã«ã‚ã‹é›¨åˆ¤å®š
+		if( isset($island['tenki']) ) {
+			if((Util::random(1000) < $init->disTenki) && ($island['tenki'] == 3)) {
+				// ã«ã‚ã‹é›¨ç™ºç”Ÿ
+				$this->log->Niwakaame($id, $name);
+				for($i = 0; $i < $init->pointNumber; $i++) {
+					$x = $this->rpx[$i];
+					$y = $this->rpy[$i];
+					$landKind = $land[$x][$y];
+					$lv = $landValue[$x][$y];
+					if($landKind == $init->landForest) {
+						// æœ¨ãŒå¢—ãˆã‚‹
+						$tree = (Util::random(5) + 1);
+						$landValue[$x][$y] += $tree;
+						if($landValue[$x][$y] > 200) {
+							$landValue[$x][$y] = 200;
+						}
+					}
+				}
+			}
+		}
+
+		// å®ãã˜åˆ¤å®š
 		if(($hako->islandTurn % $init->lottery) == 0) {
 			if((Util::random(500) < $island['lot']) && ($island['lot'] > 0)) {
-				// ‰½“™Ü‚É“–‘I‚·‚é‚©H
+				// ä½•ç­‰è³ã«å½“é¸ã™ã‚‹ã‹ï¼Ÿ
 				$syo   = Util::random(2) + 1;
 				$value = $init->lotmoney / $syo;
 				$island['money'] += $value;
 				$str = "{$value}{$init->unitMoney}";
-				// û“üƒƒO
+				// åå…¥ãƒ­ã‚°
 				$this->log->LotteryMoney($id, $name, $str, $syo);
 			}
-			// •ó‚­‚¶‚Ì–‡”ƒŠƒZƒbƒg
+			// å®ãã˜ã®æšæ•°ãƒªã‚»ãƒƒãƒˆ
 			$island['lot'] = 0;
 		}
-		
-		// –\“®”»’è
-		$unemployed   = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
+
+		// æš´å‹•åˆ¤å®š
+		$unemployed = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
 		if (($island['isBF'] != 1) && (Util::random(1000) < $unemployed) && ($unemployed > $init->disPoo) && ($island['pop'] >= $init->disPooPop)) {
-			// –\“®”­¶
+			// æš´å‹•ç™ºç”Ÿ
 			$this->log->pooriot($id, $name);
 			for($i = 0; $i < $init->pointNumber; $i++) {
 				$x = $this->rpx[$i];
@@ -4762,14 +4788,14 @@ class Turn {
 					($landKind == $init->landBigtown) ||
 					($landKind == $init->landProcity) ||
 					($landKind == $init->landFroCity)) {
-					// 1/4‚ÅlŒû‚ªŒ¸‚é
+					// 1/4ã§äººå£ãŒæ¸›ã‚‹
 					if(Util::random(4) == 0) {
 						$landValue[$x][$y] -= Util::random($unemployed);
 						if ($landValue[$x][$y]  > 0) {
-							// lŒûŒ¸
+							// äººå£æ¸›
 							$this->log->riotDamage1($id, $name, $this->landName($landKind, $lv), "({$x}, {$y})");
 						} else {
-							// ‰ó–Å
+							// å£Šæ»…
 							if ($landKind == $init->landSeaCity || $landKind == $init->landFroCity) {
 								$land[$x][$y] = $init->landSea;
 							} else {
@@ -4782,11 +4808,13 @@ class Turn {
 				}
 			}
 		}
-		
-		// ’nk”»’è
-		if ((Util::random(1000) < (($island['prepare2'] + 1) * $init->disEarthquake) - (int)($island['eisei'][1] / 15))
-			|| ($island['present']['item'] == 1)) {
-			// ’nk”­¶
+
+		// åœ°éœ‡åˆ¤å®š
+		$prepare2     = isset($island['prepare2']) ? (int)$island['prepare2'] : 0;
+		if ((Util::random(1000) < (($prepare2 + 1) * $init->disEarthquake) - (int)($island['eisei'][1] / 15))
+			|| ($presentItem == 1) )
+		{
+			// åœ°éœ‡ç™ºç”Ÿ
 			$this->log->earthquake($id, $name);
 			for($i = 0; $i < $init->pointNumber; $i++) {
 				$x = $this->rpx[$i];
@@ -4803,7 +4831,7 @@ class Turn {
 					($landKind == $init->landSeaSide) ||
 					($landKind == $init->landSeaCity) ||
 					($landKind == $init->landFroCity)) {
-					// 1/4‚Å‰ó–Å
+					// 1/4ã§å£Šæ»…
 					if(Util::random(4) == 0) {
 						$this->log->eQDamage($id, $name, $this->landName($landKind, $lv), "({$x}, {$y})");
 						if(($landKind == $init->landSeaCity) || ($landKind == $init->landFroCity) ||
@@ -4817,7 +4845,7 @@ class Turn {
 				}
 				if((($landKind == $init->landBigtown) && ($lv >= 100)) ||
 				(($landKind == $init->landNewtown) && ($lv >= 100))) {
-					// 1/3‚Å‰ó–Å
+					// 1/3ã§å£Šæ»…
 					if(Util::random(3) == 0) {
 						$this->log->eQDamagenot($id, $name, $this->landName($landKind, $lv), "({$x}, {$y})");
 						$landValue[$x][$y] -= Util::random(100) + 50;
@@ -4831,10 +4859,10 @@ class Turn {
 				}
 			}
 		}
-		
-		// H—¿•s‘«
+
+		// é£Ÿæ–™ä¸è¶³
 		if($island['food'] <= 0) {
-			// •s‘«ƒƒbƒZ[ƒW
+			// ä¸è¶³ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 			$this->log->starve($id, $name);
 			$island['food'] = 0;
 			for($i = 0; $i < $init->pointNumber; $i++) {
@@ -4849,12 +4877,12 @@ class Turn {
 					($landKind == $init->landHatuden) ||
 					($landKind == $init->landBase) ||
 					($landKind == $init->landDefence)) {
-					// 1/4‚Å‰ó–Å
+					// 1/4ã§å£Šæ»…
 					if(Util::random(4) == 0) {
 						$this->log->svDamage($id, $name, $this->landName($landKind, $lv), "({$x}, {$y})");
 						$land[$x][$y] = $init->landWaste;
 						$landValue[$x][$y] = 0;
-						// ‚Å‚à—{Bê‚È‚çó£
+						// ã§ã‚‚é¤Šæ®–å ´ãªã‚‰æµ…ç€¬
 						if($landKind == $init->landNursery) {
 							$land[$x][$y] = $init->landSea;
 							$landValue[$x][$y] = 1;
@@ -4866,8 +4894,8 @@ class Turn {
 				}
 			}
 		}
-		
-		// ÀÊ”»’è
+
+		// åº§ç¤åˆ¤å®š
 		if(Util::random(1000) < $init->disRunAground1){
 			for($i = 0; $i < $init->pointNumber; $i++) {
 				$x = $this->rpx[$i];
@@ -4881,21 +4909,21 @@ class Turn {
 				}
 			}
 		}
-		
-		// ŠC‘¯‘D”»’è
+
+		// æµ·è³Šèˆ¹åˆ¤å®š
 		$ownShip = 0;
 		for($i = 0; $i < 10; $i++) {
 			$ownShip += $island['ship'][$i];
 		}
 		if(Util::random(1000) < $init->disViking * $ownShip){
-			// ‚Ç‚±‚ÉŒ»‚ê‚é‚©Œˆ‚ß‚é
+			// ã©ã“ã«ç¾ã‚Œã‚‹ã‹æ±ºã‚ã‚‹
 			for($i = 0; $i < $init->pointNumber; $i++) {
 				$x = $this->rpx[$i];
 				$y = $this->rpy[$i];
 				$landKind = $land[$x][$y];
 				$lv = $landValue[$x][$y];
 				if(($landKind == $init->landSea) && ($lv == 0)) {
-					// ŠC‘¯‘D“oê
+					// æµ·è³Šèˆ¹ç™»å ´
 					$land[$x][$y] = $init->landShip;
 					$landValue[$x][$y] = Util::navyPack(0, 10, $init->shipHP[10], 0, 0);
 					$this->log->VikingCome($id, $name, "($x,$y)");
@@ -4903,54 +4931,54 @@ class Turn {
 				}
 			}
 		}
-		
-		// “dÔ”»’è
+
+		// é›»è»Šåˆ¤å®š
 		if((Util::random(1000) < $init->disTrain) && ($island['stat'] >= 2) &&
 			($island['train'] < $island['stat']) && ($island['pop'] >= 2000)) {
-			// ‚Ç‚±‚ÉŒ»‚ê‚é‚©Œˆ‚ß‚é
+			// ã©ã“ã«ç¾ã‚Œã‚‹ã‹æ±ºã‚ã‚‹
 			for($i = 0; $i < $init->pointNumber; $i++) {
 				$bx = $this->rpx[$i];
 				$by = $this->rpy[$i];
 				$landKind = $land[$bx][$by];
 				$lv = $landValue[$bx][$by];
 				if($landKind == $init->landRail) {
-					// “dÔ“oê
+					// é›»è»Šç™»å ´
 					$land[$bx][$by] = $init->landTrain;
 					break;
 				}
 			}
 		}
-		
-		// ‚¼‚ç‚·”»’è
+
+		// ãã‚‰ã™åˆ¤å®š
 		if($island['money'] >= 10000) {
 			$smo = Util::random(800);
 		} else {
 			$smo = Util::random(1000);
 		}
 		if(($smo < $init->disZorasu) && ($island['taiji'] >= 50) && ($island['pop'] >= 2000)) {
-			// ‚Ç‚±‚ÉŒ»‚ê‚é‚©Œˆ‚ß‚é
+			// ã©ã“ã«ç¾ã‚Œã‚‹ã‹æ±ºã‚ã‚‹
 			for($i = 0; $i < $init->pointNumber; $i++) {
 				$bx = $this->rpx[$i];
 				$by = $this->rpy[$i];
 				$landKind = $land[$bx][$by];
 				$lv = $landValue[$bx][$by];
 				if(($landKind == $init->landSea) && ($lv == 0)) {
-					// ‚¼‚ç‚·“oê
+					// ãã‚‰ã™ç™»å ´
 					$land[$bx][$by] = $init->landZorasu;
 					$landValue[$bx][$by] = Util::random(200);
-					
+
 					$this->log->ZorasuCome($id, $name, "($x,$y)");
 					break;
 				}
 			}
 		}
-		
-		// ’Ã”g”»’è
+
+		// æ´¥æ³¢åˆ¤å®š
 		if ((Util::random(1000) < $init->disTsunami - (int)($island['eisei'][1] / 15))
-			|| ($island['present']['item'] == 2)) {
-			// ’Ã”g”­¶
+			|| ($presentItem == 2)) {
+			// æ´¥æ³¢ç™ºç”Ÿ
 			$this->log->tsunami($id, $name);
-			
+
 			for($i = 0; $i < $init->pointNumber; $i++) {
 				$x = $this->rpx[$i];
 				$y = $this->rpy[$i];
@@ -4971,18 +4999,18 @@ class Turn {
 					($landKind == $init->landPort)     ||
 					($landKind == $init->landShip)   ||
 					($landKind == $init->landHaribote)) {
-					// 1d12 <= (üˆÍ‚ÌŠC - 1) ‚Å•ö‰ó
+					// 1d12 <= (å‘¨å›²ã®æµ· - 1) ã§å´©å£Š
 					if(Util::random(12) <
 						(Turn::countAround($land, $x, $y, 7, array($init->landOil, $init->landSbase, $init->landSea)) - 1)) {
 						$this->log->tsunamiDamage($id, $name, $this->landName($landKind, $lv), "({$x}, {$y})");
 						if (($landKind == $init->landSeaSide)||
 							($landKind == $init->landNursery)||
 							($landKind == $init->landPort)){
-							//»•l‚©—{Bê‚©`‚È‚çó£‚É
+							//ç ‚æµœã‹é¤Šæ®–å ´ã‹æ¸¯ãªã‚‰æµ…ç€¬ã«
 							$land[$x][$y] = $init->landSea;
 							$landValue[$x][$y] = 1;
 						} elseif($landKind == $init->landShip){
-							//‘D‚È‚ç…–vAŠC‚É
+							//èˆ¹ãªã‚‰æ°´æ²¡ã€æµ·ã«
 							$land[$x][$y] = $init->landSea;
 							$landValue[$x][$y] = 0;
 						} else {
@@ -4993,8 +5021,8 @@ class Turn {
 				}
 			}
 		}
-		
-		// ‰öb”»’è
+
+		// æ€ªç£åˆ¤å®š
 		if($island['isBF'] == 1) {
 			$r = Util::random(500);
 			$pop = $island['pop'];
@@ -5002,64 +5030,67 @@ class Turn {
 			$r = Util::random(10000);
 			$pop = $island['pop'];
 		}
-		$isMons = (($island['present']['item'] == 3) && ($pop >= $init->disMonsBorder1));
-		
-		do{
+		$isMons = (($presentItem == 3) && ($pop >= $init->disMonsBorder1));
+
+		if ( !isset($island['monstersend']) ) {
+			$island['monstersend'] = 0;
+		}
+		do {
 			if((($r < ($init->disMonster * $island['area'])) &&
 				($pop >= $init->disMonsBorder1)) || ($isMons) || ($island['monstersend'] > 0)) {
-				// ‰öboŒ»
-				// í—Ş‚ğŒˆ‚ß‚é
+				// æ€ªç£å‡ºç¾
+				// ç¨®é¡ã‚’æ±ºã‚ã‚‹
 				if($island['monstersend'] > 0) {
-					// l‘¢
+					// äººé€ 
 					$kind = 0;
 					$island['monstersend']--;
 				} elseif($pop >= $init->disMonsBorder5) {
-					// level5‚Ü‚Å
+					// level5ã¾ã§
 					$kind = Util::random($init->monsterLevel5) + 1;
 				} elseif($pop >= $init->disMonsBorder4) {
-					// level4‚Ü‚Å
+					// level4ã¾ã§
 					$kind = Util::random($init->monsterLevel4) + 1;
 				} elseif($pop >= $init->disMonsBorder3) {
-					// level3‚Ü‚Å
+					// level3ã¾ã§
 					$kind = Util::random($init->monsterLevel3) + 1;
 				} elseif($pop >= $init->disMonsBorder2) {
-					// level2‚Ü‚Å
+					// level2ã¾ã§
 					$kind = Util::random($init->monsterLevel2) + 1;
 				} else {
-					// level1‚Ì‚İ
+					// level1ã®ã¿
 					$kind = Util::random($init->monsterLevel1) + 1;
 				}
-				// lv‚Ì’l‚ğŒˆ‚ß‚é
+				// lvã®å€¤ã‚’æ±ºã‚ã‚‹
 				$lv = $kind * 100
 					+ $init->monsterBHP[$kind] + Util::random($init->monsterDHP[$kind]);
-				
-				// ‚Ç‚±‚ÉŒ»‚ê‚é‚©Œˆ‚ß‚é
+
+				// ã©ã“ã«ç¾ã‚Œã‚‹ã‹æ±ºã‚ã‚‹
 				for($i = 0; $i < $init->pointNumber; $i++) {
 					$bx = $this->rpx[$i];
 					$by = $this->rpy[$i];
 					if(($land[$bx][$by] == $init->landTown) ||
 						($land[$bx][$by] == $init->landBigtown) ||
 						($land[$bx][$by] == $init->landNewtown)) {
-						// ’nŒ`–¼
+						// åœ°å½¢å
 						$lName = $this->landName($init->landTown, $landValue[$bx][$by]);
-						// ‚»‚ÌƒwƒbƒNƒX‚ğ‰öb‚É
+						// ãã®ãƒ˜ãƒƒã‚¯ã‚¹ã‚’æ€ªç£ã«
 						$land[$bx][$by] = $init->landMonster;
 						$landValue[$bx][$by] = $lv;
-						// ‰öbî•ñ
+						// æ€ªç£æƒ…å ±
 						$monsSpec = Util::monsterSpec($lv);
 						$mName = $monsSpec['name'];
-						// ƒƒbƒZ[ƒW
+						// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 						$this->log->monsCome($id, $name, $mName, "({$bx}, {$by})", $lName);
 						break;
 					}
 				}
 			}
 		} while($island['monstersend'] > 0);
-		
-		// ’n”Õ’¾‰º”»’è
-		if(($island['area'] > $init->disFallBorder) && 
-			((Util::random(1000) < $init->disFalldown) && ($island['isBF'] != 1) || 
-			($island['present']['item'] == 4))) {
+
+		// åœ°ç›¤æ²ˆä¸‹åˆ¤å®š
+		if(($island['area'] > $init->disFallBorder) &&
+			((Util::random(1000) < $init->disFalldown) && ($island['isBF'] != 1) ||
+			($presentItem == 4))) {
 			$this->log->falldown($id, $name);
 			for($i = 0; $i < $init->pointNumber; $i++) {
 				$x = $this->rpx[$i];
@@ -5072,7 +5103,7 @@ class Turn {
 					($landKind != $init->landSfarm) &&
 					($landKind != $init->landOil) &&
 					($landKind != $init->landMountain)) {
-					// üˆÍ‚ÉŠC‚ª‚ ‚ê‚ÎA’l‚ğ-1‚É
+					// å‘¨å›²ã«æµ·ãŒã‚ã‚Œã°ã€å€¤ã‚’-1ã«
 					if(Turn::countAround($land, $x, $y, 7, array($init->landSea, $init->landSbase))) {
 						$land[$x][$y] = -1;
 						$landValue[$x][$y] = 0;
@@ -5080,26 +5111,28 @@ class Turn {
 					}
 				}
 			}
-			
+
 			for($i = 0; $i < $init->pointNumber; $i++) {
 				$x = $this->rpx[$i];
 				$y = $this->rpy[$i];
 				$landKind = $land[$x][$y];
 				if($landKind == -1) {
-					// -1‚É‚È‚Á‚Ä‚¢‚éŠ‚ğó£‚É
+					// -1ã«ãªã£ã¦ã„ã‚‹æ‰€ã‚’æµ…ç€¬ã«
 					$land[$x][$y] = $init->landSea;
 					$landValue[$x][$y] = 1;
 				} elseif ($landKind == $init->landSea) {
-					// ó£‚ÍŠC‚É
+					// æµ…ç€¬ã¯æµ·ã«
 					$landValue[$x][$y] = 0;
 				}
 			}
 		}
-		
-		// ‘ä•—”»’è
-		if ((Util::random(1000) < ($init->disTyphoon - (int)($island['eisei'][0] / 10))) && (($island['tenki'] == 2) || ($island['tenki'] == 3))
-			|| ($island['present']['item'] == 5)) {
-			// ‘ä•—”­¶
+
+		// å°é¢¨åˆ¤å®š
+		if ((Util::random(1000) < ($init->disTyphoon - (int)($island['eisei'][0] / 10)))
+				&& (($island['tenki'] == 2) || ($island['tenki'] == 3))
+				|| ($presentItem == 5))
+		{
+			// å°é¢¨ç™ºç”Ÿ
 			$this->log->typhoon($id, $name);
 			for($i = 0; $i < $init->pointNumber; $i++) {
 				$x = $this->rpx[$i];
@@ -5111,19 +5144,19 @@ class Turn {
 					($landKind == $init->landNursery) ||
 					($landKind == $init->landSeaSide) ||
 					($landKind == $init->landHaribote)) {
-					// 1d12 <= (6 - üˆÍ‚ÌX) ‚Å•ö‰ó
+					// 1d12 <= (6 - å‘¨å›²ã®æ£®) ã§å´©å£Š
 					if(Util::random(12) <
 						(6 - Turn::countAround($land, $x, $y, 7, array($init->landForest, $init->landFusy, $init->landMonument)))) {
 						$this->log->typhoonDamage($id, $name, $this->landName($landKind, $lv), "({$x}, {$y})");
 						if (($landKind == $init->landSeaSide)||($landKind == $init->landNursery)){
-							//»•l‚©—{Bê‚È‚ç‚Íó£
+							//ç ‚æµœã‹é¤Šæ®–å ´ãªã‚‰ã¯æµ…ç€¬
 							$land[$x][$y] = $init->landSea;
 							$landValue[$x][$y] = 1;
 						} elseif ($landKind == $init->landSfarm) {
 							$land[$x][$y] = $init->landSea;
 							$landValue[$x][$y] = 0;
 						} else {
-							//‚»‚Ì‘¼‚Í•½’n‚É
+							//ãã®ä»–ã¯å¹³åœ°ã«
 							$land[$x][$y] = $init->landPlains;
 							$landValue[$x][$y] = 0;
 						}
@@ -5131,12 +5164,12 @@ class Turn {
 				}
 			}
 		}
-		
-		// ‹‘åè¦Î”»’è
+
+		// å·¨å¤§éš•çŸ³åˆ¤å®š
 		if (((Util::random(1000) < ($init->disHugeMeteo - (int)($island['eisei'][2] / 50))) && ($island['id'] != 1))
-			|| ($island['present']['item'] == 6)) {
-			// —‰º
-			if ( $island['present']['item'] == 6 ) {
+			|| ($presentItem == 6)) {
+			// è½ä¸‹
+			if ( $presentItem == 6 ) {
 				$x = $island['present']['px'];
 				$y = $island['present']['py'];
 			} else {
@@ -5146,62 +5179,64 @@ class Turn {
 			$landKind = $land[$x][$y];
 			$lv = $landValue[$x][$y];
 			$point = "({$x}, {$y})";
-			// ƒƒbƒZ[ƒW
+			// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 			$this->log->hugeMeteo($id, $name, $point);
-			// Lˆæ”íŠQƒ‹[ƒ`ƒ“
-			$this->wideDamage($id, $name, &$land, &$landValue, $x, $y);
+			// åºƒåŸŸè¢«å®³ãƒ«ãƒ¼ãƒãƒ³
+			$this->wideDamage($id, $name, $land, $landValue, $x, $y);
 		}
-		
-		// ‹‘åƒ~ƒTƒCƒ‹”»’è
-		while($island['bigmissile'] > 0) {
-			$island['bigmissile']--;
-			// ‰Æ‘°‚Ì—Í
-			for($i = 0; $i < $init->pointNumber; $i++) {
-				$x = $this->rpx[$i];
-				$y = $this->rpy[$i];
-				$landKind = $land[$x][$y];
-				$lv = $landValue[$x][$y];
-				if(($landKind == $init->landMyhome) && (Util::random(100) < ($lv * 10))) {
-					// ©‘î‚ª‚ ‚Á‚½‚Æ‚«
-					$power = 1;
-					if($lv > 1) {
-						// ‰Æ‘°‚ª‚Pl€‚Ê
-						$landValue[$x][$y]--;
-						$this->log->kazokuPower($id, $name, "‰Æ‘°‚Ì—Í");
-						break;
-					} else {
-						// ‘S–Åc
-						$land[$x][$y] = $init->landWaste;
-						$landValue[$x][$y] = 0;
-						
-						$this->log->kazokuPower($id, $name, "“Æg‚Ì’ê—Í");
-						break;
+
+		// å·¨å¤§ãƒŸã‚µã‚¤ãƒ«åˆ¤å®š
+		if ( isset($island['bigmissile']) ) {
+			while($island['bigmissile'] > 0) {
+				$island['bigmissile']--;
+				// å®¶æ—ã®åŠ›
+				for($i = 0; $i < $init->pointNumber; $i++) {
+					$x = $this->rpx[$i];
+					$y = $this->rpy[$i];
+					$landKind = $land[$x][$y];
+					$lv = $landValue[$x][$y];
+					if(($landKind == $init->landMyhome) && (Util::random(100) < ($lv * 10))) {
+						// è‡ªå®…ãŒã‚ã£ãŸã¨ã
+						$power = 1;
+						if($lv > 1) {
+							// å®¶æ—ãŒï¼‘äººæ­»ã¬
+							$landValue[$x][$y]--;
+							$this->log->kazokuPower($id, $name, "å®¶æ—ã®åŠ›");
+							break;
+						} else {
+							// å…¨æ»…â€¦
+							$land[$x][$y] = $init->landWaste;
+							$landValue[$x][$y] = 0;
+
+							$this->log->kazokuPower($id, $name, "ç‹¬èº«ã®åº•åŠ›");
+							break;
+						}
 					}
 				}
-			}
-			
-			if($power != 1) {
-				// —‰º
-				$x = Util::random($init->islandSize);
-				$y = Util::random($init->islandSize);
-				$landKind = $land[$x][$y];
-				$lv = $landValue[$x][$y];
-				$point = "({$x}, {$y})";
-				// ƒƒbƒZ[ƒW
-				$this->log->monDamage($id, $name, $point);
-				// Lˆæ”íŠQƒ‹[ƒ`ƒ“
-				$this->wideDamage($id, $name, &$land, &$landValue, $x, $y);
+
+				if($power != 1) {
+					// è½ä¸‹
+					$x = Util::random($init->islandSize);
+					$y = Util::random($init->islandSize);
+					$landKind = $land[$x][$y];
+					$lv = $landValue[$x][$y];
+					$point = "({$x}, {$y})";
+					// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+					$this->log->monDamage($id, $name, $point);
+					// åºƒåŸŸè¢«å®³ãƒ«ãƒ¼ãƒãƒ³
+					$this->wideDamage($id, $name, $land, $landValue, $x, $y);
+				}
 			}
 		}
-		
-		// è¦Î”»’è
+
+		// éš•çŸ³åˆ¤å®š
 		if ((Util::random(1000) < ($init->disMeteo - (int)($island['eisei'][2] / 40)))
-			|| ($island['present']['item'] == 7)) {
+			|| ($presentItem == 7)) {
 			$first = 1;
 			while((Util::random(2) == 0) || ($first == 1)) {
 				$first = 0;
-				// —‰º
-				if (($island['present']['item'] == 7) && ($first == 1)) {
+				// è½ä¸‹
+				if (($presentItem == 7) && ($first == 1)) {
 					$x = $island['present']['px'];
 					$y = $island['present']['py'];
 				} else {
@@ -5212,15 +5247,15 @@ class Turn {
 				$landKind = $land[$x][$y];
 				$lv = $landValue[$x][$y];
 				$point = "({$x}, {$y})";
-				
+
 				if(($landKind == $init->landSea) && ($lv == 0)){
-					// ŠCƒ|ƒ`ƒƒ
+					// æµ·ãƒãƒãƒ£
 					$this->log->meteoSea($id, $name, $this->landName($landKind, $lv), $point);
 				} elseif($landKind == $init->landMountain) {
-					// R”j‰ó
+					// å±±ç ´å£Š
 					$this->log->meteoMountain($id, $name, $this->landName($landKind, $lv), $point);
 					$land[$x][$y] = $init->landWaste;
-					
+
 					$landValue[$x][$y] = 0;
 					continue;
 				} elseif(($landKind == $init->landSbase) || ($landKind == $init->landSfarm) ||
@@ -5230,7 +5265,7 @@ class Turn {
 				} elseif(($landKind == $init->landMonster) || ($landKind == $init->landSleeper)) {
 					$this->log->meteoMonster($id, $name, $this->landName($landKind, $lv), $point);
 				} elseif($landKind == $init->landSea) {
-					// ó£
+					// æµ…ç€¬
 					$this->log->meteoSea1($id, $name, $this->landName($landKind, $lv), $point);
 				} else {
 					$this->log->meteoNormal($id, $name, $this->landName($landKind, $lv), $point);
@@ -5239,11 +5274,11 @@ class Turn {
 				$landValue[$x][$y] = 0;
 			}
 		}
-		
-		// •¬‰Î”»’è
+
+		// å™´ç«åˆ¤å®š
 		if ((Util::random(1000) < ($init->disEruption - (int)($island['eisei'][1] / 40)))
-			|| ($island['present']['item'] == 8)) {
-			if ( $island['present']['item'] == 8 ) {
+			|| ($presentItem == 8)) {
+			if ( $presentItem == 8 ) {
 				$x = $island['present']['px'];
 				$y = $island['present']['py'];
 			} else {
@@ -5256,22 +5291,22 @@ class Turn {
 			$this->log->eruption($id, $name, $this->landName($landKind, $lv), $point);
 			$land[$x][$y] = $init->landMountain;
 			$landValue[$x][$y] = 0;
-			
+
 			for($i = 1; $i < 7; $i++) {
 				$sx = $x + $init->ax[$i];
 				$sy = $y + $init->ay[$i];
-				// s‚É‚æ‚éˆÊ’u’²®
+				// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 				if((($sy % 2) == 0) && (($y % 2) == 1)) {
 					$sx--;
 				}
 				$landKind = $land[$sx][$sy];
 				$lv = $landValue[$sx][$sy];
 				$point = "({$sx}, {$sy})";
-				
+
 				if(($sx < 0) || ($sx >= $init->islandSize) ||
 					($sy < 0) || ($sy >= $init->islandSize)) {
 				} else {
-					// ”ÍˆÍ“à‚Ìê‡
+					// ç¯„å›²å†…ã®å ´åˆ
 					$landKind = $land[$sx][$sy];
 					$lv = $landValue[$sx][$sy];
 					$point = "({$sx}, {$sy})";
@@ -5283,14 +5318,14 @@ class Turn {
 						($landKind == $init->landSfarm) ||
 						($landKind == $init->landSdefence) ||
 						($landKind == $init->landSbase)) {
-						// ŠC‚Ìê‡
+						// æµ·ã®å ´åˆ
 						if($lv == 1) {
-							// ó£
+							// æµ…ç€¬
 							$this->log->eruptionSea1($id, $name, $this->landName($landKind, $lv), $point);
 						} else {
 							$land[$sx][$sy] = $init->landSea;
 							$landValue[$sx][$sy] = 1;
-							
+
 							$this->log->eruptionSea($id, $name, $this->landName($landKind, $lv), $point);
 							continue;
 						}
@@ -5300,7 +5335,7 @@ class Turn {
 						($landKind == $init->landWaste)) {
 						continue;
 					} else {
-						// ‚»‚êˆÈŠO‚Ìê‡
+						// ãã‚Œä»¥å¤–ã®å ´åˆ
 						$this->log->eruptionNormal($id, $name, $this->landName($landKind, $lv), $point);
 					}
 					$land[$sx][$sy] = $init->landWaste;
@@ -5308,8 +5343,8 @@ class Turn {
 				}
 			}
 		}
-		
-		// lH‰q¯ƒGƒlƒ‹ƒM[Œ¸­
+
+		// äººå·¥è¡›æ˜Ÿã‚¨ãƒãƒ«ã‚®ãƒ¼æ¸›å°‘
 		for($i = 0; $i < 6; $i++) {
 			if($island['eisei'][$i]) {
 				$island['eisei'][$i] -= Util::random(2);
@@ -5319,76 +5354,76 @@ class Turn {
 				}
 			}
 		}
-		
-		// •ÏX‚³‚ê‚½‰Â”\«‚Ì‚ ‚é•Ï”‚ğ‘‚«–ß‚·
-		$island['land'] = $land;
+
+		// å¤‰æ›´ã•ã‚ŒãŸå¯èƒ½æ€§ã®ã‚ã‚‹å¤‰æ•°ã‚’æ›¸ãæˆ»ã™
+		$island['land']      = $land;
 		$island['landValue'] = $landValue;
-		
+
 		$island['gold'] = $island['money'] - $island['oldMoney'];
-		$island['rice'] = $island['food'] - $island['oldFood'];
-		
-		// H—¿‚ª‚ ‚Ó‚ê‚Ä‚½‚çŠ·‹à
+		$island['rice'] = $island['food']  - $island['oldFood'];
+
+		// é£Ÿæ–™ãŒã‚ãµã‚Œã¦ãŸã‚‰æ›é‡‘
 		if($island['food'] > $init->maxFood) {
 			$island['money'] += round(($island['food'] - $init->maxFood) / 10);
 			$island['food'] = $init->maxFood;
 		}
-		// ‹à‚ª‚ ‚Ó‚ê‚Ä‚½‚çØ‚èÌ‚Ä
+		// é‡‘ãŒã‚ãµã‚Œã¦ãŸã‚‰åˆ‡ã‚Šæ¨ã¦
 		if($island['money'] > $init->maxMoney) {
 			$island['money'] = $init->maxMoney;
 		}
-		// Šeí‚Ì’l‚ğŒvZ
+		// å„ç¨®ã®å€¤ã‚’è¨ˆç®—
 		Turn::estimate($hako, $island);
-		
-		// ”É‰hAĞ“ïÜ
+
+		// ç¹æ „ã€ç½é›£è³
 		$pop = $island['pop'];
 		$damage = $island['oldPop'] - $pop;
 		$prize = $island['prize'];
-		list($flags, $monsters, $turns) = split(",", $prize, 3);
+		list($flags, $monsters, $turns) = explode(",", $prize, 3);
 		$island['peop'] = $island['pop'] - $island['oldPop'];
 		$island['pots'] = $island['point'] - $island['oldPoint'];
-		
-		// ”É‰hÜ
-		if((!($flags & 1)) &&  $pop >= 3000){
+
+		// ç¹æ „è³
+		if((!($flags & 1)) &&  $pop >= 3000*100){
 			$flags |= 1;
 			$this->log->prize($id, $name, $init->prizeName[1]);
-		} elseif((!($flags & 2)) &&  $pop >= 5000){
+		} elseif((!($flags & 2)) &&  $pop >= 5000*100){
 			$flags |= 2;
 			$this->log->prize($id, $name, $init->prizeName[2]);
-		} elseif((!($flags & 4)) &&  $pop >= 10000){
+		} elseif((!($flags & 4)) &&  $pop >= 10000*100){
 			$flags |= 4;
 			$this->log->prize($id, $name, $init->prizeName[3]);
 		}
-		// Ğ“ïÜ
-		if((!($flags & 64)) &&  $damage >= 500){
+		// ç½é›£è³
+		if((!($flags & 64)) &&  $damage >= 500*100){
 			$flags |= 64;
 			$this->log->prize($id, $name, $init->prizeName[7]);
-		} elseif((!($flags & 128)) &&  $damage >= 1000){
+		} elseif((!($flags & 128)) &&  $damage >= 1000*100){
 			$flags |= 128;
 			$this->log->prize($id, $name, $init->prizeName[8]);
-		} elseif((!($flags & 256)) &&  $damage >= 2000){
+		} elseif((!($flags & 256)) &&  $damage >= 2000*100){
 			$flags |= 256;
 			$this->log->prize($id, $name, $init->prizeName[9]);
 		}
 		$island['prize'] = "{$flags},{$monsters},{$turns}";
 	}
-	
+
 	//---------------------------------------------------
-	// üˆÍ‚Ì’¬A”_ê‚ª‚ ‚é‚©”»’è
+	// å‘¨å›²ã®ç”ºã€è¾²å ´ãŒã‚ã‚‹ã‹åˆ¤å®š
 	//---------------------------------------------------
 	function countGrow($land, $landValue, $x, $y) {
 		global $init;
-		
+
 		for($i = 1; $i < 7; $i++) {
 			$sx = $x + $init->ax[$i];
 			$sy = $y + $init->ay[$i];
-			// s‚É‚æ‚éˆÊ’u’²®
+			// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 			if((($sy % 2) == 0) && (($y % 2) == 1)) {
 				$sx--;
 			}
 			if(($sx < 0) || ($sx >= $init->islandSize) ||
 				($sy < 0) || ($sy >= $init->islandSize)) {
 			} else {
-				// ”ÍˆÍ“à‚Ìê‡
+				// ç¯„å›²å†…ã®å ´åˆ
 				if(($land[$sx][$sy] == $init->landTown) ||
 					($land[$sx][$sy] == $init->landProcity) ||
 					($land[$sx][$sy] == $init->landNewtown) ||
@@ -5402,17 +5437,17 @@ class Turn {
 		}
 		return false;
 	}
-	
+
 	//---------------------------------------------------
-	// Lˆæ”íŠQƒ‹[ƒ`ƒ“
+	// åºƒåŸŸè¢«å®³ãƒ«ãƒ¼ãƒãƒ³
 	//---------------------------------------------------
 	function wideDamage($id, $name, $land, $landValue, $x, $y) {
 		global $init;
-		
+
 		for($i = 0; $i < 19; $i++) {
 			$sx = $x + $init->ax[$i];
 			$sy = $y + $init->ay[$i];
-			// s‚É‚æ‚éˆÊ’u’²®
+			// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 			if((($sy % 2) == 0) && (($y % 2) == 1)) {
 				$sx--;
 			}
@@ -5420,14 +5455,14 @@ class Turn {
 			$lv = $landValue[$sx][$sy];
 			$landName = $this->landName($landKind, $lv);
 			$point = "({$sx}, {$sy})";
-			// ”ÍˆÍŠO”»’è
+			// ç¯„å›²å¤–åˆ¤å®š
 			if(($sx < 0) || ($sx >= $init->islandSize) ||
 				($sy < 0) || ($sy >= $init->islandSize)) {
 				continue;
 			}
-			// ”ÍˆÍ‚É‚æ‚é•ªŠò
+			// ç¯„å›²ã«ã‚ˆã‚‹åˆ†å²
 			if($i < 7) {
-				// ’†SA‚¨‚æ‚Ñ1ƒwƒbƒNƒX
+				// ä¸­å¿ƒã€ãŠã‚ˆã³1ãƒ˜ãƒƒã‚¯ã‚¹
 				if($landKind == $init->landSea) {
 					$landValue[$sx][$sy] = 0;
 					continue;
@@ -5451,15 +5486,15 @@ class Turn {
 					}
 					$land[$sx][$sy] = $init->landSea;
 					if($i == 0) {
-						// ŠC
+						// æµ·
 						$landValue[$sx][$sy] = 0;
 					} else {
-						// ó£
+						// æµ…ç€¬
 						$landValue[$sx][$sy] = 1;
 					}
 				}
 			} else {
-				// 2ƒwƒbƒNƒX
+				// 2ãƒ˜ãƒƒã‚¯ã‚¹
 				if(($landKind == $init->landSea) ||
 					($landKind == $init->landSeaSide) ||
 					($landKind == $init->landSeaCity) ||
@@ -5485,76 +5520,78 @@ class Turn {
 			}
 		}
 	}
-	
+
 	//---------------------------------------------------
-	// lŒû‡‚Åƒ\[ƒg
+	// äººå£é †ã§ã‚½ãƒ¼ãƒˆ
 	//---------------------------------------------------
-	function islandSort(&$hako) {
+	static function islandSort(&$hako) {
 		global $init;
 		usort($hako->islands, 'popComp');
 	}
-	
+
 	//---------------------------------------------------
-	// û“üAÁ”ïƒtƒFƒCƒY
+	// åå…¥ã€æ¶ˆè²»ãƒ•ã‚§ã‚¤ã‚º
 	//---------------------------------------------------
 	function income(&$island) {
 		global $init;
-		
+
 		$pop = $island['pop'];
 		$farm = $island['farm'] * 10;
 		$factory = $island['factory'];
 		$commerce = $island['commerce'];
 		$mountain = $island['mountain'];
 		$hatuden = $island['hatuden'];
-		
-		// HêAÌŒ@êA¤‹Æ‚Í”­“d—Ê‚ªŠÖŒW
+
+		// å·¥å ´ã€æ¡æ˜å ´ã€å•†æ¥­ã¯ç™ºé›»é‡ãŒé–¢ä¿‚
 		$enesyouhi = round($pop / 100 + $factory * 2/3 + $commerce * 1/3 + $mountain * 1/4);
 		$work = min(round($enesyouhi), ($factory + $commerce + $mountain));
-		
-		// û“ü
+
+		// åå…¥
 		if($pop > $farm) {
-			// ”_‹Æ‚¾‚¯‚¶‚áè‚ª—]‚éê‡
+			// è¾²æ¥­ã ã‘ã˜ã‚ƒæ‰‹ãŒä½™ã‚‹å ´åˆ
 			if((Util::random(1000) < $init->disTenki) && ($island['tenki'] == 4)) {
-				// ’â“d”­¶
+				// åœé›»ç™ºç”Ÿ
 				if($island['zin'][5] == 1) {
-					// ƒWƒ“Š
-					$island['food'] += $farm * 2; // ‘Sˆõ–ì—Çd–
+					// ã‚¸ãƒ³æ‰€æŒæ™‚
+					$island['food'] += $farm * 2; // å…¨å“¡é‡è‰¯ä»•äº‹
 				} else {
-					$island['food'] += $farm; // ‘Sˆõ–ì—Çd–
+					$island['food'] += $farm; // å…¨å“¡é‡è‰¯ä»•äº‹
 				}
 				$this->log->Teiden($island['id'], $island['name']);
 			} else {
 				if($island['zin'][5] == 1) {
-					// ƒWƒ“Š
-					$island['food'] += $farm * 2; // ”_êƒtƒ‹‰Ò“­
+					// ã‚¸ãƒ³æ‰€æŒæ™‚
+					$island['food'] += $farm * 2; // è¾²å ´ãƒ•ãƒ«ç¨¼åƒ
 		        } else {
-					$island['food'] += $farm; // ”_êƒtƒ‹‰Ò“­
+					$island['food'] += $farm; // è¾²å ´ãƒ•ãƒ«ç¨¼åƒ
 				}
 				if($island['zin'][6] == 1) {
-					// ƒTƒ‰ƒ}ƒ“ƒ_[Š
+					// ã‚µãƒ©ãƒãƒ³ãƒ€ãƒ¼æ‰€æŒæ™‚
 					$island['money'] += (min(round(($pop - $farm) / 10), $work)) * 2;
 				} else {
 					$island['money'] += min(round(($pop - $farm) / 10), $work);
 				}
 			}
 		} else {
-			// ”_‹Æ‚¾‚¯‚Åèˆê”t‚Ìê‡
-			$island['food'] += $pop; // ‘Sˆõ–ì—Çd–
+			// è¾²æ¥­ã ã‘ã§æ‰‹ä¸€æ¯ã®å ´åˆ
+			$island['food'] += $pop; // å…¨å“¡é‡è‰¯ä»•äº‹
 		}
-		if ( $island['present']['item'] == 0 ) {
-			if ( $island['present']['px'] != 0 ) {
-				$island['money'] += $island['present']['px'];
-				$this->log->presentMoney($island['id'], $island['name'], $island['present']['px']);
-			}
-			if ( $island['present']['py'] != 0 ) {
-				$island['food'] += $island['present']['py'];
-				$this->log->presentFood($island['id'], $island['name'], $island['present']['py']);
+		if ( isset($island['present']) ) {
+			if ( $presentItem == 0 ) {
+				if ( $island['present']['px'] != 0 ) {
+					$island['money'] += $island['present']['px'];
+					$this->log->presentMoney($island['id'], $island['name'], $island['present']['px']);
+				}
+				if ( $island['present']['py'] != 0 ) {
+					$island['food'] += $island['present']['py'];
+					$this->log->presentFood($island['id'], $island['name'], $island['present']['py']);
+				}
 			}
 		}
-		// H—¿Á”ï
+		// é£Ÿæ–™æ¶ˆè²»
 		$island['food'] = round($island['food'] - $pop * $init->eatenFood);
-		
-		// ‘D
+
+		// èˆ¹
 		$shipCost = 0;
 		for($i = 0; $i < 10; $i++) {
 			$shipCost += $init->shipCost[$i] * $island['ship'][$i];
@@ -5567,28 +5604,27 @@ class Turn {
 		if($island['money'] < 0) $island['money'] = 0;
 		if($island['food'] < 0) $island['food']  = 0 ;
 	}
-	
+
 	//---------------------------------------------------
-	// ‘D”•”‰Šú‰»
+	// èˆ¹èˆ¶æ•°åˆæœŸåŒ–
 	//---------------------------------------------------
 	function shipcounter($hako, &$island) {
 		global $init;
-		
-		// ‘D”•”‰Šú‰»
+
+		// èˆ¹èˆ¶æ•°åˆæœŸåŒ–
 		for($i = 0; $i < 15; $i++) {
 			$island['ship'][$i] = 0;
 		}
 	}
 	//---------------------------------------------------
-	// lŒû‚»‚Ì‘¼‚Ì’l‚ğZo
+	// äººå£ãã®ä»–ã®å€¤ã‚’ç®—å‡º
 	//---------------------------------------------------
-	function estimate($hako, &$island) {
-		// estimate(&$island) ‚Ì‚æ‚¤‚Ég—p
+	static function estimate($hako, &$island) {
 		global $init;
-		
+
 		$land = $island['land'];
 		$landValue = $island['landValue'];
-		
+
 		$area      = 0;
 		$pop       = 0;
 		$farm      = 0;
@@ -5607,8 +5643,8 @@ class Turn {
 		$bank      = 0;
 		$m23       = 0;
 		$fire = $rena = $base = 0;
-		
-		// ”‚¦‚é
+
+		// æ•°ãˆã‚‹
 		for($y = 0; $y < $init->islandSize; $y++) {
 			for($x = 0; $x < $init->islandSize; $x++) {
 				$kind = $land[$x][$y];
@@ -5648,135 +5684,135 @@ class Turn {
 						case $init->landSeaCity:
 						case $init->landFroCity:
 						case $init->landProcity:
-							// ’¬
+							// ç”º
 							$base++;
 							$pop += $value;
 							break;
-							
+
 						case $init->landNewtown:
-							// ƒjƒ…[ƒ^ƒEƒ“
+							// ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³
 							$pop += $value;
 							$nwork =  (int)($value/15);
 							$commerce += $nwork;
 							break;
-							
+
 						case $init->landBigtown:
-							// Œ»‘ã“ss
+							// ç¾ä»£éƒ½å¸‚
 							$pop += $value;
 							$mwork =  (int)($value/20);
 							$lwork =  (int)($value/30);
 							$farm += $mwork;
 							$commerce += $lwork;
 							break;
-							
+
 						case $init->landFarm:
-							// ”_ê
+							// è¾²å ´
 							if(Turn::countAround($land, $x, $y, 19, array($init->landFusya))){
-								// üˆÍ2‚ÖƒNƒX‚É•—Ô‚ª‚ ‚ê‚Î2”{‚Ì‹K–Í‚É
+								// å‘¨å›²2ã¸ã‚¯ã‚¹ã«é¢¨è»ŠãŒã‚ã‚Œã°2å€ã®è¦æ¨¡ã«
 								$farm += $value * 2;
 							}else{
 								$farm += $value;
 							}
 							break;
-							
+
 						case $init->landSfarm:
-							// ŠC’ê”_ê
+							// æµ·åº•è¾²å ´
 							$farm += $value;
 							break;
-							
+
 						case $init->landNursery:
-							// —{Bê
+							// é¤Šæ®–å ´
 							$farm += $value;
 							break;
-							
+
 						case $init->landFactory:
-							// Hê
+							// å·¥å ´
 							$factory += $value;
 							break;
-							
+
 						case $init->landCommerce:
-							// ¤‹Æ
+							// å•†æ¥­
 							$commerce += $value;
 							break;
-							
+
 						case $init->landMountain:
-							// R
+							// å±±
 							$mountain += $value;
 							break;
-							
+
 						case $init->landHatuden:
-							// ”­“dŠ
+							// ç™ºé›»æ‰€
 							if($island['zin'][4] == 1) {
-								// ƒ‹ƒiŠ
+								// ãƒ«ãƒŠæ‰€æŒ
 								$hatuden += $value * 2;
 							} else {
 								$hatuden += $value;
 							}
 							break;
-							
+
 						case $init->landBase:
-							// ƒ~ƒTƒCƒ‹
+							// ãƒŸã‚µã‚¤ãƒ«
 							$base += 2;
 							$fire += Util::expToLevel($kind, $value);
 							break;
-							
+
 						case $init->landMonster:
 						case $init->landSleeper:
-							// ‰öb
+							// æ€ªç£
 							$monster++;
 							break;
-							
+
 						case $init->landZorasu:
-							// ‚¼‚ç‚·
+							// ãã‚‰ã™
 							$hatuden += $value;
 							break;
-							
+
 						case $init->landPort:
-							// `
+							// æ¸¯
 							$port++;
 							break;
-							
+
 						case $init->landStat:
-							// ‰w
+							// é§…
 							$stat++;
 							break;
-							
+
 						case $init->landTrain:
-							// “dÔ
+							// é›»è»Š
 							$train++;
 							break;
-							
+
 						case $init->landSoccer:
-							// ƒXƒ^ƒWƒAƒ€
+							// ã‚¹ã‚¿ã‚¸ã‚¢ãƒ 
 							$soccer++;
 							break;
-							
+
 						case $init->landPark:
-							// —V‰€’n
+							// éŠåœ’åœ°
 							$park++;
 							break;
-							
+
 						case $init->landBank:
-							// ‹âs
+							// éŠ€è¡Œ
 							$bank++;
 							break;
-							
+
 						case $init->landMonument:
-							// ‹L”O”è
+							// è¨˜å¿µç¢‘
 							if($value == 23) {
 								$m23++;
 							}
 							break;
-							
+
 						case $init->landMyhome:
-							// ƒ}ƒCƒz[ƒ€
+							// ãƒã‚¤ãƒ›ãƒ¼ãƒ 
 							$home++;
 							break;
 					}
 				}
 			}
 		}
-		// ‘ã“ü
+		// ä»£å…¥
 		$island['pop']      = $pop;
 		$island['area']     = $area;
 		$island['farm']     = $farm;
@@ -5796,21 +5832,21 @@ class Turn {
 		$island['m23']      = $m23;
 		$island['fire']     = $fire;
 		$island['rena']     = $fire + $base;
-		
-		// “d—ÍÁ”ï—Ê
+
+		// é›»åŠ›æ¶ˆè²»é‡
 		if(($island['pop'] - $island['farm']) <= 0 || ($island['factory'] + $island['commerce'] + $island['mountain']) <= 0) {
 			$island['enesyouhi'] = 0;
 		} elseif($island['factory'] + $island['commerce'] + $island['mountain'] > 0) {
 			$island['enesyouhi'] = min(round($island['pop'] - $island['farm']), ($island['factory'] * 2/3 + $island['commerce'] * 1/3 + $island['mountain'] * 1/4));
 		}
-		// “d—Í‰ß•s‘«—Ê
+		// é›»åŠ›éä¸è¶³é‡
 		$island['enehusoku'] = $island['hatuden'] - $island['enesyouhi'];
-		
+
 		if($island['soccer'] == 0) {
 			$island['kachi'] = $island['make'] = $island['hikiwake'] = $island['kougeki'] = $island['bougyo'] = $island['tokuten'] = $island['shitten'] = 0;
 		}
 		$island['team'] = $island['kachi']*2 - $island['make']*2 + $island['hikiwake'] + $island['kougeki'] + $island['bougyo'] + $island['tokuten'] - $island['shitten'];
-		
+
 		if($island['pop'] == 0) {
 			$island['point'] = 0;
 		} else {
@@ -5822,65 +5858,71 @@ class Turn {
 		}
 		$island['seichi'] = 0;
 	}
-	
+
 	//---------------------------------------------------
-	// ”ÍˆÍ“à‚Ì’nŒ`‚ğ”‚¦‚é
+	// ç¯„å›²å†…ã®åœ°å½¢ã‚’æ•°ãˆã‚‹
 	//---------------------------------------------------
-	function countAround($land, $x, $y, $range, $kind) {
+	static function countAround($land, $x, $y, $range, $kind) {
 		global $init;
-		
-		// ”ÍˆÍ“à‚Ì’nŒ`‚ğ”‚¦‚é
+
+		// ç¯„å›²å†…ã®åœ°å½¢ã‚’æ•°ãˆã‚‹
 		$count = 0;
 		$sea = 0;
 		$list = array();
+		$sx = 0;
+		$sy = 0;
 		reset($kind);
+
 		while (list(, $value) = each($kind)) {
 			$list[$value] = 1;
 		}
 		for($i = 0; $i < $range; $i++) {
 			$sx = $x + $init->ax[$i];
 			$sy = $y + $init->ay[$i];
-			// s‚É‚æ‚éˆÊ’u’²®
+			// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 			if((($sy % 2) == 0) && (($y % 2) == 1)) {
 				$sx--;
 			}
 			if(($sx < 0) || ($sx >= $init->islandSize) ||
 				($sy < 0) || ($sy >= $init->islandSize)) {
-				// ”ÍˆÍŠO‚Ìê‡
-				// ŠC‚É‰ÁZ
+				// ç¯„å›²å¤–ã®å ´åˆ
+				// æµ·ã«åŠ ç®—
 				$sea++;
-			} elseif($list[$land[$sx][$sy]]) {
-				// ”ÍˆÍ“à‚Ìê‡
+			} elseif( isset($list[$land[$sx][$sy]]) ) {
+				// ç¯„å›²å†…ã®å ´åˆ
 				$count++;
 			}
 		}
-		if($list[$init->landSea]) {
-			$count += $sea;
+
+		if ( isset($init->landSea) ) {
+			if( isset($list[$init->landSea]) ) {
+				$count += $sea;
+			}
 		}
 		return $count;
 	}
 	//---------------------------------------------------
-	// ”ÍˆÍ“à‚Ì’nŒ`{’l‚ÅƒJƒEƒ“ƒg
+	// ç¯„å›²å†…ã®åœ°å½¢ï¼‹å€¤ã§ã‚«ã‚¦ãƒ³ãƒˆ
 	//---------------------------------------------------
 	function countAroundValue($island, $x, $y, $kind, $lv, $range) {
 		global $init;
-		
+
 		$land = $island['land'];
 		$landValue = $island['landValue'];
 		$count = 0;
-		
+
 		for($i = 0; $i < $range; $i++) {
 			$sx = $x + $init->ax[$i];
 			$sy = $y + $init->ay[$i];
-			// s‚É‚æ‚éˆÊ’u’²®
+			// è¡Œã«ã‚ˆã‚‹ä½ç½®èª¿æ•´
 			if((($sy % 2) == 0) && (($y % 2) == 1)) {
 				$sx--;
 			}
 			if(($sx < 0) || ($sx >= $init->islandSize) ||
 				($sy < 0) || ($sy >= $init->islandSize)) {
-				// ”ÍˆÍŠO‚Ìê‡
+				// ç¯„å›²å¤–ã®å ´åˆ
 			} else {
-				// ”ÍˆÍ“à‚Ìê‡
+				// ç¯„å›²å†…ã®å ´åˆ
 				if($land[$sx][$sy] == $kind && $landValue[$sx][$sy] >= $lv) {
 					$count++;
 				}
@@ -5888,174 +5930,174 @@ class Turn {
 		}
 		return $count;
 	}
-	
+
 	//---------------------------------------------------
-	// ’nŒ`‚ÌŒÄ‚Ñ•û
+	// åœ°å½¢ã®å‘¼ã³æ–¹
 	//---------------------------------------------------
 	function landName($land, $lv) {
 		global $init;
-		
+
 		switch($land) {
 			case $init->landSea:
 				if($lv == 1) {
-					return 'ó£';
+					return 'æµ…ç€¬';
 				} else {
-					return 'ŠC';
+					return 'æµ·';
 				}
-				
+
 			case $init->landShip:
-				// ‘D”•
+				// èˆ¹èˆ¶
 				$ship = Util::navyUnpack($lv);
 				return $init->shipName[$ship[1]];
-				
+
 			case $init->landPort:
-				return '`';
-				
+				return 'æ¸¯';
+
 			case $init->landRail:
-				return 'ü˜H';
-				
+				return 'ç·šè·¯';
+
 			case $init->landStat:
-				return '‰w';
-				
+				return 'é§…';
+
 			case $init->landTrain:
-				return '“dÔ';
-				
+				return 'é›»è»Š';
+
 			case $init->landZorasu:
-				return '‚¼‚ç‚·';
-				
+				return 'ãã‚‰ã™';
+
 			case $init->landSeaSide:
-				return '»•l';
-				
+				return 'ç ‚æµœ';
+
 			case $init->landSeaResort:
-				// ŠC‚Ì‰Æ
+				// æµ·ã®å®¶
 				$n;
 				if($lv < 30) {
-					$n = 'ŠC‚Ì‰Æ';
+					$n = 'æµ·ã®å®¶';
 				} elseif($lv < 100) {
-					$n = '–¯h';
+					$n = 'æ°‘å®¿';
 				} else {
-					$n = 'ƒŠƒ][ƒgƒzƒeƒ‹';
+					$n = 'ãƒªã‚¾ãƒ¼ãƒˆãƒ›ãƒ†ãƒ«';
 				}
 				return $n;
-				
+
 			case $init->landWaste:
-				return 'r’n';
-				
+				return 'è’åœ°';
+
 			case $init->landPoll:
-				return '‰˜õ“yë';
-				
+				return 'æ±šæŸ“åœŸå£Œ';
+
 			case $init->landPlains:
-				return '•½’n';
-				
+				return 'å¹³åœ°';
+
 			case $init->landTown:
 				if($lv < 30) {
-					return '‘º';
+					return 'æ‘';
 				} elseif($lv < 100) {
-					return '’¬';
+					return 'ç”º';
 				} elseif($lv < 200) {
-					return '“ss';
+					return 'éƒ½å¸‚';
 				} else {
-					return '‘å“ss';
+					return 'å¤§éƒ½å¸‚';
 				}
-				
+
 			case $init->landProcity:
-				return '–hĞ“ss';
-				
+				return 'é˜²ç½éƒ½å¸‚';
+
 			case $init->landNewtown:
-				return 'ƒjƒ…[ƒ^ƒEƒ“';
-				
+				return 'ãƒ‹ãƒ¥ãƒ¼ã‚¿ã‚¦ãƒ³';
+
 			case $init->landBigtown:
-				return 'Œ»‘ã“ss';
-				
+				return 'ç¾ä»£éƒ½å¸‚';
+
 			case $init->landForest:
-				return 'X';
-				
+				return 'æ£®';
+
 			case $init->landFarm:
-				return '”_ê';
-				
+				return 'è¾²å ´';
+
 			case $init->landSfarm:
-				return 'ŠC’ê”_ê';
-				
+				return 'æµ·åº•è¾²å ´';
+
 			case $init->landNursery:
-				return '—{Bê';
-				
+				return 'é¤Šæ®–å ´';
+
 			case $init->landFactory:
-				return 'Hê';
-				
+				return 'å·¥å ´';
+
 			case $init->landCommerce:
-				return '¤‹Æƒrƒ‹';
-				
+				return 'å•†æ¥­ãƒ“ãƒ«';
+
 			case $init->landHatuden:
-				return '”­“dŠ';
-				
+				return 'ç™ºé›»æ‰€';
+
 			case $init->landBank:
-				return '‹âs';
-				
+				return 'éŠ€è¡Œ';
+
 			case $init->landBase:
-				return 'ƒ~ƒTƒCƒ‹Šî’n';
-				
+				return 'ãƒŸã‚µã‚¤ãƒ«åŸºåœ°';
+
 			case $init->landDefence:
-				return '–h‰q{İ';
-				
+				return 'é˜²è¡›æ–½è¨­';
+
 			case $init->landSdefence:
-				return 'ŠC’ê–h‰q{İ';
-				
+				return 'æµ·åº•é˜²è¡›æ–½è¨­';
+
 			case $init->landMountain:
-				return 'R';
-				
+				return 'å±±';
+
 			case $init->landMonster:
 			case $init->landSleeper:
 				$monsSpec = Util::monsterSpec($lv);
 				return $monsSpec['name'];
-				
+
 			case $init->landSbase:
-				return 'ŠC’êŠî’n';
-				
+				return 'æµ·åº•åŸºåœ°';
+
 			case $init->landSeaCity:
-				return 'ŠC’ê“ss';
-				
+				return 'æµ·åº•éƒ½å¸‚';
+
 			case $init->landFroCity:
-				return 'ŠCã“ss';
-				
+				return 'æµ·ä¸Šéƒ½å¸‚';
+
 			case $init->landOil:
-				return 'ŠC’ê–û“c';
-				
+				return 'æµ·åº•æ²¹ç”°';
+
 			case $init->landMyhome:
-				return 'ƒ}ƒCƒz[ƒ€';
-				
+				return 'ãƒã‚¤ãƒ›ãƒ¼ãƒ ';
+
 			case $init->landSoukoM:
-				return '‹àŒÉ';
-				
+				return 'é‡‘åº«';
+
 			case $init->landSoukoF:
-				return 'H—¿ŒÉ';
-				
+				return 'é£Ÿæ–™åº«';
+
 			case $init->landMonument:
 				return $init->monumentName[$lv];
-				
+
 			case $init->landHaribote:
-				return 'ƒnƒŠƒ{ƒe';
-				
+				return 'ãƒãƒªãƒœãƒ†';
+
 			case $init->landSoccer:
-				return 'ƒXƒ^ƒWƒAƒ€';
-				
+				return 'ã‚¹ã‚¿ã‚¸ã‚¢ãƒ ';
+
 			case $init->landPark:
-				return '—V‰€’n';
-				
+				return 'éŠåœ’åœ°';
+
 			case $init->landFusya:
-				return '•—Ô';
-				
+				return 'é¢¨è»Š';
+
 			case $init->landSyoubou:
-				return 'Á–h';
-				
+				return 'æ¶ˆé˜²ç½²';
+
 			case $init->landSsyoubou:
-				return 'ŠC’êÁ–h';
-				
+				return 'æµ·åº•æ¶ˆé˜²ç½²';
+
 		}
 	}
 }
 
 //---------------------------------------------------
-// ƒ|ƒCƒ“ƒg‚ğ”äŠr
+// ãƒã‚¤ãƒ³ãƒˆã‚’æ¯”è¼ƒ
 //---------------------------------------------------
 function popComp($x, $y) {
 	if ($x['point'] == 0) {
@@ -6079,5 +6121,3 @@ function popComp($x, $y) {
 	}
 	return ($x['point'] > $y['point']) ? -1 : 1;
 }
-
-?>

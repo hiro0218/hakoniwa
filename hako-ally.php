@@ -2,78 +2,80 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- “¯–¿ŠÇ——pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- åŒç›Ÿç®¡ç†ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-ally.php by SERA - 2012/04/03
 
 *******************************************************************/
 
-require 'jcode.phps';
-require 'config.php';
-require 'hako-cgi.php';
-require 'hako-html.php';
+require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-cgi.php';
+require_once ABSOLUTE_PATH.'hako-html.php';
 
 define("READ_LINE", 1024);
+
 $init = new Init;
-$GAME_TOP = $init->baseDir . "/hako-main.php";
-$THIS_FILE = $init->baseDir . "/hako-ally.php";
-$BACK_TO_TOP = "<a href=\"{$GAME_TOP}?\">{$init->tagBig_}ƒgƒbƒv‚Ö–ß‚é{$init->_tagBig}</a>A<A HREF=\"{$THIS_FILE}?\">{$init->tagBig_}“¯–¿ƒgƒbƒv‚Ö–ß‚é{$init->_tagBig}</A>";
+$GAME_TOP   = $init->baseDir . "/hako-main.php";
+$THIS_FILE  = $init->baseDir . "/hako-ally.php";
 
 //------------------------------------------------------------
 //
 //------------------------------------------------------------
 class HtmlAlly extends HTML {
 	//--------------------------------------------------
-	// ‰Šú‰æ–Ê
+	// åˆæœŸç”»é¢
 	//--------------------------------------------------
 	function allyTop($hako, $data) {
 		global $init;
-		
-		print "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">ƒgƒbƒv‚Ö–ß‚é</span></a></CENTER>\n";
-		print "<h1 class=\"title\">{$init->title}<br>“¯–¿ŠÇ—ƒc[ƒ‹</h1>\n";
-		
+
+		echo "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">ãƒˆãƒƒãƒ—ã¸æˆ»ã‚‹</span></a></CENTER>\n";
+		echo "<h1 class=\"title\">{$init->title}<br>åŒç›Ÿç®¡ç†ãƒ„ãƒ¼ãƒ«</h1>\n";
+
 		if($init->allyUse) {
-			print <<<END
-<input type="button" value="“¯–¿‚ÌŒ‹¬E•ÏXE‰ğUE‰Á–¿E’E‘Ş‚Í‚±‚¿‚ç‚©‚ç" onClick="JavaScript:location.replace('{$GLOBALS['THIS_FILE']}?JoinA=1')">
-<h2>Še“¯–¿‚Ìó‹µ</h2>
+			echo <<<END
+<input type="button" value="åŒç›Ÿã®çµæˆãƒ»å¤‰æ›´ãƒ»è§£æ•£ãƒ»åŠ ç›Ÿãƒ»è„±é€€ã¯ã“ã¡ã‚‰ã‹ã‚‰" onClick="JavaScript:location.replace('{$GLOBALS['THIS_FILE']}?JoinA=1')">
+<h2>å„åŒç›Ÿã®çŠ¶æ³</h2>
 END;
 		}
 		$this->allyInfo($hako);
 	}
 	//--------------------------------------------------
-	// “¯–¿‚Ìó‹µ
+	// åŒç›Ÿã®çŠ¶æ³
 	//--------------------------------------------------
 	function allyInfo($hako, $num = 0) {
 		global $init;
-		
-		print <<<END
-è—L—¦‚ÍA“¯–¿‰Á–¿‚Ì<b>‘lŒû</b>‚É‚æ‚èZo‚³‚ê‚½‚à‚Ì‚Å‚·B
+
+		echo <<<END
+å æœ‰ç‡ã¯ã€åŒç›ŸåŠ ç›Ÿã®<b>ç·äººå£</b>ã«ã‚ˆã‚Šç®—å‡ºã•ã‚ŒãŸã‚‚ã®ã§ã™ã€‚
 <div id="IslandView">
 <table border="1">
 <tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}‡ˆÊ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“¯–¿{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}ƒ}[ƒN{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“‡‚Ì”{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}‘lŒû{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}è—L—¦{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}”_ê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}Hê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}¤‹Æ‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}ÌŒ@ê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}”­“dŠ‹K–Í{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}åŒç›Ÿ{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}ãƒãƒ¼ã‚¯{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å³¶ã®æ•°{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}ç·äººå£{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å æœ‰ç‡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}è¾²å ´è¦æ¨¡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å·¥å ´è¦æ¨¡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å•†æ¥­è¦æ¨¡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}æ¡æ˜å ´è¦æ¨¡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}ç™ºé›»æ‰€è¦æ¨¡{$init->_tagTH}</th>
 </tr>
 END;
-		for($i=0; $i<$hako->allyNumber; $i++) {
+		$cnt = (int)$hako->allyNumber;
+		for($i=0; $i<$cnt; $i++) {
 			if($num && ($i != $hako->idToAllyNumber[$num])) {
 				continue;
 			}
 			$ally = $hako->ally[$i];
 			$j = $i + 1;
 			$pop = $farm = $factory = $commerce = $mountain = $hatuden = $missiles = 0;
-			for($k=0; $k<$ally['number']; $k++) {
+
+			$num = (int)$ally['number'];
+			for($k=0; $k<$num; $k++) {
 				$id = $ally['memberId'][$k];
 				$island = $hako->islands[$hako->idToNumber[$id]];
 				$pop      += $island['pop'];
@@ -83,21 +85,21 @@ END;
 				$mountain += $island['mountain'];
 				$hatuden  += $island['hatuden'];
 			}
-			
-			$name = ($num) ? "{$init->tagName_}{$ally['name']}{$init->_tagName}" : "<a href=\"{$GLOBALS['THIS_FILE']}?AmiOfAlly={$ally['id']}\">{$ally['name']}</a>";
-			$pop   = $pop . $init->unitPop;
-			$farm  = ($farm <= 0) ? "•Û—L‚¹‚¸" : $farm * 10 . $init->unitPop;
-			$factory  = ($factory <= 0) ? "•Û—L‚¹‚¸" : $factory * 10 . $init->unitPop;
-			$commerce  = ($commerce <= 0) ? "•Û—L‚¹‚¸" : $commerce * 10 . $init->unitPop;
-			$mountain = ($mountain <= 0) ? "•Û—L‚¹‚¸" : $mountain * 10 . $init->unitPop;
-			$hatuden  = ($hatuden <= 0) ? "0kw" : $hatuden * 1000 . kw;
-			
-			print <<<END
+
+			$name      = ($num) ? "{$init->tagName_}{$ally['name']}{$init->_tagName}" : "<a href=\"{$GLOBALS['THIS_FILE']}?AmiOfAlly={$ally['id']}\">{$ally['name']}</a>";
+			$pop       = $pop . $init->unitPop;
+			$farm      = ($farm <= 0)     ? "ä¿æœ‰ã›ãš" : $farm * 10 . $init->unitPop;
+			$factory   = ($factory <= 0)  ? "ä¿æœ‰ã›ãš" : $factory * 10 . $init->unitPop;
+			$commerce  = ($commerce <= 0) ? "ä¿æœ‰ã›ãš" : $commerce * 10 . $init->unitPop;
+			$mountain  = ($mountain <= 0) ? "ä¿æœ‰ã›ãš" : $mountain * 10 . $init->unitPop;
+			$hatuden   = ($hatuden <= 0)  ? "0kw" : $hatuden * 1000 . kw;
+
+			echo <<<END
 <tr>
 <th {$init->bgNumberCell} rowspan=2>{$init->tagNumber_}$j{$init->_tagNumber}</th>
 <td {$init->bgNameCell} rowspan=2>{$name}</td>
 <td {$init->bgMarkCell}><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
-<td {$init->bgInfoCell}>{$ally['number']}“‡</td>
+<td {$init->bgInfoCell}>{$ally['number']}å³¶</td>
 <td {$init->bgInfoCell}>{$pop}</td>
 <td {$init->bgInfoCell}>{$ally['occupation']}%</td>
 <td {$init->bgInfoCell}>{$farm}</td>
@@ -107,45 +109,45 @@ END;
 <td {$init->bgInfoCell}>{$hatuden}</td>
 </tr>
 <tr>
-<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$GLOBALS['THIS_FILE']}?Allypact={$ally['id']}">{$ally['oName']}</a>F{$init->_tagTH}{$ally['comment']}</td>
+<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$GLOBALS['THIS_FILE']}?Allypact={$ally['id']}">{$ally['oName']}</a>ï¼š{$init->_tagTH}{$ally['comment']}</td>
 </tr>
 END;
 		}
-		print "</table>\n";
-		print "</div>\n";
-		print "<b>¦</b>“¯–¿‚Ì–¼‘O‚ğƒNƒŠƒbƒN‚·‚é‚Æu“¯–¿‚Ìî•ñv—“‚ÖA–¿å“‡‚Ì–¼‘O‚¾‚ÆuƒRƒƒ“ƒg•ÏXv—“‚ÖˆÚ“®‚µ‚Ü‚·B\n";
+		echo "</table>\n";
+		echo "</div>\n";
+		echo "<b>â€»</b>åŒç›Ÿã®åå‰ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ã€ŒåŒç›Ÿã®æƒ…å ±ã€æ¬„ã¸ã€ç›Ÿä¸»å³¶ã®åå‰ã ã¨ã€Œã‚³ãƒ¡ãƒ³ãƒˆå¤‰æ›´ã€æ¬„ã¸ç§»å‹•ã—ã¾ã™ã€‚\n";
 	}
 	//--------------------------------------------------
-	// “¯–¿‚Ìî•ñ
+	// åŒç›Ÿã®æƒ…å ±
 	//--------------------------------------------------
 	function amityOfAlly($hako, $data) {
 		global $init;
-		
+
 		$num = $data['ALLYID'];
 		$ally = $hako->ally[$hako->idToAllyNumber[$num]];
 		$allyName = "<FONT COLOR=\"{$ally['color']}\"><B>{$ally['mark']}</B></FONT>{$ally['name']}";
-		
-		print <<<END
+
+		echo <<<END
 <DIV align='center'>
-{$init->tagBig_}{$init->tagName_}{$allyName}{$init->_tagName}‚Ìî•ñ{$init->_tagBig}<br>
+{$init->tagBig_}{$init->tagName_}{$allyName}{$init->_tagName}ã®æƒ…å ±{$init->_tagBig}<br>
 {$GLOBALS['BACK_TO_TOP']}</DIV><BR>
 <DIV ID='campInfo'>
 END;
-		// “¯–¿ó‹µ‚Ì•\¦
+		// åŒç›ŸçŠ¶æ³ã®è¡¨ç¤º
 		if($ally['number']) {
 			$this->allyInfo($hako, $num);
 		}
-		// ƒƒbƒZ[ƒWE–¿–ñ‚Ì•\¦
+		// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ»ç›Ÿç´„ã®è¡¨ç¤º
 		if($ally['message'] != '') {
 			$allyTitle = $ally['title'];
 			if($allyTitle == '') {
-				$allyTitle = '–¿å‚©‚ç‚ÌƒƒbƒZ[ƒW';
+				$allyTitle = 'ç›Ÿä¸»ã‹ã‚‰ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸';
 			}
 			$allyMessage = $ally['message'];
 			if($init->autoLink) {
-				$allyMessage = ereg_replace("(^|[^=\"'])(http://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)", "\\1<a href=\"\\2\" target=\"_top\">\\2</a>", $allyMessage);
+				$allyMessage = preg_replace("/(^|[^=\"'])(http://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)/", "\\1<a href=\"\\2\" target=\"_top\">\\2</a>", $allyMessage);
 			}
-			print <<<END
+			echo <<<END
 <HR>
 <TABLE BORDER width=80%>
 <TR><TH {$init->bgTitleCell}>{$init->tagTH_}$allyTitle{$init->_tagTH}</TH></TR>
@@ -153,25 +155,25 @@ END;
 </TABLE>
 END;
 		}
-        // ƒƒ“ƒo[ˆê——‚Ì•\¦
-		print <<<END
+        // ãƒ¡ãƒ³ãƒãƒ¼ä¸€è¦§ã®è¡¨ç¤º
+		echo <<<END
 <HR>
 <TABLE BORDER><TR>
-<TH {$init->bgTitleCell}>{$init->tagTH_}‡ˆÊ{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}“‡{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}lŒû{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}–ÊÏ{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}‘‹à{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}H—¿{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}”_ê‹K–Í{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}Hê‹K–Í{$init->_tagTH}</TH>
-<th {$init->bgTitleCell}>{$init->tagTH_}¤‹Æ‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}ÌŒ@ê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}”­“dŠ‹K–Í{$init->_tagTH}</th>
+<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</TH>
+<TH {$init->bgTitleCell}>{$init->tagTH_}å³¶{$init->_tagTH}</TH>
+<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</TH>
+<TH {$init->bgTitleCell}>{$init->tagTH_}é¢ç©{$init->_tagTH}</TH>
+<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</TH>
+<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</TH>
+<TH {$init->bgTitleCell}>{$init->tagTH_}è¾²å ´è¦æ¨¡{$init->_tagTH}</TH>
+<TH {$init->bgTitleCell}>{$init->tagTH_}å·¥å ´è¦æ¨¡{$init->_tagTH}</TH>
+<th {$init->bgTitleCell}>{$init->tagTH_}å•†æ¥­è¦æ¨¡{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}æ¡æ˜å ´è¦æ¨¡{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}ç™ºé›»æ‰€è¦æ¨¡{$init->_tagTH}</th>
 </TR>
 END;
 		if(!$ally['number']) {
-			print "<TR><TH colspan=12>Š‘®‚µ‚Ä‚¢‚é“‡‚ª‚ ‚è‚Ü‚¹‚ñI</TH></TR>";
+			echo "<TR><TH colspan=12>æ‰€å±ã—ã¦ã„ã‚‹å³¶ãŒã‚ã‚Šã¾ã›ã‚“ï¼</TH></TR>";
 		}
 		foreach ($ally['memberId'] as $id) {
 			$number = $hako->idToNumber[$id];
@@ -190,96 +192,104 @@ END;
 			} else {
 				$name = "{$init->tagName2_}<a href=\"{$init->baseDir}/hako-main.php?Sight={$island['id']}\">{$name}</a>({$island['absent']}){$init->_tagName2}";
 			}
-			$farm = ($farm == 0) ? "•Û—L‚¹‚¸" : "{$farm}0$init->unitPop";
-			$factory = ($factory == 0) ? "•Û—L‚¹‚¸" : "{$factory}0$init->unitPop";
-			$commerce  = ($commerce == 0) ? "•Û—L‚¹‚¸" : "{$commerce}0$init->unitPop";
-			$mountain = ($mountain == 0) ? "•Û—L‚¹‚¸" : "{$mountain}0$init->unitPop";
+			$farm = ($farm == 0) ? "ä¿æœ‰ã›ãš" : "{$farm}0$init->unitPop";
+			$factory = ($factory == 0) ? "ä¿æœ‰ã›ãš" : "{$factory}0$init->unitPop";
+			$commerce  = ($commerce == 0) ? "ä¿æœ‰ã›ãš" : "{$commerce}0$init->unitPop";
+			$mountain = ($mountain == 0) ? "ä¿æœ‰ã›ãš" : "{$mountain}0$init->unitPop";
 			$hatuden  = ($hatuden == 0) ? "0kw" : "{$hatuden}000kw";
-			
-			print <<<END
+
+			echo <<<END
 <TR>
-<TH {$init->bgNumberCell}>{$init->tagNumber_}$ranking{$init->_tagNumber}</TH>
-<TD {$init->bgNameCell}>$name</TD>
-<TD {$init->bgInfoCell}>{$island['pop']}$init->unitPop</TD>
-<TD {$init->bgInfoCell}>{$island['area']}$init->unitArea</TD>
-<TD {$init->bgInfoCell}>$money</TD>
-<TD {$init->bgInfoCell}>{$island['food']}$init->unitFood</TD>
-<TD {$init->bgInfoCell}>$farm</TD>
-<TD {$init->bgInfoCell}>$factory</TD>
-<TD {$init->bgInfoCell}>$commerce</TD>
-<TD {$init->bgInfoCell}>$mountain</TD>
-<TD {$init->bgInfoCell}>$hatuden</TD>
+	<TH {$init->bgNumberCell}>{$init->tagNumber_}$ranking{$init->_tagNumber}</TH>
+	<TD {$init->bgNameCell}>$name</TD>
+	<TD {$init->bgInfoCell}>{$island['pop']}$init->unitPop</TD>
+	<TD {$init->bgInfoCell}>{$island['area']}$init->unitArea</TD>
+	<TD {$init->bgInfoCell}>$money</TD>
+	<TD {$init->bgInfoCell}>{$island['food']}$init->unitFood</TD>
+	<TD {$init->bgInfoCell}>$farm</TD>
+	<TD {$init->bgInfoCell}>$factory</TD>
+	<TD {$init->bgInfoCell}>$commerce</TD>
+	<TD {$init->bgInfoCell}>$mountain</TD>
+	<TD {$init->bgInfoCell}>$hatuden</TD>
 </TR>
 END;
 		}
-		print "</TABLE>\n";
+		echo "</TABLE>\n";
     }
 	//--------------------------------------------------
-	// “¯–¿ƒRƒƒ“ƒg‚Ì•ÏX
+	// åŒç›Ÿã‚³ãƒ¡ãƒ³ãƒˆã®å¤‰æ›´
 	//--------------------------------------------------
 	function tempAllyPactPage($hako, $data) {
 		global $init;
-		
+
 		$num = $data['ALLYID'];
 		$ally = $hako->ally[$hako->idToAllyNumber[$num]];
 		$allyMessage = $ally['message'];
-		
+
 		$allyMessage = str_replace("<br>", "\n", $allyMessage);
 		$allyMessage = str_replace("&amp;", "&", $allyMessage);
 		$allyMessage = str_replace("&lt;", "<", $allyMessage);
 		$allyMessage = str_replace("&gt;", ">", $allyMessage);
 		$allyMessage = str_replace("&quot;", "\"", $allyMessage);
 		$allyMessage = str_replace("&#039;", "'", $allyMessage);
-		
-		print <<<END
+
+		echo <<<END
 <DIV align='center'>
-{$init->tagBig_}ƒRƒƒ“ƒg•ÏXi{$init->tagName_}{$ally['name']}{$init->_tagName}j{$init->_tagBig}<br>
+{$init->tagBig_}ã‚³ãƒ¡ãƒ³ãƒˆå¤‰æ›´ï¼ˆ{$init->tagName_}{$ally['name']}{$init->_tagName}ï¼‰{$init->_tagBig}<br>
 {$GLOBALS['BACK_TO_TOP']}</DIV><BR>
 
 <DIV ID='changeInfo'>
-<table border=0 width=50%><tr><td class="M">
-<FORM action="{$GLOBALS['THIS_FILE']}" method="POST">
-<B>–¿åƒpƒXƒ[ƒh‚ÍH</B><BR>
-<INPUT TYPE="password" NAME="Allypact" VALUE="{$data['defaultPassword']}" SIZE=32 MAXLENGTH=32 class=f>
-<INPUT TYPE="hidden"  NAME="ALLYID" VALUE="{$ally['id']}">
-<INPUT TYPE="submit" VALUE="‘—M" NAME="AllypactButton"><BR>
-<B>ƒRƒƒ“ƒg</B><small>(‘SŠp{$init->lengthAllyComment}š‚Ü‚ÅFƒgƒbƒvƒy[ƒW‚ÌuŠe“¯–¿‚Ìó‹µv—“‚É•\¦‚³‚ê‚Ü‚·)</small><BR>
-<INPUT TYPE="text" NAME="ALLYCOMMENT"  VALUE="{$ally['comment']}" SIZE=100 MAXLENGTH=50><BR>
-<BR>
-<B>ƒƒbƒZ[ƒWE–¿–ñ‚È‚Ç</B><small>(u“¯–¿‚Ìî•ñv—“‚Ìã‚É•\¦‚³‚ê‚Ü‚·)</small><BR>
-ƒ^ƒCƒgƒ‹<small>(‘SŠp{$init->lengthAllyTitle}š‚Ü‚Å)</small><BR>
-<INPUT TYPE="text" NAME="ALLYTITLE"  VALUE="{$ally['title']}" SIZE=100 MAXLENGTH=50><BR>
-ƒƒbƒZ[ƒW<small>(‘SŠp{$init->lengthAllyMessage}š‚Ü‚Å)</small><BR>
-<TEXTAREA COLS=50 ROWS=16 NAME="ALLYMESSAGE" WRAP="soft">{$allyMessage}</TEXTAREA>
-<BR>
-uƒ^ƒCƒgƒ‹v‚ğ‹ó—“‚É‚·‚é‚Æw–¿å‚©‚ç‚ÌƒƒbƒZ[ƒWx‚Æ‚¢‚¤ƒ^ƒCƒgƒ‹‚É‚È‚è‚Ü‚·B<BR>
-uƒƒbƒZ[ƒWv‚ğ‹ó—“‚É‚·‚é‚Æu“¯–¿‚Ìî•ñv—“‚É‚Í‰½‚à•\¦‚³‚ê‚È‚­‚È‚è‚Ü‚·B
-</FORM>
-</td></tr></table>
+<table border=0 width=50%>
+<tr>
+	<td class="M">
+		<FORM action="{$GLOBALS['THIS_FILE']}" method="POST">
+			<B>ç›Ÿä¸»ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯ï¼Ÿ</B><BR>
+			<INPUT TYPE="password" NAME="Allypact" VALUE="{$data['defaultPassword']}" SIZE=32 MAXLENGTH=32 class=f>
+			<INPUT TYPE="hidden"  NAME="ALLYID" VALUE="{$ally['id']}">
+			<INPUT TYPE="submit" VALUE="é€ä¿¡" NAME="AllypactButton"><BR>
+			<B>ã‚³ãƒ¡ãƒ³ãƒˆ</B><small>(å…¨è§’{$init->lengthAllyComment}å­—ã¾ï¿½ï¿½ï¿½ï¼šãƒˆãƒƒãƒ—ãƒšãƒ¼ã‚¸ã®ã€Œå„åŒç›Ÿã®çŠ¶æ³ã€æ¬„ã«è¡¨ç¤ºã•ã‚Œã¾ã™)</small><BR>
+			<INPUT TYPE="text" NAME="ALLYCOMMENT"  VALUE="{$ally['comment']}" SIZE=100 MAXLENGTH=50><BR>
+			<BR>
+			<B>ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ãƒ»ç›Ÿç´„ãªã©</B><small>(ã€ŒåŒç›Ÿã®æƒ…å ±ã€æ¬„ã®ä¸Šã«è¡¨ç¤ºã•ã‚Œã¾ã™)</small><BR>
+			ã‚¿ã‚¤ãƒˆãƒ«<small>(å…¨è§’{$init->lengthAllyTitle}å­—ã¾ã§)</small><BR>
+			<INPUT TYPE="text" NAME="ALLYTITLE"  VALUE="{$ally['title']}" SIZE=100 MAXLENGTH=50><BR>
+			ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸<small>(å…¨è§’{$init->lengthAllyMessage}å­—ã¾ã§)</small><BR>
+			<TEXTAREA COLS=50 ROWS=16 NAME="ALLYMESSAGE" WRAP="soft">{$allyMessage}</TEXTAREA>
+			<BR>
+			ã€Œã‚¿ã‚¤ãƒˆãƒ«ã€ã‚’ç©ºæ¬„ã«ã™ã‚‹ã¨ã€ç›Ÿä¸»ã‹ã‚‰ã®ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€ã¨ã„ã†ã‚¿ã‚¤ãƒˆãƒ«ã«ãªã‚Šã¾ã™ã€‚<BR>
+			ã€Œãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã€ã‚’ç©ºæ¬„ã«ã™ã‚‹ã¨ã€ŒåŒç›Ÿã®æƒ…å ±ã€æ¬„ã«ã¯ä½•ã‚‚è¡¨ç¤ºã•ã‚Œãªããªã‚Šã¾ã™ã€‚
+		</FORM>
+	</td>
+	</tr>
+</table>
 </DIV>
 END;
 	}
 	//--------------------------------------------------
-	// “¯–¿‚ÌŒ‹¬E•ÏXE‰ğUE‰Á–¿E’E‘Ş
+	// åŒç›Ÿã®çµæˆãƒ»å¤‰æ›´ãƒ»è§£æ•£ãƒ»åŠ ç›Ÿãƒ»è„±é€€
 	//--------------------------------------------------
 	function newAllyTop($hako, $data) {
 		global $init;
-		
+
 		$adminMode = 0;
+
+		$data['defaultPassword'] = isset($data['defaultPassword']) ? $data['defaultPassword'] : "";
 		if(Util::checkPassword("", $data['defaultPassword'])) {
-			// ŠÇ—Ò‚Ì”»’è‚ÍA‚¨‰Ùq‚ÌƒpƒXƒ[ƒhA–¿å‚Ì•ÏX‰Â
+			// ç®¡ç†è€…ã®åˆ¤å®šã¯ã€ãŠè“å­ã®ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã€ç›Ÿä¸»ã®å¤‰æ›´å¯
 			$adminMode = 1;
 		} elseif(!$init->allyUse) {
 			$this->allyTop($hako, $data);
 		}
-		
+
 		$jsIslandList = '';
-		for($i=0; $i<$hako->islandNumber; $i++) {
+		$num = (int)$hako->islandNumber;
+		for($i=0; $i<$num; $i++) {
 			$name = $hako->islands[$i]['name'];
 			$name = preg_replace("/'/", "\'", $name);
 			$id = $hako->islands[$i]['id'];
 			$jsIslandList .= "island[$id] = '$name';\n";
 		}
+		$data['defaultID'] = isset($data['defaultID']) ? $data['defaultID'] : "";
 		$n = $hako->idToAllyNumber[$data['defaultID']];
 		if($n == '') {
 			$allyname = '';
@@ -292,12 +302,17 @@ END;
 			$defaultAllyId = $hako->ally[$n]['id'];
 		}
 		$defaultMark = '';
+		$markList = "";
 		foreach ($init->allyMark as $aMark) {
 			$s = '';
-			if($aMark == $defaultMark) $s = ' SELECTED';
+			if($aMark == $defaultMark) {
+				$s = ' SELECTED';
+			}
 			$markList .= "<OPTION VALUE=\"$aMark\"$s>$aMark\n";
 		}
-		$hx = array(0,1,2,3,4,5,6,7,8,9,A,B,C,D,E,F);
+
+		$hx = array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F');
+		$colorList = array();
 		for($i=1; $i<7; $i++) {
 			if($n == '') {
 				$allycolor[$i] = '0';
@@ -306,10 +321,13 @@ END;
 			}
 			for($j=0; $j<16; $j++) {
 				$s = '';
-				if($hx[$j] == $allycolor[$i]) $s = ' SELECTED';
+				if($hx[$j] == $allycolor[$i]) {
+					$s = ' SELECTED';
+				}
 				$colorList[$i] .= "<OPTION VALUE=\"{$hx[$j]}\"$s>{$hx[$j]}\n";
 			}
 		}
+
 		$max = 201;
 		if($hako->allyNumber) {
 			$jsAllyList = "ally = [";
@@ -342,59 +360,59 @@ END;
 			$jsAllyMarkList .= "];\n";
 			$jsAllyColorList .= "];\n";
 		}
-		$str1 = $adminMode ? '(ƒƒ“ƒeƒiƒ“ƒX)' : $init->allyJoinComUse ? '' : 'E‰Á–¿E’E‘Ş';
+		$str1 = $adminMode ? '(ãƒ¡ãƒ³ãƒ†ãƒŠãƒ³ã‚¹)' : $init->allyJoinComUse ? '' : 'ãƒ»åŠ ç›Ÿãƒ»è„±é€€';
 		$str2 = $adminMode ? '' : 'onChange="colorPack()" onClick="colorPack()"';
-		$makeCost = $init->costMakeAlly ? "{$init->costMakeAlly}{$init->unitMoney}" : '–³—¿';
-		$keepCost = $init->costKeepAlly ? "{$init->costKeepAlly}{$init->unitMoney}" : '–³—¿';
-		$joinCost = $init->comCost[$init->comAlly] ? "{$init->comCost[$init->comAlly]}{$init->unitMoney}" : '–³—¿';
-		$joinStr = $init->allyJoinComUse ? '' : "‰Á–¿E’E‘Ş‚ÌÛ‚Ì”ï—p‚ÍA{$init->tagMoney_}$joinCost{$init->_tagMoney}‚Å‚·B<BR>";
-		$str3 = $adminMode ? "“ÁêƒpƒXƒ[ƒh‚ÍHi•K{j<BR>
-<INPUT TYPE=\"password\" NAME=\"OLDPASS\" VALUE=\"{$data['defaultPassword']}\" SIZE=32 MAXLENGTH=32 class=f><BR>“¯–¿" : "<span class='attention'>(’ˆÓ)</span><BR>
-“¯–¿‚ÌŒ‹¬E•ÏX‚Ì”ï—p‚ÍA{$init->tagMoney_}{$makeCost}{$init->_tagMoney}‚Å‚·B<BR>
-‚Ü‚½A–ˆƒ^[ƒ“•K—v‚Æ‚³‚ê‚éˆÛ”ï‚Í{$init->tagMoney_}$keepCost{$init->_tagMoney}‚Å‚·B<BR>
-iˆÛ”ï‚Í“¯–¿‚ÉŠ‘®‚·‚é“‡‚Å‹Ï“™‚É•‰’S‚·‚é‚±‚Æ‚É‚È‚è‚Ü‚·j<BR>
+		$makeCost = $init->costMakeAlly ? "{$init->costMakeAlly}{$init->unitMoney}" : 'ç„¡æ–™';
+		$keepCost = $init->costKeepAlly ? "{$init->costKeepAlly}{$init->unitMoney}" : 'ç„¡æ–™';
+		$joinCost = isset($init->comCost[$init->comAlly]) ? "{$init->comCost[$init->comAlly]}{$init->unitMoney}" : 'ç„¡æ–™';
+		$joinStr = $init->allyJoinComUse ? '' : "åŠ ç›Ÿãƒ»è„±é€€ã®éš›ã®è²»ç”¨ã¯ã€{$init->tagMoney_}$joinCost{$init->_tagMoney}ã§ã™ã€‚<BR>";
+		$str3 = $adminMode ? "ç‰¹æ®Šãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯ï¼Ÿï¼ˆå¿…é ˆï¼‰<BR>
+<INPUT TYPE=\"password\" NAME=\"OLDPASS\" VALUE=\"{$data['defaultPassword']}\" SIZE=32 MAXLENGTH=32 class=f><BR>åŒç›Ÿ" : "<span class='attention'>(æ³¨æ„)</span><BR>
+åŒç›Ÿã®çµæˆãƒ»å¤‰æ›´ã®è²»ç”¨ã¯ã€{$init->tagMoney_}{$makeCost}{$init->_tagMoney}ã§ã™ã€‚<BR>
+ã¾ãŸã€æ¯ã‚¿ãƒ¼ãƒ³å¿…è¦ã¨ã•ã‚Œã‚‹ç¶­æŒè²»ã¯{$init->tagMoney_}$keepCost{$init->_tagMoney}ã§ã™ã€‚<BR>
+ï¼ˆç¶­æŒè²»ã¯åŒç›Ÿã«æ‰€å±ã™ã‚‹å³¶ã§å‡ç­‰ã«è² æ‹…ã™ã‚‹ã“ã¨ã«ãªã‚Šã¾ã™ï¼‰<BR>
 {$joinStr}
 </P>
-‚ ‚È‚½‚Ì“‡‚ÍHi•K{j<BR>
+ã‚ãªãŸã®å³¶ã¯ï¼Ÿï¼ˆå¿…é ˆï¼‰<BR>
 <SELECT NAME=\"ISLANDID\" {$str2}>
 {$hako->islandList}
-</SELECT><BR>‚ ‚È‚½";
-		$str0 = ($adminMode || ($init->allyUse == 1)) ? 'Œ‹¬E' : '';
-		print <<<END
+</SELECT><BR>ã‚ãªãŸ";
+		$str0 = ($adminMode || ($init->allyUse == 1)) ? 'çµæˆãƒ»' : '';
+		echo <<<END
 <DIV align='center'>
-{$init->tagBig_}“¯–¿‚Ì{$str0}•ÏXE‰ğU{$str1}{$init->_tagBig}<br>
+{$init->tagBig_}åŒç›Ÿã®{$str0}å¤‰æ›´ãƒ»è§£æ•£{$str1}{$init->_tagBig}<br>
 {$GLOBALS['BACK_TO_TOP']}</DIV><BR>
 
 <DIV ID='changeInfo'>
 <table border=0 width=50%><tr><td class="M"><P>
 <FORM name="AcForm" action="{$GLOBALS['THIS_FILE']}" method="POST">
 {$str3}
-‚ÌƒpƒXƒ[ƒh‚ÍHi•K{j<BR>
+ã®ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯ï¼Ÿï¼ˆå¿…é ˆï¼‰<BR>
 <INPUT TYPE="password" NAME="PASSWORD" SIZE=32 MAXLENGTH=32 class=f>
 END;
 		if($hako->allyNumber) {
-			$str4 = $adminMode ? 'EŒ‹¬E•ÏX' : $init->allyJoinComUse ? '' : 'E‰Á–¿E’E‘Ş';
-			$str5 = ($adminMode || $init->allyJoinComUse) ? '' : '<INPUT TYPE="submit" VALUE="‰Á–¿E’E‘Ş" NAME="JoinAllyButton">';
-			print <<<END
+			$str4 = $adminMode ? 'ãƒ»çµæˆãƒ»å¤‰æ›´' : $init->allyJoinComUse ? '' : 'ãƒ»åŠ ç›Ÿãƒ»è„±é€€';
+			$str5 = ($adminMode || $init->allyJoinComUse) ? '' : '<INPUT TYPE="submit" VALUE="åŠ ç›Ÿãƒ»è„±é€€" NAME="JoinAllyButton">';
+			echo <<<END
 <BR>
-<BR><B><FONT SIZE=4>m‰ğU{$str4}n</FONT></B>
-<BR>‚Ç‚Ì“¯–¿‚Å‚·‚©H<BR>
+<BR><B><FONT SIZE=4>ï¼»è§£æ•£{$str4}ï¼½</FONT></B>
+<BR>ã©ã®åŒç›Ÿã§ã™ã‹ï¼Ÿ<BR>
 <SELECT NAME="ALLYNUMBER" onChange="allyPack()" onClick="allyPack()">
 {$allyList}
 </SELECT>
 <BR>
-<INPUT TYPE="submit" VALUE="‰ğU" NAME="DeleteAllyButton">
+<INPUT TYPE="submit" VALUE="è§£æ•£" NAME="DeleteAllyButton">
 {$str5}
 <BR>
 END;
 		}
-		$str7 = $adminMode ? "–¿å“‡‚Ì•ÏX(ã‚Ìƒƒjƒ…[‚Å“¯–¿‚ğ‘I‘ğ)<BR> or “¯–¿‚ÌV‹Kì¬(ã‚Ìƒƒjƒ…[‚Í–³Œø)<BR><SELECT NAME=\"ALLYID\"><OPTION VALUE=\"$max\">V‹Kì¬\n{$hako->islandList}</SELECT><BR>" : "<BR><B><FONT SIZE=4>m{$str0}•ÏXn</FONT></B><BR>";
-		print <<<END
+		$str7 = $adminMode ? "ç›Ÿä¸»å³¶ã®å¤‰æ›´(ä¸Šã®ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã§åŒç›Ÿã‚’é¸æŠ)<BR> or åŒç›Ÿã®æ–°è¦ä½œæˆ(ä¸Šã®ãƒ¡ãƒ‹ãƒ¥ãƒ¼ã¯ç„¡åŠ¹)<BR><SELECT NAME=\"ALLYID\"><OPTION VALUE=\"$max\">æ–°è¦ä½œæˆ\n{$hako->islandList}</SELECT><BR>" : "<BR><B><FONT SIZE=4>ï¼»{$str0}å¤‰æ›´ï¼½</FONT></B><BR>";
+		echo <<<END
 <BR>
 {$str7}
-“¯–¿‚Ì–¼‘Oi•ÏXj<small>(‘SŠp{$init->lengthAllyName}š‚Ü‚Å)</small><BR>
+åŒç›Ÿã®åå‰ï¼ˆå¤‰æ›´ï¼‰<small>(å…¨è§’{$init->lengthAllyName}å­—ã¾ã§)</small><BR>
 <INPUT TYPE="text" NAME="ALLYNAME" VALUE="$allyname" SIZE=32 MAXLENGTH=32><BR>
-ƒ}[ƒNi•ÏXj<BR>
+ãƒãƒ¼ã‚¯ï¼ˆå¤‰æ›´ï¼‰<BR>
 <SELECT NAME="MARK" onChange=colorPack() onClick=colorPack()>
 {$markList}
 </SELECT>
@@ -403,7 +421,7 @@ END;
    <span id="CTBL"></span>
 </ilayer>
 <BR>
-ƒ}[ƒN‚ÌFƒR[ƒhi•ÏXj<BR><TABLE BORDER=0><TR>
+ãƒãƒ¼ã‚¯ã®è‰²ã‚³ãƒ¼ãƒ‰ï¼ˆå¤‰æ›´ï¼‰<BR><TABLE BORDER=0><TR>
 <TD align='center'>RED</TD>
 <TD align='center'>GREEN</TD>
 <TD align='center'>BLUE</TD>
@@ -418,12 +436,12 @@ END;
 {$colorList[5]}</SELECT><SELECT NAME="COLOR6" onChange=colorPack() onClick=colorPack()>
 {$colorList[6]}</SELECT></TD>
 </TR></TABLE>
-<INPUT TYPE="submit" VALUE="Œ‹¬(•ÏX)" NAME="NewAllyButton">
+<INPUT TYPE="submit" VALUE="çµæˆ(å¤‰æ›´)" NAME="NewAllyButton">
 <SCRIPT language="JavaScript">
 <!--
 END;
 		if(!$adminMode) {
-			print <<<END
+			echo <<<END
 function colorPack() {
 	var island = new Array(128);
 	{$jsIslandList}
@@ -435,12 +453,12 @@ function colorPack() {
 	f = document.AcForm.COLOR6.value;
 	mark = document.AcForm.MARK.value;
 	number = document.AcForm.ISLANDID.value;
-	
+
 	str = "#" + a + b + c + d + e + f;
 	// document.AcForm.AcColorValue.value = str;
-	str = '•\¦ƒTƒ“ƒvƒ‹Fw<B><span class="number"><FONT color="' + str +'">' + mark + '</FONT></B>'
-		+ island[number] + '“‡</span>x';
-	
+	str = 'è¡¨ç¤ºã‚µãƒ³ãƒ—ãƒ«ï¼šã€<B><span class="number"><FONT color="' + str +'">' + mark + '</FONT></B>'
+		+ island[number] + 'å³¶</span>ã€';
+
 	if(document.getElementById){
 		document.getElementById("CTBL").innerHTML = str;
 	} else if(document.all){
@@ -471,7 +489,7 @@ function allyPack() {
 }
 END;
 		} else {
-			print <<<END
+			echo <<<END
 
 function colorPack() {
 	var island = new Array(128);
@@ -483,11 +501,11 @@ function colorPack() {
 	e = document.AcForm.COLOR5.value;
 	f = document.AcForm.COLOR6.value;
 	mark = document.AcForm.MARK.value;
-	
+
 	str = "#" + a + b + c + d + e + f;
 	// document.AcForm.AcColorValue.value = str;
-	str = '•\¦ƒTƒ“ƒvƒ‹Fw<B><span class="number"><FONT color="' + str +'">' + mark + '</FONT></B>'
-		+ '‚³‚ñ‚Õ‚é“‡</span>x';
+	str = 'è¡¨ç¤ºã‚µãƒ³ãƒ—ãƒ«ï¼šã€<B><span class="number"><FONT color="' + str +'">' + mark + '</FONT></B>'
+		+ 'ã•ã‚“ã·ã‚‹å³¶</span>ã€';
 	if(document.getElementById){
 		document.getElementById("CTBL").innerHTML = str;
 	} else if(document.all){
@@ -499,7 +517,7 @@ function colorPack() {
 		lay.document.write(str);
 		lay.document.close();
 	}
-	
+
 	return true;
 }
 
@@ -522,7 +540,7 @@ function allyPack() {
 }
 END;
 		}
-		print <<<END
+		echo <<<END
 colorPack();
 //-->
 </script>
@@ -535,60 +553,60 @@ END;
 //
 //------------------------------------------------------------
 class AllySetted extends HtmlAlly {
-	// –¿åƒRƒƒ“ƒg•ÏXŠ®—¹
+	// ç›Ÿä¸»ã‚³ãƒ¡ãƒ³ãƒˆå¤‰æ›´å®Œäº†
 	function allyPactOK($name) {
 		global $init;
-		print "{$init->tagBig_}{$name}‚ÌƒRƒƒ“ƒg‚ğ•ÏX‚µ‚Ü‚µ‚½B{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}{$name}ã®ã‚³ãƒ¡ãƒ³ãƒˆã‚’å¤‰æ›´ã—ã¾ã—ãŸã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 	}
-	// “¯–¿ƒf[ƒ^‚ÌÄ\¬
+	// åŒç›Ÿãƒ‡ãƒ¼ã‚¿ã®å†æ§‹æˆ
 	function allyDataUp() {
 		global $init;
-		print "{$init->tagBig_}“¯–¿ƒf[ƒ^‚ğÄ\¬‚µ‚Ü‚µ‚½B{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}åŒç›Ÿãƒ‡ãƒ¼ã‚¿ã‚’å†æ§‹æˆã—ã¾ã—ãŸã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 	}
 }
 //------------------------------------------------------------
 //
 //------------------------------------------------------------
 class AllyError {
-	// ‚·‚Å‚É‚»‚Ì–¼‘O‚Ì“¯–¿‚ª‚ ‚éê‡
+	// ã™ã§ã«ãã®åå‰ã®åŒç›ŸãŒã‚ã‚‹å ´åˆ
 	function newAllyAlready() {
 		global $init;
-		print "{$init->tagBig_}‚»‚Ì“¯–¿‚È‚ç‚·‚Å‚ÉŒ‹¬‚³‚ê‚Ä‚¢‚Ü‚·B{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}ãã®åŒç›Ÿãªã‚‰ã™ã§ã«çµæˆã•ã‚Œã¦ã„ã¾ã™ã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 	}
-	// ‚·‚Å‚É‚»‚Ìƒ}[ƒN‚Ì“¯–¿‚ª‚ ‚éê‡
+	// ã™ã§ã«ãã®ãƒãƒ¼ã‚¯ã®åŒç›ŸãŒã‚ã‚‹å ´åˆ
 	function markAllyAlready() {
 		global $init;
-		print "{$init->tagBig_}‚»‚Ìƒ}[ƒN‚Í‚·‚Å‚Ég—p‚³‚ê‚Ä‚¢‚Ü‚·B{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}ãã®ãƒãƒ¼ã‚¯ã¯ã™ã§ã«ä½¿ç”¨ã•ã‚Œã¦ã„ã¾ã™ã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 	}
-	// •Ê‚Ì“¯–¿‚ğŒ‹¬‚µ‚Ä‚¢‚é
+	// åˆ¥ã®åŒç›Ÿã‚’çµæˆã—ã¦ã„ã‚‹
 	function leaderAlready() {
 		global $init;
-		print "{$init->tagBig_}–¿å‚ÍA©•ª‚Ì“¯–¿ˆÈŠO‚É‚Í‰Á–¿‚Å‚«‚Ü‚¹‚ñB{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}ç›Ÿä¸»ã¯ã€è‡ªåˆ†ã®åŒç›Ÿä»¥å¤–ã«ã¯åŠ ç›Ÿã§ãã¾ã›ã‚“ã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 	}
-	// •Ê‚Ì“¯–¿‚É‰Á–¿‚µ‚Ä‚¢‚é
+	// åˆ¥ã®åŒç›Ÿã«åŠ ç›Ÿã—ã¦ã„ã‚‹
 	function otherAlready() {
 		global $init;
-		print "{$init->tagBig_}‚Ğ‚Æ‚Â‚Ì“¯–¿‚É‚µ‚©‰Á–¿‚Å‚«‚Ü‚¹‚ñB{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}ã²ã¨ã¤ã®åŒç›Ÿã«ã—ã‹åŠ ç›Ÿã§ãã¾ã›ã‚“ã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 	}
-	// ‘‹à‘«‚è‚¸
+	// è³‡é‡‘è¶³ã‚Šãš
 	function noMoney() {
 		global $init;
-		print "{$init->tagBig_}‘‹à•s‘«‚Å‚·(/_<B){$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}è³‡é‡‘ä¸è¶³ã§ã™(/_<ã€‚){$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 	}
-	// IDƒ`ƒFƒbƒN‚É‚Ğ‚Á‚©‚©‚é
+	// IDãƒã‚§ãƒƒã‚¯ã«ã²ã£ã‹ã‹ã‚‹
 	function wrongAlly() {
 		global $init;
-		print "{$init->tagBig_}‚ ‚È‚½‚Í–¿å‚Å‚Í‚È‚¢‚Æv‚¤B{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}ã‚ãªãŸã¯ç›Ÿä¸»ã§ã¯ãªã„ã¨æ€ã†ã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 	}
-	// V‹K‚Å“¯–¿‚ª‚È‚¢ê‡
+	// æ–°è¦ã§åŒç›ŸãŒãªã„å ´åˆ
 	function newAllyNoName() {
 		global $init;
-		print "{$init->tagBig_}“¯–¿‚É‚Â‚¯‚é–¼‘O‚ª•K—v‚Å‚·B{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}åŒç›Ÿã«ã¤ã‘ã‚‹åå‰ãŒå¿…è¦ã§ã™ã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 	}
-	// ŠÇ—ÒˆÈŠOŒ‹¬•s‰Â
+	// ç®¡ç†è€…ä»¥å¤–çµæˆä¸å¯
 	function newAllyForbbiden() {
 		global $init;
-		print "{$init->tagBig_}\‚µ–ó‚ ‚è‚Ü‚¹‚ñAó•t‚ğ’†~‚µ‚Ä‚¢‚Ü‚·B{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}ç”³ã—è¨³ã‚ã‚Šã¾ã›ã‚“ã€å—ä»˜ã‚’ä¸­æ­¢ã—ã¦ã„ã¾ã™ã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 	}
 }
 
@@ -597,19 +615,21 @@ class AllyError {
 //------------------------------------------------------------
 class MakeAlly {
 	//--------------------------------------------------
-	// Œ‹¬E•ÏXƒƒCƒ“
+	// çµæˆãƒ»å¤‰æ›´ãƒ¡ã‚¤ãƒ³
 	//--------------------------------------------------
 	function makeAllyMain($hako, $data) {
 		global $init;
-		
+
 		$currentID = $data['ISLANDID'];
-		$allyID = $data['ALLYID'];
-		$currentAnumber = $data['ALLYNUMBER'];
+		$allyID = isset($data['ALLYID']) ? $data['ALLYID'] : "";
+		$currentAnumber = isset($data['ALLYNUMBER']) ? $data['ALLYNUMBER'] : "";
 		$allyName = htmlspecialchars($data['ALLYNAME']);
 		$allyMark = $data['MARK'];
 		$allyColor = "{$data['COLOR1']}{$data['COLOR2']}{$data['COLOR3']}{$data['COLOR4']}{$data['COLOR5']}{$data['COLOR6']}";
 		$adminMode = 0;
-		// ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
+		$data['OLDPASS'] = isset($data['OLDPASS']) ? $data['OLDPASS'] : "";
 		if(Util::checkPassword("", $data['OLDPASS'])) {
 			$adminMode = 1;
 			if($allyID > 200) {
@@ -630,37 +650,37 @@ class MakeAlly {
 			AllyError::newAllyForbbiden();
 			return;
 		}
-		// “¯–¿–¼‚ª‚ ‚é‚©ƒ`ƒFƒbƒN
+		// åŒç›ŸåãŒã‚ã‚‹ã‹ãƒã‚§ãƒƒã‚¯
 		if($allyName == '') {
 			AllyError::newAllyNoName();
 			return;
 		}
-		// “¯–¿–¼‚ª³“–‚©ƒ`ƒFƒbƒN
-		if(preg_match("/[,\?\(\)\<\>\$]|^–³l|^’¾–v$/", $allyName)) {
-			// g‚¦‚È‚¢–¼‘O
+		// åŒç›ŸåãŒæ­£å½“ã‹ãƒã‚§ãƒƒã‚¯
+		if(preg_match("/[,\?\(\)\<\>\$]|^ç„¡äºº|^æ²ˆæ²¡$/", $allyName)) {
+			// ä½¿ãˆãªã„åå‰
 			Error::newIslandBadName();
 			return;
 		}
-		// –¼‘O‚Ìd•¡ƒ`ƒFƒbƒN
+		// åå‰ã®é‡è¤‡ãƒã‚§ãƒƒã‚¯
 		$currentNumber = $hako->idToNumber[$currentID];
 		if(!($adminMode && ($allyID == '') && ($allyID < 200)) &&
 			((Util::nameToNumber($hako, $allyName) != -1) ||
 			((Util::aNameToId($hako, $allyName) != -1) && (Util::aNameToId($hako, $allyName) != $currentID)))) {
-			// ‚·‚Å‚ÉŒ‹¬‚¸‚İ
+			// ã™ã§ã«çµæˆãšã¿
 			AllyError::newAllyAlready();
 			return;
 		}
-		// ƒ}[ƒN‚Ìd•¡ƒ`ƒFƒbƒN
+		// ãƒãƒ¼ã‚¯ã®é‡è¤‡ãƒã‚§ãƒƒã‚¯
 		if(!($adminMode && ($allyID == '') && ($allyID < 200)) &&
 			((Util::aMarkToId($hako, $allyMark) != -1) && (Util::aMarkToId($hako, $allyMark) != $currentID))) {
-			// ‚·‚Å‚Ég—p‚¸‚İ
+			// ã™ã§ã«ä½¿ç”¨ãšã¿
 			AllyError::markAllyAlready();
 			return;
 		}
-		// password‚Ì”»’è
+		// passwordã®åˆ¤å®š
 		$island = $hako->islands[$currentNumber];
 		if(!$adminMode && !Util::checkPassword($island['password'], $data['PASSWORD'])) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
@@ -686,7 +706,7 @@ class MakeAlly {
 					}
 				}
 				if(!$flag) {
-					print "{$init->tagBig_}•ÏX‚Å‚«‚Ü‚¹‚ñB{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+					echo "{$init->tagBig_}å¤‰æ›´ã§ãã¾ã›ã‚“ã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 					return;
 				}
 				$hako->ally[$n]['id']       = $allyID;
@@ -699,10 +719,10 @@ class MakeAlly {
 					array_push($aIsland['allyId'], $aIsland['id']);
 				}
 			} else {
-				// ‚·‚Å‚ÉŒ‹¬‚¸‚İ‚È‚ç•ÏX
+				// ã™ã§ã«çµæˆãšã¿ãªã‚‰å¤‰æ›´
 			}
 		} else {
-			// ‘¼‚Ì“‡‚Ì“¯–¿‚É“ü‚Á‚Ä‚¢‚éê‡‚ÍAŒ‹¬‚Å‚«‚È‚¢
+			// ä»–ã®å³¶ã®åŒç›Ÿã«å…¥ã£ã¦ã„ã‚‹å ´åˆã¯ã€çµæˆã§ããªã„
 			$flag = 0;
 			for($i = 0; $i < $hako->allyNumber; $i++) {
 				$allyMember = $hako->ally[$i]['memberId'];
@@ -724,12 +744,12 @@ class MakeAlly {
 				AllyError::newAllyForbbiden();
 				return;
 			}
-			// V‹K
+			// æ–°è¦
 			$n = $hako->allyNumber;
 			$hako->ally[$n]['id']           = $currentID;
 			$memberId = array();
 			if($allyID < 200) {
-				$hako->ally[$n]['oName']    = $island['name'] . "“‡";
+				$hako->ally[$n]['oName']    = $island['name'] . "å³¶";
 				$hako->ally[$n]['password'] = $island['password'];
 				$hako->ally[$n]['number']   = 1;
 				$memberId[0]                = $currentID;
@@ -748,68 +768,68 @@ class MakeAlly {
 			$hako->idToAllyNumber[$currentID] = $n;
 			$hako->allyNumber++;
 		}
-		
-		// “¯–¿‚ÌŠeí‚Ì’l‚ğİ’è
+
+		// åŒç›Ÿã®å„ç¨®ã®å€¤ã‚’è¨­å®š
 		$hako->ally[$n]['name']     = $allyName;
 		$hako->ally[$n]['mark']     = $allyMark;
 		$hako->ally[$n]['color']    = "$allyColor";
-		
-		// ”ï—p‚ğ‚¢‚½‚¾‚­
+
+		// è²»ç”¨ã‚’ã„ãŸã ã
 		if(!$adminMode) {
 			$island['money'] -= $init->costMakeAlly;
 		}
-		// ƒf[ƒ^Ši”[æ‚Ö
+		// ãƒ‡ãƒ¼ã‚¿æ ¼ç´å…ˆã¸
 		$hako->islands[$currentNumber] = $island;
-		
-		// ƒf[ƒ^‘‚«o‚µ
+
+		// ãƒ‡ãƒ¼ã‚¿æ›¸ãå‡ºã—
 		Util::allyOccupy($hako);
 		Util::allySort($hako);
 		$hako->writeAllyFile();
-		
-		// ƒgƒbƒv‚Ö
+
+		// ãƒˆãƒƒãƒ—ã¸
 		$html = new HtmlAlly;
 		$html->allyTop($hako, $data);
 	}
 	//--------------------------------------------------
-	// ‰ğU
+	// è§£æ•£
 	//--------------------------------------------------
 	function deleteAllyMain($hako, $data) {
 		global $init;
-		
+
 		$currentID = $data['ISLANDID'];
 		$currentAnumber = $data['ALLYNUMBER'];
 		$currentNumber = $hako->idToNumber[$currentID];
 		$island = $hako->islands[$currentNumber];
 		$n = $hako->idToAllyNumber[$currentID];
 		$adminMode = 0;
-		
-		// ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
 		if(Util::checkPassword("", $data['OLDPASS'])) {
 			$n = $currentAnumber;
 			$currentID = $hako->ally[$n]['id'];
 			$adminMode = 1;
 		} else {
-			// password‚Ì”»’è
+			// passwordã®åˆ¤å®š
 			if(!(Util::checkPassword($island['password'], $data['PASSWORD']))) {
-				// “‡ Password ŠÔˆá‚¢
+				// å³¶ Password é–“é•ã„
 				Error::wrongPassword();
 				return;
 			}
 			if(!(Util::checkPassword($hako->ally[$n]['password'], $data['PASSWORD']))) {
-				// “¯–¿ Password ŠÔˆá‚¢
+				// åŒç›Ÿ Password é–“é•ã„
 				Error::wrongPassword();
 				return;
 			}
-			// ”O‚Ì‚½‚ßID‚àƒ`ƒFƒbƒN
+			// å¿µã®ãŸã‚IDã‚‚ãƒã‚§ãƒƒã‚¯
 			if($hako->ally[$n]['id'] != $currentID) {
 				AllyError::wrongAlly();
 				return;
 			}
 		}
 		$allyMember = $hako->ally[$n]['memberId'];
-		
+
 		if($adminMode && (($allyMember[0] != '') || ($n == ''))){
-			print "{$init->tagBig_}íœ‚Å‚«‚Ü‚¹‚ñB{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+			echo "{$init->tagBig_}å‰Šé™¤ã§ãã¾ã›ã‚“ã€‚{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
 			return;
 		}
 		foreach ($allyMember as $id) {
@@ -825,53 +845,53 @@ class MakeAlly {
 		$hako->ally[$n]['dead'] = 1;
 		$hako->idToAllyNumber[$currentID] = '';
 		$hako->allyNumber --;
-		
-		// ƒf[ƒ^Ši”[æ‚Ö
+
+		// ãƒ‡ãƒ¼ã‚¿æ ¼ç´å…ˆã¸
 		$hako->islands[$currentNumber] = $island;
-		
-		// ƒf[ƒ^‘‚«o‚µ
+
+		// ãƒ‡ãƒ¼ã‚¿æ›¸ãå‡ºã—
 		Util::allyOccupy($hako);
 		Util::allySort($hako);
 		$hako->writeAllyFile();
-		
-		// ƒgƒbƒv‚Ö
+
+		// ãƒˆãƒƒãƒ—ã¸
 		$html = new HtmlAlly;
 		$html->allyTop($hako, $data);
 	}
 	//--------------------------------------------------
-	// ‰Á–¿E’E‘Ş
+	// åŠ ç›Ÿãƒ»è„±é€€
 	//--------------------------------------------------
 	function joinAllyMain($hako, $data) {
 		global $init;
-		
+
 		$currentID = $data['ISLANDID'];
 		$currentAnumber = $data['ALLYNUMBER'];
 		$currentNumber = $hako->idToNumber[$currentID];
 		$island = $hako->islands[$currentNumber];
-		
-		// ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
 		if(!(Util::checkPassword($island['password'], $data['PASSWORD']))) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
-		
-		// –¿åƒ`ƒFƒbƒN
+
+		// ç›Ÿä¸»ãƒã‚§ãƒƒã‚¯
 		if($hako->idToAllyNumber[$currentID]) {
 			AllyError::leaderAlready();
 			return;
 		}
-		// •¡”‰Á–¿ƒ`ƒFƒbƒN
+		// è¤‡æ•°åŠ ç›Ÿãƒã‚§ãƒƒã‚¯
 		$ally = $hako->ally[$currentAnumber];
 		if($init->allyJoinOne && ($island['allyId'][0] != '') && ($island['allyId'][0] != $ally['id'])) {
 			AllyError::otherAlready();
 			return;
 		}
-		
+
 		$allyMember = $ally['memberId'];
 		$newAllyMember = array();
 		$flag = 0;
-		
+
 		foreach ($allyMember as $id) {
 			if(!($hako->idToNumber[$id] > -1)) {
 			} elseif($id == $currentID) {
@@ -880,9 +900,9 @@ class MakeAlly {
 				array_push($newAllyMember, $id);
 			}
 		}
-		
+
 		if($flag) {
-			// ’E‘Ş
+			// è„±é€€
 			$newAlly = array();
 			foreach ($island['allyId'] as $id) {
 				if($id != $ally['id']) {
@@ -893,7 +913,7 @@ class MakeAlly {
 			$ally['score'] -= $island['pop'];
 			$ally['number'] --;
 		} else {
-			// ‰Á–¿
+			// åŠ ç›Ÿ
 			array_push($newAllyMember, $currentID);
 			array_push($island['allyId'], $ally['id']);
 			$ally['score'] += $island['pop'];
@@ -901,91 +921,91 @@ class MakeAlly {
 		}
 		$island['money'] -= $init->comCost[$init->comAlly];
 		$ally['memberId'] = $newAllyMember;
-		
-		// ƒf[ƒ^Ši”[æ‚Ö
+
+		// ãƒ‡ãƒ¼ã‚¿æ ¼ç´å…ˆã¸
 		$hako->islands[$currentNumber] = $island;
 		$hako->ally[$currentAnumber] = $ally;
-		
-		// ƒf[ƒ^‘‚«o‚µ
+
+		// ãƒ‡ãƒ¼ã‚¿æ›¸ãå‡ºã—
 		Util::allyOccupy($hako);
 		Util::allySort($hako);
 		$hako->writeAllyFile();
-		
-		// ƒgƒbƒv‚Ö
+
+		// ãƒˆãƒƒãƒ—ã¸
 		$html = new HtmlAlly;
 		$html->allyTop($hako, $data);
 	}
 	//--------------------------------------------------
-	// –¿åƒRƒƒ“ƒgƒ‚[ƒh
+	// ç›Ÿä¸»ã‚³ãƒ¡ãƒ³ãƒˆãƒ¢ãƒ¼ãƒ‰
 	//--------------------------------------------------
 	function allyPactMain($hako, $data) {
 		$ally = $hako->ally[$hako->idToAllyNumber[$data['ALLYID']]];
-		
+
 		if(Util::checkPassword($ally['password'], $data['Allypact'])) {
 			$ally['comment'] = Util::htmlEscape($data['ALLYCOMMENT']);
 			$ally['title'] = Util::htmlEscape($data['ALLYTITLE']);
 			$ally['message'] = Util::htmlEscape($data['ALLYMESSAGE'], 1);
-			
+
 			$hako->ally[$hako->idToAllyNumber[$data['ALLYID']]] = $ally;
-			// ƒf[ƒ^‘‚«o‚µ
+			// ãƒ‡ãƒ¼ã‚¿æ›¸ãå‡ºã—
 			$hako->writeAllyFile();
-			
-			// •ÏX¬Œ÷
+
+			// å¤‰æ›´æˆåŠŸ
 			AllySetted::allyPactOK($ally['name']);
 		} else {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
 	}
 	//--------------------------------------------------
-	// ” ’ëƒf[ƒ^‚Æ‚Ìƒf[ƒ^“‡ˆ—
+	// ç®±åº­ãƒ‡ãƒ¼ã‚¿ã¨ã®ãƒ‡ãƒ¼ã‚¿çµ±åˆå‡¦ç†
 	//--------------------------------------------------
 	function allyReComp(&$hako) {
-		$rt1 = $this->allyDelete($hako);    // –¿å•sİ‚É‚æ‚è“¯–¿ƒf[ƒ^‚©‚çíœ
-		$rt2 = $this->allyMemberDel($hako);    // •úŠüA–³l“‡‚ğ“¯–¿ƒf[ƒ^‚©‚çíœ
-		$rt3 = $this->allyPopComp($hako);    // lŒû‚ÌÄWŒviƒ^[ƒ“ˆ—‚É‘g‚İ‚ñ‚Å‚¢‚È‚¢‚½‚ßj
-		
+		$rt1 = $this->allyDelete($hako);    // ç›Ÿä¸»ä¸åœ¨ã«ã‚ˆã‚ŠåŒç›Ÿãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å‰Šé™¤
+		$rt2 = $this->allyMemberDel($hako);    // æ”¾æ£„ã€ç„¡äººå³¶ã‚’åŒç›Ÿãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å‰Šé™¤
+		$rt3 = $this->allyPopComp($hako);    // äººå£ã®å†é›†è¨ˆï¼ˆã‚¿ãƒ¼ãƒ³å‡¦ç†ã«çµ„ã¿è¾¼ã‚“ã§ã„ãªã„ãŸã‚ï¼‰
+
 		if($rt1 || $rt2 || $rt3) {
-			// ƒf[ƒ^‘‚«o‚µ
+			// ãƒ‡ãƒ¼ã‚¿æ›¸ãå‡ºã—
 			Util::allyOccupy($hako);
 			Util::allySort($hako);
 			$hako->writeAllyFile();
-			
-			// ƒƒbƒZ[ƒWo—Í
+
+			// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸å‡ºåŠ›
 			AllySetted::allyDataUp();
 			return 1;
 		}
 		return 0;
 	}
 	//--------------------------------------------------
-	// –¿å•sİ‚É‚æ‚è“¯–¿ƒf[ƒ^‚©‚çíœ
+	// ç›Ÿä¸»ä¸åœ¨ã«ã‚ˆã‚ŠåŒç›Ÿãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å‰Šé™¤
 	//--------------------------------------------------
 	function allyDelete(&$hako) {
 		$count = 0;
 		for($i=0; $i<$hako->allyNumber; $i++) {
 			$id = $hako->ally[$i]['id'];
 			if(!($hako->idToNumber[$id] > -1)) {
-				// ”z—ñ‚©‚çíœ
+				// é…åˆ—ã‹ã‚‰å‰Šé™¤
 				$hako->ally[$i]['dead'] = 1;
 				$hako->idToAllyNumber[$id] = '';
 				$count ++;
 			}
 		}
-		
+
 		if($count) {
 			$hako->allyNumber -= $count;
 			if($hako->allyNumber < 0) {
 				$hako->allyNumber = 0;
 			}
-			// ƒf[ƒ^Ši”[æ‚Ö
+			// ãƒ‡ãƒ¼ã‚¿æ ¼ç´å…ˆã¸
 			$hako->islands[$currentNumber] = $island;
 			return 1;
 		}
 		return 0;
 	}
 	//--------------------------------------------------
-	// •úŠüA–³l“‡‚ğ“¯–¿ƒf[ƒ^‚©‚çíœ
+	// æ”¾æ£„ã€ç„¡äººå³¶ã‚’åŒç›Ÿãƒ‡ãƒ¼ã‚¿ã‹ã‚‰å‰Šé™¤
 	//--------------------------------------------------
 	function allyMemberDel(&$hako) {
 		$flg = 0;
@@ -1010,8 +1030,9 @@ class MakeAlly {
 		}
 		return 0;
     }
+
 	//--------------------------------------------------
-	// lŒû‚ÌÄWŒviƒ^[ƒ“‚É‘g‚İ‚ß‚Îˆ—•s—vj
+	// äººå£ã®å†é›†è¨ˆï¼ˆã‚¿ãƒ¼ãƒ³ã«çµ„ã¿è¾¼ã‚ã°å‡¦ç†ä¸è¦ï¼‰
 	//--------------------------------------------------
 	function allyPopComp(&$hako) {
 		$flg = 0;
@@ -1037,44 +1058,44 @@ class MakeAlly {
 // Ally
 //------------------------------------------------------------
 class Ally extends AllyIO {
-	var $islandList;    // “‡ƒŠƒXƒg
-	var $targetList;    // ƒ^[ƒQƒbƒg‚Ì“‡ƒŠƒXƒg
-	var $defaultTarget;    // –Ú•W•â‘«—pƒ^[ƒQƒbƒg
-	
+	var $islandList;    // å³¶ãƒªã‚¹ãƒˆ
+	var $targetList;    // ã‚¿ãƒ¼ã‚²ãƒƒãƒˆã®å³¶ãƒªã‚¹ãƒˆ
+	var $defaultTarget;    // ç›®æ¨™è£œè¶³ç”¨ã‚¿ãƒ¼ã‚²ãƒƒãƒˆ
+
 	//--------------------------------------------------
 	//
 	//--------------------------------------------------
 	function readIslands(&$cgi) {
 		global $init;
-		
+
 		$m = $this->readIslandsFile();
 		$this->islandList = $this->getIslandList($cgi->dataSet['defaultID']);
-		
+
 		if($init->targetIsland == 1) {
-			// –Ú•W‚Ì“‡ Š—L‚Ì“‡‚ª‘I‘ğ‚³‚ê‚½ƒŠƒXƒg
+			// ç›®æ¨™ã®å³¶ æ‰€æœ‰ã®å³¶ãŒé¸æŠã•ã‚ŒãŸãƒªã‚¹ãƒˆ
 			$this->targetList = $this->islandList;
 		} else {
-			// ‡ˆÊ‚ªTOP‚Ì“‡‚ª‘I‘ğ‚³‚ê‚½ó‘Ô‚ÌƒŠƒXƒg
+			// é †ä½ãŒTOPã®å³¶ãŒé¸æŠã•ã‚ŒãŸçŠ¶æ…‹ã®ãƒªã‚¹ãƒˆ
 			$this->targetList = $this->getIslandList($cgi->dataSet['defaultTarget']);
 		}
 		return $m;
 	}
 	//--------------------------------------------------
-	// “‡ƒŠƒXƒg¶¬
+	// å³¶ãƒªã‚¹ãƒˆç”Ÿæˆ
 	//--------------------------------------------------
 	function getIslandList($select = 0) {
 		global $init;
-		
+
 		$list = "";
 		for($i = 0; $i < $this->islandNumber; $i++) {
 			if($init->allyUse) {
-				$name = Util::islandName($this->islands[$i], $this->ally, $this->idToAllyNumber); // “¯–¿ƒ}[ƒN‚ğ’Ç‰Á
+				$name = Util::islandName($this->islands[$i], $this->ally, $this->idToAllyNumber); // åŒç›Ÿãƒãƒ¼ã‚¯ã‚’è¿½åŠ 
 			} else {
 				$name = $this->islands[$i]['name'];
 			}
 			$id   = $this->islands[$i]['id'];
-			
-			// UŒ‚–Ú•W‚ğ‚ ‚ç‚©‚¶‚ß©•ª‚Ì“‡‚É‚·‚é
+
+			// æ”»æ’ƒç›®æ¨™ã‚’ã‚ã‚‰ã‹ã˜ã‚è‡ªåˆ†ã®å³¶ã«ã™ã‚‹
 			if(empty($this->defaultTarget)) {
 				$this->defaultTarget = $id;
 			}
@@ -1084,9 +1105,9 @@ class Ally extends AllyIO {
 				$s = "";
 			}
 			if($init->allyUse) {
-				$list .= "<option value=\"$id\" $s>{$name}</option>\n"; // “¯–¿ƒ}[ƒN‚ğ’Ç‰Á
+				$list .= "<option value=\"$id\" $s>{$name}</option>\n"; // åŒç›Ÿãƒãƒ¼ã‚¯ã‚’è¿½åŠ 
 			} else {
-				$list .= "<option value=\"$id\" $s>{$name}“‡</option>\n";
+				$list .= "<option value=\"$id\" $s>{$name}å³¶</option>\n";
 			}
 		}
 		return $list;
@@ -1096,22 +1117,22 @@ class Ally extends AllyIO {
 // AllyIO
 //------------------------------------------------------------
 class AllyIO {
-	var $islandTurn;     // ƒ^[ƒ“”
-	var $islandLastTime; // ÅIXV
-	var $islandNumber;   // “‡‚Ì‘”
-	var $islandNextID;   // Ÿ‚ÉŠ„‚è“–‚Ä‚é“‡ID
-	var $islands;        // ‘S“‡‚Ìî•ñ‚ğŠi”[
+	var $islandTurn;     // ã‚¿ãƒ¼ãƒ³æ•°
+	var $islandLastTime; // æœ€çµ‚æ›´æ–°æ™‚åˆ»
+	var $islandNumber;   // å³¶ã®ç·æ•°
+	var $islandNextID;   // æ¬¡ã«å‰²ã‚Šå½“ã¦ã‚‹å³¶ID
+	var $islands;        // å…¨å³¶ã®æƒ…å ±ã‚’æ ¼ç´
 	var $idToNumber;
-	var $allyNumber;     // “¯–¿‚Ì‘”
-	var $ally;           // Še“¯–¿‚Ìî•ñ‚ğŠi”[
-	var $idToAllyNumber; // “¯–¿
-	
+	var $allyNumber;     // åŒç›Ÿã®ç·æ•°
+	var $ally;           // å„åŒç›Ÿã®æƒ…å ±ã‚’æ ¼ç´
+	var $idToAllyNumber; // åŒç›Ÿ
+
 	//--------------------------------------------------
-	// “¯–¿ƒf[ƒ^“Ç‚İ‚±‚İ
+	// åŒç›Ÿãƒ‡ãƒ¼ã‚¿èª­ã¿ã“ã¿
 	//--------------------------------------------------
 	function readAllyFile() {
 		global $init;
-		
+
 		$fileName = "{$init->dirName}/{$init->allyData}";
 		if(!is_file($fileName)) {
 			return false;
@@ -1126,7 +1147,7 @@ class AllyIO {
 			$this->ally[$i] = $this->readAlly($fp);
 			$this->idToAllyNumber[$this->ally[$i]['id']] = $i;
 		}
-		// ‰Á–¿‚µ‚Ä‚¢‚é“¯–¿‚ÌID‚ğŠi”[
+		// åŠ ç›Ÿã—ã¦ã„ã‚‹åŒç›Ÿã®IDã‚’æ ¼ç´
 		for($i = 0; $i < $this->allyNumber; $i++) {
 			$member = $this->ally[$i]['memberId'];
 			$j = 0;
@@ -1143,7 +1164,7 @@ class AllyIO {
 		return true;
 	}
 	//--------------------------------------------------
-	// “¯–¿‚Ğ‚Æ‚Â“Ç‚İ‚±‚İ
+	// åŒç›Ÿã²ã¨ã¤èª­ã¿ã“ã¿
 	//--------------------------------------------------
 	function readAlly($fp) {
 		$name       = chop(fgets($fp, READ_LINE));
@@ -1156,13 +1177,13 @@ class AllyIO {
 		$number     = chop(fgets($fp, READ_LINE));
 		$occupation = chop(fgets($fp, READ_LINE));
 		$tmp        = chop(fgets($fp, READ_LINE));
-		$allymember = split(",", $tmp);
+		$allymember = explode(",", $tmp);
 		$tmp        = chop(fgets($fp, READ_LINE));
-		$ext        = split(",", $tmp);                // Šg’£—Ìˆæ
+		$ext        = explode(",", $tmp);                // æ‹¡å¼µé ˜åŸŸ
 		$comment    = chop(fgets($fp, READ_LINE));
 		$title      = chop(fgets($fp, READ_LINE));
-		list($title, $message) = split("<>", $title);
-		
+		list($title, $message) = explode("<>", $title);
+
 		return array(
 			'name'       => $name,
 			'mark'       => $mark,
@@ -1181,11 +1202,11 @@ class AllyIO {
 		);
 	}
 	//--------------------------------------------------
-	// “¯–¿ƒf[ƒ^‘‚«‚İ
+	// åŒç›Ÿãƒ‡ãƒ¼ã‚¿æ›¸ãè¾¼ã¿
 	//--------------------------------------------------
 	function writeAllyFile() {
 		global $init;
-		
+
 		$fileName = "{$init->dirName}/{$init->allyData}";
 		if(!is_file($fileName)) {
 			touch($fileName);
@@ -1193,7 +1214,7 @@ class AllyIO {
 		$fp = fopen($fileName, "w");
 		Util::lockw($fp);
 		fputs($fp, $this->allyNumber . "\n");
-		
+
 		for($i = 0; $i < $this->allyNumber; $i++) {
 			$this->writeAlly($fp, $this->ally[$i]);
 		}
@@ -1202,7 +1223,7 @@ class AllyIO {
 		return true;
 	}
 	//--------------------------------------------------
-	// “¯–¿‚Ğ‚Æ‚Â‘‚«‚İ
+	// åŒç›Ÿã²ã¨ã¤æ›¸ãè¾¼ã¿
 	//--------------------------------------------------
 	function writeAlly($fp, $ally) {
 		fputs($fp, $ally['name'] . "\n");
@@ -1222,11 +1243,11 @@ class AllyIO {
 		fputs($fp, $ally['title'] . '<>' . $ally['message'] . "\n");
 	}
 	//---------------------------------------------------
-	// ‘S“‡ƒf[ƒ^‚ğ“Ç‚İ‚Ş
+	// å…¨å³¶ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
 	//---------------------------------------------------
 	function readIslandsFile() {
 		global $init;
-		
+
 		$fileName = "{$init->dirName}/hakojima.dat";
 		if(!is_file($fileName)) {
 			return false;
@@ -1237,7 +1258,7 @@ class AllyIO {
 		$this->islandLastTime = chop(fgets($fp, READ_LINE));
 		$this->islandNumber   = chop(fgets($fp, READ_LINE));
 		$this->islandNextID   = chop(fgets($fp, READ_LINE));
-		
+
 		for($i = 0; $i < $this->islandNumber; $i++) {
 			$this->islands[$i] = $this->readIsland($fp);
 			$this->idToNumber[$this->islands[$i]['id']] = $i;
@@ -1245,48 +1266,49 @@ class AllyIO {
 		}
 		Util::unlock($fp);
 		fclose($fp);
-		
+
 		if($init->allyUse) {
 			$this->readAllyFile();
 		}
 		return true;
 	}
 	//---------------------------------------------------
-	// “‡‚Ğ‚Æ‚Â“Ç‚İ‚Ş
+	// å³¶ã²ã¨ã¤èª­ã¿è¾¼ã‚€
 	//---------------------------------------------------
 	function readIsland($fp) {
 		$name     = chop(fgets($fp, READ_LINE));
-		list($name, $owner, $monster, $port, $passenger, $fishingboat, $tansaku, $senkan, $viking) = split(",", $name);
+
+		list($name, $owner, $monster, $port, $passenger, $fishingboat, $tansaku, $senkan, $viking) = array_pad(explode(",", $name), 10, NULL);
 		$id       = chop(fgets($fp, READ_LINE));
-		list($id, $starturn) = split(",", $id);
+		list($id, $starturn) = explode(",", $id);
 		$prize    = chop(fgets($fp, READ_LINE));
 		$absent   = chop(fgets($fp, READ_LINE));
 		$comment  = chop(fgets($fp, READ_LINE));
-		list($comment, $comment_turn) = split(",", $comment);
+		list($comment, $comment_turn) = explode(",", $comment);
 		$password = chop(fgets($fp, READ_LINE));
 		$point    = chop(fgets($fp, READ_LINE));
-		list($point, $pots) = split(",", $point);
+		list($point, $pots) = explode(",", $point);
 		$eisei    = chop(fgets($fp, READ_LINE));
-		list($eisei0, $eisei1, $eisei2, $eisei3, $eisei4, $eisei5) = split(",", $eisei);
+		list($eisei0, $eisei1, $eisei2, $eisei3, $eisei4, $eisei5) = array_pad(explode(",", $eisei), 6, NULL);
 		$zin      = chop(fgets($fp, READ_LINE));
-		list($zin0, $zin1, $zin2, $zin3, $zin4, $zin5, $zin6) = split(",", $zin);
+		list($zin0, $zin1, $zin2, $zin3, $zin4, $zin5, $zin6) = array_pad(explode(",", $zin), 7, NULL);
 		$item     = chop(fgets($fp, READ_LINE));
-		list($item0, $item1, $item2, $item3, $item4, $item5, $item6, $item7, $item8, $item9, $item10, $item11, $item12, $item13, $item14, $item15, $item16, $item17, $item18, $item19) = split(",", $item);
+		list($item0, $item1, $item2, $item3, $item4, $item5, $item6, $item7, $item8, $item9, $item10, $item11, $item12, $item13, $item14, $item15, $item16, $item17, $item18, $item19) = array_pad(explode(",", $item), 20, NULL);
 		$money    = chop(fgets($fp, READ_LINE));
-		list($money, $lot, $gold) = split(",", $money);
+		list($money, $lot, $gold) = array_pad(explode(",", $money), 3, NULL);
 		$food     = chop(fgets($fp, READ_LINE));
-		list($food, $rice) = split(",", $food);
+		list($food, $rice) = explode(",", $food);
 		$pop      = chop(fgets($fp, READ_LINE));
-		list($pop, $peop) = split(",", $pop);
+		list($pop, $peop) = explode(",", $pop);
 		$area     = chop(fgets($fp, READ_LINE));
 		$job      = chop(fgets($fp, READ_LINE));
-		list($farm, $factory, $commerce, $mountain, $hatuden) = split(",", $job);
+		list($farm, $factory, $commerce, $mountain, $hatuden) = explode(",", $job);
 		$power    = chop(fgets($fp, READ_LINE));
-		list($taiji, $rena, $fire) = split(",", $power);
+		list($taiji, $rena, $fire) = explode(",", $power);
 		$tenki    = chop(fgets($fp, READ_LINE));
 		$soccer   = chop(fgets($fp, READ_LINE));
-		list($soccer, $team, $shiai, $kachi, $make, $hikiwake, $kougeki, $bougyo, $tokuten, $shitten) = split(",", $soccer);
-		
+		list($soccer, $team, $shiai, $kachi, $make, $hikiwake, $kougeki, $bougyo, $tokuten, $shitten) = array_pad(explode(",", $soccer), 10, NULL);
+
 		return array(
 			'name'         => $name,
 			'owner'        => $owner,
@@ -1327,11 +1349,10 @@ class AllyIO {
 			'bougyo'       => $bougyo,
 			'tokuten'      => $tokuten,
 			'shitten'      => $shitten,
-			'land'         => $land,
-			'landValue'    => $landValue,
-			'command'      => $command,
-			'lbbs'         => $lbbs,
-			'port'         => $port,
+			'land'         => (isset($land)) ? $land : "",
+			'landValue'    => (isset($landValue)) ? $landValue : "",
+			'command'      => (isset($command)) ? $command : "",
+			'port'         => (isset($port)) ? $port : "",
 			'ship'         => array('passenger' => $passenger, 'fishingboat' => $fishingboat, 'tansaku' => $tansaku, 'senkan' => $senkan, 'viking' => $viking),
 			'eisei'        => array(0 => $eisei0, 1 => $eisei1, 2 => $eisei2, 3 => $eisei3, 4 => $eisei4, 5 => $eisei5),
 			'zin'          => array(0 => $zin0, 1 => $zin1, 2 => $zin2, 3 => $zin3, 4 => $zin4, 5 => $zin5, 6 => $zin6),
@@ -1343,28 +1364,28 @@ class AllyIO {
 //------------------------------------------------------------
 class Util {
 	//---------------------------------------------------
-	// ‘‹à‚Ì•\¦
+	// è³‡é‡‘ã®è¡¨ç¤º
 	//---------------------------------------------------
-	function aboutMoney($money = 0) {
+	static function aboutMoney($money = 0) {
 		global $init;
-		
+
 		if($init->moneyMode) {
 			if($money < 500) {
-				return "„’è500{$init->unitMoney}–¢–";
+				return "æ¨å®š500{$init->unitMoney}æœªæº€";
 			} else {
-				return "„’è" . round($money / 1000) . "000" . $init->unitMoney;
+				return "æ¨å®š" . round($money / 1000) . "000" . $init->unitMoney;
 			}
 		} else {
 			return $money . $init->unitMoney;
 		}
 	}
-	
+
 	//---------------------------------------------------
-	// “¯–¿‚Ìè—L—¦‚ÌŒvZ
+	// åŒç›Ÿã®å æœ‰ç‡ã®è¨ˆç®—
 	//---------------------------------------------------
-	function allyOccupy(&$hako) {
+	static function allyOccupy(&$hako) {
 		$totalScore = 0;
-		
+
 		for($i=0; $i<$hako->allyNumber; $i++) {
 			$totalScore += $hako->ally[$i]['score'];
 		}
@@ -1377,77 +1398,77 @@ class Util {
 		}
 		return;
 	}
-	
+
 	//---------------------------------------------------
-	// lŒû‡‚Éƒ\[ƒg(“¯–¿ƒo[ƒWƒ‡ƒ“)
+	// äººå£é †ã«ã‚½ãƒ¼ãƒˆ(åŒç›Ÿãƒãƒ¼ã‚¸ãƒ§ãƒ³)
 	//---------------------------------------------------
-	function allySort(&$hako) {
+	static function allySort(&$hako) {
 		usort($hako->ally, 'scoreComp');
 	}
-	
+
 	//---------------------------------------------------
-	// “‡‚Ì–¼‘O‚©‚ç”Ô†‚ğZo
+	// å³¶ã®åå‰ã‹ã‚‰ç•ªå·ã‚’ç®—å‡º
 	//---------------------------------------------------
-	function nameToNumber($hako, $name) {
-		// ‘S“‡‚©‚ç’T‚·
+	static function nameToNumber($hako, $name) {
+		// å…¨å³¶ã‹ã‚‰æ¢ã™
 		for($i = 0; $i < $hako->islandNumber; $i++) {
 			if(strcmp($name, "{$hako->islands[$i]['name']}") == 0) {
 				return $i;
 			}
 		}
-		// Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡
+		// è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆ
 		return -1;
     }
-    
+
 	//---------------------------------------------------
-	// “¯–¿‚Ì–¼‘O‚©‚çID‚ğ“¾‚é
+	// åŒç›Ÿã®åå‰ã‹ã‚‰IDã‚’å¾—ã‚‹
 	//---------------------------------------------------
-	function aNameToId($hako, $name) {
-		// ‘S“‡‚©‚ç’T‚·
+	static function aNameToId($hako, $name) {
+		// å…¨å³¶ã‹ã‚‰æ¢ã™
 		for($i = 0; $i < $hako->allyNumber; $i++) {
 			if($hako->ally[$i]['name'] == $name) {
 				return $hako->ally[$i]['id'];
 			}
 		}
-		// Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡
+		// è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆ
 		return -1;
 	}
-	
+
 	//---------------------------------------------------
-	// “¯–¿‚Ìƒ}[ƒN‚©‚çID‚ğ“¾‚é
+	// åŒç›Ÿã®ãƒãƒ¼ã‚¯ã‹ã‚‰IDã‚’å¾—ã‚‹
 	//---------------------------------------------------
-	function aMarkToId($hako, $mark) {
-		// ‘S“‡‚©‚ç’T‚·
+	static function aMarkToId($hako, $mark) {
+		// å…¨å³¶ã‹ã‚‰æ¢ã™
 		for($i = 0; $i < $hako->allyNumber; $i++) {
 			if($hako->ally[$i]['mark'] == $mark) {
 				return $hako->ally[$i]['id'];
 			}
 		}
-		// Œ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡
+		// è¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸå ´åˆ
 		return -1;
 	}
-	
+
 	//---------------------------------------------------
-	// ƒGƒXƒP[ƒv•¶š‚Ìˆ—
+	// ã‚¨ã‚¹ã‚±ãƒ¼ãƒ—æ–‡å­—ã®å‡¦ç†
 	//---------------------------------------------------
-	function htmlEscape($s, $mode = 0) {
+	static function htmlEscape($s, $mode = 0) {
 		$s = htmlspecialchars($s);
 		$s = str_replace('"','&quot;', $s);
 		$s = str_replace("'","&#039;", $s);
-		
+
 		if ($mode) {
 			$s = str_replace("\r\n", "<br>", $s);
 			$s = str_replace("\r", "<br>", $s);
 			$s = str_replace("\n", "<br>", $s);
-			$s = ereg_replace("(<br>){5,}", "<br>", $s); // ‘å—Ê‰üs‘Îô
+			$s = preg_replace("/(<br>){5,}/", "<br>", $s); // å¤§é‡æ”¹è¡Œå¯¾ç­–
 		}
 		return $s;
 	}
-	
+
 	//---------------------------------------------------
-	// “‡–¼‚ğ•Ô‚·
+	// å³¶åã‚’è¿”ã™
 	//---------------------------------------------------
-	function islandName($island, $ally, $idToAllyNumber) {
+	static function islandName($island, $ally, $idToAllyNumber) {
 		$name = '';
 		foreach ($island['allyId'] as $id) {
 			$i = $idToAllyNumber[$id];
@@ -1455,17 +1476,17 @@ class Util {
 			$color = $ally[$i]['color'];
 			$name .= '<FONT COLOR="' . $color . '"><B>' . $mark . '</B></FONT> ';
 		}
-		$name .= $island['name'] . "“‡";
+		$name .= $island['name'] . "å³¶";
 		return ($name);
 	}
-	
+
 	//---------------------------------------------------
-	// ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+	// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
 	//---------------------------------------------------
-	function checkPassword($p1 = "", $p2 = "") {
+	static function checkPassword($p1 = "", $p2 = "") {
 		global $init;
-		
-		// nullƒ`ƒFƒbƒN
+
+		// nullãƒã‚§ãƒƒã‚¯
 		if(empty($p2)) {
 			return false;
 		}
@@ -1474,7 +1495,7 @@ class Util {
 			$masterPassword = chop(fgets($fp, READ_LINE));
 			fclose($fp);
 		}
-		// ƒ}ƒXƒ^[ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+		// ãƒã‚¹ã‚¿ãƒ¼ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
 		if(strcmp($masterPassword, crypt($p2, 'ma')) == 0) {
 			return true;
 		}
@@ -1483,69 +1504,69 @@ class Util {
 		}
 		return false;
 	}
-	
+
 	//---------------------------------------------------
-	// ƒpƒXƒ[ƒh‚ÌƒGƒ“ƒR[ƒh
+	// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®ã‚¨ãƒ³ã‚³ãƒ¼ãƒ‰
 	//---------------------------------------------------
-	function encode($s) {
+	static function encode($s) {
 		global $init;
-		
+
 		if($init->cryptOn) {
 			return crypt($s, 'h2');
 		} else {
 			return $s;
 		}
 	}
-	
+
 	//---------------------------------------------------
-	// ƒtƒ@ƒCƒ‹‚ğƒƒbƒN‚·‚é(‘‚«‚İ)
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹(æ›¸ãè¾¼ã¿æ™‚)
 	//---------------------------------------------------
-	function lockw($fp) {
+	static function lockw($fp) {
 		set_file_buffer($fp, 0);
 		if(!flock($fp, LOCK_EX)) {
 			Error::lockFail();
 		}
 		rewind($fp);
 	}
-	
+
 	//---------------------------------------------------
-	// ƒtƒ@ƒCƒ‹‚ğƒƒbƒN‚·‚é(“Ç‚İ‚İ)
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ­ãƒƒã‚¯ã™ã‚‹(èª­ã¿è¾¼ã¿æ™‚)
 	//---------------------------------------------------
-	function lockr($fp) {
+	static function lockr($fp) {
 		set_file_buffer($fp, 0);
 		if(!flock($fp, LOCK_SH)) {
 			Error::lockFail();
 		}
 		rewind($fp);
 	}
-	
+
 	//---------------------------------------------------
-	// ƒtƒ@ƒCƒ‹‚ğƒAƒ“ƒƒbƒN‚·‚é
+	// ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ã‚¢ãƒ³ãƒ­ãƒƒã‚¯ã™ã‚‹
 	//---------------------------------------------------
-	function unlock($fp) {
+	static function unlock($fp) {
 		flock($fp, LOCK_UN);
 	}
 }
 
 
 //------------------------------------------------------------
-// ƒƒCƒ“ˆ—
+// ãƒ¡ã‚¤ãƒ³å‡¦ç†
 //------------------------------------------------------------
 class Main {
 	var $mode;
 	var $dataSet = array();
 	//--------------------------------------------------
-	// ƒ‚[ƒh•ªŠò
+	// ãƒ¢ãƒ¼ãƒ‰åˆ†å²
 	//--------------------------------------------------
 	function execute() {
 		global $init;
-		
+
 		$ally = new Ally;
 		$cgi = new Cgi;
-		
+
 		$this->parseInputData();
 		$cgi->getCookies();
-		
+
 		if(!$ally->readIslands($cgi)) {
 			HTML::header($cgi->dataSet);
 			Error::noDataFile();
@@ -1554,48 +1575,48 @@ class Main {
 		}
 		$cgi->setCookies();
 		$cgi->lastModified();
-		
+
 		$html = new HtmlAlly;
 		$com = new MakeAlly;
 		$html->header($cgi->dataSet);
 		switch($this->mode) {
 			case "JoinA":
-				// “¯–¿‚ÌŒ‹¬E•ÏXE‰ğUE‰Á–¿E’E‘Ş
+				// åŒç›Ÿã®çµæˆãƒ»å¤‰æ›´ãƒ»è§£æ•£ãƒ»åŠ ç›Ÿãƒ»è„±é€€
 				$html->newAllyTop($ally, $this->dataSet);
 				break;
-				
+
 			case "newally":
-				// “¯–¿‚ÌŒ‹¬E•ÏX
+				// åŒç›Ÿã®çµæˆãƒ»å¤‰æ›´
 				$com->makeAllyMain($ally, $this->dataSet);
 				break;
-				
+
 			case "delally":
-				// “¯–¿‚Ì‰ğU
+				// åŒç›Ÿã®è§£æ•£
 				$com->deleteAllyMain($ally, $this->dataSet);
 				break;
-				
+
 			case "inoutally":
-				// “¯–¿‚Ì‰Á–¿E’E‘Ş
+				// åŒç›Ÿã®åŠ ç›Ÿãƒ»è„±é€€
 				$com->joinAllyMain($ally, $this->dataSet);
 				break;
-				
+
 			case "Allypact":
-				// ƒRƒƒ“ƒg‚Ì•ÏX
+				// ã‚³ãƒ¡ãƒ³ãƒˆã®å¤‰æ›´
 				$html->tempAllyPactPage($ally, $this->dataSet);
 				break;
-				
+
 			case "AllypactUp":
-				// ƒRƒƒ“ƒg‚ÌXV
+				// ã‚³ãƒ¡ãƒ³ãƒˆã®æ›´æ–°
 				$com->allyPactMain($ally, $this->dataSet);
 				break;
-				
+
 			case "AmiOfAlly":
-				// “¯–¿‚Ìî•ñ
+				// åŒç›Ÿã®æƒ…å ±
 				$html->amityOfAlly($ally, $this->dataSet);
 				break;
-				
+
 			default:
-				// ” ’ëƒf[ƒ^‚Æ‚Ìƒf[ƒ^“‡ˆ—iƒ^[ƒ“ˆ—‚É‘g‚İ‚ñ‚Å‚¢‚È‚¢‚½‚ßj
+				// ç®±åº­ãƒ‡ãƒ¼ã‚¿ã¨ã®ãƒ‡ãƒ¼ã‚¿çµ±åˆå‡¦ç†ï¼ˆã‚¿ãƒ¼ãƒ³å‡¦ç†ã«çµ„ã¿è¾¼ã‚“ã§ã„ãªã„ãŸã‚ï¼‰
 				if($com->allyReComp($ally)) {
 					break;
 				}
@@ -1605,25 +1626,27 @@ class Main {
 		$html->footer();
 	}
 	//---------------------------------------------------
-	// POSTAGET‚Ìƒf[ƒ^‚ğæ“¾
+	// POSTã€GETã®ãƒ‡ãƒ¼ã‚¿ã‚’å–å¾—
 	//---------------------------------------------------
 	function parseInputData() {
 		global $init;
-		
-		$this->mode = $_POST['mode'];
+
+		if ( isset($_POST['mode']) ) {
+			$this->mode = $_POST['mode'];
+		}
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
 				$value = str_replace(",", "", $value);
-				JcodeConvert($value, 0, 2);
-				$value = HANtoZEN_SJIS($value);
-				
+				// JcodeConvert($value, 0, 2);
+				// $value = HANtoZEN_UTF8($value);
+
 				if($init->stripslashes == true) {
 					$this->dataSet["{$name}"] = stripslashes($value);
 				} else {
 					$this->dataSet["{$name}"] = $value;
 				}
 			}
-			if($this->dataSet['Allypact']) {
+			if( isset($this->dataSet['Allypact']) ) {
 				$this->mode = "AllypactUp";
 			}
 			if(array_key_exists('NewAllyButton', $_POST)) {
@@ -1654,10 +1677,10 @@ class Main {
 $start = new Main();
 $start->execute();
 
-// lŒû‚ğ”äŠrA“¯–¿ˆê———p
+// äººå£ã‚’æ¯”è¼ƒã€åŒç›Ÿä¸€è¦§ç”¨
 function scoreComp($x, $y) {
 	if($x['dead'] == 1) {
-		// €–Åƒtƒ‰ƒO‚ª—§‚Á‚Ä‚¢‚ê‚ÎŒã‚ë‚Ö
+		// æ­»æ»…ãƒ•ãƒ©ã‚°ãŒç«‹ã£ã¦ã„ã‚Œã°å¾Œã‚ã¸
 		return +1;
 	}
 	if($y['dead'] == 1) {
@@ -1668,5 +1691,3 @@ function scoreComp($x, $y) {
 	}
 	return ($x['score'] > $y['score']) ? -1 : +1;
 }
-
-?>

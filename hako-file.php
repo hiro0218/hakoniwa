@@ -2,39 +2,39 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- ƒf[ƒ^ƒtƒH[ƒ}ƒbƒg’è‹`—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆå®šç¾©ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-file.php by SERA - 2012/07/08
 
 *******************************************************************/
 
 //--------------------------------------------------------------------
 class HakoIO {
-	var $islandTurn;      // ƒ^[ƒ“”
-	var $islandLastTime;  // ÅIXV
-	var $islandNumber;    // “‡‚Ì‘”
-	var $islandNextID;    // Ÿ‚ÉŠ„‚è“–‚Ä‚é“‡ID
-	var $islands;         // ‘S“‡‚Ìî•ñ‚ğŠi”[
+	var $islandTurn;      // ã‚¿ãƒ¼ãƒ³æ•°
+	var $islandLastTime;  // æœ€çµ‚æ›´æ–°æ™‚åˆ»
+	var $islandNumber;    // å³¶ã®ç·æ•°
+	var $islandNextID;    // æ¬¡ã«å‰²ã‚Šå½“ã¦ã‚‹å³¶ID
+	var $islands;         // å…¨å³¶ã®æƒ…å ±ã‚’æ ¼ç´
 	var $idToNumber;
 	var $idToName;
-	var $islandNumberBF;   // BF‚Éİ’è‚³‚ê‚Ä‚¢‚é“‡‚Ì”
-	var $islandNumberNoBF; // •’Ê‚Ì“‡‚Ì”
-	var $islandNumberKP;   // ŠÇ—l—a‚©‚è‚Éİ’è‚³‚ê‚Ä‚¢‚é“‡‚Ì”
-	var $islandNumberNoKP; // •’Ê‚Ì“‡‚Ì”
-	var $allyNumber;       // “¯–¿‚Ì‘”
-	var $ally;             // Še“¯–¿‚Ìî•ñ‚ğŠi”[
+	var $islandNumberBF;   // BFã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å³¶ã®æ•°
+	var $islandNumberNoBF; // æ™®é€šã®å³¶ã®æ•°
+	var $islandNumberKP;   // ç®¡ç†äººé ã‹ã‚Šã«è¨­å®šã•ã‚Œã¦ã„ã‚‹å³¶ã®æ•°
+	var $islandNumberNoKP; // æ™®é€šã®å³¶ã®æ•°
+	var $allyNumber;       // åŒç›Ÿã®ç·æ•°
+	var $ally;             // å„åŒç›Ÿã®æƒ…å ±ã‚’æ ¼ç´
 	var $idToAllyNumber;
-	
+
 	//---------------------------------------------------
-	// ‘S“‡ƒf[ƒ^‚ğ“Ç‚İ‚Ş
-	// 'mode'‚ª•Ï‚í‚é‰Â”\«‚ª‚ ‚é‚Ì‚Å$cgi‚ğQÆ‚Åó‚¯æ‚é
+	// å…¨å³¶ãƒ‡ãƒ¼ã‚¿ã‚’èª­ã¿è¾¼ã‚€
+	// 'mode'ãŒå¤‰ã‚ã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹ã®ã§$cgiã‚’å‚ç…§ã§å—ã‘å–ã‚‹
 	//---------------------------------------------------
 	function readIslandsFile(&$cgi) {
 		global $init;
-		
-		$num = $cgi->dataSet['ISLANDID'];
+
+		$num = (isset( $cgi->dataSet['ISLANDID'] )) ? $cgi->dataSet['ISLANDID'] : "";
 		$fileName = "{$init->dirName}/hakojima.dat";
 		if(!is_file($fileName)) {
 			return false;
@@ -43,14 +43,15 @@ class HakoIO {
 		$this->islandTurn = chop(fgets($fp, READ_LINE));
 		$this->islandLastTime = chop(fgets($fp, READ_LINE));
 		$str = chop(fgets($fp, READ_LINE));
-		list ($this->islandNumber, $this->islandNumberBF, $this->islandNumberKP) = split(",", $str);
+		list ($this->islandNumber, $this->islandNumberBF, $this->islandNumberKP) = explode(",", $str);
 		$this->islandNextID = chop(fgets($fp, READ_LINE));
-		
+
 		$GLOBALS['ISLAND_TURN'] = $this->islandTurn;
-		
-		// ƒ^[ƒ“ˆ—”»’è
-		$now = time();
-		if((DEBUG && (strcmp($cgi->dataSet['mode'], 'debugTurn') == 0)) ||
+
+		// ã‚¿ãƒ¼ãƒ³å‡¦ç†åˆ¤å®š
+		$now = $_SERVER['REQUEST_TIME'];
+		$_mode = isset($cgi->dataSet['mode']) ? $cgi->dataSet['mode'] : "";
+		if((DEBUG && (strcmp($_mode, 'debugTurn') == 0)) ||
 			 (($now - $this->islandLastTime) >= $init->unitTime)) {
 			$cgi->mode = $data['mode'] = 'turn';
 			$num = -1;
@@ -68,59 +69,63 @@ class HakoIO {
 		$this->islandNumberNoBF = $this->islandNumber - $islandNumberBF;
 		$this->islandNumberNoKP = $this->islandNumber - $islandNumberKP;
 		fclose($fp);
-		
+
 		if($init->allyUse) {
 			$this->readAllyFile();
 		}
 		return true;
 	}
 	//---------------------------------------------------
-	// “‡‚Ğ‚Æ‚Â“Ç‚İ‚Ş
+	// å³¶ã²ã¨ã¤èª­ã¿è¾¼ã‚€
 	//---------------------------------------------------
 	function readIsland($fp, $num) {
 		global $init;
-		
+
 		$name = chop(fgets($fp, READ_LINE));
-		list($name, $owner, $monster, $port, $ship0, $ship1, $ship2, $ship3, $ship4, $ship5, $ship6, $ship7, $ship8, $ship9, $ship10, $ship11, $ship12, $ship13, $ship14) = split(",", $name);
+		list($name, $owner, $monster, $port, $ship0, $ship1, $ship2, $ship3, $ship4, $ship5, $ship6, $ship7, $ship8, $ship9, $ship10, $ship11, $ship12, $ship13, $ship14) = array_pad(explode(",", $name), 20, NULL);
 		$id = chop(fgets($fp, READ_LINE));
-		list($id, $starturn, $isBF, $keep) = split(",", $id);
-		if ($isBF) { $isBF = 1; }
-		if ($keep) { $keep = 1; }
+		list($id, $starturn, $isBF, $keep) = explode(",", $id);
+		if ($isBF) {
+			$isBF = 1;
+		}
+		if ($keep) {
+			$keep = 1;
+		}
 		$prize = chop(fgets($fp, READ_LINE));
 		$absent = chop(fgets($fp, READ_LINE));
 		$comment = chop(fgets($fp, READ_LINE));
-		list($comment, $comment_turn) = split(",", $comment);
+		list($comment, $comment_turn) = explode(",", $comment);
 		$password = chop(fgets($fp, READ_LINE));
 		$point = chop(fgets($fp, READ_LINE));
-		list($point, $pots) = split(",", $point);
+		list($point, $pots) = explode(",", $point);
 		$eisei = chop(fgets($fp, READ_LINE));
-		list($eisei0, $eisei1, $eisei2, $eisei3, $eisei4, $eisei5) = split(",", $eisei);
+		list($eisei0, $eisei1, $eisei2, $eisei3, $eisei4, $eisei5) = array_pad(explode(",", $eisei), 6, NULL);
 		$zin = chop(fgets($fp, READ_LINE));
-		list($zin0, $zin1, $zin2, $zin3, $zin4, $zin5, $zin6) = split(",", $zin);
+		list($zin0, $zin1, $zin2, $zin3, $zin4, $zin5, $zin6) = array_pad(explode(",", $zin), 7, NULL);
 		$item = chop(fgets($fp, READ_LINE));
-		list($item0, $item1, $item2, $item3, $item4, $item5, $item6, $item7, $item8, $item9, $item10, $item11, $item12, $item13, $item14, $item15, $item16, $item17, $item18, $item19, $item20) = split(",", $item);
+		list($item0, $item1, $item2, $item3, $item4, $item5, $item6, $item7, $item8, $item9, $item10, $item11, $item12, $item13, $item14, $item15, $item16, $item17, $item18, $item19, $item20) = array_pad(explode(",", $item), 21, NULL);
 		$money = chop(fgets($fp, READ_LINE));
-		list($money, $lot, $gold) = split(",", $money);
+		list($money, $lot, $gold) = explode(",", $money);
 		$food = chop(fgets($fp, READ_LINE));
-		list($food, $rice) = split(",", $food);
+		list($food, $rice) = explode(",", $food);
 		$pop = chop(fgets($fp, READ_LINE));
-		list($pop, $peop) = split(",", $pop);
+		list($pop, $peop) = explode(",", $pop);
 		$area = chop(fgets($fp, READ_LINE));
 		$job = chop(fgets($fp, READ_LINE));
-		list($farm, $factory, $commerce, $mountain, $hatuden) = split(",", $job);
+		list($farm, $factory, $commerce, $mountain, $hatuden) = explode(",", $job);
 		$power = chop(fgets($fp, READ_LINE));
-		list($taiji, $rena, $fire) = split(",", $power);
+		list($taiji, $rena, $fire) = explode(",", $power);
 		$tenki = chop(fgets($fp, READ_LINE));
 		$soccer = chop(fgets($fp, READ_LINE));
-		list($soccer, $team, $shiai, $kachi, $make, $hikiwake, $kougeki, $bougyo, $tokuten, $shitten) = split(",", $soccer);
-		
+		list($soccer, $team, $shiai, $kachi, $make, $hikiwake, $kougeki, $bougyo, $tokuten, $shitten) = array_pad(explode(",", $soccer), 10, NULL);
+
 		$this->idToName[$id] = $name;
-		
+
 		if(($num == -1) || ($num == $id)) {
 			$fp_i = fopen("{$init->dirName}/island.{$id}", "r");
-			
-			// ’nŒ`
-			$offset = 7; // ˆê‘Î‚Ìƒf[ƒ^‚ª‰½•¶š‚©
+
+			// åœ°å½¢
+			$offset = 7; // ä¸€å¯¾ã®ãƒ‡ãƒ¼ã‚¿ãŒä½•æ–‡å­—ã‹
 			for($y = 0; $y < $init->islandSize; $y++) {
 				$line = chop(fgets($fp_i, READ_LINE));
 				for($x = 0; $x < $init->islandSize; $x++) {
@@ -130,11 +135,11 @@ class HakoIO {
 					$landValue[$x][$y] = hexdec($v);
 				}
 			}
-			
-			// ƒRƒ}ƒ“ƒh
+
+			// ã‚³ãƒãƒ³ãƒ‰
 			for($i = 0; $i < $init->commandMax; $i++) {
 				$line = chop(fgets($fp_i, READ_LINE));
-				list($kind, $target, $x, $y, $arg) = split(",", $line);
+				list($kind, $target, $x, $y, $arg) = explode(",", $line);
 				$command[$i] = array (
 					'kind' => $kind,
 					'target' => $target,
@@ -143,11 +148,7 @@ class HakoIO {
 					'arg' => $arg,
 				);
 			}
-			// ƒ[ƒJƒ‹Œf¦”Â
-			for($i = 0; $i < $init->lbbsMax; $i++) {
-				$line = chop(fgets($fp_i, READ_LINE));
-				$lbbs[$i] = $line;
-			}
+
 			fclose($fp_i);
 		}
 		return array(
@@ -192,10 +193,10 @@ class HakoIO {
 			'bougyo'       => $bougyo,
 			'tokuten'      => $tokuten,
 			'shitten'      => $shitten,
-			'land'         => $land,
-			'landValue'    => $landValue,
-			'command'      => $command,
-			'lbbs'         => $lbbs,
+			'land'         => isset($land)      ? $land : "",
+			'landValue'    => isset($landValue) ? $landValue : "",
+			'command'      => isset($command)   ? $command: "",
+			'lbbs'         => isset($lbbs)      ? $lbbs : "",
 			'port'         => $port,
 			'ship'         => array(0 => $ship0, 1 => $ship1, 2 => $ship2, 3 => $ship3, 4 => $ship4, 5 => $ship5, 6 => $ship6, 7 => $ship7, 8 => $ship8, 9 => $ship9, 10 => $ship10, 11 => $ship11, 12 => $ship12, 13 => $ship13, 14 => $ship14),
 			'eisei'        => array(0 => $eisei0, 1 => $eisei1, 2 => $eisei2, 3 => $eisei3, 4 => $eisei4, 5 => $eisei5),
@@ -204,21 +205,21 @@ class HakoIO {
 		);
 	}
 	//---------------------------------------------------
-	// ’nŒ`‚ğ‘‚«‚Ş
+	// åœ°å½¢ã‚’æ›¸ãè¾¼ã‚€
 	//---------------------------------------------------
 	function writeLand($num, $island) {
 		global $init;
-		// ’nŒ`
+		// åœ°å½¢
 		if(($num <= -1) || ($num == $island['id'])) {
 			$fileName = "{$init->dirName}/island.{$island['id']}";
-			
+
 			if(!is_file($fileName)) {
 				touch($fileName);
 			}
 			$fp_i = fopen($fileName, "w");
 			$land = $island['land'];
 			$landValue = $island['landValue'];
-			
+
 			for($y = 0; $y < $init->islandSize; $y++) {
 				for($x = 0; $x < $init->islandSize; $x++) {
 					$l = sprintf("%02x%05x", $land[$x][$y], $landValue[$x][$y]);
@@ -226,7 +227,7 @@ class HakoIO {
 				}
 				fputs($fp_i, "\n");
 			}
-			// ƒRƒ}ƒ“ƒh
+			// ã‚³ãƒãƒ³ãƒ‰
 			$command = $island['command'];
 			for($i = 0; $i < $init->commandMax; $i++) {
 					$com = sprintf("%d,%d,%d,%d,%d\n",
@@ -238,20 +239,16 @@ class HakoIO {
 				);
 				fputs($fp_i, $com);
 			}
-			// ƒ[ƒJƒ‹Œf¦”Â
-			$lbbs = $island['lbbs'];
-			for($i = 0; $i < $init->lbbsMax; $i++) {
-				fputs($fp_i, $lbbs[$i] . "\n");
-			}
+
 			fclose($fp_i);
 		}
 	}
 	//--------------------------------------------------
-	// “¯–¿ƒf[ƒ^“Ç‚İ‚±‚İ
+	// åŒç›Ÿãƒ‡ãƒ¼ã‚¿èª­ã¿ã“ã¿
 	//--------------------------------------------------
 	function readAllyFile() {
 		global $init;
-		
+
 		$fileName = "{$init->dirName}/{$init->allyData}";
 		if(!is_file($fileName)) {
 			return false;
@@ -265,7 +262,7 @@ class HakoIO {
 			$this->ally[$i] = $this->readAlly($fp);
 			$this->idToAllyNumber[$this->ally[$i]['id']] = $i;
 		}
-		// ‰Á–¿‚µ‚Ä‚¢‚é“¯–¿‚ÌID‚ğŠi”[
+		// åŠ ç›Ÿã—ã¦ã„ã‚‹åŒç›Ÿã®IDã‚’æ ¼ç´
 		for($i = 0; $i < $this->allyNumber; $i++) {
 			$member = $this->ally[$i]['memberId'];
 			$j = 0;
@@ -281,7 +278,7 @@ class HakoIO {
 		return true;
 	}
 	//--------------------------------------------------
-	// “¯–¿‚Ğ‚Æ‚Â“Ç‚İ‚±‚İ
+	// åŒç›Ÿã²ã¨ã¤èª­ã¿ã“ã¿
 	//--------------------------------------------------
 	function readAlly($fp) {
 		$name = chop(fgets($fp, READ_LINE));
@@ -294,13 +291,13 @@ class HakoIO {
 		$number = chop(fgets($fp, READ_LINE));
 		$occupation = chop(fgets($fp, READ_LINE));
 		$tmp = chop(fgets($fp, READ_LINE));
-		$allymember = split(",", $tmp);
+		$allymember = explode(",", $tmp);
 		$tmp = chop(fgets($fp, READ_LINE));
-		$ext = split(",", $tmp); // Šg’£—Ìˆæ
+		$ext = explode(",", $tmp); // æ‹¡å¼µé ˜åŸŸ
 		$comment = chop(fgets($fp, READ_LINE));
 		$title = chop(fgets($fp, READ_LINE));
-		list($title, $message) = split("<>", $title);
-		
+		list($title, $message) = explode("<>", $title);
+
 		return array(
 			'name'       => $name,
 			'mark'       => $mark,
@@ -319,13 +316,13 @@ class HakoIO {
 		);
 	}
 	//---------------------------------------------------
-	// ‘S“‡ƒf[ƒ^‚ğ‘‚«‚Ş
+	// å…¨å³¶ãƒ‡ãƒ¼ã‚¿ã‚’æ›¸ãè¾¼ã‚€
 	//---------------------------------------------------
 	function writeIslandsFile($num = 0) {
 		global $init;
-		
+
 		$fileName = "{$init->dirName}/hakojima.dat";
-		
+
 		if(!is_file($fileName)) {
 			touch($fileName);
 		}
@@ -341,21 +338,38 @@ class HakoIO {
 		// chmod($fileName, 0666);
 	}
 	//---------------------------------------------------
-	// “‡‚Ğ‚Æ‚Â‘‚«‚Ş
+	// å³¶ã²ã¨ã¤æ›¸ãè¾¼ã‚€
 	//---------------------------------------------------
 	function writeIsland($fp, $num, $island) {
 		global $init;
-		$ships = $island['ship'][0].",".$island['ship'][1].",".$island['ship'][2].",".$island['ship'][3].",".$island['ship'][4].",".$island['ship'][5].",".$island['ship'][6].",".$island['ship'][7].",".$island['ship'][8].",".$island['ship'][9].",".$island['ship'][10].",".$island['ship'][11].",".$island['ship'][12].",".$island['ship'][13].",".$island['ship'][14];
-		$eiseis = $island['eisei'][0].",".$island['eisei'][1].",".$island['eisei'][2].",".$island['eisei'][3].",".$island['eisei'][4].",".$island['eisei'][5];
-		$zins = $island['zin'][0].",".$island['zin'][1].",".$island['zin'][2].",".$island['zin'][3].",".$island['zin'][4].",".$island['zin'][5].",".$island['zin'][6];
-		$items = $island['item'][0].",".$island['item'][1].",".$island['item'][2].",".$island['item'][3].",".$island['item'][4].",".$island['item'][5].",".$island['item'][6].",".$island['item'][7].",".$island['item'][8].",".$island['item'][9].",".$island['item'][10].",".$island['item'][11].",".$island['item'][12].",".$island['item'][13].",".$island['item'][14].",".$island['item'][15].",".$island['item'][16].",".$island['item'][17].",".$island['item'][18].",".$island['item'][19].",".$island['item'][20];
+
+		$ships  = "";
+		$eiseis = "";
+		$zins   = "";
+		$items  = "";
+
+		if ( isset($island['ship']) ) {
+			$ships  = $island['ship'][0].",".$island['ship'][1].",".$island['ship'][2].",".$island['ship'][3].",".$island['ship'][4].",".$island['ship'][5].",".$island['ship'][6].",".$island['ship'][7].",".$island['ship'][8].",".$island['ship'][9].",".$island['ship'][10].",".$island['ship'][11].",".$island['ship'][12].",".$island['ship'][13].",".$island['ship'][14];
+		}
+		if ( isset($island['eisei']) ) {
+			$eiseis = $island['eisei'][0].",".$island['eisei'][1].",".$island['eisei'][2].",".$island['eisei'][3].",".$island['eisei'][4].",".$island['eisei'][5];
+		}
+		if ( isset($island['zin']) ) {
+			$zins = $island['zin'][0].",".$island['zin'][1].",".$island['zin'][2].",".$island['zin'][3].",".$island['zin'][4].",".$island['zin'][5].",".$island['zin'][6];
+		}
+		if ( isset($island['item']) ) {
+			$items = $island['item'][0].",".$island['item'][1].",".$island['item'][2].",".$island['item'][3].",".$island['item'][4].",".$island['item'][5].",".$island['item'][6].",".$island['item'][7].",".$island['item'][8].",".$island['item'][9].",".$island['item'][10].",".$island['item'][11].",".$island['item'][12].",".$island['item'][13].",".$island['item'][14].",".$island['item'][15].",".$island['item'][16].",".$island['item'][17].",".$island['item'][18].",".$island['item'][19].",".$island['item'][20];
+		}
+
 		fputs($fp, $island['name'] . "," . $island['owner'] . "," . $island['monster'] . "," . $island['port'] . "," . $ships . "\n");
 		fputs($fp, $island['id'] . "," . $island['starturn'] . "," . $island['isBF'] . "," . $island['keep'] . "\n");
 		fputs($fp, $island['prize'] . "\n");
 		fputs($fp, $island['absent'] . "\n");
 		fputs($fp, $island['comment'] . "," . $island['comment_turn'] . "\n");
 		fputs($fp, $island['password'] . "\n");
+
 		fputs($fp, $island['point'] . "," . $island['pots'] . "\n");
+
 		fputs($fp, $eiseis . "\n");
 		fputs($fp, $zins . "\n");
 		fputs($fp, $items . "\n");
@@ -367,18 +381,18 @@ class HakoIO {
 		fputs($fp, $island['taiji'] . "," . $island['rena'] . "," . $island['fire'] . "\n");
 		fputs($fp, $island['tenki'] . "\n");
 		fputs($fp, $island['soccer'].",".$island['team'].",".$island['shiai'].",".$island['kachi'].",".$island['make'].",".$island['hikiwake'].",".$island['kougeki'].",".$island['bougyo'].",".$island['tokuten'].",".$island['shitten']."\n");
-		
-		// ’nŒ`
+
+		// åœ°å½¢
 		if(($num <= -1) || ($num == $island['id'])) {
 			$fileName = "{$init->dirName}/island.{$island['id']}";
-			
+
 			if(!is_file($fileName)) {
 				touch($fileName);
 			}
 			$fp_i = fopen($fileName, "w");
 			$land = $island['land'];
 			$landValue = $island['landValue'];
-			
+
 			for($y = 0; $y < $init->islandSize; $y++) {
 				for($x = 0; $x < $init->islandSize; $x++) {
 					$l = sprintf("%02x%05x", $land[$x][$y], $landValue[$x][$y]);
@@ -386,7 +400,7 @@ class HakoIO {
 				}
 				fputs($fp_i, "\n");
 			}
-			// ƒRƒ}ƒ“ƒh
+			// ã‚³ãƒãƒ³ãƒ‰
 			$command = $island['command'];
 			for($i = 0; $i < $init->commandMax; $i++) {
 				$com = sprintf("%d,%d,%d,%d,%d\n",
@@ -398,21 +412,17 @@ class HakoIO {
 				);
 				fputs($fp_i, $com);
 			}
-			// ƒ[ƒJƒ‹Œf¦”Â
-			$lbbs = $island['lbbs'];
-			for($i = 0; $i < $init->lbbsMax; $i++) {
-				fputs($fp_i, $lbbs[$i] . "\n");
-			}
+
 			fclose($fp_i);
 			// chmod($fileName, 0666);
 		}
 	}
 	//---------------------------------------------------
-	// ƒf[ƒ^‚ÌƒoƒbƒNƒAƒbƒv
+	// ãƒ‡ãƒ¼ã‚¿ã®ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—
 	//---------------------------------------------------
 	function backUp() {
 		global $init;
-		
+
 		if($init->backupTimes <= 0) {
 			return;
 		}
@@ -428,8 +438,8 @@ class HakoIO {
 			rename("{$init->dirName}", "{$init->dirName}.bak0");
 		}
 		mkdir("{$init->dirName}", $init->dirMode);
-		
-		// ƒƒOƒtƒ@ƒCƒ‹‚¾‚¯–ß‚·
+
+		// ãƒ­ã‚°ãƒ•ã‚¡ã‚¤ãƒ«ã ã‘æˆ»ã™
 		for($i = 0; $i <= $init->logMax; $i++) {
 			if(is_file("{$init->dirName}.bak0/hakojima.log{$i}")){
 				rename("{$init->dirName}.bak0/hakojima.log{$i}", "{$init->dirName}/hakojima.log{$i}");
@@ -440,47 +450,52 @@ class HakoIO {
 		}
 	}
 	//---------------------------------------------------
-	// ƒZ[ƒtƒ‚[ƒhƒoƒbƒNƒAƒbƒv
+	// ã‚»ãƒ¼ãƒ•ãƒ¢ãƒ¼ãƒ‰ãƒãƒƒã‚¯ã‚¢ãƒƒãƒ—
 	//---------------------------------------------------
 	function safemode_backup() {
 		global $init;
-		
-		if($init->backupTimes <= 0) {
-			return;
-		}
-		for($i = ($init->backupTimes - 1); $i >= 0; $i--) {
-			$from = $i - 1;
-			$dir2;
-			if($from >= 0) {
-				$dir2 = "./{$init->dirName}.bak{$from}";
-			} else {
-				$dir2 = "./{$init->dirName}";
+
+		try {
+			if ($init->backupTimes <= 0) {
+				return;
 			}
-			// ƒf[ƒ^ƒfƒBƒŒƒNƒgƒŠ‚Ì’†g‚ğ‹ó‚É‚·‚é
-			$to_del = "{$init->dirName}.bak{$i}";
-			$dir = opendir("{$to_del}/");
-			while($fileName = readdir($dir)) {
-				if(!(strcmp($fileName, ".") == 0 || strcmp($fileName, "..") == 0))
-					unlink("{$to_del}/{$fileName}");
-			}
-			closedir($dir);
-			
-			// ƒf[ƒ^ƒfƒBƒŒƒNƒgƒŠ‚ğŠJ‚­
-			$dir = opendir($dir2);
-			while($copyFile = readdir($dir)) {
-				if(is_file("{$dir2}/{$copyFile}")) {
-					// ƒRƒs[Œ³
-					$from_copy = "{$dir2}/{$copyFile}";
-					// ƒRƒs[æ
-					$to_copy = "{$init->dirName}.bak{$i}/{$copyFile}";
-					// ƒRƒs[Às
-					copy($from_copy, $to_copy);
+			for ($i = ($init->backupTimes - 1); $i >= 0; $i--) {
+				$from = $i - 1;
+				$dir2;
+				if ($from >= 0) {
+					$dir2 = "./{$init->dirName}.bak{$from}";
+				} else {
+					$dir2 = "./{$init->dirName}";
+				}
+				// ãƒ‡ãƒ¼ã‚¿ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã®ä¸­èº«ã‚’ç©ºã«ã™ã‚‹
+				$to_del = "{$init->dirName}.bak{$i}";
+				$dir = opendir("{$to_del}/");
+				while ($fileName = readdir($dir)) {
+					if (!(strcmp($fileName, ".") == 0 || strcmp($fileName, "..") == 0))
+						unlink("{$to_del}/{$fileName}");
+				}
+				closedir($dir);
+
+				// ãƒ‡ãƒ¼ã‚¿ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã‚’é–‹ã
+				$dir = opendir($dir2);
+				while ($copyFile = readdir($dir)) {
+					if (is_file("{$dir2}/{$copyFile}")) {
+						// ã‚³ãƒ”ãƒ¼å…ƒ
+						$from_copy = "{$dir2}/{$copyFile}";
+						// ã‚³ãƒ”ãƒ¼å…ˆ
+						$to_copy = "{$init->dirName}.bak{$i}/{$copyFile}";
+						// ã‚³ãƒ”ãƒ¼å®Ÿè¡Œ
+						copy($from_copy, $to_copy);
+					}
 				}
 			}
+		} catch (Exception $ex) {
+			return;
 		}
 	}
+
 	//---------------------------------------------------
-	// •s—v‚ÈƒfƒBƒŒƒNƒgƒŠ‚Æƒtƒ@ƒCƒ‹‚ğíœ
+	// ä¸è¦ãªãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªã¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’å‰Šé™¤
 	//---------------------------------------------------
 	function rmTree($dirName) {
 		if(is_dir("{$dirName}")) {
@@ -494,10 +509,10 @@ class HakoIO {
 			rmdir($dirName);
 		}
 	}
-	
+
 	function readPresentFile( $erase = false ) {
 		global $init;
-		
+
 		$fileName = "{$init->dirName}/present.dat";
 		if(is_file($fileName)) {
 			$presents = file($fileName);
@@ -513,10 +528,10 @@ class HakoIO {
 			}
 		}
 	}
-	
+
 	function writePresentFile() {
 		global $init;
-		
+
 		$presents = array();
 		$fileName = "{$init->dirName}/present.dat";
 		for($i = 0; $i < $this->islandNumber; $i++) {
@@ -536,5 +551,3 @@ class HakoIO {
 		fclose($fp);
 	}
 }
-
-?>

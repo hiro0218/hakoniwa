@@ -2,10 +2,10 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- V‹Kì¬—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- æ–°è¦ä½œæˆç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-make.php by SERA - 2013/05/19
 
 *******************************************************************/
@@ -13,11 +13,11 @@
 //--------------------------------------------------------------------
 class Make {
 	//---------------------------------------------------
-	// “‡‚ÌV‹Kì¬ƒ‚[ƒh
+	// å³¶ã®æ–°è¦ä½œæˆãƒ¢ãƒ¼ãƒ‰
 	//---------------------------------------------------
 	function newIsland($hako, $data) {
 		global $init;
-		
+
 		$log = new Log;
 		if($hako->islandNumber >= $init->maxIsland) {
 			Error::newIslandFull();
@@ -27,17 +27,17 @@ class Make {
 			Error::newIslandNoName();
 			return;
 		}
-		// –¼‘O‚ª³“–‰»ƒ`ƒFƒbƒN
-		if(ereg("[,?()<>$]", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "–³l") == 0) {
+		// åå‰ãŒæ­£å½“åŒ–ãƒã‚§ãƒƒã‚¯
+		if(preg_match("/[,?()<>$]/", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "ç„¡äºº") == 0) {
 			Error::newIslandBadName();
 			return;
 		}
-		// –¼‘O‚Ìd•¡ƒ`ƒFƒbƒN
+		// åå‰ã®é‡è¤‡ãƒã‚§ãƒƒã‚¯
 		if(Util::nameToNumber($hako, $data['ISLANDNAME']) != -1) {
 			Error::newIslandAlready();
 			return;
 		}
-		// ƒpƒXƒ[ƒh‚Ì‘¶İ”»’è
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®å­˜åœ¨åˆ¤å®š
 		if(empty($data['PASSWORD'])) {
 			Error::newIslandNoPassword();
 			return;
@@ -46,14 +46,14 @@ class Make {
 			Error::wrongPassword();
 			return;
 		}
-		// V‚µ‚¢“‡‚Ì”Ô†‚ğŒˆ‚ß‚é
+		// æ–°ã—ã„å³¶ã®ç•ªå·ã‚’æ±ºã‚ã‚‹
 		$newNumber = $hako->islandNumber;
 		$hako->islandNumber++;
 		$hako->islandNumberNoBF++;
 		$hako->islandNumberNoKP++;
 		$island = $this->makeNewIsland();
-		
-		// “‡‚Ì”Ô†‚Ìg‚¢‚Ü‚í‚µ
+
+		// å³¶ã®ç•ªå·ã®ä½¿ã„ã¾ã‚ã—
 		$safety = 0;
 		while(isset($hako->idToNumber[$hako->islandNextID])) {
 			$hako->islandNextID++;
@@ -61,8 +61,8 @@ class Make {
 			$safety++;
 			if($safety == 250) break;
 		}
-		
-		// Šeí‚Ì’l‚ğİ’è
+
+		// å„ç¨®ã®å€¤ã‚’è¨­å®š
 		$island['name'] = htmlspecialchars($data['ISLANDNAME']);
 		$island['owner'] = htmlspecialchars($data['OWNERNAME']);
 		$island['id'] = $hako->islandNextID;
@@ -70,12 +70,12 @@ class Make {
 		$island['starturn'] = $hako->islandTurn;
 		$island['isBF'] = $island['keep'] = 0;
 		$island['absent'] = $init->giveupTurn - 3;
-		$island['comment'] = '(–¢“o˜^)';
+		$island['comment'] = '(æœªç™»éŒ²)';
 		$island['comment_turn'] = $hako->islandTurn;
 		$island['password'] = Util::encode($data['PASSWORD']);
 		$island['tenki'] = 1;
 		$island['team'] = $island['shiai'] = $island['kachi'] = $island['make'] = $island['hikiwake'] = $island['kougeki'] = $island['bougyo'] = $island['tokuten'] = $island['shitten'] = 0;
-		
+
 		Turn::estimate($hako, $island);
 		if ( $hako->islandNumberBF > 0 ) {
 			for ( $i = 0; $i < $hako->islandNumberBF; $i++ ) {
@@ -91,16 +91,16 @@ class Make {
 		$htmlMap->newIslandHead($island['name']);
 		$htmlMap->islandInfo($island, $newNumber);
 		$htmlMap->islandMap($hako, $island, 1, $data);
-		
+
 	}
 	//---------------------------------------------------
-	// V‚µ‚¢“‡‚ğì¬‚·‚é
+	// æ–°ã—ã„å³¶ã‚’ä½œæˆã™ã‚‹
 	//---------------------------------------------------
 	function makeNewIsland() {
 		global $init;
-		
+
 		$command = array();
-		// ‰ŠúƒRƒ}ƒ“ƒh¶¬
+		// åˆæœŸã‚³ãƒãƒ³ãƒ‰ç”Ÿæˆ
 		for($i = 0; $i < $init->commandMax; $i++) {
 			$command[$i] = array (
 				'kind'   => $init->comDoNothing,
@@ -110,19 +110,15 @@ class Make {
 				'arg'    => 0,
 			);
 		}
-		$lbbs = "";
-		// ‰ŠúŒf¦”Â¶¬
-		for($i = 0; $i < $init->lbbsMax; $i++) {
-			$lbbs[$i] = "0>>0>>";
-		}
+
 		$land = array();
 		$landValue = array();
-		
+
 		if ($init->initialLand) {
-			// ‰Šú“‡ƒf[ƒ^ƒtƒ@ƒCƒ‹g—pƒ‚[ƒh
-			// Šî–{Œ`‚ğì¬
+			// åˆæœŸå³¶ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ä½¿ç”¨ãƒ¢ãƒ¼ãƒ‰
+			// åŸºæœ¬å½¢ã‚’ä½œæˆ
 			$fp_i = fopen($init->initialLand, "r");
-			$offset = 7; // ˆê‘Î‚Ìƒf[ƒ^‚ª‰½•¶š‚©
+			$offset = 7; // ä¸€å¯¾ã®ãƒ‡ãƒ¼ã‚¿ãŒä½•æ–‡å­—ã‹
 			for($y = 0; $y < $init->islandSize; $y++) {
 				$line = chop(fgets($fp_i, READ_LINE));
 				for($x = 0; $x < $init->islandSize; $x++) {
@@ -134,33 +130,33 @@ class Make {
 			}
 			fclose($fp_i);
 		} else if ($init->initialSize) {
-			// ‰Šú–ÊÏ“ˆêƒ‚[ƒh
-			// Šî–{Œ`‚ğì¬
+			// åˆæœŸé¢ç©çµ±ä¸€ãƒ¢ãƒ¼ãƒ‰
+			// åŸºæœ¬å½¢ã‚’ä½œæˆ
 			for($y = 0; $y < $init->islandSize; $y++) {
 				for($x = 0; $x < $init->islandSize; $x++) {
 					$land[$x][$y] = $init->landSea;
 					$landValue[$x][$y] = 0;
 				}
 			}
-			
-			// 4*4‚Ér’n‚ğ”z’u
+
+			// 4*4ã«è’åœ°ã‚’é…ç½®
 			$center = $init->islandSize / 2 - 1;
 			for($y = $center -1; $y < $center + 3; $y++) {
 				for($x = $center - 1; $x < $center + 3; $x++) {
 					$land[$x][$y] = $init->landWaste;
 				}
 			}
-			// “‡”­Œ©‚Ì–ÊÏŒÅ’è
+			// å³¶ç™ºè¦‹æ™‚ã®é¢ç©å›ºå®š
 			$size = 16;
-			
-			// 8*8”ÍˆÍ“à‚É—¤’n‚ğ‘B
+
+			// 8*8ç¯„å›²å†…ã«é™¸åœ°ã‚’å¢—æ®–
 			while($size < $init->initialSize) {
 				$x = Util::random(8) + $center - 3;
 				$y = Util::random(8) + $center - 3;
 				if(Turn::countAround($land, $x, $y, 7, array($init->landSea)) != 7) {
-					// ü‚è‚É—¤’n‚ª‚ ‚éê‡Aó£‚É‚·‚é
-					// ó£‚Ír’n‚É‚·‚é
-					// r’n‚Í•½’n‚É‚·‚é
+					// å‘¨ã‚Šã«é™¸åœ°ãŒã‚ã‚‹å ´åˆã€æµ…ç€¬ã«ã™ã‚‹
+					// æµ…ç€¬ã¯è’åœ°ã«ã™ã‚‹
+					// è’åœ°ã¯å¹³åœ°ã«ã™ã‚‹
 					if($land[$x][$y] == $init->landSea) {
 						if($landValue[$x][$y] == 1) {
 							$land[$x][$y] = $init->landPlains;
@@ -182,57 +178,57 @@ class Make {
 					}
 				}
 			}
-			// X‚ğì‚é
+			// æ£®ã‚’ä½œã‚‹
 			$count = 0;
 			while($count < 4) {
-				// ƒ‰ƒ“ƒ_ƒ€À•W
+				// ãƒ©ãƒ³ãƒ€ãƒ åº§æ¨™
 				$x = Util::random(4) + $center - 1;
 				$y = Util::random(4) + $center - 1;
-				
-				// ‚»‚±‚ª‚·‚Å‚ÉX‚Å‚È‚¯‚ê‚ÎAX‚ğì‚é
+
+				// ãã“ãŒã™ã§ã«æ£®ã§ãªã‘ã‚Œã°ã€æ£®ã‚’ä½œã‚‹
 				if($land[$x][$y] != $init->landForest) {
 					$land[$x][$y] = $init->landForest;
-					$landValue[$x][$y] = 5; // Å‰‚Í500–{
+					$landValue[$x][$y] = 5; // æœ€åˆã¯500æœ¬
 					$count++;
 				}
 			}
 			$count = 0;
 			while($count < 2) {
-				// ƒ‰ƒ“ƒ_ƒ€À•W
+				// ãƒ©ãƒ³ãƒ€ãƒ åº§æ¨™
 				$x = Util::random(4) + $center - 1;
 				$y = Util::random(4) + $center - 1;
-				
-				// ‚»‚±‚ªX‚©’¬‚Å‚È‚¯‚ê‚ÎA’¬‚ğì‚é
+
+				// ãã“ãŒæ£®ã‹ç”ºã§ãªã‘ã‚Œã°ã€ç”ºã‚’ä½œã‚‹
 				if(($land[$x][$y] != $init->landTown) &&
 					 ($land[$x][$y] != $init->landForest)) {
 					$land[$x][$y] = $init->landTown;
-					$landValue[$x][$y] = 5; // Å‰‚Í500l
+					$landValue[$x][$y] = 5; // æœ€åˆã¯500äºº
 					$count++;
 				}
 			}
-			// R‚ğì‚é
+			// å±±ã‚’ä½œã‚‹
 			$count = 0;
 			while($count < 1) {
-				// ƒ‰ƒ“ƒ_ƒ€À•W
+				// ãƒ©ãƒ³ãƒ€ãƒ åº§æ¨™
 				$x = Util::random(4) + $center - 1;
 				$y = Util::random(4) + $center - 1;
-				
-				// ‚»‚±‚ªX‚©’¬‚Å‚È‚¯‚ê‚ÎA’¬‚ğì‚é
+
+				// ãã“ãŒæ£®ã‹ç”ºã§ãªã‘ã‚Œã°ã€ç”ºã‚’ä½œã‚‹
 				if(($land[$x][$y] != $init->landTown) &&
 					 ($land[$x][$y] != $init->landForest)) {
 					$land[$x][$y] = $init->landMountain;
-					$landValue[$x][$y] = 0; // Å‰‚ÍÌŒ@ê‚È‚µ
+					$landValue[$x][$y] = 0; // æœ€åˆã¯æ¡æ˜å ´ãªã—
 					$count++;
 				}
 			}
-			// Šî’n‚ğì‚é
+			// åŸºåœ°ã‚’ä½œã‚‹
 			$count = 0;
 			while($count < 1) {
-				// ƒ‰ƒ“ƒ_ƒ€À•W
+				// ãƒ©ãƒ³ãƒ€ãƒ åº§æ¨™
 				$x = Util::random(4) + $center - 1;
 				$y = Util::random(4) + $center - 1;
-				
-				// ‚»‚±‚ªX‚©’¬‚©R‚Å‚È‚¯‚ê‚ÎAŠî’n
+
+				// ãã“ãŒæ£®ã‹ç”ºã‹å±±ã§ãªã‘ã‚Œã°ã€åŸºåœ°
 				if(($land[$x][$y] != $init->landTown) &&
 					 ($land[$x][$y] != $init->landForest) &&
 					 ($land[$x][$y] != $init->landMountain)) {
@@ -242,29 +238,29 @@ class Make {
 				}
 			}
 		} else {
-			// ’Êíƒ‚[ƒh
-			// Šî–{Œ`‚ğì¬
+			// é€šå¸¸ãƒ¢ãƒ¼ãƒ‰
+			// åŸºæœ¬å½¢ã‚’ä½œæˆ
 			for($y = 0; $y < $init->islandSize; $y++) {
 				for($x = 0; $x < $init->islandSize; $x++) {
 					$land[$x][$y] = $init->landSea;
 					$landValue[$x][$y] = 0;
 				}
 			}
-			// 4*4‚Ér’n‚ğ”z’u
+			// 4*4ã«è’åœ°ã‚’é…ç½®
 			$center = $init->islandSize / 2 - 1;
 			for($y = $center -1; $y < $center + 3; $y++) {
 				for($x = $center - 1; $x < $center + 3; $x++) {
 					$land[$x][$y] = $init->landWaste;
 				}
 			}
-			// 8*8”ÍˆÍ“à‚É—¤’n‚ğ‘B
+			// 8*8ç¯„å›²å†…ã«é™¸åœ°ã‚’å¢—æ®–
 			for($i = 0; $i < 120; $i++) {
 				$x = Util::random(8) + $center - 3;
 				$y = Util::random(8) + $center - 3;
 				if(Turn::countAround($land, $x, $y, 7, array($init->landSea)) != 7) {
-					// ü‚è‚É—¤’n‚ª‚ ‚éê‡Aó£‚É‚·‚é
-					// ó£‚Ír’n‚É‚·‚é
-					// r’n‚Í•½’n‚É‚·‚é
+					// å‘¨ã‚Šã«é™¸åœ°ãŒã‚ã‚‹å ´åˆã€æµ…ç€¬ã«ã™ã‚‹
+					// æµ…ç€¬ã¯è’åœ°ã«ã™ã‚‹
+					// è’åœ°ã¯å¹³åœ°ã«ã™ã‚‹
 					if($land[$x][$y] == $init->landWaste) {
 						$land[$x][$y] = $init->landPlains;
 						$landValue[$x][$y] = 0;
@@ -278,57 +274,57 @@ class Make {
 					}
 				}
 			}
-			// X‚ğì‚é
+			// æ£®ã‚’ä½œã‚‹
 			$count = 0;
 			while($count < 4) {
-				// ƒ‰ƒ“ƒ_ƒ€À•W
+				// ãƒ©ãƒ³ãƒ€ãƒ åº§æ¨™
 				$x = Util::random(4) + $center - 1;
 				$y = Util::random(4) + $center - 1;
-				
-				// ‚»‚±‚ª‚·‚Å‚ÉX‚Å‚È‚¯‚ê‚ÎAX‚ğì‚é
+
+				// ãã“ãŒã™ã§ã«æ£®ã§ãªã‘ã‚Œã°ã€æ£®ã‚’ä½œã‚‹
 				if($land[$x][$y] != $init->landForest) {
 					$land[$x][$y] = $init->landForest;
-					$landValue[$x][$y] = 5; // Å‰‚Í500–{
+					$landValue[$x][$y] = 5; // æœ€åˆã¯500æœ¬
 					$count++;
 				}
 			}
 			$count = 0;
 			while($count < 2) {
-				// ƒ‰ƒ“ƒ_ƒ€À•W
+				// ãƒ©ãƒ³ãƒ€ãƒ åº§æ¨™
 				$x = Util::random(4) + $center - 1;
 				$y = Util::random(4) + $center - 1;
-				
-				// ‚»‚±‚ªX‚©’¬‚Å‚È‚¯‚ê‚ÎA’¬‚ğì‚é
+
+				// ãã“ãŒæ£®ã‹ç”ºã§ãªã‘ã‚Œã°ã€ç”ºã‚’ä½œã‚‹
 				if(($land[$x][$y] != $init->landTown) &&
 					 ($land[$x][$y] != $init->landForest)) {
 					$land[$x][$y] = $init->landTown;
-					$landValue[$x][$y] = 5; // Å‰‚Í500l
+					$landValue[$x][$y] = 5; // æœ€åˆã¯500äºº
 					$count++;
 				}
 			}
-			// R‚ğì‚é
+			// å±±ã‚’ä½œã‚‹
 			$count = 0;
 			while($count < 1) {
-				// ƒ‰ƒ“ƒ_ƒ€À•W
+				// ãƒ©ãƒ³ãƒ€ãƒ åº§æ¨™
 				$x = Util::random(4) + $center - 1;
 				$y = Util::random(4) + $center - 1;
-				
-				// ‚»‚±‚ªX‚©’¬‚Å‚È‚¯‚ê‚ÎA’¬‚ğì‚é
+
+				// ãã“ãŒæ£®ã‹ç”ºã§ãªã‘ã‚Œã°ã€ç”ºã‚’ä½œã‚‹
 				if(($land[$x][$y] != $init->landTown) &&
 					 ($land[$x][$y] != $init->landForest)) {
 					$land[$x][$y] = $init->landMountain;
-					$landValue[$x][$y] = 0; // Å‰‚ÍÌŒ@ê‚È‚µ
+					$landValue[$x][$y] = 0; // æœ€åˆã¯æ¡æ˜å ´ãªã—
 					$count++;
 				}
 			}
-			// Šî’n‚ğì‚é
+			// åŸºåœ°ã‚’ä½œã‚‹
 			$count = 0;
 			while($count < 1) {
-				// ƒ‰ƒ“ƒ_ƒ€À•W
+				// ãƒ©ãƒ³ãƒ€ãƒ åº§æ¨™
 				$x = Util::random(4) + $center - 1;
 				$y = Util::random(4) + $center - 1;
-				
-				// ‚»‚±‚ªX‚©’¬‚©R‚Å‚È‚¯‚ê‚ÎAŠî’n
+
+				// ãã“ãŒæ£®ã‹ç”ºã‹å±±ã§ãªã‘ã‚Œã°ã€åŸºåœ°
 				if(($land[$x][$y] != $init->landTown) &&
 					 ($land[$x][$y] != $init->landForest) &&
 					 ($land[$x][$y] != $init->landMountain)) {
@@ -344,39 +340,38 @@ class Make {
 			'land'      => $land,
 			'landValue' => $landValue,
 			'command'   => $command,
-			'lbbs'      => $lbbs,
 			'prize'     => '0,0,',
 			'taiji'     => 0,
 		);
 	}
-	
+
 	//---------------------------------------------------
-	// ƒRƒƒ“ƒgXV
+	// ã‚³ãƒ¡ãƒ³ãƒˆæ›´æ–°
 	//---------------------------------------------------
 	function commentMain($hako, $data) {
 		$id = $data['ISLANDID'];
 		$num = $hako->idToNumber[$id];
 		$island = $hako->islands[$num];
 		$name = $island['name'];
-		
-		// ƒpƒXƒ[ƒh
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
-		// ƒƒbƒZ[ƒW‚ğXV
+		// ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã‚’æ›´æ–°
 		$island['comment'] = htmlspecialchars($data['MESSAGE']);
 		$island['comment_turn'] = $hako->islandTurn;
 		$hako->islands[$num] = $island;
-		
-		// ƒf[ƒ^‚Ì‘‚«o‚µ
+
+		// ãƒ‡ãƒ¼ã‚¿ã®æ›¸ãå‡ºã—
 		$hako->writeIslandsFile();
-		
-		// ƒRƒƒ“ƒgXVƒƒbƒZ[ƒW
+
+		// ã‚³ãƒ¡ãƒ³ãƒˆæ›´æ–°ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
 		HtmlSetted::Comment();
-		
-		// owner mode‚Ö
+
+		// owner modeã¸
 		if($data['DEVELOPEMODE'] == "cgi") {
 			$html = new HtmlMap;
 		} else {
@@ -384,181 +379,25 @@ class Make {
 		}
 		$html->owner($hako, $data);
 	}
-	
+
+
 	//---------------------------------------------------
-	// ƒ[ƒJƒ‹Œf¦”Âƒ‚[ƒh
-	//---------------------------------------------------
-	function localBbsMain($hako, $data) {
-		global $init;
-		
-		$id = $data['ISLANDID'];
-		$num = $hako->idToNumber[$id];
-		$island = $hako->islands[$num];
-		$name = $island['name'];
-		$speaker = "0>";
-		
-		// ‚È‚º‚©‚»‚Ì“‡‚ª‚È‚¢ê‡
-		if($num != 0 && empty($num)) {
-			Error::problem();
-			return;
-		}
-		// íœƒ‚[ƒh‚¶‚á‚È‚­‚Ä–¼‘O‚©ƒƒbƒZ[ƒW‚ª‚È‚¢ê‡
-		if(empty($data['DEL'])) {
-			if(empty($data['LBBSNAME']) || (empty($data['LBBSMESSAGE']))) {
-				Error::lbbsNoMessage();
-				return;
-			}
-		}
-		// ŠÏŒõÒƒ‚[ƒh‚¶‚á‚È‚¢‚ÍƒpƒXƒ[ƒhƒ`ƒFƒbƒN
-		if($data['lbbsMode'] == 1) {
-			if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
-				// passwordŠÔˆá‚¢
-				Error::wrongPassword();
-				return;
-			}
-			// ƒI[ƒi[–¼‚ğİ’è
-			$HlbbsName = $island['owner'];
-		} else if (empty($data['DEL'])) {
-			// ŠÏŒõÒƒ‚[ƒh
-			if ($data['LBBSTYPE'] != 'ANON') {
-				// ŒöŠJ‚Æ‹É”é
-				// id‚©‚ç“‡”Ô†‚ğæ“¾
-				$sNum = $hako->idToNumber[$data['ISLANDID2']];
-				$sIsland = $hako->islands[$sNum];
-				
-				// ‚È‚º‚©‚»‚Ì“‡‚ª‚È‚¢ê‡
-				if($sNum != 0 && empty($sNum)) {
-					Error::problem();
-					return;
-				}
-				// ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
-				if(!Util::checkPassword($sIsland['password'], $data['PASSWORD'])) {
-					// passwordŠÔˆá‚¢
-					Error::wrongPassword();
-					return;
-				}
-				// ƒI[ƒi[–¼‚ğİ’è
-				$HlbbsName = $sIsland['owner'];
-				
-				// ’ÊM”ï—p‚ğ•¥‚¤
-				if($data['LBBSTYPE'] == 'PUBLIC') {
-					$cost = $init->lbbsMoneyPublic;
-				} else {
-					$cost = $init->lbbsMoneySecret;
-				}
-				if($sIsland['money'] < $cost) {
-					// ”ï—p•s‘«
-					Error::lbbsNoMoney();
-					return;
-				}
-				$sIsland['money'] -= $cost;
-				$hako->islands[$sNum] = $sIsland;
-			}
-			// ”­Œ¾Ò‚ğ‹L‰¯‚·‚é
-			if($data['LBBSTYPE'] != 'ANON') {
-				// ŒöŠJ‚Æ‹É”é
-				$speaker = $sIsland['name'] . '“‡,' . $data['ISLANDID2'];
-			} else {
-				// “½–¼
-				$speaker = getenv('REMOTE_HOST');
-				if($speaker == '') {
-					$speaker = getenv('REMOTE_ADDR');
-				}
-			}
-			if($data['LBBSTYPE'] != 'SECRET') {
-				// ŒöŠJ‚Æ“½–¼
-				$speaker = "0>$speaker";
-			} else {
-				// ‹É”é
-				$speaker = "1>$speaker";
-			}
-		} else {
-			// ŠÏŒõÒíœƒ‚[ƒh
-			// id‚©‚ç“‡”Ô†‚ğæ“¾
-			$sNum = $hako->idToNumber[$data['ISLANDID2']];
-			$sIsland = $hako->islands[$sNum];
-			
-			// ‚È‚º‚©‚»‚Ì“‡‚ª‚È‚¢ê‡
-			if($sNum != 0 && empty($sNum)) {
-				Error::problem();
-				return;
-			}
-			// ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
-			if(!Util::checkPassword($sIsland['password'], $data['PASSWORD'])) {
-				// passwordŠÔˆá‚¢
-				Error::wrongPassword();
-				return;
-			}
-		}
-		$lbbs = $island['lbbs'];
-		
-		// ƒ‚[ƒh‚Å•ªŠò
-		if(!empty($data['DEL'])) {
-			if($data['lbbsMode'] == 0) {
-				list($secret, $sTemp, $mode, $turn, $message, $color) = split(">", $lbbs[$data['NUMBER']]);
-				list($sName, $sId) = split(",", $sTemp);
-				if($sId != $data['ISLANDID2']) {
-					// IDŠÔˆá‚¢
-					Error::wrongID();
-					return;
-				}
-			}
-			// íœƒ‚[ƒh
-			// ƒƒbƒZ[ƒW‚ğ‘O‚É‚¸‚ç‚·
-			Util::slideBackLbbsMessage($lbbs, $data['NUMBER']);
-			HtmlSetted::lbbsDelete();
-		} else {
-			// ‹L’ ƒ‚[ƒh
-			Util::slideLbbsMessage($lbbs);
-			
-			// ƒƒbƒZ[ƒW‘‚«‚İ
-			if($data['lbbsMode'] == 0) {
-				$message = '0';
-			} else {
-				$message = '1';
-			}
-			$bbs_name = "{$hako->islandTurn}F" . htmlspecialchars($data['LBBSNAME']);
-			$bbs_message = htmlspecialchars($data['LBBSMESSAGE']);
-			$lbbs[0] = "{$speaker}>{$message}>{$bbs_name}>{$bbs_message}>{$data['LBBSCOLOR']}";
-			
-			HtmlSetted::lbbsAdd();
-		}
-		$island['lbbs'] = $lbbs;
-		$hako->islands[$num] = $island;
-		
-		// ƒf[ƒ^‘‚«o‚µ
-		$hako->writeIslandsFile($id);
-		
-		if($data['DEVELOPEMODE'] == "cgi") {
-			$html = new HtmlMap;
-		} else {
-			$html = new HtmlJS;
-		}
-		// ‚à‚Æ‚Ìƒ‚[ƒh‚Ö
-		if($data['lbbsMode'] == 0) {
-			$html->visitor($hako, $data);
-		} else {
-			$html->owner($hako, $data);
-		}
-	}
-	
-	//---------------------------------------------------
-	// î•ñ•ÏXƒ‚[ƒh
+	// æƒ…å ±å¤‰æ›´ãƒ¢ãƒ¼ãƒ‰
 	//---------------------------------------------------
 	function changeMain($hako, $data) {
 		global $init;
 		$log = new Log;
-		
+
 		$id = $data['ISLANDID'];
 		$num = $hako->idToNumber[$id];
 		$island = $hako->islands[$num];
 		$name = $island['name'];
-		
-		// ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
 		if(Util::checkSpecialPassword($data['OLDPASS'])) {
-			// “ÁêƒpƒXƒ[ƒh
-			if(preg_match("/^–³l$/", $data['ISLANDNAME'])) {
-				// “‡‚Ì‹­§íœ
+			// ç‰¹æ®Šãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
+			if(preg_match("/^ç„¡äºº$/", $data['ISLANDNAME'])) {
+				// å³¶ã®å¼·åˆ¶å‰Šé™¤
 				$this->deleteIsland($hako, $data);
 				HtmlSetted::deleteIsland($name);
 				return;
@@ -567,122 +406,122 @@ class Make {
 				$island['food'] = $init->maxFood;
 			}
 		} elseif(!Util::checkPassword($island['password'], $data['OLDPASS'])) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
-		// Šm”F—pƒpƒXƒ[ƒh
+		// ç¢ºèªç”¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 		if(strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
 		if(!empty($data['ISLANDNAME'])) {
-			// –¼‘O•ÏX‚Ìê‡
-			// –¼‘O‚ª³“–‚©ƒ`ƒFƒbƒN
-			if(ereg("[,?()<>$]", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "–³l") == 0) {
+			// åå‰å¤‰æ›´ã®å ´åˆ
+			// åå‰ãŒæ­£å½“ã‹ãƒã‚§ãƒƒã‚¯
+			if(preg_match("/[,?()<>$]/", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "ç„¡äºº") == 0) {
 				Error::newIslandBadName();
 				return;
 			}
-			// –¼‘O‚Ìd•¡ƒ`ƒFƒbƒN
+			// åå‰ã®é‡è¤‡ãƒã‚§ãƒƒã‚¯
 			if(Util::nameToNumber($hako, $data['ISLANDNAME']) != -1) {
 				Error::newIslandAlready();
 				return;
 			}
 			if($island['money'] < $init->costChangeName) {
-				// ‹à‚ª‘«‚è‚È‚¢
+				// é‡‘ãŒè¶³ã‚Šãªã„
 				Error::changeNoMoney();
 				return;
 			}
-			// ‘ã‹à
+			// ä»£é‡‘
 			if(!Util::checkSpecialPassword($data['OLDPASS'])) {
 				$island['money'] -= $init->costChangeName;
 			}
-			// –¼‘O‚ğ•ÏX
+			// åå‰ã‚’å¤‰æ›´
 			$log->changeName($island['name'], $data['ISLANDNAME']);
 			$island['name'] = $data['ISLANDNAME'];
 			$flag = 1;
 		}
-		// password•ÏX‚Ìê‡
+		// passwordå¤‰æ›´ã®å ´åˆ
 		if(!empty($data['PASSWORD'])) {
-			// ƒpƒXƒ[ƒh‚ğ•ÏX
+			// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’å¤‰æ›´
 			$island['password'] = Util::encode($data['PASSWORD']);
 			$flag = 1;
 		}
 		if(($flag == 0) && (strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0)) {
-			// ‚Ç‚¿‚ç‚à•ÏX‚³‚ê‚Ä‚¢‚È‚¢
+			// ã©ã¡ã‚‰ã‚‚å¤‰æ›´ã•ã‚Œã¦ã„ãªã„
 			Error::changeNothing();
 			return;
 		}
 		$hako->islands[$num] = $island;
-		// ƒf[ƒ^‘‚«o‚µ
+		// ãƒ‡ãƒ¼ã‚¿æ›¸ãå‡ºã—
 		$hako->writeIslandsFile($id);
-		
-		// •ÏX¬Œ÷
+
+		// å¤‰æ›´æˆåŠŸ
 		HtmlSetted::change();
 	}
-	
+
 	//---------------------------------------------------
-	// ƒI[ƒi–¼•ÏXƒ‚[ƒh
+	// ã‚ªãƒ¼ãƒŠåå¤‰æ›´ãƒ¢ãƒ¼ãƒ‰
 	//---------------------------------------------------
 	function changeOwnerName($hako, $data) {
 		global $init;
-		
+
 		$id = $data['ISLANDID'];
 		$num = $hako->idToNumber[$id];
 		$island = $hako->islands[$num];
-		
-		// ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
 		if(Util::checkSpecialPassword($data['OLDPASS'])) {
-			// “ÁêƒpƒXƒ[ƒh
+			// ç‰¹æ®Šãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 			$island['money'] = $init->maxMoney;
 			$island['food'] = $init->maxFood;
 		} elseif(!Util::checkPassword($island['password'], $data['OLDPASS'])) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
 		$island['owner'] = htmlspecialchars($data['OWNERNAME']);
 		$hako->islands[$num] = $island;
-		// ƒf[ƒ^‘‚«o‚µ
+		// ãƒ‡ãƒ¼ã‚¿æ›¸ãå‡ºã—
 		$hako->writeIslandsFile($id);
-		
-		// •ÏX¬Œ÷
+
+		// å¤‰æ›´æˆåŠŸ
 		HtmlSetted::change();
 	}
-	
+
 	//---------------------------------------------------
-	// ƒRƒ}ƒ“ƒhƒ‚[ƒh
+	// ã‚³ãƒãƒ³ãƒ‰ãƒ¢ãƒ¼ãƒ‰
 	//---------------------------------------------------
 	function commandMain($hako, $data) {
 		global $init;
-		
+
 		$id = $data['ISLANDID'];
 		$num = $hako->idToNumber[$id];
 		$island = $hako->islands[$num];
 		$name = $island['name'];
-		
-		// ƒpƒXƒ[ƒh
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
-			// passwordŠÔˆá‚¢
+			// passwordé–“é•ã„
 			Error::wrongPassword();
 			return;
 		}
-		// ƒ‚[ƒh‚Å•ªŠò
+		// ãƒ¢ãƒ¼ãƒ‰ã§åˆ†å²
 		$command = $island['command'];
-		
+
 		if(strcmp($data['COMMANDMODE'], 'delete') == 0) {
 			Util::slideFront($command, $data['NUMBER']);
 			HtmlSetted::commandDelete();
 		} elseif(($data['COMMAND'] == $init->comAutoPrepare) ||
 				 ($data['COMMAND'] == $init->comAutoPrepare2)) {
-			// ƒtƒ‹®’nAƒtƒ‹’n‚È‚ç‚µ
-			// À•W”z—ñ‚ğì‚é
+			// ãƒ•ãƒ«æ•´åœ°ã€ãƒ•ãƒ«åœ°ãªã‚‰ã—
+			// åº§æ¨™é…åˆ—ã‚’ä½œã‚‹
 			$r = Util::makeRandomPointArray();
 			$rpx = $r[0];
 			$rpy = $r[1];
 			$land = $island['land'];
-			// ƒRƒ}ƒ“ƒh‚Ìí—ŞŒˆ’è
+			// ã‚³ãƒãƒ³ãƒ‰ã®ç¨®é¡æ±ºå®š
 			$kind = $init->comPrepare;
 			if($data['COMMAND'] == $init->comAutoPrepare2) {
 				$kind = $init->comPrepare2;
@@ -707,7 +546,7 @@ class Make {
 			}
 			HtmlSetted::commandAdd();
 		} elseif($data['COMMAND'] == $init->comAutoDelete) {
-			// ‘SÁ‚µ
+			// å…¨æ¶ˆã—
 			for($i = 0; $i < $init->commandMax; $i++) {
 				Util::slideFront($command, 0);
 			}
@@ -717,7 +556,7 @@ class Make {
 				Util::slideBack($command, $data['NUMBER']);
 			}
 			HtmlSetted::commandAdd();
-			// ƒRƒ}ƒ“ƒh‚ğ“o˜^
+			// ã‚³ãƒãƒ³ãƒ‰ã‚’ç™»éŒ²
 			$command[$data['NUMBER']] = array (
 				'kind'   => $data['COMMAND'],
 				'target' => $data['TARGETID'],
@@ -726,28 +565,28 @@ class Make {
 				'arg'    => $data['AMOUNT'],
 			);
 		}
-		// ƒf[ƒ^‚Ì‘‚«o‚µ
+		// ãƒ‡ãƒ¼ã‚¿ã®æ›¸ãå‡ºã—
 		$island['command'] = $command;
 		$hako->islands[$num] = $island;
 		$hako->writeIslandsFile($island['id']);
-		
-		// owner mode‚Ö
+
+		// owner modeã¸
 		$html = new HtmlMap;
 		$html->owner($hako, $data);
 	}
-	
+
 	//---------------------------------------------------
-	// “‡‚Ì‹­§íœ
+	// å³¶ã®å¼·åˆ¶å‰Šé™¤
 	//---------------------------------------------------
 	function deleteIsland($hako, $data) {
 		global $init;
-		
+
 		$log = new Log;
 		$id = $data['ISLANDID'];
 		$num = $hako->idToNumber[$id];
 		$island = $hako->islands[$num];
-		
-		// “‡ƒe[ƒuƒ‹‚Ì‘€ì
+
+		// å³¶ãƒ†ãƒ¼ãƒ–ãƒ«ã®æ“ä½œ
 		$island['point'] = 0;
 		$island['pop'] = 0;
 		$island['dead'] = 1;
@@ -756,14 +595,12 @@ class Make {
 		if(is_file("{$init->dirName}/island.{$tmpid}")) {
 			unlink("{$init->dirName}/island.{$tmpid}");
 		}
-		// ƒƒCƒ“ƒf[ƒ^‚Ì‘€ì
+		// ãƒ¡ã‚¤ãƒ³ãƒ‡ãƒ¼ã‚¿ã®æ“ä½œ
 		$hako->islands[$num] = $island;
-		Turn::islandSort($hako); // íœ‚·‚é“‡‚ğÅ‰ºˆÊ‚ÉˆÚ“®
-		$hako->islandNumber -= 1; // Å‰ºˆÊíœ
-		
-		// ƒf[ƒ^‘‚«o‚µ
+		Turn::islandSort($hako); // å‰Šé™¤ã™ã‚‹å³¶ã‚’æœ€ä¸‹ä½ã«ç§»å‹•
+		$hako->islandNumber -= 1; // æœ€ä¸‹ä½å‰Šé™¤
+
+		// ãƒ‡ãƒ¼ã‚¿æ›¸ãå‡ºã—
 		$hako->writeIslandsFile($id);
 	}
 }
-
-?>

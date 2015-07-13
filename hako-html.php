@@ -2,137 +2,130 @@
 
 /*******************************************************************
 
-	” ’ë”“‡ S.E
-	
-	- ‰æ–Êo—Í—pƒtƒ@ƒCƒ‹ -
-	
+	ç®±åº­è«¸å³¶ S.E
+
+	- ç”»é¢å‡ºåŠ›ç”¨ãƒ•ã‚¡ã‚¤ãƒ« -
+
 	hako-html.php by SERA - 2013/05/12
 
 *******************************************************************/
 
-if(GZIP == true) {
-	// gzipˆ³k“]‘——p
-	require_once "HTTP/Compress.php";
-	$http = new HTTP_Compress;
-}
-
 //--------------------------------------------------------------------
 class HTML {
 	//---------------------------------------------------
-	// HTML ƒwƒbƒ_o—Í
+	// HTML ãƒ˜ãƒƒãƒ€å‡ºåŠ›
 	//---------------------------------------------------
 	function header($data = "") {
 		global $init;
-		global $PRODUCT_VERSION;
-		
-		// ˆ³k“]‘—
-		if(GZIP == true) {
-			global $http;
-			$http->start();
-		}
-		header("X-Product-Version: {$PRODUCT_VERSION}");
-		$css = (empty($data['defaultSkin'])) ? $init->cssList[0] : $data['defaultSkin'];
-		$bimg = (empty($data['defaultImg'])) ? $init->imgDir : $data['defaultImg'];
-		
-		print <<<END
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="ja">
+
+		// $css  = (empty($data['defaultSkin'])) ? $init->cssList[0] : $data['defaultSkin'];
+		$css  = $init->cssList[0];
+		$bimg = (empty($data['defaultImg']))  ? $init->imgDir : $data['defaultImg'];
+
+		echo <<<END
+<!DOCTYPE html>
+<html>
 <head>
-<base href="{$bimg}/">
-<meta http-equiv="Content-type" content="text/html; charset=Shift_JIS">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<meta http-equiv="Content-Script-Type" content="text/javascript">
-<link rel="stylesheet" type="text/css" href="{$init->cssDir}/{$css}">
-<link rel="shortcut icon" href="{$init->baseDir}/favicon.ico">
-<title>{$init->title}</title>
-<script type="text/javascript" src="{$init->baseDir}/hako.js"></script>
-<script type="text/javascript" src="{$init->baseDir}/auto-filter.js"></script>
-<script type="text/javascript" src="{$init->baseDir}/cpick.js"></script>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<base href="{$bimg}/">
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{$init->cssDir}/{$css}">
+	<link rel="shortcut icon" href="{$init->baseDir}/favicon.ico">
+	<title>{$init->title}</title>
+	<script type="text/javascript" src="{$init->baseDir}/js/hako.js"></script>
+	<script type="text/javascript" src="{$init->baseDir}/js/auto-filter.js"></script>
+	<script type="text/javascript" src="{$init->baseDir}/js/cpick.js"></script>
 </head>
 <body>
+<div class="container">
+	<header>
+		<ul class="list-inline">
+			<li><a href="http://www.bekkoame.ne.jp/~tokuoka/hakoniwa.html">ç®±åº­è«¸å³¶ã‚¹ã‚¯ãƒªãƒ—ãƒˆé…å¸ƒå…ƒ</a> <a href="http://scrlab.g-7.ne.jp">[PHP]</a></li>
+			<li><a href="http://hakoniwa.symphonic-net.com">ç®±åº­è«¸å³¶S.Eé…å¸ƒå…ƒ</a></li>
+			<li><a href="http://snufkin.jp.land.to">æ²™å¸ƒå·¾ã®ç®±åº­</a></li>
+			<li><a href="http://www.s90259900.onlinehome.us/">ç®±åº­ã®ç®±åº­</a></li>
+			<li><a href="http://no-one.s53.xrea.com">The Return of Neptune</a></li>
+			<li><a href="http://minnano.min-ai.net/ocn/">ã¿ã‚“ãªã®ã‚ã„ã‚‰ã‚“ã©</a></li>
+		</ul>
 
-<div id="LinkHeader">
-<a href="http://www.bekkoame.ne.jp/~tokuoka/hakoniwa.html">” ’ë”“‡ƒXƒNƒŠƒvƒg”z•zŒ³</a>
-<a href="http://scrlab.g-7.ne.jp">[PHP]</a>@
-[<a href="http://hakoniwa.symphonic-net.com">” ’ë”“‡S.E”z•zŒ³</a>]@
-[<a href="http://snufkin.jp.land.to">¹•z‹Ğ‚Ì” ’ë</a>]@
-[<a href="http://www.s90259900.onlinehome.us/">” ’ë‚Ì” ’ë</a>]@
-[<a href="http://no-one.s53.xrea.com">The Return of Neptune</a>]@
-[<a href="http://minnano.min-ai.net/ocn/">‚İ‚ñ‚È‚Ì‚ ‚¢‚ç‚ñ‚Ç</a>]
-<BR>
-[<a href="{$init->baseDir}/hako-main.php?mode=conf">“‡‚Ì“o˜^Eİ’è•ÏX</a>]@
-[<a href="{$init->baseDir}/hako-ally.php">“¯–¿ŠÇ—</a>]@
-[<a href="{$init->baseDir}/hako-main.php?mode=log">Å‹ß‚Ìo—ˆ–</a>]@
-[<a href="{$init->urlManu}" target="_blank">ƒ}ƒjƒ…ƒAƒ‹</a>]@
-[<a href="{$init->urlBbs}" target="_blank">Œf¦”Â</a>]@
-[<a href="{$init->baseDir}/hako-admin.php">ŠÇ—lº</a>]
-</div>
-<hr>
+		<nav class="navbar navbar-default">
+		  <div class="container-fluid">
+		    <div class="navbar-header">
+					<a href="{$init->baseDir}/hako-main.php" class="navbar-brand">{$init->title}</a>
+		    </div>
+		      <ul class="nav navbar-nav">
+						<li><a href="{$init->baseDir}/hako-main.php?mode=conf">å³¶ã®ç™»éŒ²ãƒ»è¨­å®šå¤‰æ›´</a></li>
+						<li><a href="{$init->baseDir}/hako-ally.php">åŒç›Ÿç®¡ç†</a></li>
+			      <li><a href="{$init->baseDir}/hako-main.php?mode=log">æœ€è¿‘ã®å‡ºæ¥äº‹</a></li>
+					</ul>
+		  </div>
+		</nav>
+	</header>
+
 END;
 	}
-	
+
 	//---------------------------------------------------
-	// HTML ƒtƒbƒ^o—Í
+	// HTML ãƒ•ãƒƒã‚¿å‡ºåŠ›
 	//---------------------------------------------------
-	function footer() {
+	static function footer() {
 		global $init;
-		
-		print <<<END
+
+		echo <<<END
 <hr>
-<div id="LinkFoot">
-ŠÇ—ÒF{$init->adminName}(<a href="mailto:{$init->adminEmail}">{$init->adminEmail}</a>)<br>
-Œf¦”ÂF(<a href="{$init->urlBbs}">{$init->urlBbs}</a>)<br>
-ƒgƒbƒvƒy[ƒWF(<a href="{$init->urlTopPage}">{$init->urlTopPage}</a>)
-</div>
-<br><div align="right">
+<footer>
+	<p>Produced by {$init->adminName} (<a href="{$init->urlTopPage}">{$init->urlTopPage}</a>)
 END;
 		if($init->performance) {
-			list($tmp1, $tmp2) = split(" ", $init->CPU_start);
-			list($tmp3, $tmp4) = split(" ", microtime());
-			printf("@<SMALL>(CPU : %.6f•b)</SMALL>", $tmp4-$tmp2+$tmp3-$tmp1);
+			echo '<small class="pull-right">';
+			list($tmp1, $tmp2) = array_pad( explode(" ", $init->CPU_start), 2, 0);
+			list($tmp3, $tmp4) = array_pad( explode(" ", microtime()), 2, 0);
+			printf("(CPU : %.6fç§’)", $tmp4-$tmp2+$tmp3-$tmp1);
+			echo '</small>';
 		}
-		print <<<END
-</div>
+
+
+		echo <<<END
+		</p>
+</footer>
+
+</div><!-- container -->
 </body>
 </html>
 END;
-		if(GZIP == true) {
-			global $http;
-			$http->output();
-		}
 	}
-	
+
 	//---------------------------------------------------
-	// ÅIXV { Ÿƒ^[ƒ“XVo—Í
+	// æœ€çµ‚æ›´æ–°æ™‚åˆ» ï¼‹ æ¬¡ã‚¿ãƒ¼ãƒ³æ›´æ–°æ™‚åˆ»å‡ºåŠ›
 	//---------------------------------------------------
 	function lastModified($hako) {
 		global $init;
-		
-		$timeString = date("Y”NmŒd“ú@H", $hako->islandLastTime);
-		print <<<END
-<div class="lastModified">ÅIXVŠÔ : $timeString
-<span style="font-weight: normal;">
-(Ÿ‚Ìƒ^[ƒ“‚Ü‚ÅA‚ ‚Æ
-<script type="text/javascript">
-<!--
-var nextTime = $hako->islandLastTime + $init->unitTime;
-remainTime(nextTime);
-//-->
-</script>
-</span>
+
+		$timeString = date("Yå¹´mæœˆdæ—¥ã€€Hæ™‚", $hako->islandLastTime);
+		echo <<<END
+
+<div class="lastModified">
+<p>æœ€çµ‚æ›´æ–°æ™‚é–“: $timeString<br>
+(æ¬¡ã®ã‚¿ãƒ¼ãƒ³ã¾ã§ã€ã‚ã¨
+	<script type="text/javascript">
+		remainTime($hako->islandLastTime + $init->unitTime);
+	</script>
+</p>
 </div>
+
 END;
 	}
 }
 //--------------------------------------------------------------------
 class HtmlTop extends HTML {
 	//---------------------------------------------------
-	// ‚s‚n‚oƒy[ƒW
+	// ï¼´ï¼¯ï¼°ãƒšãƒ¼ã‚¸
 	//---------------------------------------------------
 	function main($hako, $data) {
 		global $init;
-		
-		// ÅIXV { Ÿƒ^[ƒ“XVo—Í
+
+		// æœ€çµ‚æ›´æ–°æ™‚åˆ» ï¼‹ æ¬¡ã‚¿ãƒ¼ãƒ³æ›´æ–°æ™‚åˆ»å‡ºåŠ›
 		$this->lastModified($hako);
 		$allyfile = $init->baseDir . "/hako-ally.php";
 		if(empty($data['defaultDevelopeMode']) || $data['defaultDevelopeMode'] == "cgi") {
@@ -140,55 +133,79 @@ class HtmlTop extends HTML {
 		} else {
 			$radio = ""; $radio2 = "checked";
 		}
-		print "<h1 class=\"title\">{$init->title}</h1>\n";
-		
-		if(DEBUG == true) {
-			print <<<END
+		//print "<h1 class=\"title\">{$init->title}</h1>\n";
+
+		if(DEBUG === true) {
+			echo <<<END
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<input type="hidden" name="mode" value="debugTurn">
-<input type="submit" value="ƒ^[ƒ“‚ği‚ß‚é">
+	<input type="hidden" name="mode" value="debugTurn">
+	<input type="submit" class="btn btn-default" value="ã‚¿ãƒ¼ãƒ³ã‚’é€²ã‚ã‚‹">
 </form>
 END;
 		}
-		print <<<END
-<div class='Turn'>ƒ^[ƒ“$hako->islandTurn</div>
+
+		$_defaultPassword = isset($data['defaultPassword']) ? $data['defaultPassword'] : "";
+		echo <<<END
+<div class='Turn'>ã‚¿ãƒ¼ãƒ³$hako->islandTurn</div>
 <hr>
-<TABLE BORDER=0 width="100%">
-<TR valign="top">
-<TD width="50%" class="M">
-<div id="MyIsland">
-<h2>©•ª‚Ì“‡‚Ö</h2>
+
+
+<div class="row">
+<div class="col-xs-6">
+<h2>è‡ªåˆ†ã®å³¶ã¸</h2>
+
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-‚ ‚È‚½‚Ì“‡‚Ì–¼‘O‚ÍH<br>
-<select name="ISLANDID">
-$hako->islandList
-</select>
-<br>
-ƒpƒXƒ[ƒh‚ğ‚Ç‚¤‚¼II<br>
-<input type="password" name="PASSWORD" value="{$data['defaultPassword']}" size="32" maxlength="32"><br>
-<input type="hidden" name="mode" value="owner">
-<input type="radio" name="DEVELOPEMODE" value="cgi" id="cgi" $radio><label for="cgi">’Êíƒ‚[ƒh</label>
-<input type="radio" name="DEVELOPEMODE" value="java" id="java" $radio2><label for="java">JavaƒXƒNƒŠƒvƒgƒ‚[ƒh</label><BR>
-<input type="submit" value="ŠJ”­‚µ‚És‚­">
+	<br>
+
+	<div class="form-group">
+		<label>ã‚ãªãŸã®å³¶ã®åå‰ã¯ï¼Ÿ</label>
+		<select name="ISLANDID" class="form-control">
+			$hako->islandList
+		</select>
+	</div>
+	<div class="form-group">
+		<label>ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰</label>
+		<input type="password" name="PASSWORD" class="form-control" value="{$_defaultPassword}" size="32" maxlength="32"><br>
+	</div>
+
+	<input type="hidden" name="mode" value="owner">
+
+	<div class="form-group">
+		<label class="radio-inline">
+		  <input type="radio" name="DEVELOPEMODE" value="cgi" id="cgi" $radio>
+			<label for="cgi">é€šå¸¸ãƒ¢ãƒ¼ãƒ‰</label>
+		</label>
+		<label class="radio-inline">
+		  <input type="radio" name="DEVELOPEMODE" value="java" id="java" $radio2>
+			<label for="java">JavaScriptãƒ¢ãƒ¼ãƒ‰</label>
+		</label>
+	</div>
+
+	<div class="form-group">
+	<input type="submit" class="btn btn-primary" value="é–‹ç™ºã—ã«è¡Œã">
+	</div>
 </form>
 </div>
 
-</TD>
-<TD width="50%" class="M">
+<div class="col-xs-6">
 END;
-		$this->infoPrint(); // u‚¨’m‚ç‚¹v‚ğ•\¦
-		// $this->historyPrint(); // u”­Œ©‚Ì‹L˜^v‚ğ•\¦
-		
-		print <<<END
-</TD></TR></TABLE>
+		$this->infoPrint(); // ã€ŒãŠçŸ¥ã‚‰ã›ã€ã‚’è¡¨ç¤º
+echo <<<END
+</div>
+
+</div>
+
+
+
 <hr>
-<h2>Še•”–åƒ‰ƒ“ƒLƒ“ƒO</h2>
-<table width="90%">
+<h2>å„éƒ¨é–€ãƒ©ãƒ³ã‚­ãƒ³ã‚°</h2>
+<div class="table-responsive">
+<table class="table">
 END;
-		$element = array('point', 'money', 'food', 'pop', 'area', 'fire', 'pots', 'gold', 'rice', 'peop', 'monster', 'taiji', 'farm', 'factory', 'commerce', 'hatuden', 'mountain', 'team');
-		$bumonName = array("‘‡ƒ|ƒCƒ“ƒg", "‘‹à", "H—¿", "lŒû", "–ÊÏ", "ŒR–—Í", "¬’·", "û“ü", "ûŠn", "lŒû‘‰Á", "‰öboŒ»”", "‰öb‘Ş¡”", "”_ê", "Hê", "¤‹Æ", "”­“dŠ", "ÌŒ@ê", "ƒTƒbƒJ[");
-		$bumonUnit = array('pts', $init->unitMoney, $init->unitFood, $init->unitPop, $init->unitArea, "‹@–§–€", "ptsª", $init->unitMoney, $init->unitFood, $init->unitPop, $init->unitMonster, $init->unitMonster, "0{$init->unitPop}", "0{$init->unitPop}", "0{$init->unitPop}", "000kw", "0{$init->unitPop}", 'pts');
-		
+		$element   = array('point', 'money', 'food', 'pop', 'area', 'fire', 'pots', 'gold', 'rice', 'peop', 'monster', 'taiji', 'farm', 'factory', 'commerce', 'hatuden', 'mountain', 'team');
+		$bumonName = array("ç·åˆãƒã‚¤ãƒ³ãƒˆ", $init->nameFunds, $init->nameFood, $init->namePopulation, "é¢ç©", "è»äº‹åŠ›", "æˆé•·", "åå…¥", "åç©«", "äººå£å¢—åŠ ", "æ€ªç£å‡ºç¾æ•°", "æ€ªç£é€€æ²»æ•°", "è¾²å ´", "å·¥å ´", "å•†æ¥­", "ç™ºé›»æ‰€", "æ¡æ˜å ´", "ã‚µãƒƒã‚«ãƒ¼");
+		$bumonUnit = array('pts', $init->unitMoney, $init->unitFood, $init->unitPop, $init->unitArea, "æ©Ÿå¯†äº‹é …", "ptsâ†‘", $init->unitMoney, $init->unitFood, $init->unitPop, $init->unitMonster, $init->unitMonster, "0{$init->unitPop}", "0{$init->unitPop}", "0{$init->unitPop}", "000kw", "0{$init->unitPop}", 'pts');
+
 		for($r = 0; $r < sizeof($element); $r++) {
 			$max = 0;
 			for($i = 0; $i < $hako->islandNumber; $i++) {
@@ -202,8 +219,9 @@ END;
 				if(($r % 6) == 0) {
 					print "<tr>\n";
 				}
-				print "<td width=\"15%\" class=\"M\"><table width=\"100%\">\n";
-				print "<tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr>\n";
+				print "<td width=\"15%\" class=\"M\">";
+				print "<table class=\"table table-bordered\">\n";
+				print "<thead><tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr></thead>\n";
 				print "<tr><td class=\"TenkiCell\">{$init->tagName_}-{$init->_tagName}</a></td></tr>\n";
 				print "<tr><td class=\"TenkiCell\">-</td></tr>\n";
 				print "</table></td>\n";
@@ -219,8 +237,9 @@ END;
 				}
 				$island = $hako->islands[$rankid[$r]];
 				$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
-				print "<td width=\"15%\" class=\"M\"><table width=\"100%\">\n";
-				print "<tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr>\n";
+				print "<td width=\"15%\" class=\"M\">";
+				print "<table class=\"table table-bordered\">\n";
+				print "<thead><tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr></thead>\n";
 				print "<tr><td class=\"TenkiCell\"><a href=\"{$GLOBALS['THIS_FILE']}?Sight={$island['id']}\">{$init->tagName_}{$name}{$init->_tagName}</a></td></tr>\n";
 				print "<tr><td class=\"TenkiCell\">{$max}{$bumonUnit[$r]}</td></tr>\n";
 				print "</table></td>\n";
@@ -230,26 +249,27 @@ END;
 			}
 		}
 		print "</table>\n";
+		print "</div>\n";
 		print "<BR>\n";
-		
+
 		if($hako->allyNumber) {
-			print <<<END
+			echo <<<END
 <hr>
 <div id="IslandView">
-<h2>“¯–¿‚Ìó‹µ</h2>
-<table border="1">
+<h2>åŒç›Ÿã®çŠ¶æ³</h2>
+<table class="table table-bordered">
 <tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}‡ˆÊ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“¯–¿{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}ƒ}[ƒN{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“‡‚Ì”{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}‘lŒû{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}è—L—¦{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}”_ê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}Hê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}¤‹Æ‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}ÌŒ@ê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}”­“dŠ‹K–Í{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}åŒç›Ÿ{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}ãƒãƒ¼ã‚¯{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å³¶ã®æ•°{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}ç·äººå£{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å æœ‰ç‡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}è¾²å ´è¦æ¨¡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å·¥å ´è¦æ¨¡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å•†æ¥­è¦æ¨¡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}æ¡æ˜å ´è¦æ¨¡{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}ç™ºé›»æ‰€è¦æ¨¡{$init->_tagTH}</th>
 </tr>
 END;
 			for($i=0; $i<$hako->allyNumber; $i++) {
@@ -258,7 +278,7 @@ END;
 				}
 				$ally = $hako->ally[$i];
 				$j = $i + 1;
-				
+
 				$pop = $farm = $factory = $commerce = $mountain = $hatuden = $missiles = 0;
 				for($k=0; $k<$ally['number']; $k++) {
 					$id = $ally['memberId'][$k];
@@ -272,18 +292,18 @@ END;
 				}
 				$name = ($num) ? "{$init->tagName_}{$ally['name']}{$init->_tagName}" : "<a href=\"{$allyfile}?AmiOfAlly={$ally['id']}\">{$ally['name']}</a>";
 				$pop = $pop . $init->unitPop;
-				$farm = ($farm <= 0) ? "•Û—L‚¹‚¸" : $farm * 10 . $init->unitPop;
-				$factory = ($factory <= 0) ? "•Û—L‚¹‚¸" : $factory * 10 . $init->unitPop;
-				$commerce = ($commerce <= 0) ? "•Û—L‚¹‚¸" : $commerce * 10 . $init->unitPop;
-				$mountain = ($mountain <= 0) ? "•Û—L‚¹‚¸" : $mountain * 10 . $init->unitPop;
+				$farm = ($farm <= 0) ? "ä¿æœ‰ã›ãš" : $farm * 10 . $init->unitPop;
+				$factory = ($factory <= 0) ? "ä¿æœ‰ã›ãš" : $factory * 10 . $init->unitPop;
+				$commerce = ($commerce <= 0) ? "ä¿æœ‰ã›ãš" : $commerce * 10 . $init->unitPop;
+				$mountain = ($mountain <= 0) ? "ä¿æœ‰ã›ãš" : $mountain * 10 . $init->unitPop;
 				$hatuden = ($hatuden <= 0) ? "0kw" : $hatuden * 1000 . kw;
-				
-				print <<<END
+
+				echo <<<END
 <tr>
 <th {$init->bgNumberCell} rowspan=2>{$init->tagNumber_}$j{$init->_tagNumber}</th>
 <td {$init->bgNameCell} rowspan=2>{$name}</td>
 <td class="TenkiCell"><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
-<td {$init->bgInfoCell}>{$ally['number']}“‡</td>
+<td {$init->bgInfoCell}>{$ally['number']}å³¶</td>
 <td {$init->bgInfoCell}>{$pop}</td>
 <td {$init->bgInfoCell}>{$ally['occupation']}%</td>
 <td {$init->bgInfoCell}>{$farm}</td>
@@ -293,7 +313,7 @@ END;
 <td {$init->bgInfoCell}>{$hatuden}</td>
 </tr>
 <tr>
-<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$allyfile}?Allypact={$ally['id']}">{$ally['oName']}</a>F{$init->_tagTH}{$ally['comment']}</td>
+<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$allyfile}?Allypact={$ally['id']}">{$ally['oName']}</a>ï¼š{$init->_tagTH}{$ally['comment']}</td>
 </tr>
 END;
 			}
@@ -302,8 +322,8 @@ END;
 		print "<BR>\n";
 		print "<hr>\n";
 		print "<div ID=\"IslandView\">\n";
-		print "<h2>”“‡‚Ìó‹µ</h2>\n";
-		
+		print "<h2>è«¸å³¶ã®çŠ¶æ³</h2>\n";
+
 		if ($hako->islandNumber != 0) {
 			$islandListStart = $data['islandListStart'];
 			if ($init->islandListRange == 0) {
@@ -316,9 +336,9 @@ END;
 			}
 		}
 		print "<p>\n";
-		print "“‡‚Ì–¼‘O‚ğƒNƒŠƒbƒN‚·‚é‚ÆA<strong>ŠÏŒõ</strong>‚·‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B\n";
+		print "å³¶ã®åå‰ã‚’ã‚¯ãƒªãƒƒã‚¯ã™ã‚‹ã¨ã€<strong>è¦³å…‰</strong>ã™ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚\n";
 		print "</p>\n";
-		
+
 		if (($islandListStart != 1) || ($islandListSentinel != $hako->islandNumberNoBF)) {
 			for ($i = 1; $i <= $hako->islandNumberNoBF ; $i += $init->islandListRange) {
 				$j = $i + $init->islandListRange - 1;
@@ -330,7 +350,7 @@ END;
 					print "<a href=\"" . $GLOBALS['THIS_FILE'] . "?islandListStart=" . $i ."\">";
 				}
 				print " [ ". $i . " - " . $j . " ]";
-				
+
 				if ($i != $islandListStart) {
 					print "</a>";
 				}
@@ -338,40 +358,40 @@ END;
 		}
 		$islandListStart--;
 		$this->islandTable($hako, $islandListStart, $islandListSentinel);
-		
+
 		print "<hr>\n\n";
 		print "<div ID=\"IslandView\">\n";
-		print "<h2>Battle Field‚Ìó‹µ</h2>\n";
-		
+		print "<h2>Battle Fieldã®çŠ¶æ³</h2>\n";
+
 		$this->islandTable($hako, $hako->islandNumberNoBF, $hako->islandNumber);
-		
+
 		print "<hr>\n";
-		
+
 		$this->historyPrint();
-		
+
 		if($init->registMode) {
-			print <<<END
+			echo <<<END
 <FORM action="{$GLOBALS['THIS_FILE']}?mode=conf" method="POST">
 <DIV align="right">
 <INPUT TYPE="password" NAME="PASSWORD" SIZE=8 MAXLENGTH=32>
-<INPUT TYPE="submit" VALUE="ŠÇ——p" NAME="AdminButton">
+<INPUT TYPE="submit" VALUE="ç®¡ç†ç”¨" NAME="AdminButton">
 </DIV>
 </FORM>
 END;
 		}
 	}
-	
+
 	//---------------------------------------------------
-	// “‡‚Ìˆê——•\‚ğ•\¦
+	// å³¶ã®ä¸€è¦§è¡¨ã‚’è¡¨ç¤º
 	//---------------------------------------------------
 	function islandTable(&$hako, $start, $sentinel) {
 		global $init;
-		
-		print "<table border=\"1\">\n";
-		
+
+		echo '<table class="table table-bordered">';
+
 		for($i = $start; $i < $sentinel ; $i++) {
 			$island       = $hako->islands[$i];
-			$j            = ($island['isBF']) ? 'š' : $i + 1;
+			$j            = ($island['isBF']) ? 'â˜…' : $i + 1;
 			$id           = $island['id'];
 			$pop          = $island['pop'] . $init->unitPop;
 			$area         = $island['area'] . $init->unitArea;
@@ -384,12 +404,12 @@ END;
 			$food         = $island['food'] . $init->unitFood;
 			$unemployed   = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
 			$unemployed   = '<font color="' . ($unemployed < 0 ? 'black' : 'red') . '">' . sprintf("%-3d%%", $unemployed) . '</font>';
-			$farm         = ($island['farm'] <= 0) ? "•Û—L‚¹‚¸" : $island['farm'] * 10 . $init->unitPop;
-			$factory      = ($island['factory'] <= 0) ? "•Û—L‚¹‚¸" : $island['factory'] * 10 . $init->unitPop;
-			$commerce     = ($island['commerce'] <= 0) ? "•Û—L‚¹‚¸" : $island['commerce'] * 10 . $init->unitPop;
-			$mountain     = ($island['mountain'] <= 0) ? "•Û—L‚¹‚¸" : $island['mountain'] * 10 . $init->unitPop;
-			$hatuden      = ($island['hatuden'] <= 0) ? "•Û—L‚¹‚¸" : $island['hatuden'] * 10 . $init->unitPop;
-			$taiji        = ($island['taiji'] <= 0) ? "0•C" : $island['taiji'] * 1 . $init->unitMonster;
+			$farm         = ($island['farm'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['farm'] * 10 . $init->unitPop;
+			$factory      = ($island['factory'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['factory'] * 10 . $init->unitPop;
+			$commerce     = ($island['commerce'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['commerce'] * 10 . $init->unitPop;
+			$mountain     = ($island['mountain'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['mountain'] * 10 . $init->unitPop;
+			$hatuden      = ($island['hatuden'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['hatuden'] * 10 . $init->unitPop;
+			$taiji        = ($island['taiji'] <= 0) ? "0åŒ¹" : $island['taiji'] * 1 . $init->unitMonster;
 			$peop         = ($island['peop'] < 0) ? "{$island['peop']}{$init->unitPop}" : "+{$island['peop']}{$init->unitPop}";
 			$okane        = ($island['gold'] < 0) ? "{$island['gold']}{$init->unitMoney}" : "+{$island['gold']}{$init->unitMoney}";
 			$gohan        = ($island['rice'] < 0) ? "{$island['rice']}{$init->unitFood}" : "+{$island['rice']}{$init->unitFood}";
@@ -408,132 +428,141 @@ END;
 			$comment_turn = $island['comment_turn'];
 			$starturn     = $island['starturn'];
 			$monster      = '';
-			
+
 			if($island['monster'] > 0) {
-				$monster = "<strong class=\"monster\">[‰öb{$island['monster']}‘Ì]</strong>";
+				$monster = "<strong class=\"monster\">[æ€ªç£{$island['monster']}ä½“]</strong>";
 			}
-			
+
 			if($island['keep'] == 1) {
-				$comment = "<span class=\"attention\">‚±‚Ì“‡‚ÍŠÇ—l—a‚©‚è’†‚Å‚·B</span>";
+				$comment = "<span class=\"attention\">ã“ã®å³¶ã¯ç®¡ç†äººé ã‹ã‚Šä¸­ã§ã™ã€‚</span>";
 			}
-			
+
 			$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
 			if($island['absent'] == 0) {
 				$name = "{$init->tagName_}{$name}{$init->_tagName}";
 			} else {
 				$name = "{$init->tagName2_}{$name}({$island['absent']}){$init->_tagName2}";
 			}
+
 			if(!empty($island['owner'])) {
 				$owner = $island['owner'];
 			} else {
-				$owner = "ƒRƒƒ“ƒg";
+				$owner = "ã‚³ãƒ¡ãƒ³ãƒˆ";
 			}
-			
+
 			$prize = $island['prize'];
 			$prize = $hako->getPrizeList($prize);
-			
+
 			$point = $island['point'];
-			
-			if($init->commentNew > 0 && ($comment_turn + $init->commentNew) > $hako->islandTurn) {
+
+			// /*if($init->commentNew > 0 && ($comment_turn + $init->commentNew) > $hako->islandTurn) { */
+			if( $comment_turn > $hako->islandTurn) {
 				$comment .= " <span class=\"new\">New</span>";
 			}
-			
+
 			$sora = "";
 			if($tenki == 1) {
-				$sora .= "<IMG SRC=\"tenki1.gif\" ALT=\"°‚ê\" title=\"°‚ê\">";
+				$sora .= "<IMG SRC=\"tenki1.gif\" ALT=\"æ™´ã‚Œ\" title=\"æ™´ã‚Œ\">";
 			} elseif($tenki == 2) {
-				$sora .= "<IMG SRC=\"tenki2.gif\" ALT=\"“Ü‚è\" title=\"“Ü‚è\">";
+				$sora .= "<IMG SRC=\"tenki2.gif\" ALT=\"æ›‡ã‚Š\" title=\"æ›‡ã‚Š\">";
 			} elseif($tenki == 3) {
-				$sora .= "<IMG SRC=\"tenki3.gif\" ALT=\"‰J\" title=\"‰J\">";
+				$sora .= "<IMG SRC=\"tenki3.gif\" ALT=\"é›¨\" title=\"é›¨\">";
 			} elseif($tenki == 4) {
-				$sora .= "<IMG SRC=\"tenki4.gif\" ALT=\"—‹\" title=\"—‹\">";
+				$sora .= "<IMG SRC=\"tenki4.gif\" ALT=\"é›·\" title=\"é›·\">";
 			} else {
-				$sora .= "<IMG SRC=\"tenki5.gif\" ALT=\"á\" title=\"á\">";
+				$sora .= "<IMG SRC=\"tenki5.gif\" ALT=\"é›ª\" title=\"é›ª\">";
 			}
-			
+
 			$eiseis = "";
 			for($e = 0; $e < $init->EiseiNumber; $e++) {
-				if($eisei[$e] > 0) {
-					$eiseis .= "<img src=\"eisei{$e}.gif\" alt=\"{$init->EiseiName[$e]} {$eisei[$e]}%\" title=\"{$init->EiseiName[$e]} {$eisei[$e]}%\"> ";
-				} else {
-					$eiseis .= "@";
+				if (isset($eisei[$e])) {
+					if($eisei[$e] > 0) {
+						$eiseis .= "<img src=\"eisei{$e}.gif\" alt=\"{$init->EiseiName[$e]} {$eisei[$e]}%\" title=\"{$init->EiseiName[$e]} {$eisei[$e]}%\"> ";
+					} else {
+						$eiseis .= "ã€€";
+					}
 				}
 			}
-			
+
 			$zins = "";
 			for($z = 0; $z < $init->ZinNumber; $z++) {
-				if($zin[$z] > 0) {
-					$zins .= "<img src=\"zin{$z}.gif\" alt=\"{$init->ZinName[$z]}\" title=\"{$init->ZinName[$z]}\"> ";
-				} else {
-					$zins .= "";
+				if (isset($zin[$z])) {
+					if($zin[$z] > 0) {
+						$zins .= "<img src=\"zin{$z}.gif\" alt=\"{$init->ZinName[$z]}\" title=\"{$init->ZinName[$z]}\"> ";
+					} else {
+						$zins .= "";
+					}
 				}
 			}
-			
+
 			$items = "";
 			for($t = 0; $t < $init->ItemNumber; $t++) {
-				if($item[$t] > 0) {
-					if($t == 20) {
-						$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"  title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
+				if (isset($item[$t])) {
+					if($item[$t] > 0) {
+						if($t == 20) {
+							$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"  title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
+						} else {
+							$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
+						}
 					} else {
-						$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
+						$items .= "";
 					}
-				} else {
-					$items .= "";
 				}
 			}
-			
+
 			$lots = "";
 			if($lot > 0) {
-				$lots .= " <IMG SRC=\"lot.png\" ALT=\"{$lot}–‡\" title=\"{$lot}–‡\">";
+				$lots .= " <IMG SRC=\"lot.png\" ALT=\"{$lot}æš\" title=\"{$lot}æš\">";
 			}
-			
+
 			$viking = "";
 			for($v = 10; $v < 15; $v++) {
 				if($island['ship'][$v] > 0) {
-					$viking .= " <IMG SRC=\"ship{$v}.gif\" width=\"16\" height=\"16\" ALT=\"{$init->shipName[$v]}oŒ»’†\" title=\"{$init->shipName[$v]}oŒ»’†\">";
+					$viking .= " <IMG SRC=\"ship{$v}.gif\" width=\"16\" height=\"16\" ALT=\"{$init->shipName[$v]}å‡ºç¾ä¸­\" title=\"{$init->shipName[$v]}å‡ºç¾ä¸­\">";
 				}
 			}
-			
+
 			$start = "";
 			if(($hako->islandTurn - $island['starturn']) < $init->noAssist) {
-				$start .= " <IMG SRC=\"start.gif\" width=\"16\" height=\"16\" ALT=\"‰SÒƒ}[ƒN\" title=\"‰SÒƒ}[ƒN\">";
+				$start .= " <IMG SRC=\"start.gif\" width=\"16\" height=\"16\" ALT=\"åˆå¿ƒè€…ãƒãƒ¼ã‚¯\" title=\"åˆå¿ƒè€…ãƒãƒ¼ã‚¯\">";
 			}
-			
+
 			$soccer = "";
 			if($island['soccer'] > 0) {
-				$soccer .= " <IMG SRC=\"soccer.gif\" width=\"16\" height=\"16\" ALT=\"‘‡ƒ|ƒCƒ“ƒgF{$team}@{$shiai}í{$kachi}Ÿ{$make}”s{$hikiwake}•ª@UŒ‚—ÍF{$kougeki}@ç”õ—ÍF{$bougyo}@“¾“_F{$tokuten}@¸“_F{$shitten}\" title=\"‘‡ƒ|ƒCƒ“ƒgF{$team}@{$shiai}í{$kachi}Ÿ{$make}”s{$hikiwake}•ª@UŒ‚—ÍF{$kougeki}@ç”õ—ÍF{$bougyo}@“¾“_F{$tokuten}@¸“_F{$shitten}\">";
+				$soccer .= " <IMG SRC=\"soccer.gif\" width=\"16\" height=\"16\" ALT=\"ç·åˆãƒã‚¤ãƒ³ãƒˆï¼š{$team}ã€€{$shiai}æˆ¦{$kachi}å‹{$make}æ•—{$hikiwake}åˆ†ã€€æ”»æ’ƒåŠ›ï¼š{$kougeki}ã€€å®ˆå‚™åŠ›ï¼š{$bougyo}ã€€å¾—ç‚¹ï¼š{$tokuten}ã€€å¤±ç‚¹ï¼š{$shitten}\" title=\"ç·åˆãƒã‚¤ãƒ³ãƒˆï¼š{$team}ã€€{$shiai}æˆ¦{$kachi}å‹{$make}æ•—{$hikiwake}åˆ†ã€€æ”»æ’ƒåŠ›ï¼š{$kougeki}ã€€å®ˆå‚™åŠ›ï¼š{$bougyo}ã€€å¾—ç‚¹ï¼š{$tokuten}ã€€å¤±ç‚¹ï¼š{$shitten}\">";
 			}
-			
-			// “d—ÍÁ”ï—Ê
+
+			// é›»åŠ›æ¶ˆè²»é‡
 			$enesyouhi = round($island['pop'] / 100 + $island['factory'] * 2/3 + $island['commerce'] * 1/3 + $island['mountain'] * 1/4);
 			if($enesyouhi == 0) {
-				$ene = "“d—ÍÁ”ï‚È‚µ";
+				$ene = "é›»åŠ›æ¶ˆè²»ãªã—";
 			} elseif($island['hatuden'] == 0) {
 				$ene =  "<font color=\"#ff0000\">0%</font>";
 			} else {
-				// “d—Í‹Ÿ‹‹—¦
+				// é›»åŠ›ä¾›çµ¦ç‡
 				$ene = round($island['hatuden'] / $enesyouhi * 100);
 				if($ene < 100) {
-					// ‹Ÿ‹‹“d—Í•s‘«
+					// ä¾›çµ¦é›»åŠ›ä¸è¶³
 					$ene = "<font color=\"#ff0000\">{$ene}%</font>";
 				} else {
-					// ‹Ÿ‹‹“d—Í[•ª
+					// ä¾›çµ¦é›»åŠ›å……åˆ†
 					$ene = "{$ene}%";
 				}
 			}
-			print <<<END
+			echo <<<END
 <tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}‡ˆÊ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“‡{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“¾“_{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}lŒû{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}–ÊÏ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“V‹C{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}‘‹à{$init->_tagTH}{$lots}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}H—¿{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}¸‹Æ—¦{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å³¶{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å¾—ç‚¹{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}é¢ç©{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å¤©æ°—{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}å¤±æ¥­ç‡{$init->_tagTH}</th>
 </tr>
 END;
+			$keep = isset($keep) ? $keep : "";
 			print "<tr>\n";
 			print "<th {$init->bgNumberCell} rowspan=\"5\">{$init->tagNumber_}$j{$init->_tagNumber}</th>\n";
 			print "<td {$init->bgNameCell} rowspan=\"5\">{$keep}<br>\n<a href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$name}</a>{$start}{$monster}{$soccer}<br>\n{$prize}{$viking}<br>\n{$zins}<br>\n<font size=\"-1\">({$peop} {$okane} {$gohan} {$poin})</font></td>\n";
@@ -546,13 +575,13 @@ END;
 			print "<td {$init->bgInfoCell}>$unemployed</td>\n";
 			print "</tr>\n";
 			print "<tr>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}”_ê‹K–Í{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}Hê‹K–Í{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}¤‹Æ‹K–Í{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}ÌŒ@ê‹K–Í{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}”­“dŠ‹K–Í{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}“d—Í‹Ÿ‹‹—¦{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}lH‰q¯{$init->_tagTH}</th>\n";
+			print "<th {$init->bgTitleCell}>{$init->tagTH_}è¾²å ´è¦æ¨¡{$init->_tagTH}</th>\n";
+			print "<th {$init->bgTitleCell}>{$init->tagTH_}å·¥å ´è¦æ¨¡{$init->_tagTH}</th>\n";
+			print "<th {$init->bgTitleCell}>{$init->tagTH_}å•†æ¥­è¦æ¨¡{$init->_tagTH}</th>\n";
+			print "<th {$init->bgTitleCell}>{$init->tagTH_}æ¡æ˜å ´è¦æ¨¡{$init->_tagTH}</th>\n";
+			print "<th {$init->bgTitleCell}>{$init->tagTH_}ç™ºé›»æ‰€è¦æ¨¡{$init->_tagTH}</th>\n";
+			print "<th {$init->bgTitleCell}>{$init->tagTH_}é›»åŠ›ä¾›çµ¦ç‡{$init->_tagTH}</th>\n";
+			print "<th {$init->bgTitleCell}>{$init->tagTH_}äººå·¥è¡›æ˜Ÿ{$init->_tagTH}</th>\n";
 			print "</tr>\n";
 			print "<tr>\n";
 			print "<td {$init->bgInfoCell}>$farm</td>\n";
@@ -564,335 +593,268 @@ END;
 			print "<td class=\"ItemCell\">$eiseis</td>\n";
 			print "</tr>\n";
 			print "<tr>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}æ“¾ƒAƒCƒeƒ€{$init->_tagTH}</th>\n";
-			print "<td class=\"ItemCell\" colspan=\"6\">@$items</td>\n";
+			print "<th {$init->bgTitleCell}>{$init->tagTH_}å–å¾—ã‚¢ã‚¤ãƒ†ãƒ {$init->_tagTH}</th>\n";
+			print "<td class=\"ItemCell\" colspan=\"6\">ã€€$items</td>\n";
 			print "</tr>\n";
 			print "<tr>\n";
-			print "<td {$init->bgCommentCell} colspan=\"7\">{$init->tagTH_}{$owner}F{$init->_tagTH}$comment</td>\n";
+			print "<td {$init->bgCommentCell} colspan=\"7\">{$init->tagTH_}{$owner}ï¼š{$init->_tagTH}$comment</td>\n";
 			print "</tr>\n";
 		}
 		print "</table>\n</div>\n";
 	}
-	
+
 	//---------------------------------------------------
-	// “‡‚Ì“o˜^‚Æİ’è
+	// å³¶ã®ç™»éŒ²ã¨è¨­å®š
 	//---------------------------------------------------
-	function regist(&$hako, $data = "") {
+	function register(&$hako, $data = "") {
 		global $init;
-		
+
 		print "<center>{$GLOBALS['BACK_TO_TOP']}</center>";
+
 		$this->newDiscovery($hako->islandNumber);
 		$this->changeIslandInfo($hako->islandList);
 		$this->changeOwnerName($hako->islandList);
-		$this->setStyleSheet();
-		$this->setLocalImage($data);
+
 	}
-	
+
 	//---------------------------------------------------
-	// V‚µ‚¢“‡‚ğ’T‚·
+	// æ–°ã—ã„å³¶ã‚’æ¢ã™
 	//---------------------------------------------------
 	function newDiscovery($number) {
 		global $init;
-		
+
 		print "<div id=\"NewIsland\">\n";
-		print "<h2>V‚µ‚¢“‡‚ğ’T‚·</h2>\n";
+		print "<h2>æ–°ã—ã„å³¶ã‚’æ¢ã™</h2>\n";
 		if($number < $init->maxIsland) {
 			if($init->registMode == 1 && $init->adminMode == 0) {
-				print "“–” ’ë‚Å‚Í•s“K“–‚È“‡–¼‚È‚Ç‚Ì–‘Oƒ`ƒFƒbƒN‚ğs‚Á‚Ä‚¢‚Ü‚·B<BR>\n";
-				print "Q‰ÁŠó–]‚Ì•û‚ÍAŠÇ—Ò‚Éu“‡–¼v‚ÆuƒpƒXƒ[ƒhv‚ğ‘—M‚µ‚Ä‚­‚¾‚³‚¢B<BR>\n";
+				print "å½“ç®±åº­ã§ã¯ä¸é©å½“ãªå³¶åãªã©ã®äº‹å‰ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã£ã¦ã„ã¾ã™ã€‚<BR>\n";
+				print "å‚åŠ å¸Œæœ›ã®æ–¹ã¯ã€ç®¡ç†è€…ã«ã€Œå³¶åã€ã¨ã€Œãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã€ã‚’é€ä¿¡ã—ã¦ãã ã•ã„ã€‚<BR>\n";
 			} else {
-				print <<<END
+				echo <<<END
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-‚Ç‚ñ‚È–¼‘O‚ğ‚Â‚¯‚é—\’èH<br>
-<input type="text" name="ISLANDNAME" size="32" maxlength="32">“‡<br>
-‚ ‚È‚½‚Ì‚¨–¼‘O‚ÍH(È—ª‰Â)<br>
+ã©ã‚“ãªåå‰ã‚’ã¤ã‘ã‚‹äºˆå®šï¼Ÿ<br>
+<input type="text" name="ISLANDNAME" size="32" maxlength="32">å³¶<br>
+ã‚ãªãŸã®ãŠåå‰ã¯ï¼Ÿ(çœç•¥å¯)<br>
 <input type="text" name="OWNERNAME" size="32" maxlength="32"><br>
-ƒpƒXƒ[ƒh‚ÍH<br>
+ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯ï¼Ÿ<br>
 <input type="password" name="PASSWORD" size="32" maxlength="32"><br>
-”O‚Ì‚½‚ßƒpƒXƒ[ƒh‚ğ‚à‚¤ˆê‰ñ<br>
+å¿µã®ãŸã‚ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ã‚‚ã†ä¸€å›<br>
 <input type="password" name="PASSWORD2" size="32" maxlength="32"><br>
 <input type="hidden" name="mode" value="new">
-<input type="submit" value="’T‚µ‚És‚­">
+<input type="submit" value="æ¢ã—ã«è¡Œã">
 </form>
 END;
 			}
 		} else {
-			print "“‡‚Ì”‚ªÅ‘å”‚Å‚·EEEŒ»İ“o˜^‚Å‚«‚Ü‚¹‚ñB\n";
+			print "å³¶ã®æ•°ãŒæœ€å¤§æ•°ã§ã™ã€‚ç¾åœ¨ç™»éŒ²ã§ãã¾ã›ã‚“ã€‚\n";
 		}
 		print "</div>\n";
 		print "<hr>\n";
 	}
-	
+
 	//---------------------------------------------------
-	// “‡‚Ì–¼‘O‚ÆƒpƒXƒ[ƒh‚Ì•ÏX
+	// å³¶ã®åå‰ã¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®å¤‰æ›´
 	//---------------------------------------------------
 	function changeIslandInfo($islandList = "") {
 		global $init;
-		
-		print <<<END
+
+		echo <<<END
 <div id="ChangeInfo">
-<h2>“‡‚Ì–¼‘O‚ÆƒpƒXƒ[ƒh‚Ì•ÏX</h2>
+<h2>å³¶ã®åå‰ã¨ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã®å¤‰æ›´</h2>
 <p>
-(’ˆÓ)–¼‘O‚Ì•ÏX‚É‚Í500‰­‰~‚©‚©‚è‚Ü‚·B
+(æ³¨æ„)åå‰ã®å¤‰æ›´ã«ã¯500å„„å††ã‹ã‹ã‚Šã¾ã™ã€‚
 </p>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-‚Ç‚Ì“‡‚Å‚·‚©H<br>
+ã©ã®å³¶ã§ã™ã‹ï¼Ÿ<br>
 <select NAME="ISLANDID">
 $islandList
 </select>
 <br>
-‚Ç‚ñ‚È–¼‘O‚É•Ï‚¦‚Ü‚·‚©H(•ÏX‚·‚éê‡‚Ì‚İ)<br>
-<input type="text" name="ISLANDNAME" size="32" maxlength="32">“‡<br>
-ƒpƒXƒ[ƒh‚ÍH(•K{)<br>
+ã©ã‚“ãªåå‰ã«å¤‰ãˆã¾ã™ã‹ï¼Ÿ(å¤‰æ›´ã™ã‚‹å ´åˆã®ã¿)<br>
+<input type="text" name="ISLANDNAME" size="32" maxlength="32">å³¶<br>
+ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯ï¼Ÿ(å¿…é ˆ)<br>
 <input type="password" name="OLDPASS" size="32" maxlength="32"><br>
-V‚µ‚¢ƒpƒXƒ[ƒh‚ÍH(•ÏX‚·‚é‚Ì‚İ)<br>
+æ–°ã—ã„ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯ï¼Ÿ(å¤‰æ›´ã™ã‚‹æ™‚ã®ã¿)<br>
 <input type="password" name="PASSWORD" size="32" maxlength="32"><br>
-”O‚Ì‚½‚ßƒpƒXƒ[ƒh‚ğ‚à‚¤ˆê‰ñ(•ÏX‚·‚é‚Ì‚İ)<br>
+å¿µã®ãŸã‚ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã‚’ã‚‚ã†ä¸€å›(å¤‰æ›´ã™ã‚‹æ™‚ã®ã¿)<br>
 <input type="password" name="PASSWORD2" size="32" maxlength="32"><br>
 <input type="hidden" name="mode" value="change">
-<input type="submit" value="•ÏX‚·‚é">
+<input type="submit" value="å¤‰æ›´ã™ã‚‹">
 </form>
 </div>
 <hr>
 END;
 	}
-	
+
 	//---------------------------------------------------
-	// ƒI[ƒi[–¼‚Ì•ÏX
+	// ã‚ªãƒ¼ãƒŠãƒ¼åã®å¤‰æ›´
 	//---------------------------------------------------
 	function changeOwnerName($islandList = "") {
 		global $init;
-		
-		print <<<END
+
+		echo <<<END
 <div id="ChangeOwnerName">
-<h2>ƒI[ƒi[–¼‚Ì•ÏX</h2>
+<h2>ã‚ªãƒ¼ãƒŠãƒ¼åã®å¤‰æ›´</h2>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-‚Ç‚Ì“‡‚Å‚·‚©H<br>
+ã©ã®å³¶ã§ã™ã‹ï¼Ÿ<br>
 <select name="ISLANDID">
 {$islandList}
 </select>
 <br>
-V‚µ‚¢ƒI[ƒi[–¼‚ÍH<br>
+æ–°ã—ã„ã‚ªãƒ¼ãƒŠãƒ¼åã¯ï¼Ÿ<br>
 <input type="text" name="OWNERNAME" size="32" maxlength="32"><br>
-ƒpƒXƒ[ƒh‚ÍH<br>
+ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¯ï¼Ÿ<br>
 <input type="password" name="OLDPASS" size="32" maxlength="32"><br>
 <input type="hidden" name="mode" value="ChangeOwnerName">
-<input type="submit" value="•ÏX‚·‚é">
+<input type="submit" value="å¤‰æ›´ã™ã‚‹">
 </form>
 </div>
 END;
 	}
-	
-	//---------------------------------------------------
-	// ƒXƒ^ƒCƒ‹ƒV[ƒg‚Ìİ’è
-	//---------------------------------------------------
-	function setStyleSheet() {
-		global $init;
-		
-		$styleSheet;
-		for($i = 0; $i < count($init->cssList); $i++) {
-			$styleSheet .= "<option value=\"{$init->cssList[$i]}\">{$init->cssList[$i]}</option>\n";
-		}
-		print <<<END
-<div id="HakoSkin">
-<h2>ƒXƒ^ƒCƒ‹ƒV[ƒg‚Ìİ’è</h2>
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-<select name="SKIN">
-$styleSheet
-</select>
-<input type="hidden" name="mode" value="skin">
-<input type="submit" value="İ’è">
-</form>
-</div>
-<hr>
 
-END;
-	}
-	
-	//---------------------------------------------------
-	// ‰æ‘œ‚Ìƒ[ƒJƒ‹İ’è
-	//---------------------------------------------------
-	function setLocalImage($data = "") {
-		global $init;
-		
-		$Himgflag;
-		if(empty($data['defaultImg']) || (strcmp($data['defaultImg'], $init->imgDir) == 0)){
-			$Himgflag = '<span class=attention>–¢İ’è</span>';
-		} else {
-			$Himgflag = $data['defaultImg'];
-		}
-		print <<<END
-<div id="localImage">
-<h2>‰æ‘œ‚Ìƒ[ƒJƒ‹İ’è</h2>
-<table border width=50%><tr><td class='N'>
-@‰æ‘œ“]‘—‚É‚æ‚éƒT[ƒo[‚Ö‚Ì•‰‰×‚ğŒyŒ¸‚·‚é‚¾‚¯‚Å‚È‚­A‚ ‚È‚½‚Ìƒpƒ\ƒRƒ“‚É‚ ‚é‰æ‘œ‚ğŒÄ‚Ño‚·‚Ì‚ÅA•\¦ƒXƒs[ƒh‚ª”ò–ô“I‚ÉƒAƒbƒv‚µ‚Ü‚·B<br>
-@‰æ‘œ‚Í<B><a href="{$init->imgPack}">‚±‚±</a></B>‚©‚çƒ_ƒEƒ“ƒ[ƒh‚µ‚ÄA‚P‚Â‚ÌƒtƒHƒ‹ƒ_‚É‰ğ“€‚µA‰º‚Ìİ’è‚Åuland0.gifv‚ğw’è‚µ‚Ä‰º‚³‚¢B<br>
-@Ú‚µ‚­‚Í<B><a href="{$init->imgExp}">à–¾‚Ìƒy[ƒW</a></B>‚ğ‚²——‰º‚³‚¢B
-</td></tr></table>
-<table border=0 width=50%><tr><td class="M">
-Œ»İ‚Ìİ’è<B>[</B> ${Himgflag} <B>]</B>
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-<input type=file name="IMGLINE">
-<input type="hidden" name="mode" value="imgset">
-<input type="submit" value="İ’è">
-</form>
 
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-<input type=hidden name="IMGLINE" value="delete">
-<input type="hidden" name="mode" value="imgset">
-<input type="submit" value="İ’è‚ğ‰ğœ‚·‚é">
-</form>
-</td></tr></table>
-</div>
-<hr>
-
-END;
-	}
-	
 	//---------------------------------------------------
-	// Å‹ß‚Ìo—ˆ–
+	// æœ€è¿‘ã®å‡ºæ¥äº‹
 	//---------------------------------------------------
 	function log() {
 		global $init;
-		
+
 		print "<center>{$GLOBALS['BACK_TO_TOP']}</center>";
 		print "<div id=\"RecentlyLog\">\n";
-		print "<h2>Å‹ß‚Ìo—ˆ–</h2>\n";
+		print "<h2>æœ€è¿‘ã®å‡ºæ¥äº‹</h2>\n";
 		for($i = 0; $i < $init->logTopTurn; $i++) {
 			LogIO::logFilePrint($i, 0, 0);
 		}
 		print "</div>\n";
 	}
-	
+
 	//---------------------------------------------------
-	// ”­Œ©‚Ì‹L˜^
+	// ç™ºè¦‹ã®è¨˜éŒ²
 	//---------------------------------------------------
 	function historyPrint() {
 		print "<div id=\"HistoryLog\">\n";
-		print "<h2>”­Œ©‚Ì‹L˜^</h2>";
+		print "<h2>æ­´å²</h2>";
 		LogIO::historyPrint();
 		print "</div>\n";
 	}
-	
+
 	//---------------------------------------------------
-	// ‚¨’m‚ç‚¹
+	// ãŠçŸ¥ã‚‰ã›
 	//---------------------------------------------------
 	function infoPrint() {
 		global $init;
-		
+
 		print "<div id=\"HistoryLog\">\n";
-		print "<h2>‚¨’m‚ç‚¹</h2>\n";
+		print "<h2>ãŠçŸ¥ã‚‰ã›</h2>\n";
 		print "<DIV style=\"overflow:auto; height:{$init->divHeight}px;\">\n";
 		LogIO::infoPrint();
 		print "</div></div>\n";
 	}
+
 }
 //------------------------------------------------------------------
 class HtmlMap extends HTML {
 	//---------------------------------------------------
-	// ŠJ”­‰æ–Ê
+	// é–‹ç™ºç”»é¢
 	//---------------------------------------------------
 	function owner($hako, $data) {
 		global $init;
-		
+
 		$id = $data['ISLANDID'];
 		$number = $hako->idToNumber[$id];
 		$island = $hako->islands[$number];
-		
-		// ƒpƒXƒ[ƒhƒ`ƒFƒbƒN
+
+		// ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒã‚§ãƒƒã‚¯
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])){
 			Error::wrongPassword();
 			return;
 		}
-		if(((empty($data['defaultImg'])) || ($data['defaultImg'] == $init->imgDir)) && ($init->setImg)) {
-			Error::emptyImg();
-			return;
-		}
+		// if(((empty($data['defaultImg'])) || ($data['defaultImg'] == $init->imgDir)) /*&& ($init->setImg)*/ ) {
+		// 	Error::emptyImg();
+		// 	return;
+		// }
 		$this->tempOwer($hako, $data, $number);
-		
-		// IPî•ñæ“¾
+
+		// IPæƒ…å ±å–å¾—
 		$logfile = "{$init->dirName}/{$init->logname}";
 		$ax = $init->axesmax - 1;
 		$log = file($logfile);
-		$fp = fopen($logfile,"w"); 
-		$timedata =date ("Y”NmŒd“ú(D) Hi•ªs•b");
+		$fp = fopen($logfile,"w");
+		$timedata = date("Yå¹´mæœˆdæ—¥(D) Hæ™‚iåˆ†sç§’");
 		$islandID = "{$data['ISLANDID']}";
-		$name = "{$island['name']}“‡";
+		$name = "{$island['name']}å³¶";
 		$ip = getenv("REMOTE_ADDR");
 		$host = gethostbyaddr(getenv("REMOTE_ADDR"));
 		fputs($fp,$timedata.",".$islandID.",".$name.",".$ip.",".$host."\n");
-		for($i=0; $i<$ax; $i++) fputs($fp,$log[$i]);
-		fclose($fp);
-		
-		if($init->useBbs) {
-			print "<div id=\"localBBS\">\n";
-			$this->lbbsHead($island);
-			$this->lbbsInputOW($island, $data);
-			$this->lbbsContents($hako, $island, 1);
-			print "</div>\n";
+		for($i=0; $i<$ax; $i++) {
+			if ( isset($log[$i]) ) {
+				fputs($fp,$log[$i]);
+			}
 		}
+		fclose($fp);
+
 		$this->islandRecent($island, 1);
 	}
-	
+
 	//---------------------------------------------------
-	// ŠÏŒõ‰æ–Ê
+	// è¦³å…‰ç”»é¢
 	//---------------------------------------------------
 	function visitor($hako, $data) {
 		global $init;
-		
+		// idã‹ã‚‰å³¶ç•ªå·ã‚’å–å¾—
 		$id = $data['ISLANDID'];
-		$number = $hako->idToNumber[$id];
+		$number = isset($hako->idToNumber[$id]) ? $hako->idToNumber[$id] : -1;
+		// ãªãœã‹ãã®å³¶ãŒãªã„å ´åˆ
+		if($number < 0 || $number > $hako->islandNumber) {
+			Error::problem();
+			return;
+		}
 		$island = $hako->islands[$number];
 		$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
-		
-		print <<<END
+
+		echo <<<END
 <div align="center">
-{$init->tagBig_}{$init->tagName_}u{$name}v{$init->_tagName}‚Ö‚æ‚¤‚±‚»II{$init->_tagBig}<br>
+{$init->tagBig_}{$init->tagName_}ã€Œ{$name}ã€{$init->_tagName}ã¸ã‚ˆã†ã“ãï¼ï¼{$init->_tagBig}<br>
 {$GLOBALS['BACK_TO_TOP']}<br>
 </div>
 END;
+
 		$this->islandInfo($island, $number, 0);
 		$this->islandMap($hako, $island, 0);
-		
-		// ‘¼‚Ì“‡‚Ö
-		print <<<END
+
+		// ä»–ã®å³¶ã¸
+		echo <<<END
 <div align="center"><form action="{$GLOBALS['THIS_FILE']}" method="get">
-<select name="Sight">$hako->islandList</select><input type="submit" value="ŠÏŒõ">
+<select name="Sight">$hako->islandList</select><input type="submit" value="è¦³å…‰">
 </form></div>
 END;
-		if($init->useBbs) {
-			print "<div id=\"localBBS\">\n";
-			$this->lbbsHead($island);
-			$this->lbbsInput($hako, $island, $data);
-			$this->lbbsContents($hako, $island, 0);
-			print "</div>\n";
-		}
+
 		$this->islandRecent($island, 0);
 	}
-	
+
 	//---------------------------------------------------
-	// “‡‚Ìî•ñ
+	// å³¶ã®æƒ…å ±
 	//---------------------------------------------------
 	function islandInfo($island, $number = 0, $mode = 0) {
 		global $init;
-		
-		$rank       = ($island['isBF']) ? 'š' : $number + 1;
+
+		$rank       = ($island['isBF']) ? 'â˜…' : $number + 1;
 		$pop        = $island['pop'] . $init->unitPop;
 		$area       = $island['area'] . $init->unitArea;
-		$eisei      = $island['eisei'];
-		$zin        = $island['zin'];
-		$item       = $island['item'];
+		$eisei      = isset($island['eisei']) ? $island['eisei'] : "";
+		$zin        = isset($island['zin'])   ? $island['zin']   : "";
+		$item       = isset($island['item'])  ? $island['item']  : "";
 		$money      = ($mode == 0) ? Util::aboutMoney($island['money']) : "{$island['money']}{$init->unitMoney}";
-		$lot        = $island['lot'];
+		$lot        = isset($island['lot'])  ? $island['lot']  : "";
 		$food       = $island['food'] . $init->unitFood;
 		$unemployed = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
 		$unemployed = '<font color="' . ($unemployed < 0 ? 'black' : 'red') . '">' . sprintf("%-3d%%", $unemployed) . '</font>';
-		$farm       = ($island['farm'] <= 0) ? "•Û—L‚¹‚¸" : $island['farm'] * 10 . $init->unitPop;
-		$factory    = ($island['factory'] <= 0) ? "•Û—L‚¹‚¸" : $island['factory'] * 10 . $init->unitPop;
-		$commerce   = ($island['commerce'] <= 0) ? "•Û—L‚¹‚¸" : $island['commerce'] * 10 . $init->unitPop;
-		$mountain   = ($island['mountain'] <= 0) ? "•Û—L‚¹‚¸" : $island['mountain'] * 10 . $init->unitPop;
-		$hatuden    = ($island['hatuden'] <= 0) ? "•Û—L‚¹‚¸" : $island['hatuden'] * 10 . $init->unitPop;
-		$taiji      = ($island['taiji'] <= 0) ? "0•C" : $island['taiji'] * 1 . $init->unitMonster;
+		$farm       = ($island['farm'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['farm'] * 10 . $init->unitPop;
+		$factory    = ($island['factory'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['factory'] * 10 . $init->unitPop;
+		$commerce   = ($island['commerce'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['commerce'] * 10 . $init->unitPop;
+		$mountain   = ($island['mountain'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['mountain'] * 10 . $init->unitPop;
+		$hatuden    = ($island['hatuden'] <= 0) ? "ä¿æœ‰ã›ãš" : $island['hatuden'] * 10 . $init->unitPop;
+		$taiji      = ($island['taiji'] <= 0) ? "0åŒ¹" : $island['taiji'] * 1 . $init->unitMonster;
 		$tenki      = $island['tenki'];
 		$team       = $island['team'];
 		$shiai      = $island['shiai'];
@@ -904,100 +866,106 @@ END;
 		$tokuten    = $island['tokuten'];
 		$shitten    = $island['shitten'];
 		$comment    = $island['comment'];
-		
+
 		if($island['keep'] == 1) {
-			$comment = "<span class=\"attention\">‚±‚Ì“‡‚ÍŠÇ—l—a‚©‚è’†‚Å‚·B</span>";
+			$comment = "<span class=\"attention\">ã“ã®å³¶ã¯ç®¡ç†äººé ã‹ã‚Šä¸­ã§ã™ã€‚</span>";
 		}
-		
+
 		$sora = "";
 		if($tenki == 1) {
-			$sora .= "<IMG SRC=\"tenki1.gif\" ALT=\"°‚ê\" title=\"°‚ê\">";
+			$sora .= "<IMG SRC=\"tenki1.gif\" ALT=\"æ™´ã‚Œ\" title=\"æ™´ã‚Œ\">";
 		} elseif($tenki == 2) {
-			$sora .= "<IMG SRC=\"tenki2.gif\" ALT=\"“Ü‚è\" title=\"“Ü‚è\">";
+			$sora .= "<IMG SRC=\"tenki2.gif\" ALT=\"æ›‡ã‚Š\" title=\"æ›‡ã‚Š\">";
 		} elseif($tenki == 3) {
-			$sora .= "<IMG SRC=\"tenki3.gif\" ALT=\"‰J\" title=\"‰J\">";
+			$sora .= "<IMG SRC=\"tenki3.gif\" ALT=\"é›¨\" title=\"é›¨\">";
 		} elseif($tenki == 4) {
-			$sora .= "<IMG SRC=\"tenki4.gif\" ALT=\"—‹\" title=\"—‹\">";
+			$sora .= "<IMG SRC=\"tenki4.gif\" ALT=\"é›·\" title=\"é›·\">";
 		} else {
-			$sora .= "<IMG SRC=\"tenki5.gif\" ALT=\"á\" title=\"á\">";
+			$sora .= "<IMG SRC=\"tenki5.gif\" ALT=\"é›ª\" title=\"é›ª\">";
 		}
-		
+
 		$eiseis = "";
 		for($e = 0; $e < $init->EiseiNumber; $e++) {
-		$eiseip = "";
-			if($eisei[$e] > 0) {
-				$eiseip .= $eisei[$e];
-				$eiseis .= "<img src=\"eisei{$e}.gif\" alt=\"{$init->EiseiName[$e]} {$eiseip}%\" title=\"{$init->EiseiName[$e]} {$eiseip}%\"> ({$eiseip}%)";
-			} else {
-				$eiseis .= "";
+			$eiseip = "";
+			if ( isset($eisei[$e]) ) {
+				if($eisei[$e] > 0) {
+					$eiseip .= $eisei[$e];
+					$eiseis .= "<img src=\"eisei{$e}.gif\" alt=\"{$init->EiseiName[$e]} {$eiseip}%\" title=\"{$init->EiseiName[$e]} {$eiseip}%\"> ({$eiseip}%)";
+				} else {
+					$eiseis .= "";
+				}
 			}
 		}
-		
+
 		$zins = "";
 		for($z = 0; $z < $init->ZinNumber; $z++) {
-			if($zin[$z] > 0) {
-				$zins .= "<img src=\"zin{$z}.gif\" alt=\"{$init->ZinName[$z]}\" title=\"{$init->ZinName[$z]}\"> ";
-			} else {
-				$zins .= "";
+			if ( isset($zin[$z]) ) {
+				if($zin[$z] > 0) {
+					$zins .= "<img src=\"zin{$z}.gif\" alt=\"{$init->ZinName[$z]}\" title=\"{$init->ZinName[$z]}\"> ";
+				} else {
+					$zins .= "";
+				}
 			}
 		}
-		
+
 		$items = "";
 		for($t = 0; $t < $init->ItemNumber; $t++) {
-			if($item[$t] > 0) {
-				if($t == 20) {
-					$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\" title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
+			if ( isset($item[$t]) ) {
+				if($item[$t] > 0) {
+					if($t == 20) {
+						$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\" title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
+					} else {
+						$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
+					}
 				} else {
-					$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
+					$items .= "";
 				}
-			} else {
-				$items .= "";
 			}
 		}
 		$lots = "";
 		if($lot > 0) {
-			$lots .= " <IMG SRC=\"lot.png\" ALT=\"{$lot}–‡\" title=\"{$lot}–‡\">";
+			$lots .= " <IMG SRC=\"lot.png\" ALT=\"{$lot}æš\" title=\"{$lot}æš\">";
 		}
-		
+
 		if($mode == 1) {
 			$arm = "Lv.{$island['rena']}";
 		} else {
-			$arm = "‹@–§–€";
+			$arm = "æ©Ÿå¯†äº‹é …";
 		}
-		
-		// “d—ÍÁ”ï—Ê
+
+		// é›»åŠ›æ¶ˆè²»é‡
 		$enesyouhi = round($island['pop'] / 100 + $island['factory'] * 2/3 + $island['commerce'] * 1/3 + $island['mountain'] * 1/4);
 		if($enesyouhi == 0) {
-			$ene = "“d—ÍÁ”ï‚È‚µ";
+			$ene = "é›»åŠ›æ¶ˆè²»ãªã—";
 		} elseif($island['hatuden'] == 0) {
 			$ene =  "<font color=\"#ff0000\">0%</font>";
 		} else {
-			// “d—Í‹Ÿ‹‹—¦
+			// é›»åŠ›ä¾›çµ¦ç‡
 			$ene = round($island['hatuden'] / $enesyouhi * 100);
 			if($ene < 100) {
-				// ‹Ÿ‹‹“d—Í•s‘«
+				// ä¾›çµ¦é›»åŠ›ä¸è¶³
 				$ene = "<font color=\"#ff0000\">{$ene}%</font>";
 			} else {
-				// ‹Ÿ‹‹“d—Í[•ª
+				// ä¾›çµ¦é›»åŠ›å……åˆ†
 				$ene = "{$ene}%";
 			}
 		}
-		print <<<END
+		echo <<<END
 <div id="islandInfo">
-<table border="1">
+<table class="table table-bordered">
 <tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}‡ˆÊ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}lŒû{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}–ÊÏ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}‘‹à{$init->_tagTH}{$lots}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}H—¿{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}¸‹Æ—¦{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}”_ê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}Hê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}¤‹Æ‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}ÌŒ@ê‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}”­“dŠ‹K–Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“d—Í‹Ÿ‹‹—¦{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}é¢ç©{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}å¤±æ¥­ç‡{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}è¾²å ´è¦æ¨¡{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}å·¥å ´è¦æ¨¡{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}å•†æ¥­è¦æ¨¡{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}æ¡æ˜å ´è¦æ¨¡{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}ç™ºé›»æ‰€è¦æ¨¡{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}é›»åŠ›ä¾›çµ¦ç‡{$init->_tagTH}</th>
 </tr>
 <tr>
 <th {$init->bgNumberCell} rowspan="4">{$init->tagNumber_}$rank{$init->_tagNumber}</th>
@@ -1014,20 +982,20 @@ END;
 <td {$init->bgInfoCell}>$ene</td>
 </tr>
 <tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}“V‹C{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}å¤©æ°—{$init->_tagTH}</th>
 <td class="TenkiCell">$sora</td>
-<th {$init->bgTitleCell}>{$init->tagTH_}ŒR–‹Zp{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}è»äº‹æŠ€è¡“{$init->_tagTH}</th>
 <td {$init->bgInfoCell}>{$arm}</td>
-<th {$init->bgTitleCell}>{$init->tagTH_}‰öb‘Ş¡”{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}æ€ªç£é€€æ²»æ•°{$init->_tagTH}</th>
 <td {$init->bgInfoCell}>$taiji</td>
-<th {$init->bgTitleCell}>{$init->tagTH_}lH‰q¯{$init->_tagTH}</th>
-<td class="ItemCell" colspan="4">@$eiseis</td>
+<th {$init->bgTitleCell}>{$init->tagTH_}äººå·¥è¡›æ˜Ÿ{$init->_tagTH}</th>
+<td class="ItemCell" colspan="4">ã€€$eiseis</td>
 </tr>
 <tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}ƒWƒ“{$init->_tagTH}</th>
-<td class="ItemCell" colspan="5">@$zins</td>
-<th {$init->bgTitleCell}>{$init->tagTH_}ƒAƒCƒeƒ€{$init->_tagTH}</th>
-<td class="ItemCell" colspan="4">@$items</td>
+<th {$init->bgTitleCell}>{$init->tagTH_}ã‚¸ãƒ³{$init->_tagTH}</th>
+<td class="ItemCell" colspan="5">ã€€$zins</td>
+<th {$init->bgTitleCell}>{$init->tagTH_}ã‚¢ã‚¤ãƒ†ãƒ {$init->_tagTH}</th>
+<td class="ItemCell" colspan="4">ã€€$items</td>
 </tr>
 <tr>
 <td colspan="11" {$init->bgCommentCell}>$comment</td>
@@ -1036,306 +1004,130 @@ END;
 </div>
 END;
 	}
-	
+
 	//---------------------------------------------------
-	// ’nŒ`o—Í
-	// $mode = 1 -- ƒ~ƒTƒCƒ‹Šî’n‚È‚Ç‚à•\¦
+	// åœ°å½¢å‡ºåŠ›
+	// $mode = 1 -- ãƒŸã‚µã‚¤ãƒ«åŸºåœ°ãªã©ã‚‚è¡¨ç¤º
 	//---------------------------------------------------
 	function islandMap($hako, $island, $mode = 0) {
 		global $init;
-		
+
 		$land = $island['land'];
 		$landValue = $island['landValue'];
 		$command = $island['command'];
-		
-		// ‘Œ¸î•ñ
-		$peop       = ($island['peop'] < 0) ? "{$island['peop']}{$init->unitPop}" : "+{$island['peop']}{$init->unitPop}";
-		$okane      = ($island['gold'] < 0) ? "{$island['gold']}{$init->unitMoney}" : "+{$island['gold']}{$init->unitMoney}";
-		$gohan      = ($island['rice'] < 0) ? "{$island['rice']}{$init->unitFood}" : "+{$island['rice']}{$init->unitFood}";
-		$poin       = ($island['pots'] < 0) ? "{$island['pots']}pts" : "+{$island['pots']}pts";
-		
+		$comStr = array();
+
+		// å¢—æ¸›æƒ…å ±
+		$peop  = "";
+		$okane = "";
+		$gohan = "";
+		$poin  = "";
+
+		if (isset($island['peop'])){
+			$peop = ($island['peop'] < 0) ? "{$island['peop']}{$init->unitPop}" : "+{$island['peop']}{$init->unitPop}";
+		}
+		if (isset($island['gold'])){
+			$okane = ($island['gold'] < 0) ? "{$island['gold']}{$init->unitMoney}" : "+{$island['gold']}{$init->unitMoney}";
+		}
+		if (isset($island['rice'])){
+			$gohan = ($island['rice'] < 0) ? "{$island['rice']}{$init->unitFood}" : "+{$island['rice']}{$init->unitFood}";
+		}
+		if (isset($island['pots'])){
+			$poin = ($island['pots'] < 0) ? "{$island['pots']}pts" : "+{$island['pots']}pts";
+		}
+
 		if($mode == 1) {
 			for($i = 0; $i < $init->commandMax; $i++) {
 				$j = $i + 1;
 				$com = $command[$i];
 				if($com['kind'] < 51) {
-					$comStr[$com['x']][$com['y']] .=
-						"[{$j}]{$init->comName[$com['kind']]} ";
+					if ( isset($comStr[$com['x']][$com['y']]) ) {
+					$comStr[$com['x']][$com['y']] .= "[{$j}]{$init->comName[$com['kind']]} ";
+					}
 				}
 			}
 		}
-		
-		print "<div id=\"islandMap\" align=\"center\"><table border=\"1\"><tr><td>\n";
+
+		echo "<div id=\"islandMap\" align=\"center\">";
+		echo '<div class="table-responsive">';
+		echo "<table border=\"1\"><tr><td>\n";
+
 		for($y = 0; $y < $init->islandSize; $y++) {
-			if($y % 2 == 0) { print "<img src=\"land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">"; }
-			for($x = 0; $x < $init->islandSize; $x++) {
-				$hako->landString($land[$x][$y], $landValue[$x][$y], $x, $y, $mode, $comStr[$x][$y]);
+			if($y % 2 == 0) {
+				print "<img src=\"land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
 			}
-			if($y % 2 == 1) { print "<img src=\"land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">"; }
+			for($x = 0; $x < $init->islandSize; $x++) {
+				//$hako->landString($land[$x][$y], $landValue[$x][$y], $x, $y, $mode, $comStr[$x][$y]);
+				$hako->landString($land[$x][$y], $landValue[$x][$y], $x, $y, $mode, $comStr);
+			}
+			if($y % 2 == 1) {
+				print "<img src=\"land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
+			}
 			print "<br>";
 		}
-		print "<div id=\"NaviView\"></div>";
-		print "</td></tr></table></div>\n";
-		print "<center>\n";
-		print "<p>ŠJnƒ^[ƒ“F{$island['starturn']} ({$peop} {$okane} {$gohan} {$poin})</p>\n";
-		
+
+		echo "<div id=\"NaviView\"></div>";
+		echo "</div>";
+		echo "</td></tr></table></div>\n";
+
+		echo "<center>\n";
+		echo "<p>é–‹å§‹ã‚¿ãƒ¼ãƒ³ï¼š{$island['starturn']}</p>\n";
+
+if (isset($island['soccer'])){
 		if($island['soccer'] > 0) {
-			print <<<END
-<table border="1">
-<tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}‘‡“¾“_{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}¬Ñ{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}UŒ‚—Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}ç”õ—Í{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}“¾“_{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}¸“_{$init->_tagTH}</th>
-</tr>
-<tr>
-<td {$init->bgInfoCell}>{$island['team']}</td>
-<td {$init->bgInfoCell}>{$island['shiai']}í{$island['kachi']}Ÿ{$island['make']}”s{$island['hikiwake']}•ª</td>
-<td {$init->bgInfoCell}>{$island['kougeki']}</td>
-<td {$init->bgInfoCell}>{$island['bougyo']}</td>
-<td {$init->bgInfoCell}>{$island['tokuten']}</td>
-<td {$init->bgInfoCell}>{$island['shitten']}</td>
-</tr>
+			echo <<<END
+<table class="table table-bordered">
+	<tr>
+		<th {$init->bgTitleCell}>{$init->tagTH_}ç·åˆå¾—ç‚¹{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}æˆç¸¾{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}æ”»æ’ƒåŠ›{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}å®ˆå‚™åŠ›{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}å¾—ç‚¹{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}å¤±ç‚¹{$init->_tagTH}</th>
+	</tr>
+	<tr>
+		<td {$init->bgInfoCell}>{$island['team']}</td>
+		<td {$init->bgInfoCell}>{$island['shiai']}æˆ¦{$island['kachi']}å‹{$island['make']}æ•—{$island['hikiwake']}åˆ†</td>
+		<td {$init->bgInfoCell}>{$island['kougeki']}</td>
+		<td {$init->bgInfoCell}>{$island['bougyo']}</td>
+		<td {$init->bgInfoCell}>{$island['tokuten']}</td>
+		<td {$init->bgInfoCell}>{$island['shitten']}</td>
+	</tr>
 </table>
 <br>
 END;
 		}
+	}
 		print "</center>\n";
 	}
-	
+
+
 	//---------------------------------------------------
-	// ŠÏŒõÒ’ÊM
-	//---------------------------------------------------
-	function lbbsHead($island) {
-		global $init;
-		
-		print <<<END
-<hr>
-<h2>{$island['name']}“‡{$init->_tagName}ŠÏŒõÒ’ÊM</h2>
-END;
-	}
-	
-	//---------------------------------------------------
-	// ŠÏŒõÒ’ÊM “ü—Í•”•ª
-	//---------------------------------------------------
-	function lbbsInput($hako, $island, $data) {
-		global $init;
-		
-		$lbbsAtention = '';
-		if($init->lbbsMoneyPublic + $init->lbbsMoneySecret > 0) {
-			// ”­Œ¾‚Í—L—¿
-			$lbbsAtention .= "<CENTER><B>¦</B>";
-			if($init->lbbsMoneyPublic > 0){
-				$lbbsAtention .= "ŒöŠJ’ÊM‚Í<B>{$init->lbbsMoneyPublic}{$init->unitMoney}</B>‚Å‚·B";
-			}
-			if($init->lbbsMoneySecret > 0){
-				$lbbsAtention .= "‹É”é’ÊM‚Í<B>{$init->lbbsMoneySecret}{$init->unitMoney}</B>‚Å‚·B";
-			}
-			$lbbsAtention .= "</CENTER>";
-		}
-		$lbbsAnonny = '';
-		if ($init->lbbsAnon){
-			$lbbsAnonny .= "<input type=\"radio\" name=\"LBBSTYPE\" value=\"ANON\">ŠÏŒõ‹q";
-		} else {
-			$col2 = " colspan=2";
-			$col3 = " colspan=3";
-		}
-		print <<<END
-<div align="center">
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-{$lbbsAtention}<B>¦</B>“‡‚ğ‚Á‚Ä‚¢‚é•û‚Í“‡–¼‚ªƒRƒƒ“ƒg‚Ì‚ ‚Æ‚É‚Â‚«‚Ü‚·B
-<table border="1">
-<tr>
-<th>–¼‘O</th>
-<th{$col3}>“à—e</th>
-<th>ƒJƒ‰[</th>
-</tr>
-<tr class="lbbsCell">
-<td><input type="text" size="32" maxlength="32" name="LBBSNAME" value="{$data['defaultName']}" style="width:100%"></td>
-<td{$col3}><input type="text" size="80" name="LBBSMESSAGE" style="width:100%"></td>
-<td><input type="text" name="LBBSCOLOR" value="{$data['defaultColor']}" class="html5jp-cpick [coloring:true]" onFocus="this.blur();"></td>
-</tr>
-<tr>
-<th>“‡–¼</th>
-<th>ƒpƒXƒ[ƒh</th>
-<th>’ÊM•û–@</th>
-<th{$col2}>“®ì</th>
-</tr>
-<tr>
-<td>
-<select name="ISLANDID2">{$hako->islandList}</select>
-{$lbbsAnonny}
-</td>
-<td><input type=password size="16" maxlength="16" name=PASSWORD value="{$data['defaultPassword']}"></td>
-<td>
-<input type="radio" name="LBBSTYPE" value="PUBLIC" checked>ŒöŠJ
-<input type="radio" name="LBBSTYPE" value="SECRET"><font color="red">‹É”é</font>
-</td>
-<td>
-<input type="hidden" name="mode" value="lbbs">
-<input type="hidden" name="lbbsMode" value="0">
-<input type="hidden" name="ISLANDID" value="{$island['id']}">
-<input type="hidden" name="DEVELOPEMODE" value="{$data['DEVELOPEMODE']}">
-<input type="submit" value="‹L’ ‚·‚é"></TD>
-END;
-		if ($init->lbbsAnon == 0){
-			print <<<END
-<td align="right">
-”Ô†
-<select name="NUMBER">
-END;
-			// ”­Œ¾”Ô†
-			for($i = 0; $i < $init->lbbsMax; $i++) {
-				$j = $i + 1;
-				print "<option value=\"{$i}\">{$j}</option>\n";
-			}
-			print <<<END
-</select>
-<input type="submit" name="DEL" value="íœ‚·‚é">
-</td>
-END;
-		}
-		print <<<END
-</tr>
-</table>
-</form>
-</div>
-END;
-	}
-	
-	//---------------------------------------------------
-	// ŠÏŒõÒ’ÊM “ü—Í•”•ª ƒI[ƒi—p
-	//---------------------------------------------------
-	function lbbsInputOW($island, $data) {
-		global $init;
-		
-		print <<<END
-<div align="center">
-<table border="1">
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-<tr>
-<th>–¼‘O</th>
-<th colspan="2">“à—e</th>
-</tr>
-<tr>
-<td><input type="text" size="32" maxlength="32" name="LBBSNAME" VALUE="{$data['defaultName']}" style="width:100%"></TD>
-<td colspan="2"><input type="text" size="80" name="LBBSMESSAGE" style="width:100%"></td>
-</tr>
-<tr>
-<th>ƒJƒ‰[</th>
-<th colspan="2">“®ì</th>
-</tr>
-<tr class="lbbsCell">
-<td><input type="text" name="LBBSCOLOR" value="{$data['defaultColor']}" class="html5jp-cpick [coloring:true]" onFocus="this.blur();"></td>
-<td align="center">
-<input type="hidden" name="mode" value="lbbs">
-<input type="hidden" name="lbbsMode" value="1">
-<input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
-<input type="hidden" name="ISLANDID" value="{$island['id']}">
-<input type="hidden" name="DEVELOPEMODE" value="{$data['DEVELOPEMODE']}">
-<input type="submit" value="‹L’ ‚·‚é">
-</td>
-<td align="right">
-”Ô†
-<select name="NUMBER">
-END;
-		// ”­Œ¾”Ô†
-		for($i = 0; $i < $init->lbbsMax; $i++) {
-			$j = $i + 1;
-			print "<option value=\"{$i}\">{$j}</option>\n";
-		}
-		print <<<END
-</select>
-<input type="submit" name="DEL" value="íœ‚·‚é">
-</form>
-</td>
-</tr>
-</table>
-</div>
-END;
-	}
-	
-	//---------------------------------------------------
-	// ŠÏŒõÒ’ÊM ‘‚«‚Ü‚ê‚½“à—e‚ğo—Í
-	//---------------------------------------------------
-	function lbbsContents($hako, $island, $owner = 0) {
-		global $init;
-		
-		$lbbs = $island['lbbs'];
-		print <<<END
-<div align="center">
-<table border="1">
-<tr>
-<th style="width:3em;">”Ô†</th>
-<th>‹L’ “à—e</th>
-</tr>
-END;
-		for($i = 0; $i < $init->lbbsMax; $i++) {
-			$j = $i + 1;
-			$line = $lbbs[$i];
-			list($secret, $sTemp, $mode, $turn, $message, $color) = split(">", $line);
-			list($sName, $sId) = split(",", $sTemp);
-			$sNo = $hako->idToNumber[$sId];
-			print "<tr><th>{$init->tagNumber_}{$j}{$init->_tagNumber}</th>";
-			$speaker = '';
-			if($init->lbbsSpeaker && ($sName != '')) {
-				if($sNo == '0' || !empty($sNo)) {
-					$speaker = " <font color=gray><b><small>(<a style=\"text-decoration:none\" href=\"{$GLOBALS['THIS_FILE']}?Sight={$sId}\">{$sName}</a>)</small></b></font>";
-				} else {
-					$speaker = " <font color=gray><b><small>({$sName})</small></b></font>";
-				}
-			}
-			if($mode == 0) {
-				// ŠÏŒõÒ
-				if($secret == 0) {
-					// ŒöŠJ
-					print "<td class=\"lbbsCell\"><font color=\"$color\">{$turn} &gt; {$message} {$speaker}</font></td></tr>\n";
-				} else {
-					// ‹É”é
-					if($owner == 0) {
-						// ŠÏŒõ‹q
-						print "<td class=\"lbbsCell\"><center><font color=gray>- ‹É”é -</font></center></td></tr>\n";
-					} else {
-						// ƒI[ƒi[
-						print "<td class=\"lbbsCell\"><font color=\"$color\">{$turn} &gt;(”é) {$message} {$speaker}</font></td></tr>\n";
-					}
-				}
-			} else {
-				// “‡å
-				print "<td class=\"lbbsCell\"><font color=\"$color\">{$turn} &gt; {$message}</font></td></tr>\n";
-			}
-		}
-		print "</table></div>\n";
-	}
-	
-	//---------------------------------------------------
-	// “‡‚Ì‹ß‹µ
+	// å³¶ã®è¿‘æ³
 	//---------------------------------------------------
 	function islandRecent($island, $mode = 0) {
 		global $init;
 		print "<hr>\n";
 		print "<div id=\"RecentlyLog\">\n";
-		print "<h2>{$island['name']}“‡{$init->_tagName}‚Ì‹ß‹µ</h2>\n";
+		print "<h2>{$island['name']}å³¶{$init->_tagName}ã®è¿‘æ³</h2>\n";
 		for($i = 0; $i < $init->logMax; $i++) {
 			LogIO::logFilePrint($i, $island['id'], $mode);
 		}
 		print "</div>\n";
 	}
-	
+
 	//---------------------------------------------------
-	// ŠJ”­‰æ–Ê
+	// é–‹ç™ºç”»é¢
 	//---------------------------------------------------
 	function tempOwer($hako, $data, $number = 0) {
 		global $init;
-		
+
 		$island = $hako->islands[$number];
 		$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
 		$width = $init->islandSize * 32 + 50;
 		$height = $init->islandSize * 32 + 100;
 		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
-		print <<<END
+		echo <<<END
 <script type="text/javascript">
 <!--
 var w;
@@ -1360,15 +1152,16 @@ function targetopen() {
 }
 //-->
 </script>
+
 <div align="center">
-{$init->tagBig_}{$init->tagName_}{$name}{$init->_tagName}ŠJ”­Œv‰æ{$init->_tagBig}<br>
+{$init->tagBig_}{$init->tagName_}{$name}{$init->_tagName}é–‹ç™ºè¨ˆç”»{$init->_tagBig}<br>
 {$GLOBALS['BACK_TO_TOP']}<br>
 </div>
 END;
 		$this->islandInfo($island, $number, 1);
-		print <<<END
+		echo <<<END
 <div align="center">
-<table border="1">
+<table class="table table-bordered">
 <tr>
 <td {$init->bgInputCell}>
 <div align="center">
@@ -1376,28 +1169,30 @@ END;
 <input type="hidden" name="mode" value="command">
 <input type="hidden" name="ISLANDID" value="{$island['id']}">
 <input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
-<input type="submit" value="Œv‰æ‘—M">
+<input type="submit" value="è¨ˆç”»é€ä¿¡">
 <hr>
-<strong>Œv‰æ”Ô†</strong>
+<strong>è¨ˆç”»ç•ªå·</strong>
 <select name="NUMBER">
 END;
-		// Œv‰æ”Ô†
+		// è¨ˆç”»ç•ªå·
 		for($i = 0; $i < $init->commandMax; $i++) {
 			$j = $i + 1;
 			print "<option value=\"{$i}\">{$j}</option>";
 		}
-		print <<<END
+		echo <<<END
 </select><br>
 <hr>
-<strong>ŠJ”­Œv‰æ</strong><br>
+<strong>é–‹ç™ºè¨ˆç”»</strong><br>
 <select name="COMMAND">
 END;
-		// ƒRƒ}ƒ“ƒh
+		// ã‚³ãƒãƒ³ãƒ‰
 		for($i = 0; $i < $init->commandTotal; $i++) {
 			$kind = $init->comList[$i];
 			$cost = $init->comCost[$kind];
+			$s = '';
+
 			if($cost == 0) {
-				$cost = '–³—¿';
+				$cost = 'ç„¡æ–™';
 			} elseif($cost < 0) {
 				$cost = - $cost;
 				if($kind == $init->comSellTree) {
@@ -1408,67 +1203,79 @@ END;
 			} else {
 				$cost .= $init->unitMoney;
 			}
-			if($kind == $data['defaultKind']) {
-				$s = 'selected';
-			} else {
-				$s = '';
+			if ( isset($data['defaultKind']) ) {
+				if($kind == $data['defaultKind']) {
+					$s = 'selected';
+				}
 			}
+
 			print "<option value=\"{$kind}\" {$s}>{$init->comName[$kind]}({$cost})</option>\n";
 		}
-		print <<<END
+		echo <<<END
 </select>
 <hr>
-<strong>À•W(</strong>
+<strong>åº§æ¨™(</strong>
 <select name="POINTX">
 END;
 		for($i = 0; $i < $init->islandSize; $i++) {
-			if($i == $data['defaultX']) {
-				print "<option value=\"{$i}\" selected>{$i}</option>\n";
+
+			if ( isset($data['defaultX']) ) {
+				if($i == $data['defaultX']) {
+					print "<option value=\"{$i}\" selected>{$i}</option>\n";
+				} else {
+					print "<option value=\"{$i}\">{$i}</option>\n";
+				}
 			} else {
 				print "<option value=\"{$i}\">{$i}</option>\n";
 			}
+
 		}
 		print "</select>, <select name=\"POINTY\">";
 		for($i = 0; $i < $init->islandSize; $i++) {
-			if($i == $data['defaultY']) {
-				print "<option value=\"{$i}\" selected>{$i}</option>\n";
+			if ( isset($data['defaultY']) ) {
+				if($i == $data['defaultY']) {
+					print "<option value=\"{$i}\" selected>{$i}</option>\n";
+				} else {
+					print "<option value=\"{$i}\">{$i}</option>\n";
+				}
 			} else {
 				print "<option value=\"{$i}\">{$i}</option>\n";
 			}
+
 		}
-		print <<<END
+		echo <<<END
 </select><strong>)</strong>
 <hr>
-<strong>”—Ê</strong>
+<strong>æ•°é‡</strong>
 <select name="AMOUNT">
 END;
 		 for($i = 0; $i < 100; $i++) {
 			 print "<option value=\"{$i}\">{$i}</option>\n";
 		}
-		 print <<<END
+		 echo <<<END
 </select>
 <hr>
-<strong>–Ú•W‚Ì“‡</strong><br>
+<strong>ç›®æ¨™ã®å³¶</strong><br>
 <select name="TARGETID" onchange="settarget(this);">
 $hako->targetList
 </select>
-<input type="button" value="–Ú•W•ß‘¨" onClick="javascript: targetopen();">
+<input type="button" value="ç›®æ¨™æ•æ‰" onClick="javascript: targetopen();">
 <hr>
-<strong>“®ì</strong><br>
-<input type="radio" name="COMMANDMODE" id="insert" value="insert" checked><label for="insert">‘}“ü</label>
-<input type="radio" name="COMMANDMODE" id="write" value="write"><label for="write">ã‘‚«</label><BR>
-<input type="radio" name="COMMANDMODE" id="delete" value="delete"><label for="delete">íœ</label>
+<strong>å‹•ä½œ</strong><br>
+<input type="radio" name="COMMANDMODE" id="insert" value="insert" checked><label for="insert">æŒ¿å…¥</label>
+<input type="radio" name="COMMANDMODE" id="write" value="write"><label for="write">ä¸Šæ›¸ã</label><BR>
+<input type="radio" name="COMMANDMODE" id="delete" value="delete"><label for="delete">å‰Šé™¤</label>
 <hr>
 <input type="hidden" name="DEVELOPEMODE" value="cgi">
-<input type="submit" value="Œv‰æ‘—M">
+<input type="submit" value="è¨ˆç”»é€ä¿¡">
 </form>
-<center>ƒ~ƒTƒCƒ‹”­ËãŒÀ”[<b> {$island['fire']} </b>]”­</center>
+<center>ãƒŸã‚µã‚¤ãƒ«ç™ºå°„ä¸Šé™æ•°[<b> {$island['fire']} </b>]ç™º</center>
 </div>
 </td>
 <td {$init->bgMapCell}>
 END;
-		$this->islandMap($hako, $island, 1); // “‡‚Ì’n}AŠ—LÒƒ‚[ƒh
-		print <<<END
+		$this->islandMap($hako, $island, 1); // å³¶ã®åœ°å›³ã€æ‰€æœ‰è€…ãƒ¢ãƒ¼ãƒ‰
+		echo <<<END
 </td>
 <td {$init->bgCommandCell}>
 END;
@@ -1476,32 +1283,32 @@ END;
 		for($i = 0; $i < $init->commandMax; $i++) {
 			$this->tempCommand($i, $command[$i], $hako);
 		}
-		print <<<END
+		echo <<<END
 </td>
 </tr>
 </table>
 </div>
 <hr>
 <div id='CommentBox'>
-<h2>ƒRƒƒ“ƒgXV</h2>
+<h2>ã‚³ãƒ¡ãƒ³ãƒˆæ›´æ–°</h2>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-ƒRƒƒ“ƒg<input type="text" name="MESSAGE" size="80" value="{$island['comment']}"><br>
+ã‚³ãƒ¡ãƒ³ãƒˆ<input type="text" name="MESSAGE" size="80" value="{$island['comment']}"><br>
 <input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
 <input type="hidden" name="mode" value="comment">
 <input type="hidden" name="ISLANDID" value="{$island['id']}">
 <input type="hidden" name="DEVELOPEMODE" value="cgi">
-<input type="submit" value="ƒRƒƒ“ƒgXV">
+<input type="submit" value="ã‚³ãƒ¡ãƒ³ãƒˆæ›´æ–°">
 </form>
 </div>
 END;
 	}
-	
+
 	//---------------------------------------------------
-	// “ü—ÍÏ‚İƒRƒ}ƒ“ƒh•\¦
+	// å…¥åŠ›æ¸ˆã¿ã‚³ãƒãƒ³ãƒ‰è¡¨ç¤º
 	//---------------------------------------------------
 	function tempCommand($number, $command, $hako) {
 		global $init;
-		
+
 		$kind = $command['kind'];
 		$target = $command['target'];
 		$x = $command['x'];
@@ -1509,11 +1316,15 @@ END;
 		$arg = $command['arg'];
 		$comName = "{$init->tagComName_}{$init->comName[$kind]}{$init->_tagComName}";
 		$point = "{$init->tagName_}({$x},{$y}){$init->_tagName}";
-		$target = $hako->idToName[$target];
-		if(empty($target)) {
-			$target = "–³l";
+
+		if ( isset($hako->idToName[$target]) ) {
+			$target = $hako->idToName[$target];
 		}
-		$target = "{$init->tagName_}{$target}“‡{$init->_tagName}";
+
+		if(empty($target)) {
+			$target = "ç„¡äºº";
+		}
+		$target = "{$init->tagName_}{$target}å³¶{$init->_tagName}";
 		$value = $arg * $init->comCost[$kind];
 		if($value == 0) {
 			$value = $init->comCost[$kind];
@@ -1531,16 +1342,16 @@ END;
 			$value = "{$value}{$init->unitMoney}";
 		}
 		$value = "{$init->tagName_}{$value}{$init->_tagName}";
-		$j = sprintf("%02dF", $number + 1);
+		$j = sprintf("%02dï¼š", $number + 1);
 		print "<a href=\"javascript:void(0);\" onclick=\"ns({$number})\">{$init->tagNumber_}{$j}{$init->_tagNumber}";
-		
+
 		switch($kind) {
 			case $init->comMissileSM:
 			case $init->comDoNothing:
 			case $init->comGiveup:
 				$str = "{$comName}";
 				break;
-				
+
 			case $init->comMissileNM:
 			case $init->comMissilePP:
 			case $init->comMissileST:
@@ -1548,133 +1359,133 @@ END;
 			case $init->comMissileSP:
 			case $init->comMissileLD:
 			case $init->comMissileLU:
-				// ƒ~ƒTƒCƒ‹Œn
-				$n = ($arg == 0) ? '–³§ŒÀ' : "{$arg}”­";
-				$str = "{$target}{$point}‚Ö{$comName}({$init->tagName_}{$n}{$init->_tagName})";
+				// ãƒŸã‚µã‚¤ãƒ«ç³»
+				$n = ($arg == 0) ? 'ç„¡åˆ¶é™' : "{$arg}ç™º";
+				$str = "{$target}{$point}ã¸{$comName}({$init->tagName_}{$n}{$init->_tagName})";
 				break;
-				
+
 			case $init->comEisei:
-				// lH‰q¯”­Ë
+				// äººå·¥è¡›æ˜Ÿç™ºå°„
 				if($arg >= $init->EiseiNumber) {
 					$arg = 0;
 				}
-				$str = "{$init->tagComName_}{$init->EiseiName[$arg]}‘Å‚¿ã‚°{$init->_tagComName}";
+				$str = "{$init->tagComName_}{$init->EiseiName[$arg]}æ‰“ã¡ä¸Šã’{$init->_tagComName}";
 				break;
-				
+
 			case $init->comEiseimente:
-				// lH‰q¯C•œ
+				// äººå·¥è¡›æ˜Ÿä¿®å¾©
 				if($arg >= $init->EiseiNumber) {
 					$arg = 0;
 				}
-				$str = "{$init->tagComName_}{$init->EiseiName[$arg]}C•œ{$init->_tagComName}";
+				$str = "{$init->tagComName_}{$init->EiseiName[$arg]}ä¿®å¾©{$init->_tagComName}";
 				break;
-				
+
 			case $init->comEiseiAtt:
-				// lH‰q¯”j‰ó–C
+				// äººå·¥è¡›æ˜Ÿç ´å£Šç ²
 				if($arg >= $init->EiseiNumber) {
 					$arg = 0;
 				}
-				$str = "{$target}‚Ö{$init->tagComName_}{$init->EiseiName[$arg]}”j‰ó–C”­Ë{$init->_tagComName}";
+				$str = "{$target}ã¸{$init->tagComName_}{$init->EiseiName[$arg]}ç ´å£Šç ²ç™ºå°„{$init->_tagComName}";
 				break;
-				
+
 			case $init->comEiseiLzr:
-				// ‰q¯ƒŒ[ƒU[
-				$str = "{$target}{$point}‚Ö{$comName}";
+				// è¡›æ˜Ÿãƒ¬ãƒ¼ã‚¶ãƒ¼
+				$str = "{$target}{$point}ã¸{$comName}";
 				break;
-				
+
 			case $init->comSendMonster:
 			case $init->comSendSleeper:
-				// ‰öb”hŒ­
-				$str = "{$target}‚Ö{$comName}";
+				// æ€ªç£æ´¾é£
+				$str = "{$target}ã¸{$comName}";
 				break;
-				
+
 			case $init->comSell:
 			case $init->comSellTree:
-				// H—¿E–ØŞ—Ao
+				// é£Ÿæ–™ãƒ»æœ¨æè¼¸å‡º
 				$str ="{$comName}{$value}";
 				break;
-				
+
 			case $init->comMoney:
 			case $init->comFood:
-				// ‰‡•
-				$str = "{$target}‚Ö{$comName}{$value}";
+				// æ´åŠ©
+				$str = "{$target}ã¸{$comName}{$value}";
 				break;
-				
+
 			case $init->comDestroy:
-				// Œ@í
+				// æ˜å‰Š
 				if($arg != 0) {
-					$str = "{$point}‚Å{$comName}(—\Z{$value})";
+					$str = "{$point}ã§{$comName}(äºˆç®—{$value})";
 				} else {
-					$str = "{$point}‚Å{$comName}";
+					$str = "{$point}ã§{$comName}";
 				}
 				break;
-				
+
 			case $init->comLot:
-				// •ó‚­‚¶w“ü
+				// å®ãã˜è³¼å…¥
 				if ($arg == 0) {
 					$arg = 1;
 				} elseif ($arg > 30) {
 					$arg = 30;
 				}
-				$str = "{$comName}(—\Z{$value})";
+				$str = "{$comName}(äºˆç®—{$value})";
 				break;
-				
+
 			case $init->comDbase:
-				// –h‰q{İ
+				// é˜²è¡›æ–½è¨­
 				if ($arg == 0) {
 					$arg = 1;
 				} elseif ($arg > $init->dBaseHP) {
 					$arg = $init->dBaseHP;
 				}
-				$str = "{$point}‚Å{$comName}(‘Ï‹v—Í{$arg})";
+				$str = "{$point}ã§{$comName}(è€ä¹…åŠ›{$arg})";
 				break;
-				
+
 			case $init->comSdbase:
-				// ŠC’ê–h‰q{İ
+				// æµ·åº•é˜²è¡›æ–½è¨­
 				if ($arg == 0) {
 					$arg = 1;
 				} elseif ($arg > $init->sdBaseHP) {
 					$arg = $init->sdBaseHP;
 				}
-				$str = "{$point}‚Å{$comName}(‘Ï‹v—Í{$arg})";
+				$str = "{$point}ã§{$comName}(è€ä¹…åŠ›{$arg})";
 				break;
-				
+
 			case $init->comSoukoM:
 				$flagm = 1;
 			case $init->comSoukoF:
-				// ‘qŒÉŒšİ
+				// å€‰åº«å»ºè¨­
 				if($arg == 0) {
-					$str = "{$point}‚Å{$comName}(ƒZƒLƒ…ƒŠƒeƒB‹­‰»)";
+					$str = "{$point}ã§{$comName}(ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£å¼·åŒ–)";
 				} else {
 					if($flagm == 1) {
-						$str = "{$point}‚Å{$comName}({$value})";
+						$str = "{$point}ã§{$comName}({$value})";
 					} else {
-						$str = "{$point}‚Å{$comName}({$value})";
+						$str = "{$point}ã§{$comName}({$value})";
 					}
 				}
 				break;
-				
+
 			case $init->comHikidasi:
-				// ‘qŒÉˆø‚«o‚µ
+				// å€‰åº«å¼•ãå‡ºã—
 				if ($arg == 0) {
 					$arg = 1;
 				}
 				$str = "{$comName}({$value})";
 				break;
-				
+
 			case $init->comMakeShip:
-				// ‘¢‘D
+				// é€ èˆ¹
 				if ($arg >= $init->shipKind) {
 					$arg = $init->shipKind - 1;
 				}
-				$str = "{$point}‚Å{$comName}({$init->shipName[$arg]})";
+				$str = "{$point}ã§{$comName}({$init->shipName[$arg]})";
 				break;
-				
+
 			case $init->comShipBack:
-				// ‘D‚Ì”jŠü
-				$str = "{$point}‚Å{$comName}";
+				// èˆ¹ã®ç ´æ£„
+				$str = "{$point}ã§{$comName}";
 				break;
-				
+
 			case $init->comFarm:
 			case $init->comSfarm:
 			case $init->comNursery:
@@ -1683,74 +1494,74 @@ END;
 			case $init->comMountain:
 			case $init->comHatuden:
 			case $init->comBoku:
-				// ‰ñ”•t‚«
+				// å›æ•°ä»˜ã
 				if($arg == 0) {
-					$str = "{$point}‚Å{$comName}";
+					$str = "{$point}ã§{$comName}";
 				} else {
-					$str = "{$point}‚Å{$comName}({$arg}‰ñ)";
+					$str = "{$point}ã§{$comName}({$arg}å›)";
 				}
 				break;
-				
+
 			case $init->comPropaganda:
 			case $init->comOffense:
 			case $init->comDefense:
 			case $init->comPractice:
-				// ‹­‰»
-				$str = "{$comName}({$arg}‰ñ)";
+				// å¼·åŒ–
+				$str = "{$comName}({$arg}å›)";
 				break;
-				
+
 			case $init->comPlaygame:
-				// ‡
-				$str = "{$target}‚Æ{$comName}";
+				// è©¦åˆ
+				$str = "{$target}ã¨{$comName}";
 				break;
-				
+
 			case $init->comSendShip:
-				// ‘D”hŒ­
-				$str = "{$target}‚Ö{$point}‚Ì{$comName}";
+				// èˆ¹æ´¾é£
+				$str = "{$target}ã¸{$point}ã®{$comName}";
 				break;
-				
+
 			case $init->comReturnShip:
-				// ‘D‹AŠÒ
-				$str = "{$target}{$point}‚Ì{$comName}";
+				// èˆ¹å¸°é‚„
+				$str = "{$target}{$point}ã®{$comName}";
 				break;
-				
+
 			default:
-				// À•W•t‚«
-				$str = "{$point}‚Å{$comName}";
+				// åº§æ¨™ä»˜ã
+				$str = "{$point}ã§{$comName}";
 		}
 		print "{$str}</a><br>";
 	}
 	//---------------------------------------------------
-	// V‚µ‚­”­Œ©‚µ‚½“‡
+	// æ–°ã—ãç™ºè¦‹ã—ãŸå³¶
 	//---------------------------------------------------
 	function newIslandHead($name) {
 		global $init;
-		
-		print <<<END
+
+		echo <<<END
 <div align="center">
-{$init->tagBig_}“‡‚ğ”­Œ©‚µ‚Ü‚µ‚½II{$init_tagBig}<br>
-{$init->tagBig_}{$init->tagName_}u{$name}“‡v{$init->_tagName}‚Æ–½–¼‚µ‚Ü‚·B{$init->_tagBig}<br>
+{$init->tagBig_}å³¶ã‚’ç™ºè¦‹ã—ã¾ã—ãŸï¼ï¼{$init->_tagBig}<br>
+{$init->tagBig_}{$init->tagName_}ã€Œ{$name}å³¶ã€{$init->_tagName}ã¨å‘½åã—ã¾ã™ã€‚{$init->_tagBig}<br>
 {$GLOBALS['BACK_TO_TOP']}<br>
 </div>
 END;
 	}
-	
+
 	//---------------------------------------------------
-	// –Ú•W•ß‘¨ƒ‚[ƒh
+	// ç›®æ¨™æ•æ‰ãƒ¢ãƒ¼ãƒ‰
 	//---------------------------------------------------
 	function printTarget($hako, $data) {
 		global $init;
-		
-		// id‚©‚ç“‡”Ô†‚ğæ“¾
+
+		// idã‹ã‚‰å³¶ç•ªå·ã‚’å–å¾—
 		$id = $data['ISLANDID'];
 		$number = $hako->idToNumber[$id];
-		// ‚È‚º‚©‚»‚Ì“‡‚ª‚È‚¢ê‡
+		// ãªãœã‹ãã®å³¶ãŒãªã„å ´åˆ
 		if($number < 0 || $number > $hako->islandNumber) {
 			Error::problem();
 			return;
 		}
 		$island = $hako->islands[$number];
-		print <<<END
+		echo <<<END
 <script type="text/javascript">
 <!--
 function ps(x, y) {
@@ -1762,87 +1573,41 @@ function ps(x, y) {
 </script>
 
 <div align="center">
-{$init->tagBig_}{$init->tagName_}{$island['name']}“‡{$init->_tagName}{$init->_tagBig}<br>
+{$init->tagBig_}{$init->tagName_}{$island['name']}å³¶{$init->_tagName}{$init->_tagBig}<br>
 </div>
 END;
-		//“‡‚Ì’n}
+		//å³¶ã®åœ°å›³
 		$this->islandMap($hako, $island, 2);
 	}
 }
 
 //------------------------------------------------------------------
 class HtmlJS extends HtmlMap {
-	function header($data = "") {
-		global $init;
-		global $PRODUCT_VERSION;
-		
-		// ˆ³k“]‘—
-		if(GZIP == true) {
-			global $http;
-			$http->start();
-		}
-		header("X-Product-Version: {$PRODUCT_VERSION}");
-		$css = (empty($data['defaultSkin'])) ? $init->cssList[0] : $data['defaultSkin'];
-		$bimg = (empty($data['defaultImg'])) ? $init->imgDir : $data['defaultImg'];
-		print <<<END
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="ja">
-<head>
-<base href="{$bimg}/">
-<meta http-equiv="Content-type" content="text/html; charset=Shift_JIS">
-<meta http-equiv="Content-Style-Type" content="text/css">
-<meta http-equiv="Content-Script-Type" content="text/javascript">
-<link rel="stylesheet" type="text/css" href="{$init->cssDir}/{$css}">
-<link rel="shortcut icon" href="{$init->baseDir}/favicon.ico">
-<title>{$init->title}</title>
-<script type="text/javascript" src="{$init->baseDir}/hako.js"></script>
-<script type="text/javascript" src="{$init->baseDir}/cpick.js"></script>
-</head>
-<body onload="init()">
-<div id="LinkHeader">
-<a href="http://www.bekkoame.ne.jp/~tokuoka/hakoniwa.html">” ’ë”“‡ƒXƒNƒŠƒvƒg”z•zŒ³</a>
-<a href="http://scrlab.g-7.ne.jp">[PHP]</a>@
-[<a href="http://hakoniwa.symphonic-net.com">” ’ë”“‡S.E”z•zŒ³</a>]@
-[<a href="http://snufkin.jp.land.to">¹•z‹Ğ‚Ì” ’ë</a>]@
-[<a href="http://www.s90259900.onlinehome.us/">” ’ë‚Ì” ’ë</a>]@
-[<a href="http://no-one.s53.xrea.com">The Return of Neptune</a>]@
-[<a href="http://minnano.min-ai.net/ocn/">‚İ‚ñ‚È‚Ì‚ ‚¢‚ç‚ñ‚Ç</a>]
-<BR>
-[<a href="{$init->baseDir}/hako-main.php?mode=conf">“‡‚Ì“o˜^Eİ’è•ÏX</a>]@
-[<a href="{$init->baseDir}/hako-ally.php">“¯–¿ŠÇ—</a>]@
-[<a href="{$init->baseDir}/hako-main.php?mode=log">Å‹ß‚Ìo—ˆ–</a>]@
-[<a href="{$init->urlManu}" target="_blank">ƒ}ƒjƒ…ƒAƒ‹</a>]@
-[<a href="{$init->urlBbs}" target="_blank">Œf¦”Â</a>]@
-[<a href="{$init->baseDir}/hako-admin.php">ŠÇ—lº</a>]
-</div>
-<hr>
-END;
-	}
-	
+
 	//---------------------------------------------------
-	// ŠJ”­‰æ–Ê
+	// é–‹ç™ºç”»é¢
 	//---------------------------------------------------
 	function tempOwer($hako, $data, $number = 0) {
 		global $init;
-		
+
 		$island = $hako->islands[$number];
 		$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
 		$width = $init->islandSize * 32 + 50;
 		$height = $init->islandSize * 32 + 100;
-		
-		// ƒRƒ}ƒ“ƒhƒZƒbƒg
+
+		// ã‚³ãƒãƒ³ãƒ‰ã‚»ãƒƒãƒˆ
 		$set_com = "";
 		$com_max = "";
 		for($i = 0; $i < $init->commandMax; $i++) {
-			// Še—v‘f‚Ìæ‚èo‚µ
+			// å„è¦ç´ ã®å–ã‚Šå‡ºã—
 			$command = $island['command'][$i];
 			$s_kind = $command['kind'];
 			$s_target = $command['target'];
 			$s_x = $command['x'];
 			$s_y = $command['y'];
 			$s_arg = $command['arg'];
-			
-			// ƒRƒ}ƒ“ƒh“o˜^
+
+			// ã‚³ãƒãƒ³ãƒ‰ç™»éŒ²
 			if($i == $init->commandMax - 1){
 				$set_com .= "[$s_kind, $s_x, $s_y, $s_arg, $s_target]\n";
 				$com_max .= "0";
@@ -1851,20 +1616,20 @@ END;
 				$com_max .= "0,";
 			}
 		}
-		//ƒRƒ}ƒ“ƒhƒŠƒXƒgƒZƒbƒg
+		//ã‚³ãƒãƒ³ãƒ‰ãƒªã‚¹ãƒˆã‚»ãƒƒãƒˆ
 		$l_kind;
 		$set_listcom = "";
 		$click_com = array("", "", "", "", "", "", "", "");
 		$All_listCom = 0;
 		$com_count = count($init->commandDivido);
 		for($m = 0; $m < $com_count; $m++) {
-			list($aa,$dd,$ff) = split(",", $init->commandDivido[$m]);
+			list($aa,$dd,$ff) = explode(",", $init->commandDivido[$m]);
 			$set_listcom .= "[ ";
 			for($i = 0; $i < $init->commandTotal; $i++) {
 				$l_kind = $init->comList[$i];
 				$l_cost = $init->comCost[$l_kind];
 				if($l_cost == 0) {
-					$l_cost = '–³—¿';
+					$l_cost = 'ç„¡æ–™';
 				} elseif($l_cost < 0) {
 					$l_cost = - $l_cost;
 					if($l_kind == 83) {
@@ -1882,7 +1647,9 @@ END;
 					}
 					$All_listCom++;
 				}
-				if($l_kind < $ff+1) { next; }
+				//if($l_kind < $ff+1) {
+				//	next;
+				//}
 			}
 			$bai = strlen($set_listcom);
 			$set_listcom = substr($set_listcom, 0, $bai - 2);
@@ -1895,16 +1662,18 @@ END;
 		} else {
 			$default_Kind = $data['defaultKind'];
 		}
-		// ‘DƒŠƒXƒgƒZƒbƒg
+		// èˆ¹ãƒªã‚¹ãƒˆã‚»ãƒƒãƒˆ
+		$set_ships = "";
 		for($i = 0; $i < $init->shipKind; $i++) {
-				$set_ships .= "'".$init->shipName[$i]."',";
+			$set_ships .= "'".$init->shipName[$i]."',";
 		}
-		// ‰q¯ƒŠƒXƒgƒZƒbƒg
+		// è¡›æ˜Ÿãƒªã‚¹ãƒˆã‚»ãƒƒãƒˆ
 		//$set_eisei = implode("," , $init->EiseiName);
+		$set_eisei = "";
 		for($i = 0; $i < count($init->EiseiName); $i++) {
-				$set_eisei .= "'".$init->EiseiName[$i]."',";
+			$set_eisei .= "'".$init->EiseiName[$i]."',";
 		}
-		// “‡ƒŠƒXƒgƒZƒbƒg
+		// å³¶ãƒªã‚¹ãƒˆã‚»ãƒƒãƒˆ
 		$set_island = "";
 		for($i = 0; $i < $hako->islandNumber; $i++) {
 			$l_name = $hako->islands[$i]['name'];
@@ -1917,9 +1686,9 @@ END;
 			}
 		}
 		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
-		print <<<END
+		echo <<<END
 <center>
-{$init->tagBig_}{$init->tagName_}{$name}{$init->_tagName}ŠJ”­Œv‰æ{$init->_tagBig}<BR>
+{$init->tagBig_}{$init->tagName_}{$name}{$init->_tagName}é–‹ç™ºè¨ˆç”»{$init->_tagBig}<BR>
 {$GLOBALS['BACK_TO_TOP']}<br>
 </center>
 <script type="text/javascript">
@@ -1927,10 +1696,10 @@ END;
 var w;
 var p = $defaultTarget;
 
-// ‚i‚`‚u‚`ƒXƒNƒŠƒvƒgŠJ”­‰æ–Ê”z•zŒ³
-// ‚ ‚Á‚Û[ˆÁ” ’ë”“‡i http://appoh.execweb.cx/hakoniwa/ j
-// Programmed by Jynichi Sakai(‚ ‚Á‚Û[)
-// ª íœ‚µ‚È‚¢‚Å‰º‚³‚¢B
+// ï¼ªï¼¡ï¼¶ï¼¡ã‚¹ã‚¯ãƒªãƒ—ãƒˆé–‹ç™ºç”»é¢é…å¸ƒå…ƒ
+// ã‚ã£ã½ãƒ¼åºµç®±åº­è«¸å³¶ï¼ˆ http://appoh.execweb.cx/hakoniwa/ ï¼‰
+// Programmed by Jynichi Sakai(ã‚ã£ã½ãƒ¼)
+// â†‘ å‰Šé™¤ã—ãªã„ã§ä¸‹ã•ã„ã€‚
 var str;
 g = [$com_max];
 k1 = [$com_max];
@@ -1964,7 +1733,7 @@ function init() {
 	SelectList('');
 	outp();
 	str = plchg();
-	str = '<font color="blue">¡ ‘—MÏ‚İ ¡<\\/font><br>' + str;
+	str = '<font color="blue">â–  é€ä¿¡æ¸ˆã¿ â– <\\/font><br>' + str;
 	disp(str, "");
 	document.onmousemove = Mmove;
 	if(document.layers) {
@@ -2018,7 +1787,7 @@ function cominput(theForm, x, k, z) {
 			g[i] = g[i+1];
 		}
 		command[$init->commandMax - 1] = [81, 0, 0, 0, 0];
-		g[$init->commandMax - 1] = '‘‹àŒJ‚è';
+		g[$init->commandMax - 1] = 'è³‡é‡‘ç¹°ã‚Š';
 	} else if(x == 4) {
 		i = Math.floor(a);
 		if (i == 0){ return true; }
@@ -2029,7 +1798,7 @@ function cominput(theForm, x, k, z) {
 		g[i] = k2[i];g[i-1] = k1[i];
 		ns(--i);
 		str = plchg();
-		str = '<font color="red"><strong>¡ –¢‘—M ¡<\\/strong><\\/font><br>' + str;
+		str = '<font color="red"><strong>â–  æœªé€ä¿¡ â– <\\/strong><\\/font><br>' + str;
 		disp(str,"white");
 		outp();
 		newNs = i+1;
@@ -2042,17 +1811,17 @@ function cominput(theForm, x, k, z) {
 		g[i] = k2[i];g[i + 1] = k1[i];
 		newNs = i+1;
 	}else if(x == 7){
-		// ˆÚ“®
+		// ç§»å‹•
 		var ctmp = command[k];
 		var gtmp = g[k];
 		if(z > k) {
-			// ã‚©‚ç‰º‚Ö
+			// ä¸Šã‹ã‚‰ä¸‹ã¸
 			for(i = k; i < z-1; i++) {
 				command[i] = command[i+1];
 				g[i] = g[i+1];
 			}
 		} else {
-			// ‰º‚©‚çã‚Ö
+			// ä¸‹ã‹ã‚‰ä¸Šã¸
 			for(i = k; i > z; i--) {
 				command[i] = command[i-1];
 				g[i] = g[i-1];
@@ -2065,7 +1834,7 @@ function cominput(theForm, x, k, z) {
 		command[a][3] = k;
 	}
 	str = plchg();
-	str = '<font color="red"><b>¡ –¢‘—M ¡<\\/b><\\/font><br>' + str;
+	str = '<font color="red"><b>â–  æœªé€ä¿¡ â– <\\/b><\\/font><br>' + str;
 	disp(str, "");
 	outp();
 	theForm.SENDPROJECT.disabled = false;
@@ -2084,13 +1853,13 @@ function plchg() {
 		point = '{$init->tagName_}' + "(" + x + "," + y + ")" + '{$init->_tagName}';
 		for(j = 0; j < islname.length ; j++) {
 			if(tgt == islname[j][0]){
-				tgt = '{$init->tagName_}' + islname[j][1] + "“‡" + '{$init->_tagName}';
+				tgt = '{$init->tagName_}' + islname[j][1] + "å³¶" + '{$init->_tagName}';
 			}
 		}
 		if(c[0] == $init->comMissileSM || c[0] == $init->comDoNothing || c[0] == $init->comGiveup){
-			// ƒ~ƒTƒCƒ‹Œ‚‚¿~‚ßA‘‹àŒJ‚èA“‡‚Ì•úŠü
+			// ãƒŸã‚µã‚¤ãƒ«æ’ƒã¡æ­¢ã‚ã€è³‡é‡‘ç¹°ã‚Šã€å³¶ã®æ”¾æ£„
 			strn2 = kind;
-		}else if(c[0] == $init->comMissileNM || // ƒ~ƒTƒCƒ‹ŠÖ˜A
+		}else if(c[0] == $init->comMissileNM || // ãƒŸã‚µã‚¤ãƒ«é–¢é€£
 			c[0] == $init->comMissilePP ||
 			c[0] == $init->comMissileST ||
 			c[0] == $init->comMissileBT ||
@@ -2098,85 +1867,85 @@ function plchg() {
 			c[0] == $init->comMissileLD ||
 			c[0] == $init->comMissileLU){
 			if(c[3] == 0) {
-				arg = "i–³§ŒÀj";
+				arg = "ï¼ˆç„¡åˆ¶é™ï¼‰";
 			} else {
-				arg = "i" + c[3] + "”­j";
+				arg = "ï¼ˆ" + c[3] + "ç™ºï¼‰";
 			}
-			strn2 = tgt + point + "‚Ö" + kind + arg;
-		} else if((c[0] == $init->comSendMonster) || (c[0] == $init->comSendSleeper)) { // ‰öb”hŒ­
-			strn2 = tgt + "‚Ö" + kind;
-		} else if(c[0] == $init->comSell) { // H—¿—Ao
+			strn2 = tgt + point + "ã¸" + kind + arg;
+		} else if((c[0] == $init->comSendMonster) || (c[0] == $init->comSendSleeper)) { // æ€ªç£æ´¾é£
+			strn2 = tgt + "ã¸" + kind;
+		} else if(c[0] == $init->comSell) { // é£Ÿæ–™è¼¸å‡º
 			if(c[3] == 0){ c[3] = 1; }
 			arg = c[3] * 100;
-			arg = "i" + arg + "{$init->unitFood}j";
+			arg = "ï¼ˆ" + arg + "{$init->unitFood}ï¼‰";
 			strn2 = kind + arg;
-		} else if(c[0] == $init->comSellTree) { // –ØŞ—Ao
+		} else if(c[0] == $init->comSellTree) { // æœ¨æè¼¸å‡º
 			if(c[3] == 0){ c[3] = 1; }
 			arg = c[3] * 10;
-			arg = "i" + arg + "{$init->unitTree}j";
+			arg = "ï¼ˆ" + arg + "{$init->unitTree}ï¼‰";
 			strn2 = kind + arg;
-		} else if(c[0] == $init->comMoney) { // ‘‹à‰‡•
+		} else if(c[0] == $init->comMoney) { // è³‡é‡‘æ´åŠ©
 			if(c[3] == 0){ c[3] = 1; }
 			arg = c[3] * {$init->comCost[$init->comMoney]};
-			arg = "i" + arg + "{$init->unitMoney}j";
-			strn2 = tgt + "‚Ö" + kind + arg;
-		} else if(c[0] == $init->comFood) { // H—¿‰‡•
+			arg = "ï¼ˆ" + arg + "{$init->unitMoney}ï¼‰";
+			strn2 = tgt + "ã¸" + kind + arg;
+		} else if(c[0] == $init->comFood) { // é£Ÿæ–™æ´åŠ©
 			if(c[3] == 0){ c[3] = 1; }
 			arg = c[3] * 100;
-			arg = "i" + arg + "{$init->unitFood}j";
-			strn2 = tgt + "‚Ö" + kind + arg;
-		} else if(c[0] == $init->comDestroy) { // Œ@í
+			arg = "ï¼ˆ" + arg + "{$init->unitFood}ï¼‰";
+			strn2 = tgt + "ã¸" + kind + arg;
+		} else if(c[0] == $init->comDestroy) { // æ˜å‰Š
 			if(c[3] == 0){
-				strn2 = point + "‚Å" + kind;
+				strn2 = point + "ã§" + kind;
 			} else {
 				arg = c[3] * {$init->comCost[$init->comDestroy]};
-				arg = "i—\\Z" + arg + "{$init->unitMoney}j";
-				strn2 = point + "‚Å" + kind + arg;
+				arg = "ï¼ˆäºˆ\ç®—" + arg + "{$init->unitMoney}ï¼‰";
+				strn2 = point + "ã§" + kind + arg;
 			}
-		} else if(c[0] == $init->comLot) { // •ó‚­‚¶w“ü
+		} else if(c[0] == $init->comLot) { // å®ãã˜è³¼å…¥
 			if(c[3] == 0) c[3] = 1;
 			if(c[3] > 30) c[3] = 30;
 				arg = c[3] * {$init->comCost[$init->comLot]};
-				arg = "i—\\Z" + arg + "{$init->unitMoney}j";
+				arg = "ï¼ˆäºˆ\ç®—" + arg + "{$init->unitMoney}ï¼‰";
 				strn2 = kind + arg;
-		} else if(c[0] == $init->comDbase) { // –h‰q{İ
+		} else if(c[0] == $init->comDbase) { // é˜²è¡›æ–½è¨­
 			if(c[3] == 0) c[3] = 1;
 			if(c[3] > $init->dBaseHP) c[3] = $init->dBaseHP;
 				arg = c[3];
-				arg = "(‘Ï‹v—Í" + arg + "j";
-				strn2 = point + "‚Å" + kind + arg;
-		} else if(c[0] == $init->comSdbase) { // ŠC’ê–h‰q{İ
+				arg = "(è€ä¹…åŠ›" + arg + "ï¼‰";
+				strn2 = point + "ã§" + kind + arg;
+		} else if(c[0] == $init->comSdbase) { // æµ·åº•é˜²è¡›æ–½è¨­
 			if(c[3] == 0) c[3] = 1;
 			if(c[3] > $init->sdBaseHP) c[3] = $init->sdBaseHP;
 				arg = c[3];
-				arg = "(‘Ï‹v—Í" + arg + "j";
-				strn2 = point + "‚Å" + kind + arg;
-		} else if(c[0] == $init->comShipBack){ // ‘D‚Ì”jŠü
-				strn2 = point + "‚Å" + kind;
-		} else if(c[0] == $init->comSoukoM){ // ‘qŒÉŒšİ(’™‹à)
+				arg = "(è€ä¹…åŠ›" + arg + "ï¼‰";
+				strn2 = point + "ã§" + kind + arg;
+		} else if(c[0] == $init->comShipBack){ // èˆ¹ã®ç ´æ£„
+				strn2 = point + "ã§" + kind;
+		} else if(c[0] == $init->comSoukoM){ // å€‰åº«å»ºè¨­(è²¯é‡‘)
 			if(c[3] == 0) {
-				arg = "(ƒZƒLƒ…ƒŠƒeƒB‹­‰»)";
-				strn2 = point + "‚Å" + kind + arg;
+				arg = "(ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£å¼·åŒ–)";
+				strn2 = point + "ã§" + kind + arg;
 			} else {
 				arg = c[3] * 1000;
 				arg = "(" + arg + "{$init->unitMoney})";
-				strn2 = point + "‚Å" + kind + arg;
+				strn2 = point + "ã§" + kind + arg;
 			}
-		} else if(c[0] == $init->comSoukoF){ // ‘qŒÉŒšİ(’™H)
+		} else if(c[0] == $init->comSoukoF){ // å€‰åº«å»ºè¨­(è²¯é£Ÿ)
 			if(c[3] == 0) {
-				arg = "(ƒZƒLƒ…ƒŠƒeƒB‹­‰»)";
-				strn2 = point + "‚Å" + kind + arg;
+				arg = "(ã‚»ã‚­ãƒ¥ãƒªãƒ†ã‚£å¼·åŒ–)";
+				strn2 = point + "ã§" + kind + arg;
 			} else {
 				arg = c[3] * 1000;
 				arg = "(" + arg + "{$init->unitFood})";
-				strn2 = point + "‚Å" + kind + arg;
+				strn2 = point + "ã§" + kind + arg;
 			}
-		} else if(c[0] == $init->comHikidasi) { // ‘qŒÉˆø‚«o‚µ
+		} else if(c[0] == $init->comHikidasi) { // å€‰åº«å¼•ãå‡ºã—
 			if(c[3] == 0) c[3] = 1;
 			arg = c[3] * 1000;
-			arg = "i" + arg + "{$init->unitMoney} or " + arg + "{$init->unitFood}j";
-			strn2 = point + "‚Å" + kind + arg;
-		} else if(c[0] == $init->comFarm || // ”_êAŠC’ê”_êAHêA¤‹Æƒrƒ‹AÌŒ@ê®”õA”­“dŠA–l‚Ìˆø‰z‚µ
+			arg = "ï¼ˆ" + arg + "{$init->unitMoney} or " + arg + "{$init->unitFood}ï¼‰";
+			strn2 = point + "ã§" + kind + arg;
+		} else if(c[0] == $init->comFarm || // è¾²å ´ã€æµ·åº•è¾²å ´ã€å·¥å ´ã€å•†æ¥­ãƒ“ãƒ«ã€æ¡æ˜å ´æ•´å‚™ã€ç™ºé›»æ‰€ã€åƒ•ã®å¼•è¶Šã—
 			c[0] == $init->comSfarm ||
 			c[0] == $init->comFactory ||
 			c[0] == $init->comCommerce ||
@@ -2184,55 +1953,55 @@ function plchg() {
 			c[0] == $init->comHatuden ||
 			c[0] == $init->comBoku) {
 			if(c[3] != 0){
-				arg = "i" + c[3] + "‰ñj";
-				strn2 = point + "‚Å" + kind + arg;
+				arg = "ï¼ˆ" + c[3] + "å›ï¼‰";
+				strn2 = point + "ã§" + kind + arg;
 			}else{
-				strn2 = point + "‚Å" + kind;
+				strn2 = point + "ã§" + kind;
 			}
-		} else if(c[0] == $init->comPropaganda || // —U’vŠˆ“®
-			c[0] == $init->comOffense || // ‹­‰»
+		} else if(c[0] == $init->comPropaganda || // èª˜è‡´æ´»å‹•
+			c[0] == $init->comOffense || // å¼·åŒ–
 			c[0] == $init->comDefense ||
 			c[0] == $init->comPractice) {
 			if(c[3] != 0){
-				arg = "i" + c[3] + "‰ñj";
+				arg = "ï¼ˆ" + c[3] + "å›ï¼‰";
 				strn2 = kind + arg;
 			}else{
 				strn2 = kind;
 			}
-		} else if(c[0] == $init->comPlaygame) { // ‡
-			strn2 = tgt + "‚Æ" + kind;
-		} else if(c[0] == $init->comMakeShip){ // ‘¢‘D
+		} else if(c[0] == $init->comPlaygame) { // è©¦åˆ
+			strn2 = tgt + "ã¨" + kind;
+		} else if(c[0] == $init->comMakeShip){ // é€ èˆ¹
 			if(c[3] >= $init->shipKind) {
 				c[3] = $init->shipKind - 1;
 			}
 			arg = c[3];
-			strn2 = point + "‚Å" + kind + " (" + shiplist[arg] + ")";
-		} else if(c[0] == $init->comSendShip){ // ‘D”hŒ­
-			strn2 = tgt + "‚Ö" + point + "‚Ì" + kind;
-		} else if(c[0] == $init->comReturnShip){ // ‘D‹AŠÒ
-			strn2 = tgt + point + "‚Ì" + kind;
-		} else if(c[0] == $init->comEisei){ // lH‰q¯‘Å‚¿ã‚°
+			strn2 = point + "ã§" + kind + " (" + shiplist[arg] + ")";
+		} else if(c[0] == $init->comSendShip){ // èˆ¹æ´¾é£
+			strn2 = tgt + "ã¸" + point + "ã®" + kind;
+		} else if(c[0] == $init->comReturnShip){ // èˆ¹å¸°é‚„
+			strn2 = tgt + point + "ã®" + kind;
+		} else if(c[0] == $init->comEisei){ // äººå·¥è¡›æ˜Ÿæ‰“ã¡ä¸Šã’
 			if(c[3] >= $init->EiseiNumber) {
 				c[3] = 0;
 			}
 			arg = c[3];
-			strn2 = '{$init->tagComName_}' + eiseilist[arg] + "‘Å‚¿ã‚°" + '{$init->_tagComName}';
-		} else if(c[0] == $init->comEiseimente){ // lH‰q¯C•œ
+			strn2 = '{$init->tagComName_}' + eiseilist[arg] + "æ‰“ã¡ä¸Šã’" + '{$init->_tagComName}';
+		} else if(c[0] == $init->comEiseimente){ // äººå·¥è¡›æ˜Ÿä¿®å¾©
 			if(c[3] >= $init->EiseiNumber) {
 				c[3] = 0;
 			}
 			arg = c[3];
-			strn2 = '{$init->tagComName_}' + eiseilist[arg] + "C•œ" + '{$init->_tagComName}';
-		} else if(c[0] == $init->comEiseiAtt){ // lH‰q¯”j‰ó
+			strn2 = '{$init->tagComName_}' + eiseilist[arg] + "ä¿®å¾©" + '{$init->_tagComName}';
+		} else if(c[0] == $init->comEiseiAtt){ // äººå·¥è¡›æ˜Ÿç ´å£Š
 			if(c[3] >= $init->EiseiNumber) {
 				c[3] = 0;
 			}
 			arg = c[3];
-			strn2 = tgt + "‚Ö" + '{$init->tagComName_}' + eiseilist[arg] + "”j‰ó–C”­Ë" + '{$init->_tagComName}';
-		} else if(c[0] == $init->comEiseiLzr) { // ‰q¯ƒŒ[ƒU[
-			strn2 = tgt + point + "‚Ö" + kind;
+			strn2 = tgt + "ã¸" + '{$init->tagComName_}' + eiseilist[arg] + "ç ´å£Šç ²ç™ºå°„" + '{$init->_tagComName}';
+		} else if(c[0] == $init->comEiseiLzr) { // è¡›æ˜Ÿãƒ¬ãƒ¼ã‚¶ãƒ¼
+			strn2 = tgt + point + "ã¸" + kind;
 		}else{
-			strn2 = point + "‚Å" + kind;
+			strn2 = point + "ã§" + kind;
 		}
 		tmpnum = '';
 		if(i < 9){ tmpnum = '0'; }
@@ -2265,7 +2034,7 @@ function disp(str,bgclr) {
 
 function outp() {
 	comary = "";
-	
+
 	for(k = 0; k < command.length; k++){
 		comary = comary + command[k][0]
 			+ " " + command[k][1]
@@ -2306,14 +2075,14 @@ function set_com(x, y, land) {
 					com_str += kind;
 				} else {
 					arg = c[3] * 200;
-					arg = "i—\\Z" + arg + "{$init->unitMoney}j";
+					arg = "ï¼ˆäºˆ\ç®—" + arg + "{$init->unitMoney}ï¼‰";
 					com_str += kind + arg;
 				}
 			} else if(c[0] == $init->comLot){
 				if(c[3] == 0) c[3] = 1;
 				if(c[3] > 30) c[3] = 30;
 					arg = c[3] * 300;
-					arg = "i—\\Z" + arg + "{$init->unitMoney}j";
+					arg = "ï¼ˆäºˆ\ç®—" + arg + "{$init->unitMoney}ï¼‰";
 					com_str += kind + arg;
 			} else if(c[0] == $init->comFarm ||
 				c[0] == $init->comSfarm ||
@@ -2327,7 +2096,7 @@ function set_com(x, y, land) {
 				c[0] == $init->comDefense ||
 				c[0] == $init->comPractice) {
 				if(c[3] != 0){
-					arg = "i" + c[3] + "‰ñj";
+					arg = "ï¼ˆ" + c[3] + "å›ï¼‰";
 					com_str += kind + arg;
 				} else {
 					com_str += kind;
@@ -2440,7 +2209,7 @@ function selCommand(num) {
 	oldNum = num;
 }
 
-/* ƒRƒ}ƒ“ƒh ƒhƒ‰ƒbƒO•ƒhƒƒbƒv—p’Ç‰ÁƒXƒNƒŠƒvƒg */
+/* ã‚³ãƒãƒ³ãƒ‰ ãƒ‰ãƒ©ãƒƒã‚°ï¼†ãƒ‰ãƒ­ãƒƒãƒ—ç”¨è¿½åŠ ã‚¹ã‚¯ãƒªãƒ—ãƒˆ */
 var moveLay = new MoveFalse();
 var newLnum = -2;
 var Mcommand = false;
@@ -2545,10 +2314,10 @@ function Kdown(e){
 		el = new String(event.srcElement.tagName);
 		el = el.toUpperCase();
 		if (el == "INPUT") return;
-//	}else if(document.layers){// NN4 KEYDOWNƒCƒxƒ“ƒg‚ÍWin98Œn‚Å•¶š‰»‚¯‚·‚é‚Ì‚ÅƒRƒƒ“ƒg‰»
+//	}else if(document.layers){// NN4 KEYDOWNã‚¤ãƒ™ãƒ³ãƒˆã¯Win98ç³»ã§æ–‡å­—åŒ–ã‘ã™ã‚‹ã®ã§ã‚³ãƒ¡ãƒ³ãƒˆåŒ–
 //		if (e.modifiers != 0) return;
 //		c = e.which;
-//		if ((c >= 97) && (c <= 122)) c -= 32; // ‰p¬•¶š‚ğ‰p‘å•¶š‚É‚·‚é
+//		if ((c >= 97) && (c <= 122)) c -= 32; // è‹±å°æ–‡å­—ã‚’è‹±å¤§æ–‡å­—ã«ã™ã‚‹
 //		el = new String(e.target);
 //		el = el.toUpperCase();
 //		if (el.indexOf("<INPUT") >= 0) return;
@@ -2560,24 +2329,24 @@ function Kdown(e){
 		if (el == "INPUT") return;
 	}
 	c = String.fromCharCode(c);
-	
-	// ‰Ÿ‚³‚ê‚½ƒL[‚É‰‚¶‚ÄŒv‰æ”Ô†‚ğİ’è‚·‚é
+
+	// æŠ¼ã•ã‚ŒãŸã‚­ãƒ¼ã«å¿œã˜ã¦è¨ˆç”»ç•ªå·ã‚’è¨­å®šã™ã‚‹
 	switch (c) {
-		case 'A': c = $init->comPrepare; break; // ®’n
-		case 'J': c = $init->comPrepare2; break; // ’n‚È‚ç‚µ
-		case 'U': c = $init->comReclaim; break; // –„‚ß—§‚Ä
-		case 'K': c = $init->comDestroy; break; // Œ@í
-		case 'B': c = $init->comSellTree; break; // ”°Ì
-		case 'P': c = $init->comPlant; break; // A—Ñ
-		case 'N': c = $init->comFarm; break; // ”_ê®”õ
-		case 'I': c = $init->comFactory; break; // HêŒšİ
-		case 'S': c = $init->comMountain; break; // ÌŒ@ê®”õ
-		case 'D': c = $init->comDbase; break; // –h‰q{İŒšİ
-		case 'M': c = $init->comBase; break; // ƒ~ƒTƒCƒ‹Šî’nŒšİ
-		case 'F': c = $init->comSbase; break; // ŠC’êŠî’nŒšİ
-		case '-': c = $init->comDoNothing; break; //INS ‘‹àŒJ‚è
-		case '.': cominput(InputPlan,3); return; //DEL íœ
-		case'\b': //BS ˆê‚Â‘Oíœ
+		case 'A': c = $init->comPrepare; break; // æ•´åœ°
+		case 'J': c = $init->comPrepare2; break; // åœ°ãªã‚‰ã—
+		case 'U': c = $init->comReclaim; break; // åŸ‹ã‚ç«‹ã¦
+		case 'K': c = $init->comDestroy; break; // æ˜å‰Š
+		case 'B': c = $init->comSellTree; break; // ä¼æ¡
+		case 'P': c = $init->comPlant; break; // æ¤æ—
+		case 'N': c = $init->comFarm; break; // è¾²å ´æ•´å‚™
+		case 'I': c = $init->comFactory; break; // å·¥å ´å»ºè¨­
+		case 'S': c = $init->comMountain; break; // æ¡æ˜å ´æ•´å‚™
+		case 'D': c = $init->comDbase; break; // é˜²è¡›æ–½è¨­å»ºè¨­
+		case 'M': c = $init->comBase; break; // ãƒŸã‚µã‚¤ãƒ«åŸºåœ°å»ºè¨­
+		case 'F': c = $init->comSbase; break; // æµ·åº•åŸºåœ°å»ºè¨­
+		case '-': c = $init->comDoNothing; break; //INS è³‡é‡‘ç¹°ã‚Š
+		case '.': cominput(InputPlan,3); return; //DEL å‰Šé™¤
+		case'\b': //BS ä¸€ã¤å‰å‰Šé™¤
 		var no = document.InputPlan.COMMAND.selectedIndex;
 		if(no > 0) {
 			document.InputPlan.COMMAND.selectedIndex = no - 1;
@@ -2596,7 +2365,7 @@ function Kdown(e){
 		case '9':case'i': document.InputPlan.AMOUNT.selectedIndex = m*10+9; return;
 		case 'Z':case'j': document.InputPlan.AMOUNT.selectedIndex = 0; return;
 		default:
-		// IE ‚Å‚ÍƒŠƒ[ƒh‚Ì‚½‚ß‚Ì F5 ‚Ü‚ÅE‚¤‚Ì‚ÅA‚±‚±‚Éˆ—‚ğ‚¢‚ê‚Ä‚Í‚¢‚¯‚È‚¢
+		// IE ã§ã¯ãƒªãƒ­ãƒ¼ãƒ‰ã®ãŸã‚ã® F5 ã¾ã§æ‹¾ã†ã®ã§ã€ã“ã“ã«å‡¦ç†ã‚’ã„ã‚Œã¦ã¯ã„ã‘ãªã„
 		return;
 	}
 	cominput(document.InputPlan, 6, c);
@@ -2613,7 +2382,7 @@ function targetopen() {
 </script>
 END;
 		$this->islandInfo($island, $number, 1);
-		print <<<END
+		echo <<<END
 <div id="menu" style="position:absolute; top:-500;left:-500; overflow:auto;width:360px;height:350px;">
 <table border=0 class="PopupCell" onClick="menuclose()">
 <tr valign=top>
@@ -2641,18 +2410,18 @@ $click_com[6]
 <div ID="mc_div" style="position:absolute;top:-50;left:-50;height:22px;">&nbsp;</div>
 <div ID="ch_num" style="position:absolute;visibility:hidden;display:none">
 <form name="ch_numForm">
-<table border=1 bgcolor="#e0ffff" cellspacing=1>
-<tr><td valign=top nowrap>
-<a href="JavaScript:void(0)" onClick="hideElement('ch_num');" style="text-decoration:none"><B>~</B></a><br>
-<select name="AMOUNT" size=13 onchange="chNumDo()">
-</select>
-</TD>
-</TR>
-</TABLE>
+	<table class="table table-bordered" bgcolor="#e0ffff" cellspacing=1>
+	<tr><td valign=top nowrap>
+	<a href="JavaScript:void(0)" onClick="hideElement('ch_num');" style="text-decoration:none"><B>Ã—</B></a><br>
+	<select name="AMOUNT" size=13 onchange="chNumDo()">
+	</select>
+	</TD>
+	</TR>
+	</TABLE>
 </form>
 </div>
 <div align="center">
-<table border="1">
+<table class="table table-bordered">
 <tr valign="top">
 <td $init->bgInputCell>
 <form action="{$GLOBALS['THIS_FILE']}" method="post" name="InputPlan">
@@ -2661,128 +2430,139 @@ $click_com[6]
 <input type="hidden" name="DEVELOPEMODE" value="java">
 <center>
 <br>
-<b>ƒRƒ}ƒ“ƒh“ü—Í</b><br>
+<b>ã‚³ãƒãƒ³ãƒ‰å…¥åŠ›</b><br>
 <b>
-<a href="javascript:void(0);" onclick="cominput(InputPlan,1)">‘}“ü</a>
-@<a href="javascript:void(0);" onclick="cominput(InputPlan,2)">ã‘‚«</a>
-@<a href="javascript:void(0);" onclick="cominput(InputPlan,3)">íœ</a>
+<a href="javascript:void(0);" onclick="cominput(InputPlan,1)">æŒ¿å…¥</a>
+ã€€<a href="javascript:void(0);" onclick="cominput(InputPlan,2)">ä¸Šæ›¸ã</a>
+ã€€<a href="javascript:void(0);" onclick="cominput(InputPlan,3)">å‰Šé™¤</a>
 </b>
 <hr>
-<b>Œv‰æ”Ô†</b>
+<b>è¨ˆç”»ç•ªå·</b>
 <select name="NUMBER">
 END;
-		// Œv‰æ”Ô†
+		// è¨ˆç”»ç•ªå·
 		for($i = 0; $i < $init->commandMax; $i++) {
 			$j = $i + 1;
 			print "<option value=\"$i\">$j</option>\n";
 		}
-		if ($data['MENUOPEN'] == 'on') {
-			$open = "CHECKED";
-		}else{
-			$open = "";
+
+		$open = "";
+		if ( isset($data['MENUOPEN']) ) {
+			if ($data['MENUOPEN'] == 'on') {
+				$open = "CHECKED";
+			} else {
+				$open = "";
+			}
 		}
-		print <<<END
+
+		echo <<<END
 </select>
 <hr>
-<b>ŠJ”­Œv‰æ</b><br>
+<b>é–‹ç™ºè¨ˆç”»</b><br>
 <input type="checkbox" name="NAVIOFF" $open>NaviOff
 <input type="checkbox" name="MENUOPEN" $open>PopupOff<br>
 <br>
 <select name="menu" onchange="SelectList(InputPlan)">
-<option value="">‘Sí—Ş</option>
+<option value="">å…¨ç¨®é¡</option>
 END;
 		for($i = 0; $i < $com_count; $i++) {
-			list($aa, $tmp) = split(",", $init->commandDivido[$i], 2);
+			list($aa, $tmp) = explode(",", $init->commandDivido[$i], 2);
 			print "<option value=\"$i\">{$aa}</option>\n";
 		}
-		print <<<END
+		echo <<<END
 </select><br>
 <select name="COMMAND">
-<option>@@@@@@@@@@</option>
-<option>@@@@@@@@@@</option>
-<option>@@@@@@@@@@</option>
-<option>@@@@@@@@@@</option>
-<option>@@@@@@@@@@</option>
-<option>@@@@@@@@@@</option>
-<option>@@@@@@@@@@</option>
-<option>@@@@@@@@@@</option>
-<option>@@@@@@@@@@</option>
-<option>@@@@@@@@@@</option>
+<option>ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€</option>
+<option>ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€</option>
+<option>ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€</option>
+<option>ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€</option>
+<option>ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€</option>
+<option>ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€</option>
+<option>ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€</option>
+<option>ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€</option>
+<option>ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€</option>
+<option>ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€ã€€</option>
 </select>
 <hr>
-<b>À•W(</b>
+<b>åº§æ¨™(</b>
 <select name="POINTX">
 END;
 		for($i = 0; $i < $init->islandSize; $i++) {
-			if($i == $data['defaultX']) {
-				print "<option value=\"$i\" selected>$i</option>\n";
-			} else {
-				print "<option value=\"$i\">$i</option>\n";
+			if (isset($data['defaultX'])){
+				if($i == $data['defaultX']) {
+					print "<option value=\"$i\" selected>$i</option>\n";
+				} else {
+					print "<option value=\"$i\">$i</option>\n";
+				}
 			}
 		}
 		print "</select>, <select name=\"POINTY\">\n";
 		for($i = 0; $i < $init->islandSize; $i++) {
-			if($i == $data['defaultY']) {
-				print "<option value=\"$i\" selected>$i</option>\n";
-			} else {
-				print "<option value=\"$i\">$i</option>\n";
+			if (isset($data['defaultY'])){
+				if($i == $data['defaultY']) {
+					print "<option value=\"$i\" selected>$i</option>\n";
+				} else {
+					print "<option value=\"$i\">$i</option>\n";
+				}
 			}
 		}
-		print <<<END
+		echo <<<END
 </select><b> )</b>
 <hr>
-<b>”—Ê</b><select name="AMOUNT">
+<b>æ•°é‡</b><select name="AMOUNT">
 END;
-		// ”—Ê
+		// æ•°é‡
 		for($i = 0; $i < 100; $i++) {
 			print "<option value=\"$i\">$i</option>\n";
 		}
-		
-		// ‘D”•”
+
+		// èˆ¹èˆ¶æ•°
 		$ownship = 0;
 		for($i = 0; $i < $init->shipKind; $i++) {
 			$ownship += $island['ship'][$i];
 		}
-		print <<<END
+		echo <<<END
 </select>
 <hr>
-<b>–Ú•W‚Ì“‡</b><br>
+<b>ç›®æ¨™ã®å³¶</b><br>
 <select name="TARGETID" onchange="settarget(this);">
 $hako->targetList<br>
 </select>
-<input type="button" value="–Ú•W•ß‘¨" onClick="javascript: targetopen();">
+<input type="button" value="ç›®æ¨™æ•æ‰" onClick="javascript: targetopen();">
 <hr>
-<b>ƒRƒ}ƒ“ƒhˆÚ“®</b>F
-<a href="javascript:void(0);" onclick="cominput(InputPlan,4)" style="text-decoration:none"> £ </a>EE
-<a href="javascript:void(0);" onclick="cominput(InputPlan,5)" style="text-decoration:none"> ¥ </a>
+<b>ã‚³ãƒãƒ³ãƒ‰ç§»å‹•</b>ï¼š
+<a href="javascript:void(0);" onclick="cominput(InputPlan,4)" style="text-decoration:none"> â–² </a>ãƒ»ãƒ»
+<a href="javascript:void(0);" onclick="cominput(InputPlan,5)" style="text-decoration:none"> â–¼ </a>
 <hr>
 <input type="hidden" name="ISLANDID" value="{$island['id']}">
 <input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
-<input type="submit" value="Œv‰æ‘—M" name="SENDPROJECT">
-<br>ÅŒã‚É<font color="red">Œv‰æ‘—Mƒ{ƒ^ƒ“</font>‚ğ<br>‰Ÿ‚·‚Ì‚ğ–Y‚ê‚È‚¢‚æ‚¤‚ÉB</font>
+<input type="submit" value="è¨ˆç”»é€ä¿¡" name="SENDPROJECT">
+<br>æœ€å¾Œã«<font color="red">è¨ˆç”»é€ä¿¡ãƒœã‚¿ãƒ³</font>ã‚’<br>æŠ¼ã™ã®ã‚’å¿˜ã‚Œãªã„ã‚ˆã†ã«ã€‚</font>
 </center>
 </form>
-<center>ƒ~ƒTƒCƒ‹”­ËãŒÀ”[<b> {$island['fire']} </b>]”­
-<br>Š—L‘D”•”[<b> {$ownship} </b>]Ç
-<br><br>
-<a title='”š=”—Ê@BS=ˆê‚Â‘Oíœ
-DEL=íœ@INS=‘‹àŒJ‚è
-A=®’n@J=’n‚È‚ç‚µ
-K=Œ@í@U=–„‚ß—§‚Ä
-B=”°Ì@P=A—Ñ
-N=”_ê®”õ@I=HêŒšİ
-S=ÌŒ@ê®”õ
-D=–h‰q{İŒšİ
-M=ƒ~ƒTƒCƒ‹Šî’nŒšİ
-F=ŠC’êŠî’nŒšİ'>
-ƒL[“ü—ÍŠÈˆÕà–¾</a>(NN4•s‰Â)
+<center>ãƒŸã‚µã‚¤ãƒ«ç™ºå°„ä¸Šé™æ•°[<b> {$island['fire']} </b>]ç™º
+<br>æ‰€æœ‰èˆ¹èˆ¶æ•°[<b> {$ownship} </b>]éš»
+<br>
+<br>
+
+<a title='æ•°å­—=æ•°é‡ã€€BS=ä¸€ã¤å‰å‰Šé™¤
+DEL=å‰Šé™¤ã€€INS=è³‡é‡‘ç¹°ã‚Š
+A=æ•´åœ°ã€€J=åœ°ãªã‚‰ã—
+K=æ˜å‰Šã€€U=åŸ‹ã‚ç«‹ã¦
+B=ä¼æ¡ã€€P=æ¤æ—
+N=è¾²å ´æ•´å‚™ã€€I=å·¥å ´å»ºè¨­
+S=æ¡æ˜å ´æ•´å‚™
+D=é˜²è¡›æ–½è¨­å»ºè¨­
+M=ãƒŸã‚µã‚¤ãƒ«åŸºåœ°å»ºè¨­
+F=æµ·åº•åŸºåœ°å»ºè¨­'>
+ã‚­ãƒ¼å…¥åŠ›ç°¡æ˜“èª¬æ˜</a>
 </center>
 </td>
 <td $init->bgMapCell id="plan" onmouseout="mc_out();return false;">
 END;
-		$this->islandMap($hako, $island, 1); // “‡‚Ì’n}AŠ—LÒƒ‚[ƒh
+		$this->islandMap($hako, $island, 1); // å³¶ã®åœ°å›³ã€æ‰€æœ‰è€…ãƒ¢ãƒ¼ãƒ‰
 		$comment = $hako->islands[$number]['comment'];
-		print <<<END
+		echo <<<END
 </td>
 <td $init->bgCommandCell id="plan">
 <ilayer name="PARENT_LINKMSG" width="100%" height="100%">
@@ -2795,193 +2575,153 @@ END;
 </table>
 <hr>
 <div id='CommentBox'>
-<h2>ƒRƒƒ“ƒgXV</h2>
+<h2>ã‚³ãƒ¡ãƒ³ãƒˆæ›´æ–°</h2>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-ƒRƒƒ“ƒg<input type="text" name="MESSAGE" size="80" value="{$island['comment']}"><br>
+ã‚³ãƒ¡ãƒ³ãƒˆ<input type="text" name="MESSAGE" size="80" value="{$island['comment']}"><br>
 <input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
 <input type="hidden" name="mode" value="comment">
 <input type="hidden" name="DEVELOPEMODE" value="java">
 <input type="hidden" name="ISLANDID" value="{$island['id']}">
-<input type="submit" value="ƒRƒƒ“ƒgXV">
+<input type="submit" value="ã‚³ãƒ¡ãƒ³ãƒˆæ›´æ–°">
 </FORM>
 </DIV>
 </DIV>
 END;
 	}
-	
-	// ŠÖ”ƒ_ƒ~[y’Ç‰Áz
-	function funcJavaDM() {
-		print <<<END
-<script  type="text/javascript">
-<!--
-function init(){
-}
-function SelectList(theForm){
-}
-//-->
+
+	// é–¢æ•°ãƒ€ãƒŸãƒ¼ã€è¿½åŠ ã€‘
+	static function funcJavaDM() {
+		echo <<<END
+<script type="text/javascript">
+function init(){}
+function SelectList(theForm){}
 </script>
 END;
 	}
 }
 
 class HtmlSetted extends HTML {
-	function setSkin() {
+	// static function setSkin() {
+	// 	global $init;
+	// 	Util::makeTagMessage("ã‚¹ã‚¿ã‚¤ãƒ«ã‚·ãƒ¼ãƒˆã‚’è¨­å®šã—ã¾ã—ãŸã€‚", "success");
+	// }
+
+	static function comment() {
 		global $init;
-		print "{$init->tagBig_}ƒXƒ^ƒCƒ‹ƒV[ƒg‚ğİ’è‚µ‚Ü‚µ‚½B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
+		Util::makeTagMessage("ã‚³ãƒ¡ãƒ³ãƒˆã‚’æ›´æ–°ã—ã¾ã—ãŸ", "success");
 	}
-	
-	function setImg() {
+
+	static function change() {
 		global $init;
-		print "{$init->tagBig_}‰æ‘œ‚Ìƒ[ƒJƒ‹İ’è‚ğ‚µ‚Ü‚µ‚½B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
 	}
-	
-	function comment() {
+
+	// ã‚³ãƒãƒ³ãƒ‰å‰Šé™¤
+	static function commandDelete() {
 		global $init;
-		print "{$init->tagBig_}ƒRƒƒ“ƒg‚ğXV‚µ‚Ü‚µ‚½{$init->_tagBig}<hr>";
+		Util::makeTagMessage("ã‚³ãƒãƒ³ãƒ‰ã‚’å‰Šé™¤ã—ã¾ã—ãŸ", "success");
 	}
-	
-	function change() {
+
+	// ã‚³ãƒãƒ³ãƒ‰ç™»éŒ²
+	static function commandAdd() {
 		global $init;
-		print "{$init->tagBig_}•ÏXŠ®—¹‚µ‚Ü‚µ‚½{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
+		Util::makeTagMessage("ã‚³ãƒãƒ³ãƒ‰ã‚’ç™»éŒ²ã—ã¾ã—ãŸ", "success");
 	}
-	
-	function lbbsDelete() {
+
+	// å³¶ã®å¼·åˆ¶å‰Šé™¤
+	static function deleteIsland($name) {
 		global $init;
-		print "{$init->tagBig_}‹L’ “à—e‚ğíœ‚µ‚Ü‚µ‚½{$init->_tagBig}<hr>";
-	}
-	
-	function lbbsAdd() {
-		global $init;
-		print "{$init->tagBig_}‹L’ ‚ğs‚¢‚Ü‚µ‚½{$init->_tagBig}<hr>";
-	}
-	
-	// ƒRƒ}ƒ“ƒhíœ
-	function commandDelete() {
-		global $init;
-		print "{$init->tagBig_}ƒRƒ}ƒ“ƒh‚ğíœ‚µ‚Ü‚µ‚½{$init->_tagBig}<hr>\n";
-	}
-	
-	// ƒRƒ}ƒ“ƒh“o˜^
-	function commandAdd() {
-		global $init;
-		print "{$init->tagBig_}ƒRƒ}ƒ“ƒh‚ğ“o˜^‚µ‚Ü‚µ‚½{$init->_tagBig}<hr>\n";
-	}
-	
-	// “‡‚Ì‹­§íœ
-	function deleteIsland($name) {
-		global $init;
-		print "{$init->tagBig_}{$name}“‡‚ğ‹­§íœ‚µ‚Ü‚µ‚½B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
+		Util::makeTagMessage("{$name}å³¶ã‚’å¼·åˆ¶å‰Šé™¤ã—ã¾ã—ãŸ", "success");
 	}
 }
 
 class Error {
-	function wrongPassword() {
+	static function wrongPassword() {
 		global $init;
-		print "{$init->tagBig_}ƒpƒXƒ[ƒh‚ªˆá‚¢‚Ü‚·B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
+		Util::makeTagMessage("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒé•ã„ã¾ã™ã€‚", "danger");
 
-    // JavaScript error ‚Ì‰ñ”ğy’Ç‰Áz
+    // JavaScript error ã®å›é¿ã€è¿½åŠ ã€‘
     HtmlJS::funcJavaDM();
 
     HTML::footer();
     exit;
 	}
-	
-	function wrongID() {
-		global $init;
-		print "{$init->tagBig_}ID‚ªˆá‚¢‚Ü‚·B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function emptyImg() {
-		global $init;
-		print "{$init->tagBig_}İ’è•ÏX‚Åu‰æ‘œ‚Ìƒ[ƒJƒ‹İ’èv‚ğs‚Á‚Ä‰º‚³‚¢B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-	}
-	
-	// hakojima.dat‚ª‚È‚¢
-	function noDataFile() {
-		global $init;
-		print "{$init->tagBig_}ƒf[ƒ^ƒtƒ@ƒCƒ‹‚ªŠJ‚¯‚Ü‚¹‚ñB{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function newIslandFull() {
-		global $init;
-		print "{$init->tagBig_}\‚µ–ó‚ ‚è‚Ü‚¹‚ñA“‡‚ªˆê”t‚Å“o˜^‚Å‚«‚Ü‚¹‚ñII{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function newIslandNoName() {
-		global $init;
-		print "{$init->tagBig_}“‡‚É‚Â‚¯‚é–¼‘O‚ª•K—v‚Å‚·B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function newIslandBadName() {
-		global $init;
-		print "{$init->tagBig_},?()<>\$‚Æ‚©“ü‚Á‚Ä‚½‚èAu–³l“‡v‚Æ‚©‚¢‚Á‚½•Ï‚È–¼‘O‚Í‚â‚ß‚Ü‚µ‚å‚¤‚æ`B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function newIslandAlready() {
-		global $init;
-		print "{$init->tagBig_}‚»‚Ì“‡‚È‚ç‚·‚Å‚É”­Œ©‚³‚ê‚Ä‚¢‚Ü‚·B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function newIslandNoPassword() {
-		global $init;
-		print "{$init->tagBig_}ƒpƒXƒ[ƒh‚ª•K—v‚Å‚·B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function changeNoMoney() {
-		global $init;
-		print "{$init->tagBig_}‘‹à•s‘«‚Ì‚½‚ß•ÏX‚Å‚«‚Ü‚¹‚ñ{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function changeNothing() {
-		global $init;
-		print "{$init->tagBig_}–¼‘OAƒpƒXƒ[ƒh‚Æ‚à‚É‹ó—“‚Å‚·{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function problem() {
-		global $init;
-		print "{$init->tagBig_}–â‘è”­¶A‚Æ‚è‚ ‚¦‚¸–ß‚Á‚Ä‚­‚¾‚³‚¢B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function lbbsNoMessage() {
-		global $init;
-		print "{$init->tagBig_}–¼‘O‚Ü‚½‚Í“à—e‚Ì—“‚ª‹ó—“‚Å‚·B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function lockFail() {
-		global $init;
-		print "{$init->tagBig_}“¯ƒAƒNƒZƒXƒGƒ‰[‚Å‚·B<BR>ƒuƒ‰ƒEƒU‚Ìu–ß‚évƒ{ƒ^ƒ“‚ğ‰Ÿ‚µA<BR>‚µ‚Î‚ç‚­‘Ò‚Á‚Ä‚©‚çÄ“x‚¨‚µ‰º‚³‚¢B{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-	
-	function lbbsNoMoney() {
-		global $init;
-		print "{$init->tagBig_}‘‹à•s‘«‚Ì‚½‚ß‹L’ ‚Å‚«‚Ü‚¹‚ñB{$init->_tagBig}{$GLOBALS['BACK_TO_TOP']}\n";
-		HTML::footer();
-		exit;
-	}
-}
 
-?>
+	static function wrongID() {
+		global $init;
+		Util::makeTagMessage("IDãŒé•ã„ã¾ã™ã€‚", "danger");
+		HTML::footer();
+		exit;
+	}
+
+	// hakojima.datãŒãªã„
+	static function noDataFile() {
+		global $init;
+		Util::makeTagMessage("ãƒ‡ãƒ¼ã‚¿ãƒ•ã‚¡ã‚¤ãƒ«ãŒé–‹ã‘ã¾ã›ã‚“ã€‚", "danger");
+		HTML::footer();
+		exit;
+	}
+
+	static function newIslandFull() {
+		global $init;
+		Util::makeTagMessage("ç”³ã—è¨³ã‚ã‚Šã¾ã›ã‚“ã€å³¶ãŒä¸€æ¯ã§ç™»éŒ²ã§ãã¾ã›ã‚“ï¼ï¼", "danger");
+		HTML::footer();
+		exit;
+	}
+
+	static function newIslandNoName() {
+		global $init;
+		Util::makeTagMessage("å³¶ã«ã¤ã‘ã‚‹åå‰ãŒå¿…è¦ã§ã™ã€‚", "danger");
+		HTML::footer();
+		exit;
+	}
+
+	static function newIslandBadName() {
+		global $init;
+		Util::makeTagMessage(",?()<>\$ã¨ã‹å…¥ã£ã¦ãŸã‚Šã€å¤‰ãªåå‰ã¯ã‚„ã‚ã¾ã—ã‚‡ã†ã€‚", "danger");
+		HTML::footer();
+		exit;
+	}
+
+	static function newIslandAlready() {
+		global $init;
+		Util::makeTagMessage("ãã®å³¶ãªã‚‰ã™ã§ã«ç™ºè¦‹ã•ã‚Œã¦ã„ã¾ã™ã€‚", "danger");
+		HTML::footer();
+		exit;
+	}
+
+	static function newIslandNoPassword() {
+		global $init;
+		Util::makeTagMessage("ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãŒå¿…è¦ã§ã™ã€‚", "danger");
+		HTML::footer();
+		exit;
+	}
+
+	static function changeNoMoney() {
+		global $init;
+		Util::makeTagMessage("è³‡é‡‘ä¸è¶³ã®ãŸã‚å¤‰æ›´ã§ãã¾ã›ã‚“", "danger");
+		HTML::footer();
+		exit;
+	}
+
+	static function changeNothing() {
+		global $init;
+		Util::makeTagMessage("åå‰ã€ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ã¨ã‚‚ã«ç©ºæ¬„ã§ã™", "danger");
+		HTML::footer();
+		exit;
+	}
+
+	static function problem() {
+		global $init;
+		Util::makeTagMessage("å•é¡ŒãŒç™ºç”Ÿã—ã¾ã—ãŸã€‚", "danger");
+		HTML::footer();
+		exit;
+	}
+
+	static function lockFail() {
+		global $init;
+		Util::makeTagMessage("åŒæ™‚ã‚¢ã‚¯ã‚»ã‚¹ã‚¨ãƒ©ãƒ¼ã§ã™ã€‚<BR>ãƒ–ãƒ©ã‚¦ã‚¶ã®ã€Œæˆ»ã‚‹ã€ãƒœã‚¿ãƒ³ã‚’æŠ¼ã—ã€<BR>ã—ã°ã‚‰ãå¾…ã£ã¦ã‹ã‚‰å†åº¦ãŠè©¦ã—ä¸‹ã•ã„ã€‚", "danger");
+		HTML::footer();
+		exit;
+	}
+
+}
