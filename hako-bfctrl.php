@@ -26,27 +26,20 @@ class HtmlBF extends HTML {
 		global $init;
 
 		echo <<<END
-<CENTER><a href="{$init->baseDir}/hako-main.php"><span class="big">トップへ戻る</span></a></CENTER>
-<h1 class="title">{$init->title}<br>BattleFields管理ツール</h1>
+<h1 class="title">BattleFields管理ツール</h1>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<h2>通常の島からBattleFieldに変更</h2><br>
-<br>
-<select name="ISLANDID">
-$hako->islandListNoBF
-</select>
-<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-<input type="hidden" name="mode" value="TOBF">
-<input type="submit" value="BattleFieldに変更">
+	<h2>通常の島からBattleFieldに変更</h2>
+	<select name="ISLANDID">$hako->islandListNoBF</select>
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="TOBF">
+	<input type="submit" value="BattleFieldに変更">
 </form>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<h2>BattleFieldから通常の島に変更</h2><br>
-<br>
-<select name="ISLANDID">
-$hako->islandListBF
-</select>
-<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-<input type="hidden" name="mode" value="FROMBF">
-<input type="submit" value="通常の島に変更">
+	<h2>BattleFieldから通常の島に変更</h2>
+	<select name="ISLANDID">$hako->islandListBF</select>
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="FROMBF">
+	<input type="submit" value="通常の島に変更">
 </form>
 END;
 	}
@@ -54,7 +47,7 @@ END;
 
 class Hako extends HakoIO {
 	var $islandListNoBF;	// 普通の島リスト
-	var $islandListBF;	// BFな島リスト
+	var $islandListBF;		// BFな島リスト
 
 	function init($cgi) {
 		$this->readIslandsFile($cgi);

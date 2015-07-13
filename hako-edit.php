@@ -15,11 +15,13 @@ require_once ABSOLUTE_PATH.'hako-file.php';
 require_once ABSOLUTE_PATH.'hako-html.php';
 require_once ABSOLUTE_PATH.'hako-util.php';
 
-$init = new Init;
+$init = new Init();
 
 define("READ_LINE", 1024);
 $THIS_FILE = $init->baseDir . "/hako-edit.php";
 $BACK_TO_TOP = "<A HREF=\"JavaScript:void(0);\" onClick=\"document.TOP.submit();return false;\">{$init->tagBig_}トップへ戻る{$init->_tagBig}</A>";
+
+ini_set('display_errors', 0);
 
 //----------------------------------------------------------------------
 class Hako extends HakoIO {
@@ -637,27 +639,25 @@ END;
 			return;
 		}
 		
-		echo "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">トップへ戻る</span></a></CENTER>\n";
-		echo "<h1 class=\"title\">{$init->title}<br>マップ・エディタ</h1>\n";
+		echo "<h1 class=\"title\">マップ・エディタ</h1>\n";
 		echo <<<END
 <h2 class='Turn'>ターン$hako->islandTurn</h2>
 <hr>
 <div ID="IslandView">
 <h2>諸島の状況</h2>
-<p>
-島の名前をクリックすると、<strong>マップ</strong>が表示されます。
-</p>
-<table class="table table-bordered">
+<p>島の名前をクリックすると、<strong>マップ</strong>が表示されます。</p>
+
+<table class="table table-bordered table-condensed">
 <tr>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}面積{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}農場規模{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}工場規模{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}採掘場規模{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
 </tr>
 END;
 		// 表示内容は、管理者用の内容
@@ -705,12 +705,12 @@ END;
 <th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
 <th {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</th>
 <th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}面積{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
 <th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</th>
 <th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}農場規模{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}工場規模{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}採掘場規模{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
 </tr>
 END;
 			}
@@ -719,9 +719,9 @@ END;
 			echo "<td {$init->bgNameCell} rowspan=\"2\"><a href=\"JavaScript:void(0);\" onClick=\"document.MAP{$id}.submit();return false;\">{$name}</a> {$monster}<br>\n{$prize}</td>\n";
 			echo <<<END
 <form name="MAP{$id}" action="{$GLOBALS['THIS_FILE']}" method="post">
-<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-<input type="hidden" name="mode" value="map">
-<input type="hidden" name="Sight" value="{$id}">
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="map">
+	<input type="hidden" name="Sight" value="{$id}">
 </form>
 END;
 			echo "<td {$init->bgInfoCell}>$pop</td>\n";

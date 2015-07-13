@@ -75,47 +75,6 @@ class Cgi {
 		$this->dataSet["MESSAGE"]     = (isset( $this->dataSet['MESSAGE'] ))     ? mb_substr($this->dataSet["MESSAGE"], 0, 60) : "";
 	}
 
-	function lastModified() {
-		global $init;
-
-		// Last Modifiedヘッダを出力
-		/*
-		if($this->mode == "Sight") {
-			$fileName = "{$init->dirName}/island.{$this->dataSet['ISLANDID']}";
-		} else {
-			$fileName = "{$init->dirName}/hakojima.dat";
-		}
-		*/
-		$fileName = "{$init->dirName}/hakojima.dat";
-		$time_stamp = filemtime($fileName);
-		$time = gmdate("D, d M Y G:i:s", $time_stamp);
-		//header ("Last-Modified: $time GMT");
-		//$this->modifiedSinces($time_stamp);
-	}
-
-	// function modifiedSinces($time) {
-	// 	$modsince = "";
-	// 	if(isset($_SERVER["HTTP_IF_MODIFIED_SINCE"])){
-	// 		$modsince = $_SERVER["HTTP_IF_MODIFIED_SINCE"];
-	// 	}
-	// 	if ( isset($modsince) ) {
-	// 		$ms = gmdate("D, d M Y G:i:s", $time) . " GMT";
-	// 		if($modsince == $ms) {
-	// 			// RFC 822
-	// 			header ("HTTP/1.1 304 Not Modified\n");
-	// 		}
-	// 		$ms = gmdate("l, d-M-y G:i:s", $time) . " GMT";
-	// 		if($modsince == $ms) {
-	// 			// RFC 850
-	// 			header ("HTTP/1.1 304 Not Modified\n");
-	// 		}
-	// 		$ms = gmdate("D M j G:i:s Y", $time);
-	// 		if($modsince == $ms) {
-	// 			// ANSI C's asctime() format
-	// 			header ("HTTP/1.1 304 Not Modified\n");
-	// 		}
-	// 	}
-	// }
 
 	//---------------------------------------------------
 	// COOKIEを取得

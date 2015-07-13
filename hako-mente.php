@@ -22,8 +22,7 @@ class HtmlMente extends HTML {
 	function enter() {
 		global $init;
 
-		print "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">トップへ戻る</span></a></CENTER>\n";
-		print "<h1 class=\"title\">{$init->title}<br>メンテナンスツール</h1>";
+		echo "<h1 class=\"title\">メンテナンスツール</h1>";
 		if(file_exists("{$init->passwordFile}")) {
 			echo <<<END
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
@@ -47,23 +46,22 @@ END;
 <INPUT type="submit" value="パスワードを設定する">
 END;
 		}
-		print "</form>\n";
+		echo "</form>\n";
 	}
 
 	function main($data) {
 		global $init;
 
-		print "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">トップへ戻る</span></a></CENTER>\n";
-		print "<h1 class=\"title\">{$init->title}<br>メンテナンスツール</h1>\n";
+		echo "<h1 class=\"title\">メンテナンスツール</h1>\n";
 		if(is_dir("{$init->dirName}")) {
 			$this->dataPrint($data);
 		} else {
-			print "<hr>\n";
-			print "<form action=\"{$GLOBALS['THIS_FILE']}\" method=\"post\">\n";
-			print "<input type=\"hidden\" name=\"PASSWORD\" value=\"{$data['PASSWORD']}\">\n";
-			print "<input type=\"hidden\" name=\"mode\" value=\"NEW\">\n";
-			print "<input type=\"submit\" value=\"新しいデータを作る\">\n";
-			print "</form>\n";
+			echo "<hr>\n";
+			echo "<form action=\"{$GLOBALS['THIS_FILE']}\" method=\"post\">\n";
+			echo "<input type=\"hidden\" name=\"PASSWORD\" value=\"{$data['PASSWORD']}\">\n";
+			echo "<input type=\"hidden\" name=\"mode\" value=\"NEW\">\n";
+			echo "<input type=\"submit\" value=\"新しいデータを作る\">\n";
+			echo "</form>\n";
 		}
 		// バックアップデータ
 		$dir = opendir("./");
@@ -81,13 +79,13 @@ END;
 	function dataPrint($data, $suf = "") {
 		global $init;
 
-		print "<HR>";
+		echo "<HR>";
 		if(strcmp($suf, "") == 0) {
 			$fp = fopen("{$init->dirName}/hakojima.dat", "r");
-			print "<h2>現役データ</h2>\n";
+			echo "<h2>現役データ</h2>\n";
 		} else {
 			$fp = fopen("{$init->dirName}.bak{$suf}/hakojima.dat", "r");
-			print "<h2>バックアップ{$suf}</h2>\n";
+			echo "<h2>バックアップ{$suf}</h2>\n";
 		}
 		$lastTurn = chop(fgets($fp, READ_LINE));
 		$lastTime = chop(fgets($fp, READ_LINE));
@@ -297,10 +295,10 @@ class Main {
 		global $init;
 
 		if(empty($this->dataSet['MPASS1']) || empty($this->dataSet['MPASS2']) || strcmp($this->dataSet['MPASS1'], $this->dataSet['MPASS2'])) {
-			print "<h2>マスタパスワードが入力されていないか間違っています</h2>\n";
+			echo "<h2>マスタパスワードが入力されていないか間違っています</h2>\n";
 			return 0;
 		} else if(empty($this->dataSet['SPASS1']) || empty($this->dataSet['SPASS2']) || strcmp($this->dataSet['SPASS1'], $this->dataSet['SPASS2'])) {
-			print "<h2>特殊パスワードが入力されていないか間違っています</h2>\n";
+			echo "<h2>特殊パスワードが入力されていないか間違っています</h2>\n";
 			return 0;
 		}
 		$masterPassword = crypt($this->dataSet['MPASS1'], 'ma');
@@ -321,7 +319,7 @@ class Main {
 		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
 			return 1;
 		} else {
-			print "<h2>パスワードが違います。</h2>\n";
+			echo "<h2>パスワードが違います。</h2>\n";
 			return 0;
 		}
 	}

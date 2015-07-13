@@ -27,7 +27,7 @@ table {
   border: none;
 }
 th, td {
-  border: solid #00BFFF 1px;
+  /*border: solid #00BFFF 1px;*/
   white-space: nowrap;
 }
 th {

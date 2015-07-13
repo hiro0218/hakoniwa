@@ -62,10 +62,10 @@ class LogIO {
 				}
 			}
 			if($row == 1) {
-				echo "<p>{$init->tagNumber_}【ターン{$turn}の出来事】{$init->_tagNumber}</p>\n";
+				echo "<h2>{$init->tagNumber_}【ターン{$turn}の出来事】{$init->_tagNumber}</h2>\n";
 				$row++;
 			}
-			echo "<ul>";
+			echo "<ul class='list-unstyled'>";
 			echo "<li>{$message}</li>\n";
 			echo "</ul>";
 		}
@@ -201,16 +201,19 @@ class LogIO {
 		if($init->infoFile == "") {
 			return;
 		}
+
 		$fileName = "{$init->infoFile}";
 		if(!is_file($fileName)) {
 			return;
 		}
+
 		$fp = fopen($fileName, "r");
 		while($line = fgets($fp, READ_LINE)) {
 			$line = chop($line);
 			echo "{$line}<br>\n";
 		}
 		fclose($fp);
+		
 	}
 }
 

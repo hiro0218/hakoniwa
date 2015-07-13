@@ -12,6 +12,7 @@
 
 //--------------------------------------------------------------------
 class HTML {
+
 	//---------------------------------------------------
 	// HTML ヘッダ出力
 	//---------------------------------------------------
@@ -35,10 +36,10 @@ class HTML {
 	<title>{$init->title}</title>
 	<script type="text/javascript" src="{$init->baseDir}/js/hako.js"></script>
 	<script type="text/javascript" src="{$init->baseDir}/js/auto-filter.js"></script>
-	<script type="text/javascript" src="{$init->baseDir}/js/cpick.js"></script>
 </head>
 <body>
-<div class="container">
+
+<div class="container-fluid">
 	<header>
 		<ul class="list-inline">
 			<li><a href="http://www.bekkoame.ne.jp/~tokuoka/hakoniwa.html">箱庭諸島スクリプト配布元</a> <a href="http://scrlab.g-7.ne.jp">[PHP]</a></li>
@@ -50,20 +51,21 @@ class HTML {
 		</ul>
 
 		<nav class="navbar navbar-default">
-		  <div class="container-fluid">
-		    <div class="navbar-header">
+			<div class="container-fluid">
+				<div class="navbar-header">
 					<a href="{$init->baseDir}/hako-main.php" class="navbar-brand">{$init->title}</a>
-		    </div>
-		      <ul class="nav navbar-nav">
-						<li><a href="{$init->baseDir}/hako-main.php?mode=conf">島の登録・設定変更</a></li>
-						<li><a href="{$init->baseDir}/hako-ally.php">同盟管理</a></li>
-			      <li><a href="{$init->baseDir}/hako-main.php?mode=log">最近の出来事</a></li>
-					</ul>
-		  </div>
+				</div>
+				<ul class="nav navbar-nav">
+					<li><a href="{$init->baseDir}/hako-main.php?mode=conf">島の登録・設定変更</a></li>
+					<li><a href="{$init->baseDir}/hako-ally.php">同盟管理</a></li>
+					<li><a href="{$init->baseDir}/hako-main.php?mode=log">最近の出来事</a></li>
+				</ul>
+			</div>
 		</nav>
 	</header>
 
 END;
+
 	}
 
 	//---------------------------------------------------
@@ -74,8 +76,23 @@ END;
 
 		echo <<<END
 <hr>
-<footer>
-	<p>Produced by {$init->adminName} (<a href="{$init->urlTopPage}">{$init->urlTopPage}</a>)
+<script>
+	// JavaScriptモード関連
+    if (document.addEventListener) {
+        if (typeof(init) == "function") {
+            document.addEventListener("DOMContentLoaded", init(), false);
+        }
+    } else {
+        if (typeof(init) == "function") {
+            window.onload = init;
+        }
+    }
+</script>
+
+<div class="row">
+	<div class="col-xs-12">
+		<footer>
+			<p>Produced by {$init->adminName} (<a href="{$init->urlTopPage}">{$init->urlTopPage}</a>)
 END;
 		if($init->performance) {
 			echo '<small class="pull-right">';
@@ -84,11 +101,11 @@ END;
 			printf("(CPU : %.6f秒)", $tmp4-$tmp2+$tmp3-$tmp1);
 			echo '</small>';
 		}
-
-
 		echo <<<END
 		</p>
 </footer>
+	</div>
+</div>
 
 </div><!-- container -->
 </body>
@@ -102,18 +119,16 @@ END;
 	function lastModified($hako) {
 		global $init;
 
-		$timeString = date("Y年m月d日　H時", $hako->islandLastTime);
+		$timeString = date("Y年m月d日 H時", $hako->islandLastTime);
 		echo <<<END
-
 <div class="lastModified">
 <p>最終更新時間: $timeString<br>
 (次のターンまで、あと
-	<script type="text/javascript">
-		remainTime($hako->islandLastTime + $init->unitTime);
-	</script>
+<script type="text/javascript">
+	remainTime($hako->islandLastTime + $init->unitTime);
+</script>
 </p>
 </div>
-
 END;
 	}
 }
@@ -125,15 +140,7 @@ class HtmlTop extends HTML {
 	function main($hako, $data) {
 		global $init;
 
-		// 最終更新時刻 ＋ 次ターン更新時刻出力
-		$this->lastModified($hako);
-		$allyfile = $init->baseDir . "/hako-ally.php";
-		if(empty($data['defaultDevelopeMode']) || $data['defaultDevelopeMode'] == "cgi") {
-			$radio = "checked"; $radio2 = "";
-		} else {
-			$radio = ""; $radio2 = "checked";
-		}
-		//print "<h1 class=\"title\">{$init->title}</h1>\n";
+		echo "<h1>{$init->title} トップ</h1>\n";
 
 		if(DEBUG === true) {
 			echo <<<END
@@ -144,18 +151,30 @@ class HtmlTop extends HTML {
 END;
 		}
 
+		echo "<div class='Turn'>ターン".$hako->islandTurn."</div>";
+
+		// 最終更新時刻 ＋ 次ターン更新時刻出力
+		$this->lastModified($hako);
+
+		$allyfile = $init->baseDir . "/hako-ally.php";
+		if(empty($data['defaultDevelopeMode']) || $data['defaultDevelopeMode'] == "cgi") {
+			$radio = "checked";
+			$radio2 = "";
+		} else {
+			$radio = "";
+			$radio2 = "checked";
+		}
+
 		$_defaultPassword = isset($data['defaultPassword']) ? $data['defaultPassword'] : "";
 		echo <<<END
-<div class='Turn'>ターン$hako->islandTurn</div>
-<hr>
 
+<hr>
 
 <div class="row">
 <div class="col-xs-6">
 <h2>自分の島へ</h2>
 
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-	<br>
 
 	<div class="form-group">
 		<label>あなたの島の名前は？</label>
@@ -165,7 +184,7 @@ END;
 	</div>
 	<div class="form-group">
 		<label>パスワード</label>
-		<input type="password" name="PASSWORD" class="form-control" value="{$_defaultPassword}" size="32" maxlength="32"><br>
+		<input type="password" name="PASSWORD" class="form-control" value="{$_defaultPassword}" size="32" maxlength="32" required>
 	</div>
 
 	<input type="hidden" name="mode" value="owner">
@@ -176,8 +195,8 @@ END;
 			<label for="cgi">通常モード</label>
 		</label>
 		<label class="radio-inline">
-		  <input type="radio" name="DEVELOPEMODE" value="java" id="java" $radio2>
-			<label for="java">JavaScriptモード</label>
+		  <input type="radio" name="DEVELOPEMODE" value="javascript" id="javascript" $radio2>
+			<label for="javascript">JavaScript高機能モード</label>
 		</label>
 	</div>
 
@@ -200,10 +219,10 @@ echo <<<END
 <hr>
 <h2>各部門ランキング</h2>
 <div class="table-responsive">
-<table class="table">
+<table class="table table-condensed">
 END;
 		$element   = array('point', 'money', 'food', 'pop', 'area', 'fire', 'pots', 'gold', 'rice', 'peop', 'monster', 'taiji', 'farm', 'factory', 'commerce', 'hatuden', 'mountain', 'team');
-		$bumonName = array("総合ポイント", $init->nameFunds, $init->nameFood, $init->namePopulation, "面積", "軍事力", "成長", "収入", "収穫", "人口増加", "怪獣出現数", "怪獣退治数", "農場", "工場", "商業", "発電所", "採掘場", "サッカー");
+		$bumonName = array("総合ポイント", $init->nameFunds, $init->nameFood, $init->namePopulation, $init->nameArea, "軍事力", "成長", "収入", "収穫", "人口増加", "怪獣出現数", "怪獣退治数", "農場", "工場", "商業", "発電所", "採掘場", "サッカー");
 		$bumonUnit = array('pts', $init->unitMoney, $init->unitFood, $init->unitPop, $init->unitArea, "機密事項", "pts↑", $init->unitMoney, $init->unitFood, $init->unitPop, $init->unitMonster, $init->unitMonster, "0{$init->unitPop}", "0{$init->unitPop}", "0{$init->unitPop}", "000kw", "0{$init->unitPop}", 'pts');
 
 		for($r = 0; $r < sizeof($element); $r++) {
@@ -217,44 +236,47 @@ END;
 			}
 			if($max == 0) {
 				if(($r % 6) == 0) {
-					print "<tr>\n";
+					echo "<tr>\n";
 				}
-				print "<td width=\"15%\" class=\"M\">";
-				print "<table class=\"table table-bordered\">\n";
-				print "<thead><tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr></thead>\n";
-				print "<tr><td class=\"TenkiCell\">{$init->tagName_}-{$init->_tagName}</a></td></tr>\n";
-				print "<tr><td class=\"TenkiCell\">-</td></tr>\n";
-				print "</table></td>\n";
+				echo "<td width=\"15%\" class=\"M\">";
+				echo "<table class=\"table table-bordered\" style=\"border:0\">\n";
+				echo "<thead><tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr></thead>\n";
+				echo "<tr><td class=\"TenkiCell\">{$init->tagName_}-{$init->_tagName}</a></td></tr>\n";
+				echo "<tr><td class=\"TenkiCell\">-</td></tr>\n";
+				echo "</table></td>\n";
+
 				if(($r % 6) == 5) {
-					print "</tr>\n";
+					echo "</tr>\n";
 				}
+
 			} else {
 				if($r == 5) {
 					$max = "";
 				}
 				if(($r % 6) == 0) {
-					print "<tr>\n";
+					echo "<tr>\n";
 				}
 				$island = $hako->islands[$rankid[$r]];
 				$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
-				print "<td width=\"15%\" class=\"M\">";
-				print "<table class=\"table table-bordered\">\n";
-				print "<thead><tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr></thead>\n";
-				print "<tr><td class=\"TenkiCell\"><a href=\"{$GLOBALS['THIS_FILE']}?Sight={$island['id']}\">{$init->tagName_}{$name}{$init->_tagName}</a></td></tr>\n";
-				print "<tr><td class=\"TenkiCell\">{$max}{$bumonUnit[$r]}</td></tr>\n";
-				print "</table></td>\n";
+				echo "<td width=\"15%\" class=\"M\">";
+				echo "<table class=\"table table-bordered\">\n";
+				echo "<thead><tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr></thead>\n";
+				echo "<tr><td class=\"TenkiCell\"><a href=\"{$GLOBALS['THIS_FILE']}?Sight={$island['id']}\">{$init->tagName_}{$name}{$init->_tagName}</a></td></tr>\n";
+				echo "<tr><td class=\"TenkiCell\">{$max}{$bumonUnit[$r]}</td></tr>\n";
+				echo "</table></td>\n";
 				if(($r % 6) == 5) {
-					print "</tr>\n";
+					echo "</tr>\n";
 				}
 			}
 		}
-		print "</table>\n";
-		print "</div>\n";
-		print "<BR>\n";
+		echo "</table>\n";
+		echo "</div>\n";
+		echo "<BR>\n";
 
 		if($hako->allyNumber) {
 			echo <<<END
 <hr>
+
 <div id="IslandView">
 <h2>同盟の状況</h2>
 <table class="table table-bordered">
@@ -265,17 +287,17 @@ END;
 	<th {$init->bgTitleCell}>{$init->tagTH_}島の数{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}総人口{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}占有率{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}農場規模{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}工場規模{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}採掘場規模{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
 </tr>
 END;
 			for($i=0; $i<$hako->allyNumber; $i++) {
-				if($num && ($i != $hako->idToAllyNumber[$num])) {
-					continue;
-				}
+//				if($num && ($i != $hako->idToAllyNumber[$num])) {
+//					continue;
+//				}
 				$ally = $hako->ally[$i];
 				$j = $i + 1;
 
@@ -290,7 +312,7 @@ END;
 					$mountain += $island['mountain'];
 					$hatuden += $island['hatuden'];
 				}
-				$name = ($num) ? "{$init->tagName_}{$ally['name']}{$init->_tagName}" : "<a href=\"{$allyfile}?AmiOfAlly={$ally['id']}\">{$ally['name']}</a>";
+				$name = /*($num) ? "{$init->tagName_}{$ally['name']}{$init->_tagName}" : */"<a href=\"{$allyfile}?AmiOfAlly={$ally['id']}\">{$ally['name']}</a>";
 				$pop = $pop . $init->unitPop;
 				$farm = ($farm <= 0) ? "保有せず" : $farm * 10 . $init->unitPop;
 				$factory = ($factory <= 0) ? "保有せず" : $factory * 10 . $init->unitPop;
@@ -300,29 +322,29 @@ END;
 
 				echo <<<END
 <tr>
-<th {$init->bgNumberCell} rowspan=2>{$init->tagNumber_}$j{$init->_tagNumber}</th>
-<td {$init->bgNameCell} rowspan=2>{$name}</td>
-<td class="TenkiCell"><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
-<td {$init->bgInfoCell}>{$ally['number']}島</td>
-<td {$init->bgInfoCell}>{$pop}</td>
-<td {$init->bgInfoCell}>{$ally['occupation']}%</td>
-<td {$init->bgInfoCell}>{$farm}</td>
-<td {$init->bgInfoCell}>{$factory}</td>
-<td {$init->bgInfoCell}>{$commerce}</td>
-<td {$init->bgInfoCell}>{$mountain}</td>
-<td {$init->bgInfoCell}>{$hatuden}</td>
+	<th {$init->bgNumberCell} rowspan="2">{$init->tagNumber_}$j{$init->_tagNumber}</th>
+	<td {$init->bgNameCell} rowspan="2">{$name}</td>
+	<td class="TenkiCell"><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
+	<td {$init->bgInfoCell}>{$ally['number']}島</td>
+	<td {$init->bgInfoCell}>{$pop}</td>
+	<td {$init->bgInfoCell}>{$ally['occupation']}%</td>
+	<td {$init->bgInfoCell}>{$farm}</td>
+	<td {$init->bgInfoCell}>{$factory}</td>
+	<td {$init->bgInfoCell}>{$commerce}</td>
+	<td {$init->bgInfoCell}>{$mountain}</td>
+	<td {$init->bgInfoCell}>{$hatuden}</td>
 </tr>
 <tr>
-<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$allyfile}?Allypact={$ally['id']}">{$ally['oName']}</a>：{$init->_tagTH}{$ally['comment']}</td>
+	<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$allyfile}?Allypact={$ally['id']}">{$ally['oName']}</a>：{$init->_tagTH}{$ally['comment']}</td>
 </tr>
 END;
 			}
-			print "</table>\n";
+			echo "</table>\n";
 		}
-		print "<BR>\n";
-		print "<hr>\n";
-		print "<div ID=\"IslandView\">\n";
-		print "<h2>諸島の状況</h2>\n";
+		echo "<hr>\n";
+		echo "<div ID=\"IslandView\">\n";
+
+		echo "<h2>諸島の状況</h2>";
 
 		if ($hako->islandNumber != 0) {
 			$islandListStart = $data['islandListStart'];
@@ -335,9 +357,9 @@ END;
 				}
 			}
 		}
-		print "<p>\n";
-		print "島の名前をクリックすると、<strong>観光</strong>することができます。\n";
-		print "</p>\n";
+		echo "<p>\n";
+		echo "島の名前をクリックすると、<strong>観光</strong>することができます。\n";
+		echo "</p>\n";
 
 		if (($islandListStart != 1) || ($islandListSentinel != $hako->islandNumberNoBF)) {
 			for ($i = 1; $i <= $hako->islandNumberNoBF ; $i += $init->islandListRange) {
@@ -345,37 +367,38 @@ END;
 				if ($j > $hako->islandNumberNoBF) {
 					$j = $hako->islandNumberNoBF;
 				}
-				print " ";
+				echo " ";
 				if ( $i != $islandListStart ) {
-					print "<a href=\"" . $GLOBALS['THIS_FILE'] . "?islandListStart=" . $i ."\">";
+					echo "<a href=\"" . $GLOBALS['THIS_FILE'] . "?islandListStart=" . $i ."\">";
 				}
-				print " [ ". $i . " - " . $j . " ]";
+				echo " [ ". $i . " - " . $j . " ]";
 
 				if ($i != $islandListStart) {
-					print "</a>";
+					echo "</a>";
 				}
 			}
 		}
 		$islandListStart--;
 		$this->islandTable($hako, $islandListStart, $islandListSentinel);
 
-		print "<hr>\n\n";
-		print "<div ID=\"IslandView\">\n";
-		print "<h2>Battle Fieldの状況</h2>\n";
+		echo "<hr>\n\n";
+
+		echo "<div ID=\"IslandView\">\n";
+		echo "<h2>Battle Fieldの状況</h2>\n";
 
 		$this->islandTable($hako, $hako->islandNumberNoBF, $hako->islandNumber);
 
-		print "<hr>\n";
+		echo "<hr>\n";
 
 		$this->historyPrint();
 
 		if($init->registMode) {
 			echo <<<END
 <FORM action="{$GLOBALS['THIS_FILE']}?mode=conf" method="POST">
-<DIV align="right">
-<INPUT TYPE="password" NAME="PASSWORD" SIZE=8 MAXLENGTH=32>
-<INPUT TYPE="submit" VALUE="管理用" NAME="AdminButton">
-</DIV>
+	<div class="text-right">
+		<INPUT TYPE="password" NAME="PASSWORD" SIZE=8 MAXLENGTH=32 required>
+		<INPUT TYPE="submit" VALUE="管理用" NAME="AdminButton">
+	</div>
 </FORM>
 END;
 		}
@@ -387,7 +410,8 @@ END;
 	function islandTable(&$hako, $start, $sentinel) {
 		global $init;
 
-		echo '<table class="table table-bordered">';
+		echo '<div class="table-responsive">';
+		echo '<table class="table table-bordered table-condensed">';
 
 		for($i = $start; $i < $sentinel ; $i++) {
 			$island       = $hako->islands[$i];
@@ -403,7 +427,7 @@ END;
 			$lot          = $island['lot'];
 			$food         = $island['food'] . $init->unitFood;
 			$unemployed   = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
-			$unemployed   = '<font color="' . ($unemployed < 0 ? 'black' : 'red') . '">' . sprintf("%-3d%%", $unemployed) . '</font>';
+			$unemployed   = '<font color="' . ($unemployed < 0 ? 'black' : '#C7243A') . '">' . sprintf("%-3d%%", $unemployed) . '</font>';
 			$farm         = ($island['farm'] <= 0) ? "保有せず" : $island['farm'] * 10 . $init->unitPop;
 			$factory      = ($island['factory'] <= 0) ? "保有せず" : $island['factory'] * 10 . $init->unitPop;
 			$commerce     = ($island['commerce'] <= 0) ? "保有せず" : $island['commerce'] * 10 . $init->unitPop;
@@ -461,17 +485,24 @@ END;
 			}
 
 			$sora = "";
-			if($tenki == 1) {
-				$sora .= "<IMG SRC=\"tenki1.gif\" ALT=\"晴れ\" title=\"晴れ\">";
-			} elseif($tenki == 2) {
-				$sora .= "<IMG SRC=\"tenki2.gif\" ALT=\"曇り\" title=\"曇り\">";
-			} elseif($tenki == 3) {
-				$sora .= "<IMG SRC=\"tenki3.gif\" ALT=\"雨\" title=\"雨\">";
-			} elseif($tenki == 4) {
-				$sora .= "<IMG SRC=\"tenki4.gif\" ALT=\"雷\" title=\"雷\">";
-			} else {
-				$sora .= "<IMG SRC=\"tenki5.gif\" ALT=\"雪\" title=\"雪\">";
+			switch ($tenki) {
+				case 1:
+					$sora = "<IMG SRC=\"tenki1.gif\" ALT=\"晴れ\" title=\"晴れ\">";
+					break;
+				case 2:
+					$sora = "<IMG SRC=\"tenki2.gif\" ALT=\"曇り\" title=\"曇り\">";
+					break;
+				case 3:
+					$sora = "<IMG SRC=\"tenki3.gif\" ALT=\"雨\" title=\"雨\">";
+					break;
+				case 4:
+					$sora = "<IMG SRC=\"tenki4.gif\" ALT=\"雷\" title=\"雷\">";
+					break;
+				default :
+					$sora = "<IMG SRC=\"tenki5.gif\" ALT=\"雪\" title=\"雪\">";
 			}
+
+
 
 			$eiseis = "";
 			for($e = 0; $e < $init->EiseiNumber; $e++) {
@@ -500,9 +531,9 @@ END;
 				if (isset($item[$t])) {
 					if($item[$t] > 0) {
 						if($t == 20) {
-							$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"  title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
+							$items .= "<img src=\"item{$t}.gif\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"  title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
 						} else {
-							$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
+							$items .= "<img src=\"item{$t}.gif\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
 						}
 					} else {
 						$items .= "";
@@ -512,7 +543,7 @@ END;
 
 			$lots = "";
 			if($lot > 0) {
-				$lots .= " <IMG SRC=\"lot.png\" ALT=\"{$lot}枚\" title=\"{$lot}枚\">";
+				$lots .= " <IMG SRC=\"lot.gif\" ALT=\"{$lot}枚\" title=\"{$lot}枚\">";
 			}
 
 			$viking = "";
@@ -537,70 +568,83 @@ END;
 			if($enesyouhi == 0) {
 				$ene = "電力消費なし";
 			} elseif($island['hatuden'] == 0) {
-				$ene =  "<font color=\"#ff0000\">0%</font>";
+				$ene =  "<font color=\"#C7243A\">0%</font>";
 			} else {
 				// 電力供給率
 				$ene = round($island['hatuden'] / $enesyouhi * 100);
 				if($ene < 100) {
 					// 供給電力不足
-					$ene = "<font color=\"#ff0000\">{$ene}%</font>";
+					$ene = "<font color=\"#C7243A\">{$ene}%</font>";
 				} else {
 					// 供給電力充分
 					$ene = "{$ene}%";
 				}
 			}
 			echo <<<END
-<tr>
-	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}得点{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}面積{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}天気{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}失業率{$init->_tagTH}</th>
-</tr>
+<thead>
+	<tr>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}得点{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}天気{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}失業率{$init->_tagTH}</th>
+	</tr>
+</thead>
 END;
 			$keep = isset($keep) ? $keep : "";
-			print "<tr>\n";
-			print "<th {$init->bgNumberCell} rowspan=\"5\">{$init->tagNumber_}$j{$init->_tagNumber}</th>\n";
-			print "<td {$init->bgNameCell} rowspan=\"5\">{$keep}<br>\n<a href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$name}</a>{$start}{$monster}{$soccer}<br>\n{$prize}{$viking}<br>\n{$zins}<br>\n<font size=\"-1\">({$peop} {$okane} {$gohan} {$poin})</font></td>\n";
-			print "<td {$init->bgInfoCell}>$point</td>\n";
-			print "<td {$init->bgInfoCell}>$pop</td>\n";
-			print "<td {$init->bgInfoCell}>$area</td>\n";
-			print "<td class=\"TenkiCell\">$sora</td>\n";
-			print "<td {$init->bgInfoCell}>$money</td>\n";
-			print "<td {$init->bgInfoCell}>$food</td>\n";
-			print "<td {$init->bgInfoCell}>$unemployed</td>\n";
-			print "</tr>\n";
-			print "<tr>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}農場規模{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}工場規模{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}採掘場規模{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}電力供給率{$init->_tagTH}</th>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}人工衛星{$init->_tagTH}</th>\n";
-			print "</tr>\n";
-			print "<tr>\n";
-			print "<td {$init->bgInfoCell}>$farm</td>\n";
-			print "<td {$init->bgInfoCell}>$factory</td>\n";
-			print "<td {$init->bgInfoCell}>$commerce</td>\n";
-			print "<td {$init->bgInfoCell}>$mountain</td>\n";
-			print "<td {$init->bgInfoCell}>{$hatuden}</td>\n";
-			print "<td {$init->bgInfoCell}>$ene</td>\n";
-			print "<td class=\"ItemCell\">$eiseis</td>\n";
-			print "</tr>\n";
-			print "<tr>\n";
-			print "<th {$init->bgTitleCell}>{$init->tagTH_}取得アイテム{$init->_tagTH}</th>\n";
-			print "<td class=\"ItemCell\" colspan=\"6\">　$items</td>\n";
-			print "</tr>\n";
-			print "<tr>\n";
-			print "<td {$init->bgCommentCell} colspan=\"7\">{$init->tagTH_}{$owner}：{$init->_tagTH}$comment</td>\n";
-			print "</tr>\n";
+
+			echo <<<END
+	<tr>
+		<th {$init->bgNumberCell} rowspan="5">{$init->tagNumber_}$j{$init->_tagNumber}</th>
+		<td {$init->bgNameCell} rowspan="5" valign="top">
+			<h3><a href="{$GLOBALS['THIS_FILE']}?Sight={$id}">{$name}</a> <small>{$start}{$monster}{$soccer}</small></h3>
+			{$prize}{$viking}<br>
+			{$zins}<br>
+			<small>({$peop} {$okane} {$gohan} {$poin})</small>
+		</td>
+		<td {$init->bgInfoCell}>$point</td>
+		<td {$init->bgInfoCell}>$pop</td>
+		<td {$init->bgInfoCell}>$area</td>
+		<td class="TenkiCell">$sora</td>
+		<td {$init->bgInfoCell}>$money</td>
+		<td {$init->bgInfoCell}>$food</td>
+		<td {$init->bgInfoCell}>$unemployed</td>
+	</tr>
+	<tr>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}電力供給率{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}人工衛星{$init->_tagTH}</th>
+	</tr>
+	<tr>
+		<td {$init->bgInfoCell}>$farm</td>
+		<td {$init->bgInfoCell}>$factory</td>
+		<td {$init->bgInfoCell}>$commerce</td>
+		<td {$init->bgInfoCell}>$mountain</td>
+		<td {$init->bgInfoCell}>{$hatuden}</td>
+		<td {$init->bgInfoCell}>$ene</td>
+		<td class="ItemCell">$eiseis</td>
+	</tr>
+	<tr>
+		<th {$init->bgTitleCell}>{$init->tagTH_}取得アイテム{$init->_tagTH}</th>
+		<td class="ItemCell" colspan="6">　$items</td>
+	</tr>
+	<tr>
+		<td {$init->bgCommentCell} colspan="7">{$init->tagTH_}{$owner}：{$init->_tagTH}$comment</td>
+	</tr>
+END;
+
 		}
-		print "</table>\n</div>\n";
+		echo "</table>";
+		echo "</div>";
+		echo "</div>";
 	}
 
 	//---------------------------------------------------
@@ -609,11 +653,20 @@ END;
 	function register(&$hako, $data = "") {
 		global $init;
 
-		print "<center>{$GLOBALS['BACK_TO_TOP']}</center>";
-
+		echo <<<END
+<div class="row">
+	<div class="col-lg-4 col-md-6 col-sm-8 col-xs-12">
+		<h1>島の登録・設定変更</h1>
+END;
 		$this->newDiscovery($hako->islandNumber);
 		$this->changeIslandInfo($hako->islandList);
 		$this->changeOwnerName($hako->islandList);
+
+		echo <<<END
+	</div>
+</div>
+
+END;
 
 	}
 
@@ -623,33 +676,47 @@ END;
 	function newDiscovery($number) {
 		global $init;
 
-		print "<div id=\"NewIsland\">\n";
-		print "<h2>新しい島を探す</h2>\n";
+		echo "<div id=\"NewIsland\">\n";
+		echo "<h2>新しい島を探す</h2>\n";
+
 		if($number < $init->maxIsland) {
 			if($init->registMode == 1 && $init->adminMode == 0) {
-				print "当箱庭では不適当な島名などの事前チェックを行っています。<BR>\n";
-				print "参加希望の方は、管理者に「島名」と「パスワード」を送信してください。<BR>\n";
+				echo "当箱庭では不適当な島名などの事前チェックを行っています。<BR>\n";
+				echo "参加希望の方は、管理者に「島名」と「パスワード」を送信してください。<BR>\n";
 			} else {
 				echo <<<END
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-どんな名前をつける予定？<br>
-<input type="text" name="ISLANDNAME" size="32" maxlength="32">島<br>
-あなたのお名前は？(省略可)<br>
-<input type="text" name="OWNERNAME" size="32" maxlength="32"><br>
-パスワードは？<br>
-<input type="password" name="PASSWORD" size="32" maxlength="32"><br>
-念のためパスワードをもう一回<br>
-<input type="password" name="PASSWORD2" size="32" maxlength="32"><br>
-<input type="hidden" name="mode" value="new">
-<input type="submit" value="探しに行く">
+	<div class="form-group">
+		<label>どんな名前をつける予定？</label>
+		<div class="input-group">
+			<input type="text" class="form-control" name="ISLANDNAME" size="32" maxlength="32" required>
+			<span class="input-group-addon">島</span>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label>あなたのお名前は？(省略可)</label>
+		<input type="text" class="form-control" name="OWNERNAME" size="32" maxlength="32">
+	</div>
+	<div class="form-group">
+		<label>パスワードは？</label>
+		<input type="password" class="form-control" name="PASSWORD" size="32" maxlength="32" required>
+	</div>
+	<div class="form-group">
+		<label>念のためパスワードをもう一回</label>
+		<input type="password" class="form-control" name="PASSWORD2" size="32" maxlength="32" required>
+	</div>
+	<div class="form-group">
+		<input type="submit" class="btn btn-primary" value="探しに行く">
+	</div>
+	<input type="hidden" name="mode" value="new">
 </form>
 END;
 			}
 		} else {
-			print "島の数が最大数です。現在登録できません。\n";
+			echo "島の数が最大数です。現在登録できません。\n";
 		}
-		print "</div>\n";
-		print "<hr>\n";
+		echo "</div>\n";
 	}
 
 	//---------------------------------------------------
@@ -660,29 +727,42 @@ END;
 
 		echo <<<END
 <div id="ChangeInfo">
-<h2>島の名前とパスワードの変更</h2>
-<p>
-(注意)名前の変更には500億円かかります。
-</p>
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-どの島ですか？<br>
-<select NAME="ISLANDID">
-$islandList
-</select>
-<br>
-どんな名前に変えますか？(変更する場合のみ)<br>
-<input type="text" name="ISLANDNAME" size="32" maxlength="32">島<br>
-パスワードは？(必須)<br>
-<input type="password" name="OLDPASS" size="32" maxlength="32"><br>
-新しいパスワードは？(変更する時のみ)<br>
-<input type="password" name="PASSWORD" size="32" maxlength="32"><br>
-念のためパスワードをもう一回(変更する時のみ)<br>
-<input type="password" name="PASSWORD2" size="32" maxlength="32"><br>
-<input type="hidden" name="mode" value="change">
-<input type="submit" value="変更する">
-</form>
+	<h2>島の名前とパスワードの変更</h2>
+
+	<p class="alert alert-info" role="alert">(注意) 名前の変更には{$init->costChangeName}{$init->unitMoney}かかります。</p>
+
+	<form action="{$GLOBALS['THIS_FILE']}" method="post">
+		<div class="form-group">
+			<label>どの島ですか？</label>
+			<select NAME="ISLANDID" class="form-control">$islandList</select>
+		</div>
+
+		<div class="form-group">
+			<label>どんな名前に変えますか？(変更する場合のみ)</label>
+			<div class="input-group">
+				<input type="text" class="form-control" name="ISLANDNAME" size="32" maxlength="32">
+				<span class="input-group-addon">島</span>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label>パスワードは？(必須)</label>
+			<input type="password" class="form-control" name="OLDPASS" size="32" maxlength="32">
+		</div>
+		<div class="form-group">
+			<label>新しいパスワードは？(変更する時のみ)</label>
+			<input type="password" class="form-control" name="PASSWORD" size="32" maxlength="32">
+		</div>
+		<div class="form-group">
+			<label>念のためパスワードをもう一回(変更する時のみ)</label>
+			<input type="password" class="form-control" name="PASSWORD2" size="32" maxlength="32">
+		</div>
+		<div class="form-group">
+			<input type="submit" class="btn btn-primary" value="変更する">
+		</div>
+		<input type="hidden" name="mode" value="change">
+	</form>
 </div>
-<hr>
 END;
 	}
 
@@ -694,20 +774,25 @@ END;
 
 		echo <<<END
 <div id="ChangeOwnerName">
-<h2>オーナー名の変更</h2>
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-どの島ですか？<br>
-<select name="ISLANDID">
-{$islandList}
-</select>
-<br>
-新しいオーナー名は？<br>
-<input type="text" name="OWNERNAME" size="32" maxlength="32"><br>
-パスワードは？<br>
-<input type="password" name="OLDPASS" size="32" maxlength="32"><br>
-<input type="hidden" name="mode" value="ChangeOwnerName">
-<input type="submit" value="変更する">
-</form>
+	<h2>オーナー名の変更</h2>
+	<form action="{$GLOBALS['THIS_FILE']}" method="post">
+		<div class="form-group">
+			<label>どの島ですか？</label>
+			<select name="ISLANDID" class="form-control">{$islandList}</select>
+		</div>
+		<div class="form-group">
+			<label>新しいオーナー名は？</label>
+			<input type="text" name="OWNERNAME" class="form-control" size="32" maxlength="32">
+		</div>
+		<div class="form-group">
+			<label>パスワードは？</label>
+			<input type="password" name="OLDPASS" class="form-control" size="32" maxlength="32">
+		</div>
+		<div class="form-group">
+			<input type="submit" class="btn btn-primary" value="変更する">
+		</div>
+		<input type="hidden" name="mode" value="ChangeOwnerName">
+	</form>
 </div>
 END;
 	}
@@ -719,23 +804,31 @@ END;
 	function log() {
 		global $init;
 
-		print "<center>{$GLOBALS['BACK_TO_TOP']}</center>";
-		print "<div id=\"RecentlyLog\">\n";
-		print "<h2>最近の出来事</h2>\n";
+		echo <<<END
+<div class="row">
+	<div class="col-xs-12">
+END;
+		echo "<div id=\"RecentlyLog\">\n";
+		echo "<h1>最近の出来事</h1>\n";
 		for($i = 0; $i < $init->logTopTurn; $i++) {
 			LogIO::logFilePrint($i, 0, 0);
 		}
-		print "</div>\n";
+		echo "</div>\n";
+
+		echo <<<END
+	</div>
+</div>
+END;
 	}
 
 	//---------------------------------------------------
 	// 発見の記録
 	//---------------------------------------------------
 	function historyPrint() {
-		print "<div id=\"HistoryLog\">\n";
-		print "<h2>歴史</h2>";
+		echo "<div id=\"HistoryLog\">\n";
+		echo "<h2>歴史</h2>";
 		LogIO::historyPrint();
-		print "</div>\n";
+		echo "</div>\n";
 	}
 
 	//---------------------------------------------------
@@ -744,11 +837,11 @@ END;
 	function infoPrint() {
 		global $init;
 
-		print "<div id=\"HistoryLog\">\n";
-		print "<h2>お知らせ</h2>\n";
-		print "<DIV style=\"overflow:auto; height:{$init->divHeight}px;\">\n";
+		echo "<div id=\"HistoryLog\">\n";
+		echo "<h2>お知らせ</h2>\n";
+		echo "<DIV style=\"overflow:auto; height:{$init->divHeight}px;\">\n";
 		LogIO::infoPrint();
-		print "</div></div>\n";
+		echo "</div></div>\n";
 	}
 
 }
@@ -813,9 +906,8 @@ class HtmlMap extends HTML {
 		$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
 
 		echo <<<END
-<div align="center">
-{$init->tagBig_}{$init->tagName_}「{$name}」{$init->_tagName}へようこそ！！{$init->_tagBig}<br>
-{$GLOBALS['BACK_TO_TOP']}<br>
+<div class="text-center">
+	<h2>{$init->tagName_}「{$name}」{$init->_tagName}へようこそ！！</h2>
 </div>
 END;
 
@@ -824,9 +916,12 @@ END;
 
 		// 他の島へ
 		echo <<<END
-<div align="center"><form action="{$GLOBALS['THIS_FILE']}" method="get">
-<select name="Sight">$hako->islandList</select><input type="submit" value="観光">
-</form></div>
+<div class="text-center">
+	<form action="{$GLOBALS['THIS_FILE']}" method="get">
+	<select name="Sight">$hako->islandList</select>
+	<input type="submit" value="観光">
+</form>
+</div>
 END;
 
 		$this->islandRecent($island, 0);
@@ -848,7 +943,7 @@ END;
 		$lot        = isset($island['lot'])  ? $island['lot']  : "";
 		$food       = $island['food'] . $init->unitFood;
 		$unemployed = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
-		$unemployed = '<font color="' . ($unemployed < 0 ? 'black' : 'red') . '">' . sprintf("%-3d%%", $unemployed) . '</font>';
+		$unemployed = '<font color="' . ($unemployed < 0 ? 'black' : '#C7243A') . '">' . sprintf("%-3d%%", $unemployed) . '</font>';
 		$farm       = ($island['farm'] <= 0) ? "保有せず" : $island['farm'] * 10 . $init->unitPop;
 		$factory    = ($island['factory'] <= 0) ? "保有せず" : $island['factory'] * 10 . $init->unitPop;
 		$commerce   = ($island['commerce'] <= 0) ? "保有せず" : $island['commerce'] * 10 . $init->unitPop;
@@ -913,9 +1008,9 @@ END;
 			if ( isset($item[$t]) ) {
 				if($item[$t] > 0) {
 					if($t == 20) {
-						$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\" title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
+						$items .= "<img src=\"item{$t}.gif\" alt=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\" title=\"{$init->ItemName[$t]} {$item[$t]}{$init->unitTree}\"> ";
 					} else {
-						$items .= "<img src=\"item{$t}.png\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
+						$items .= "<img src=\"item{$t}.gif\" alt=\"{$init->ItemName[$t]}\" title=\"{$init->ItemName[$t]}\"> ";
 					}
 				} else {
 					$items .= "";
@@ -924,7 +1019,7 @@ END;
 		}
 		$lots = "";
 		if($lot > 0) {
-			$lots .= " <IMG SRC=\"lot.png\" ALT=\"{$lot}枚\" title=\"{$lot}枚\">";
+			$lots .= " <IMG SRC=\"lot.gif\" ALT=\"{$lot}枚\" title=\"{$lot}枚\">";
 		}
 
 		if($mode == 1) {
@@ -938,69 +1033,71 @@ END;
 		if($enesyouhi == 0) {
 			$ene = "電力消費なし";
 		} elseif($island['hatuden'] == 0) {
-			$ene =  "<font color=\"#ff0000\">0%</font>";
+			$ene =  "<font color=\"#C7243A\">0%</font>";
 		} else {
 			// 電力供給率
 			$ene = round($island['hatuden'] / $enesyouhi * 100);
 			if($ene < 100) {
 				// 供給電力不足
-				$ene = "<font color=\"#ff0000\">{$ene}%</font>";
+				$ene = "<font color=\"#C7243A\">{$ene}%</font>";
 			} else {
 				// 供給電力充分
 				$ene = "{$ene}%";
 			}
 		}
 		echo <<<END
-<div id="islandInfo">
-<table class="table table-bordered">
-<tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}面積{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}失業率{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}農場規模{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}工場規模{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}採掘場規模{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}電力供給率{$init->_tagTH}</th>
-</tr>
-<tr>
-<th {$init->bgNumberCell} rowspan="4">{$init->tagNumber_}$rank{$init->_tagNumber}</th>
-<td {$init->bgInfoCell}>$pop</td>
-<td {$init->bgInfoCell}>$area</td>
-<td {$init->bgInfoCell}>$money</td>
-<td {$init->bgInfoCell}>$food</td>
-<td {$init->bgInfoCell}>$unemployed</td>
-<td {$init->bgInfoCell}>$farm</td>
-<td {$init->bgInfoCell}>$factory</td>
-<td {$init->bgInfoCell}>$commerce</td>
-<td {$init->bgInfoCell}>$mountain</td>
-<td {$init->bgInfoCell}>$hatuden</td>
-<td {$init->bgInfoCell}>$ene</td>
-</tr>
-<tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}天気{$init->_tagTH}</th>
-<td class="TenkiCell">$sora</td>
-<th {$init->bgTitleCell}>{$init->tagTH_}軍事技術{$init->_tagTH}</th>
-<td {$init->bgInfoCell}>{$arm}</td>
-<th {$init->bgTitleCell}>{$init->tagTH_}怪獣退治数{$init->_tagTH}</th>
-<td {$init->bgInfoCell}>$taiji</td>
-<th {$init->bgTitleCell}>{$init->tagTH_}人工衛星{$init->_tagTH}</th>
-<td class="ItemCell" colspan="4">　$eiseis</td>
-</tr>
-<tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}ジン{$init->_tagTH}</th>
-<td class="ItemCell" colspan="5">　$zins</td>
-<th {$init->bgTitleCell}>{$init->tagTH_}アイテム{$init->_tagTH}</th>
-<td class="ItemCell" colspan="4">　$items</td>
-</tr>
-<tr>
-<td colspan="11" {$init->bgCommentCell}>$comment</td>
-</tr>
-</table>
+<div id="islandInfo" class="table-responsive">
+	<table class="table table-bordered table-condensed">
+		<thead>
+			<tr>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}失業率{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}電力供給率{$init->_tagTH}</th>
+			</tr>
+		</thead>
+		<tr>
+			<th {$init->bgNumberCell} rowspan="4">{$init->tagNumber_}$rank{$init->_tagNumber}</th>
+			<td {$init->bgInfoCell}>$pop</td>
+			<td {$init->bgInfoCell}>$area</td>
+			<td {$init->bgInfoCell}>$money</td>
+			<td {$init->bgInfoCell}>$food</td>
+			<td {$init->bgInfoCell}>$unemployed</td>
+			<td {$init->bgInfoCell}>$farm</td>
+			<td {$init->bgInfoCell}>$factory</td>
+			<td {$init->bgInfoCell}>$commerce</td>
+			<td {$init->bgInfoCell}>$mountain</td>
+			<td {$init->bgInfoCell}>$hatuden</td>
+			<td {$init->bgInfoCell}>$ene</td>
+		</tr>
+		<tr>
+			<th {$init->bgTitleCell}>{$init->tagTH_}天気{$init->_tagTH}</th>
+			<td class="TenkiCell">$sora</td>
+			<th {$init->bgTitleCell}>{$init->tagTH_}軍事技術{$init->_tagTH}</th>
+			<td {$init->bgInfoCell}>{$arm}</td>
+			<th {$init->bgTitleCell}>{$init->tagTH_}怪獣退治数{$init->_tagTH}</th>
+			<td {$init->bgInfoCell}>$taiji</td>
+			<th {$init->bgTitleCell}>{$init->tagTH_}人工衛星{$init->_tagTH}</th>
+			<td class="ItemCell" colspan="4">　$eiseis</td>
+		</tr>
+		<tr>
+			<th {$init->bgTitleCell}>{$init->tagTH_}ジン{$init->_tagTH}</th>
+			<td class="ItemCell" colspan="5">　$zins</td>
+			<th {$init->bgTitleCell}>{$init->tagTH_}アイテム{$init->_tagTH}</th>
+			<td class="ItemCell" colspan="4">　$items</td>
+		</tr>
+		<tr>
+			<td colspan="11" {$init->bgCommentCell}>$comment</td>
+		</tr>
+	</table>
 </div>
 END;
 	}
@@ -1048,30 +1145,31 @@ END;
 			}
 		}
 
-		echo "<div id=\"islandMap\" align=\"center\">";
+		echo "<div id=\"islandMap\" class=\"text-center\">";
 		echo '<div class="table-responsive">';
 		echo "<table border=\"1\"><tr><td>\n";
 
 		for($y = 0; $y < $init->islandSize; $y++) {
 			if($y % 2 == 0) {
-				print "<img src=\"land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
+				echo "<img src=\"land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
 			}
 			for($x = 0; $x < $init->islandSize; $x++) {
 				//$hako->landString($land[$x][$y], $landValue[$x][$y], $x, $y, $mode, $comStr[$x][$y]);
 				$hako->landString($land[$x][$y], $landValue[$x][$y], $x, $y, $mode, $comStr);
 			}
 			if($y % 2 == 1) {
-				print "<img src=\"land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
+				echo "<img src=\"land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
 			}
-			print "<br>";
+			echo "<br>";
 		}
 
 		echo "<div id=\"NaviView\"></div>";
+
 		echo "</div>";
 		echo "</td></tr></table></div>\n";
 
 		echo "<center>\n";
-		echo "<p>開始ターン：{$island['starturn']}</p>\n";
+		//echo "<p>開始ターン：{$island['starturn']}</p>\n";
 
 if (isset($island['soccer'])){
 		if($island['soccer'] > 0) {
@@ -1098,7 +1196,7 @@ if (isset($island['soccer'])){
 END;
 		}
 	}
-		print "</center>\n";
+		echo "</center>\n";
 	}
 
 
@@ -1107,13 +1205,15 @@ END;
 	//---------------------------------------------------
 	function islandRecent($island, $mode = 0) {
 		global $init;
-		print "<hr>\n";
-		print "<div id=\"RecentlyLog\">\n";
-		print "<h2>{$island['name']}島{$init->_tagName}の近況</h2>\n";
+
+		echo "<hr>\n";
+
+		echo "<div id=\"RecentlyLog\">\n";
+		echo "<h2>{$island['name']}島の近況</h2>\n";
 		for($i = 0; $i < $init->logMax; $i++) {
 			LogIO::logFilePrint($i, $island['id'], $mode);
 		}
-		print "</div>\n";
+		echo "</div>\n";
 	}
 
 	//---------------------------------------------------
@@ -1121,15 +1221,13 @@ END;
 	//---------------------------------------------------
 	function tempOwer($hako, $data, $number = 0) {
 		global $init;
-
 		$island = $hako->islands[$number];
-		$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
-		$width = $init->islandSize * 32 + 50;
+		$name   = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
+		$width  = $init->islandSize * 32 + 50;
 		$height = $init->islandSize * 32 + 100;
 		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
 		echo <<<END
 <script type="text/javascript">
-<!--
 var w;
 var p = $defaultTarget;
 
@@ -1150,35 +1248,37 @@ function settarget(part){
 function targetopen() {
 	w = window.open("{$GLOBALS['THIS_FILE']}?target=" + p, "","width={$width},height={$height},scrollbars=1,resizable=1,toolbar=1,menubar=1,location=1,directories=0,status=1");
 }
-//-->
 </script>
 
-<div align="center">
-{$init->tagBig_}{$init->tagName_}{$name}{$init->_tagName}開発計画{$init->_tagBig}<br>
-{$GLOBALS['BACK_TO_TOP']}<br>
+<div class="text-center">
+	<h2>{$init->tagName_}{$name}{$init->_tagName}開発計画</h2>
 </div>
+
 END;
 		$this->islandInfo($island, $number, 1);
 		echo <<<END
-<div align="center">
+<div class="text-center">
 <table class="table table-bordered">
 <tr>
 <td {$init->bgInputCell}>
-<div align="center">
+<div class="text-center">
 <form action="{$GLOBALS['THIS_FILE']}" method="post" name="InputPlan">
 <input type="hidden" name="mode" value="command">
 <input type="hidden" name="ISLANDID" value="{$island['id']}">
 <input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
-<input type="submit" value="計画送信">
+<input type="submit" class="btn btn-primary" value="計画送信">
+
 <hr>
-<strong>計画番号</strong>
+
+<b>計画番号</b>
 <select name="NUMBER">
 END;
 		// 計画番号
 		for($i = 0; $i < $init->commandMax; $i++) {
 			$j = $i + 1;
-			print "<option value=\"{$i}\">{$j}</option>";
+			echo "<option value=\"{$i}\">{$j}</option>";
 		}
+
 		echo <<<END
 </select><br>
 <hr>
@@ -1186,7 +1286,9 @@ END;
 <select name="COMMAND">
 END;
 		// コマンド
-		for($i = 0; $i < $init->commandTotal; $i++) {
+		//var_dump($init->comName,$init->comList);
+
+		for($i = 0; $i < count($init->comList); $i++) {
 			$kind = $init->comList[$i];
 			$cost = $init->comCost[$kind];
 			$s = '';
@@ -1209,7 +1311,7 @@ END;
 				}
 			}
 
-			print "<option value=\"{$kind}\" {$s}>{$init->comName[$kind]}({$cost})</option>\n";
+			echo "<option value=\"{$kind}\" {$s}>{$init->comName[$kind]} ({$cost})</option>\n";
 		}
 		echo <<<END
 </select>
@@ -1221,25 +1323,25 @@ END;
 
 			if ( isset($data['defaultX']) ) {
 				if($i == $data['defaultX']) {
-					print "<option value=\"{$i}\" selected>{$i}</option>\n";
+					echo "<option value=\"{$i}\" selected>{$i}</option>\n";
 				} else {
-					print "<option value=\"{$i}\">{$i}</option>\n";
+					echo "<option value=\"{$i}\">{$i}</option>\n";
 				}
 			} else {
-				print "<option value=\"{$i}\">{$i}</option>\n";
+				echo "<option value=\"{$i}\">{$i}</option>\n";
 			}
 
 		}
-		print "</select>, <select name=\"POINTY\">";
+		echo "</select>, <select name=\"POINTY\">";
 		for($i = 0; $i < $init->islandSize; $i++) {
 			if ( isset($data['defaultY']) ) {
 				if($i == $data['defaultY']) {
-					print "<option value=\"{$i}\" selected>{$i}</option>\n";
+					echo "<option value=\"{$i}\" selected>{$i}</option>\n";
 				} else {
-					print "<option value=\"{$i}\">{$i}</option>\n";
+					echo "<option value=\"{$i}\">{$i}</option>\n";
 				}
 			} else {
-				print "<option value=\"{$i}\">{$i}</option>\n";
+				echo "<option value=\"{$i}\">{$i}</option>\n";
 			}
 
 		}
@@ -1250,7 +1352,7 @@ END;
 <select name="AMOUNT">
 END;
 		 for($i = 0; $i < 100; $i++) {
-			 print "<option value=\"{$i}\">{$i}</option>\n";
+			 echo "<option value=\"{$i}\">{$i}</option>\n";
 		}
 		 echo <<<END
 </select>
@@ -1261,15 +1363,27 @@ $hako->targetList
 </select>
 <input type="button" value="目標捕捉" onClick="javascript: targetopen();">
 <hr>
-<strong>動作</strong><br>
-<input type="radio" name="COMMANDMODE" id="insert" value="insert" checked><label for="insert">挿入</label>
-<input type="radio" name="COMMANDMODE" id="write" value="write"><label for="write">上書き</label><BR>
-<input type="radio" name="COMMANDMODE" id="delete" value="delete"><label for="delete">削除</label>
+
+<div>
+	<p><strong>動作</strong></p>
+	<label class="radio-inline">
+		<input type="radio" name="COMMANDMODE" id="insert" value="insert" checked><label for="insert">挿入</label>
+	</label>
+	<label class="radio-inline">
+		<input type="radio" name="COMMANDMODE" id="write" value="write"><label for="write">上書き</label><BR>
+	</label>
+	<label class="radio-inline">
+		<input type="radio" name="COMMANDMODE" id="delete" value="delete"><label for="delete">削除</label>
+	</label>
+</div>
+
 <hr>
+
 <input type="hidden" name="DEVELOPEMODE" value="cgi">
-<input type="submit" value="計画送信">
+<input type="submit" class="btn btn-primary" value="計画送信">
 </form>
-<center>ミサイル発射上限数[<b> {$island['fire']} </b>]発</center>
+
+ミサイル発射上限数[<b> {$island['fire']} </b>]発
 </div>
 </td>
 <td {$init->bgMapCell}>
@@ -1288,17 +1402,28 @@ END;
 </tr>
 </table>
 </div>
-<hr>
+
+ <hr>
+
 <div id='CommentBox'>
-<h2>コメント更新</h2>
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-コメント<input type="text" name="MESSAGE" size="80" value="{$island['comment']}"><br>
-<input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
-<input type="hidden" name="mode" value="comment">
-<input type="hidden" name="ISLANDID" value="{$island['id']}">
-<input type="hidden" name="DEVELOPEMODE" value="cgi">
-<input type="submit" value="コメント更新">
-</form>
+	<h2>コメント更新</h2>
+	<form action="{$GLOBALS['THIS_FILE']}" method="post">
+		<div class="row">
+		  <div class="col-xs-12">
+			<div class="input-group">
+				<input type="text" name="MESSAGE" class="form-control" size="80" value="{$island['comment']}" placeholder="コメントする">
+				<input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
+				<input type="hidden" name="mode" value="comment">
+				<input type="hidden" name="ISLANDID" value="{$island['id']}">
+				<input type="hidden" name="DEVELOPEMODE" value="cgi">
+			  <span class="input-group-btn">
+				<input type="submit" class="btn btn-primary" value="コメント更新">
+			  </span>
+			</div>
+		  </div>
+		</div>
+
+	</form>
 </div>
 END;
 	}
@@ -1343,7 +1468,7 @@ END;
 		}
 		$value = "{$init->tagName_}{$value}{$init->_tagName}";
 		$j = sprintf("%02d：", $number + 1);
-		print "<a href=\"javascript:void(0);\" onclick=\"ns({$number})\">{$init->tagNumber_}{$j}{$init->_tagNumber}";
+		echo "<a href=\"javascript:void(0);\" onclick=\"ns({$number})\">{$init->tagNumber_}{$j}{$init->_tagNumber}";
 
 		switch($kind) {
 			case $init->comMissileSM:
@@ -1529,7 +1654,7 @@ END;
 				// 座標付き
 				$str = "{$point}で{$comName}";
 		}
-		print "{$str}</a><br>";
+		echo "{$str}</a><br>";
 	}
 	//---------------------------------------------------
 	// 新しく発見した島
@@ -1613,7 +1738,7 @@ class HtmlJS extends HtmlMap {
 				$com_max .= "0";
 			} else {
 				$set_com .= "[$s_kind, $s_x, $s_y, $s_arg, $s_target],\n";
-				$com_max .= "0,";
+				$com_max .= "0, ";
 			}
 		}
 		//コマンドリストセット
@@ -1673,6 +1798,8 @@ class HtmlJS extends HtmlMap {
 		for($i = 0; $i < count($init->EiseiName); $i++) {
 			$set_eisei .= "'".$init->EiseiName[$i]."',";
 		}
+		$set_eisei = substr($set_eisei, 0, -1);  // ケツカンマを削除
+
 		// 島リストセット
 		$set_island = "";
 		for($i = 0; $i < $hako->islandNumber; $i++) {
@@ -1685,14 +1812,16 @@ class HtmlJS extends HtmlMap {
 				$set_island .= "[$l_id, '$l_name'],\n";
 			}
 		}
+		$set_island = substr($set_island, 0, -1);  // ケツカンマを削除
+
+
 		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
 		echo <<<END
-<center>
-{$init->tagBig_}{$init->tagName_}{$name}{$init->_tagName}開発計画{$init->_tagBig}<BR>
-{$GLOBALS['BACK_TO_TOP']}<br>
-</center>
+<div class="text-center">
+	<h2>{$init->tagName_}{$name}{$init->_tagName}開発計画</h2>
+</div>
+
 <script type="text/javascript">
-<!--
 var w;
 var p = $defaultTarget;
 
@@ -1701,29 +1830,26 @@ var p = $defaultTarget;
 // Programmed by Jynichi Sakai(あっぽー)
 // ↑ 削除しないで下さい。
 var str;
-g = [$com_max];
-k1 = [$com_max];
-k2 = [$com_max];
-tmpcom1 = [ [0,0,0,0,0] ];
-tmpcom2 = [ [0,0,0,0,0] ];
-command = [
-$set_com];
+var g  = [$com_max];
+var k1 = [$com_max];
+var k2 = [$com_max];
+var tmpcom1 = [ [0, 0, 0, 0, 0] ];
+var tmpcom2 = [ [0, 0, 0, 0, 0] ];
+var command = [$set_com];
+var comlist = [$set_listcom];
 
-comlist = [
-$set_listcom
-];
+var islname   = [$set_island];
+var shiplist  = [$set_ships];
+var eiseilist = [$set_eisei];
 
-islname = [
-$set_island];
-
-shiplist = [$set_ships];
-eiseilist = [$set_eisei];
+var mx, my;
 
 function init() {
-	for(i = 0; i < command.length ;i++) {
-		for(s = 0; s < $com_count ;s++) {
+
+	for(var i = 0; i < command.length; i++) {
+		for(var s = 0; s < $com_count; s++) {
 			var comlist2 = comlist[s];
-			for(j = 0; j < comlist2.length ; j++) {
+			for(var j = 0; j < comlist2.length; j++) {
 				if(command[i][0] == comlist2[j][0]) {
 					g[i] = comlist2[j][1];
 				}
@@ -1737,7 +1863,8 @@ function init() {
 	disp(str, "");
 	document.onmousemove = Mmove;
 	if(document.layers) {
-		document.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+		//document.captureEvents(Event.MOUSEMOVE | Event.MOUSEUP);
+		document.addEventListener("DOMContentLoaded", Event.MOUSEMOVE | Event.MOUSEUP, false);
 	}
 	document.onmouseup = Mup;
 	document.onmousemove = Mmove;
@@ -1752,18 +1879,24 @@ function init() {
 }
 
 function cominput(theForm, x, k, z) {
-	a = theForm.NUMBER.options[theForm.NUMBER.selectedIndex].value;
-	b = theForm.COMMAND.options[theForm.COMMAND.selectedIndex].value;
-	c = theForm.POINTX.options[theForm.POINTX.selectedIndex].value;
-	d = theForm.POINTY.options[theForm.POINTY.selectedIndex].value;
-	e = theForm.AMOUNT.options[theForm.AMOUNT.selectedIndex].value;
-	f = theForm.TARGETID.options[theForm.TARGETID.selectedIndex].value;
-	if(x == 6){ b = k; menuclose(); }
+	var a = theForm.NUMBER.options[theForm.NUMBER.selectedIndex].value;
+	var b = theForm.COMMAND.options[theForm.COMMAND.selectedIndex].value;
+	var c = theForm.POINTX.options[theForm.POINTX.selectedIndex].value;
+	var d = theForm.POINTY.options[theForm.POINTY.selectedIndex].value;
+	var e = theForm.AMOUNT.options[theForm.AMOUNT.selectedIndex].value;
+	var f = theForm.TARGETID.options[theForm.TARGETID.selectedIndex].value;
+
+	if(x == 6){
+		b = k; menuclose();
+	}
+
 	var newNs = a;
 	if (x == 1 || x == 2 || x == 6){
-		if(x == 6) b = k;
+		if(x == 6) {
+			b = k;
+		}
 		if(x != 2) {
-			for(i = $init->commandMax - 1; i > a; i--) {
+			for(var i = $init->commandMax - 1; i > a; i--) {
 				command[i] = command[i-1];
 				g[i] = g[i-1];
 			}
@@ -1780,6 +1913,7 @@ function cominput(theForm, x, k, z) {
 		command[a] = [b,c,d,e,f];
 		newNs++;
 //		menuclose();
+
 	} else if(x == 3) {
 		var num = (k) ? k-1 : a;
 		for(i = Math.floor(num); i < ($init->commandMax - 1); i++) {
@@ -1788,6 +1922,7 @@ function cominput(theForm, x, k, z) {
 		}
 		command[$init->commandMax - 1] = [81, 0, 0, 0, 0];
 		g[$init->commandMax - 1] = '資金繰り';
+
 	} else if(x == 4) {
 		i = Math.floor(a);
 		if (i == 0){ return true; }
@@ -1798,7 +1933,7 @@ function cominput(theForm, x, k, z) {
 		g[i] = k2[i];g[i-1] = k1[i];
 		ns(--i);
 		str = plchg();
-		str = '<font color="red"><strong>■ 未送信 ■<\\/strong><\\/font><br>' + str;
+		str = '<font color="#C7243A"><strong>■ 未送信 ■<\\/strong><\\/font><br>' + str;
 		disp(str,"white");
 		outp();
 		newNs = i+1;
@@ -1834,28 +1969,31 @@ function cominput(theForm, x, k, z) {
 		command[a][3] = k;
 	}
 	str = plchg();
-	str = '<font color="red"><b>■ 未送信 ■<\\/b><\\/font><br>' + str;
+	str = '<font color="#C7243A"><b>■ 未送信 ■<\\/b><\\/font><br>' + str;
 	disp(str, "");
 	outp();
 	theForm.SENDPROJECT.disabled = false;
 	ns(newNs);
+
 	return true;
 }
 
 function plchg() {
 	strn1 = "";
-	for(i = 0; i < $init->commandMax; i++) {
-		c = command[i];
-		kind = '{$init->tagComName_}' + g[i] + '{$init->_tagComName}';
-		x = c[1];
-		y = c[2];
-		tgt = c[4];
-		point = '{$init->tagName_}' + "(" + x + "," + y + ")" + '{$init->_tagName}';
-		for(j = 0; j < islname.length ; j++) {
+	for(var i = 0; i < $init->commandMax; i++) {
+		var c = command[i];
+		var kind = '{$init->tagComName_}' + g[i] + '{$init->_tagComName}';
+		var x = c[1];
+		var y = c[2];
+		var tgt = c[4];
+		var point = '{$init->tagName_}' + "(" + x + "," + y + ")" + '{$init->_tagName}';
+
+		for(var j = 0; j < islname.length ; j++) {
 			if(tgt == islname[j][0]){
 				tgt = '{$init->tagName_}' + islname[j][1] + "島" + '{$init->_tagName}';
 			}
 		}
+
 		if(c[0] == $init->comMissileSM || c[0] == $init->comDoNothing || c[0] == $init->comGiveup){
 			// ミサイル撃ち止め、資金繰り、島の放棄
 			strn2 = kind;
@@ -2008,17 +2146,20 @@ function plchg() {
 		strn1 +=
 			'<div id="com_'+i+'" '+
 				'onmouseover="mc_over('+i+');return false;" '+
-					'><a HREF="javascript:void(0);" onclick="ns('+i+')" onkeypress="ns('+i+')" '+
-						'onmousedown="return comListMove('+i+');" '+'ondblclick="chNum('+c[3]+');return false;" '+
-							'><nobr>'+
-								tmpnum+(i+1)+':'+
-									strn2+'<\\/nobr><\\/a><\\/div>\\n';
+				'><a HREF="javascript:void(0);" onclick="ns('+i+')" onkeypress="ns('+i+')" '+
+				'onmousedown="return comListMove('+i+');" '+'ondblclick="chNum('+c[3]+');return false;" '+
+				'><nobr>'+
+				tmpnum+(i+1)+':'+
+				strn2+'<\\/nobr><\\/a><\\/div>\\n';
 	}
+
 	return strn1;
 }
 
 function disp(str,bgclr) {
-	if(str==null) str = "";
+	if(str==null) {
+		str = "";
+	}
 
 	if(document.getElementById || document.all){
 		LayWrite('LINKMSG1', str);
@@ -2038,10 +2179,10 @@ function outp() {
 	for(k = 0; k < command.length; k++){
 		comary = comary + command[k][0]
 			+ " " + command[k][1]
-				+ " " + command[k][2]
-					+ " " + command[k][3]
-						+ " " + command[k][4]
-							+ " " ;
+			+ " " + command[k][2]
+			+ " " + command[k][3]
+			+ " " + command[k][4]
+			+ " " ;
 	}
 	document.InputPlan.COMARY.value = comary;
 }
@@ -2049,14 +2190,17 @@ function outp() {
 function ps(x, y) {
 	document.InputPlan.POINTX.options[x].selected = true;
 	document.InputPlan.POINTY.options[y].selected = true;
-	if(!(document.InputPlan.MENUOPEN.checked))
-		moveLAYER("menu",mx+10,my-50);
+	if(!(document.InputPlan.MENUOPEN.checked)) {
+		moveLAYER("menu", mx+10, my-50);
+	}
 	NaviClose();
 	return true;
 }
 
 function ns(x) {
-	if (x == $init->commandMax){ return true; }
+	if (x == $init->commandMax){
+		return true;
+	}
 	document.InputPlan.NUMBER.options[x].selected = true;
 	return true;
 }
@@ -2151,55 +2295,28 @@ function SelectList(theForm) {
 }
 
 function moveLAYER(layName,x,y){
-	if(document.getElementById){ //NN6,IE5
-		el = document.getElementById(layName);
-		el.style.left = x;
-		el.style.top = y;
-	} else if(document.layers){ //NN4
-		msgLay = document.layers[layName];
-		msgLay.moveTo(x,y);
-	} else if(document.all){ //IE4
-		msgLay = document.all(layName).style;
-		msgLay.pixelLeft = x;
-		msgLay.pixelTop = y;
-	}
+	var el = document.getElementById(layName);
+	el.style.left = x + "px";
+	el.style.top  = y + "px";
 }
 
 function menuclose() {
-	moveLAYER("menu",-500,-500);
+	moveLAYER("menu", -500, -500);
 }
 
 function Mmove(e){
-	if(document.all){
-		mx = event.x + document.body.scrollLeft;
-		my = event.y + document.body.scrollTop;
-	}else if(document.layers){
-		mx = e.pageX;
-		my = e.pageY;
-	}else if(document.getElementById){
-		mx = e.pageX;
-		my = e.pageY;
-	}
+	mx = e.pageX;
+	my = e.pageY;
+
 	return moveLay.move();
 }
 
 function LayWrite(layName, str) {
-	if(document.getElementById){
-		document.getElementById(layName).innerHTML = str;
-	} else if(document.all){
-		document.all(layName).innerHTML = str;
-	} else if(document.layers){
-		lay = document.layers[layName];
-		lay.document.open();
-		lay.document.write(str);
-		lay.document.close();
-	}
+	document.getElementById(layName).innerHTML = str;
 }
 
 function SetBG(layName, bgclr) {
-	 if(document.getElementById) document.getElementById(layName).style.backgroundColor = bgclr;
-	 else if(document.all) document.all.layName.bgColor = bgclr;
-	 //else if(document.layers) document.layers[layName].bgColor = bgclr;
+	document.getElementById(layName).style.backgroundColor = bgclr;
 }
 
 var oldNum=0;
@@ -2220,10 +2337,11 @@ function Mup() {
 }
 
 function setBorder(num, color) {
-	if(document.getElementById) {
-		if(color.length == 4) document.getElementById('com_'+num).style.borderTop = ' 1px solid '+color;
-		else document.getElementById('com_'+num).style.border = '0px';
-	 }
+	if(color.length == 4) {
+		document.getElementById('com_'+num).style.borderTop = ' 1px solid '+color;
+	} else {
+		document.getElementById('com_'+num).style.border = '0px';
+	}
 }
 
 function mc_out() {
@@ -2242,7 +2360,8 @@ function mc_over(num) {
 }
 
 function comListMove(num) {
-	moveLay = new MoveComList(num); return (document.layers) ? true : false;
+	moveLay = new MoveComList(num);
+	return (document.layers) ? true : false;
 }
 
 function MoveFalse() {
@@ -2255,7 +2374,7 @@ function MoveComList(num) {
 	Mcommand = true;
 	LayWrite('mc_div', '<NOBR><strong>'+(num+1)+': '+g[num]+'</strong></NOBR>');
 	this.move = function() {
-		moveLAYER('mc_div',mx+10,my-30);
+		moveLAYER('mc_div', mx+10, my-30);
 		return false;
 	}
 	this.up = function() {
@@ -2285,7 +2404,7 @@ function hideElement(layName) {
 
 function chNum(num) {
 	document.ch_numForm.AMOUNT.options.length = 100;
-	for(i=0;i<document.ch_numForm.AMOUNT.options.length;i++){
+	for(var i=0; i<document.ch_numForm.AMOUNT.options.length; i++){
 		if(document.ch_numForm.AMOUNT.options[i].value == num){
 			document.ch_numForm.AMOUNT.selectedIndex = i;
 			document.ch_numForm.AMOUNT.options[i].selected = true;
@@ -2314,13 +2433,7 @@ function Kdown(e){
 		el = new String(event.srcElement.tagName);
 		el = el.toUpperCase();
 		if (el == "INPUT") return;
-//	}else if(document.layers){// NN4 KEYDOWNイベントはWin98系で文字化けするのでコメント化
-//		if (e.modifiers != 0) return;
-//		c = e.which;
-//		if ((c >= 97) && (c <= 122)) c -= 32; // 英小文字を英大文字にする
-//		el = new String(e.target);
-//		el = el.toUpperCase();
-//		if (el.indexOf("<INPUT") >= 0) return;
+
 	}else if(document.getElementById){
 		if (e.altKey || e.ctrlKey || e.shiftKey) return;
 		c = e.which;
@@ -2378,12 +2491,13 @@ function settarget(part){
 function targetopen() {
 	w = window.open("{$GLOBALS['THIS_FILE']}?target=" + p, "","width={$width},height={$height},scrollbars=1,resizable=1,toolbar=1,menubar=1,location=1,directories=0,status=1");
 }
-//-->
+
 </script>
 END;
 		$this->islandInfo($island, $number, 1);
 		echo <<<END
-<div id="menu" style="position:absolute; top:-500;left:-500; overflow:auto;width:360px;height:350px;">
+<div id="menu" style="position:absolute; top:-500px;left:-500px; overflow:auto;width:360px;height:350px;">
+
 <table border=0 class="PopupCell" onClick="menuclose()">
 <tr valign=top>
 <td>
@@ -2407,7 +2521,9 @@ $click_com[6]
 </tr>
 </table>
 </div>
+
 <div ID="mc_div" style="position:absolute;top:-50;left:-50;height:22px;">&nbsp;</div>
+
 <div ID="ch_num" style="position:absolute;visibility:hidden;display:none">
 <form name="ch_numForm">
 	<table class="table table-bordered" bgcolor="#e0ffff" cellspacing=1>
@@ -2420,30 +2536,39 @@ $click_com[6]
 	</TABLE>
 </form>
 </div>
+
 <div align="center">
 <table class="table table-bordered">
 <tr valign="top">
 <td $init->bgInputCell>
+
 <form action="{$GLOBALS['THIS_FILE']}" method="post" name="InputPlan">
 <input type="hidden" name="mode" value="command">
 <input type="hidden" name="COMARY" value="comary">
-<input type="hidden" name="DEVELOPEMODE" value="java">
-<center>
-<br>
-<b>コマンド入力</b><br>
-<b>
-<a href="javascript:void(0);" onclick="cominput(InputPlan,1)">挿入</a>
-　<a href="javascript:void(0);" onclick="cominput(InputPlan,2)">上書き</a>
-　<a href="javascript:void(0);" onclick="cominput(InputPlan,3)">削除</a>
-</b>
-<hr>
-<b>計画番号</b>
-<select name="NUMBER">
+<input type="hidden" name="DEVELOPEMODE" value="javascript">
+
+<div class="text-center">
+
+	<input type="submit" class="btn btn-primary" value="計画送信" name="SENDPROJECT">
+
+	<hr>
+
+	<h3>コマンド入力</h3>
+	<ul class="list-inline">
+		<li><b><a href="javascript:void(0);" onclick="cominput(InputPlan,1)">挿入</a></b>
+		<li><b><a href="javascript:void(0);" onclick="cominput(InputPlan,2)">上書き</a></b>
+		<li><b><a href="javascript:void(0);" onclick="cominput(InputPlan,3)">削除</a></b>
+	</ul>
+
+	<hr>
+
+	<b>計画番号</b>
+	<select name="NUMBER">
 END;
 		// 計画番号
 		for($i = 0; $i < $init->commandMax; $i++) {
 			$j = $i + 1;
-			print "<option value=\"$i\">$j</option>\n";
+			echo "<option value=\"$i\">$j</option>\n";
 		}
 
 		$open = "";
@@ -2456,64 +2581,83 @@ END;
 		}
 
 		echo <<<END
-</select>
-<hr>
-<b>開発計画</b><br>
-<input type="checkbox" name="NAVIOFF" $open>NaviOff
-<input type="checkbox" name="MENUOPEN" $open>PopupOff<br>
-<br>
-<select name="menu" onchange="SelectList(InputPlan)">
-<option value="">全種類</option>
+	</select>
+
+	<hr>
+
+	<h3>開発計画</h3>
+	<label class="checkbox-inline">
+	  <input type="checkbox" name="NAVIOFF" $open>NaviOff
+	</label>
+	<label class="checkbox-inline">
+	  <input type="checkbox" name="MENUOPEN" $open>PopupOff<br>
+	</label>
+
+	<br>
+
+	<select name="menu" onchange="SelectList(InputPlan)">
+	<option value="">全種類</option>
 END;
 		for($i = 0; $i < $com_count; $i++) {
 			list($aa, $tmp) = explode(",", $init->commandDivido[$i], 2);
-			print "<option value=\"$i\">{$aa}</option>\n";
+			echo "<option value=\"$i\">{$aa}</option>\n";
 		}
 		echo <<<END
-</select><br>
-<select name="COMMAND">
-<option>　　　　　　　　　　</option>
-<option>　　　　　　　　　　</option>
-<option>　　　　　　　　　　</option>
-<option>　　　　　　　　　　</option>
-<option>　　　　　　　　　　</option>
-<option>　　　　　　　　　　</option>
-<option>　　　　　　　　　　</option>
-<option>　　　　　　　　　　</option>
-<option>　　　　　　　　　　</option>
-<option>　　　　　　　　　　</option>
-</select>
-<hr>
-<b>座標(</b>
-<select name="POINTX">
+	</select>
+	<br>
+	<select name="COMMAND">
+		<option>　　　　　　　　　　</option>
+		<option>　　　　　　　　　　</option>
+		<option>　　　　　　　　　　</option>
+		<option>　　　　　　　　　　</option>
+		<option>　　　　　　　　　　</option>
+		<option>　　　　　　　　　　</option>
+		<option>　　　　　　　　　　</option>
+		<option>　　　　　　　　　　</option>
+		<option>　　　　　　　　　　</option>
+		<option>　　　　　　　　　　</option>
+	</select>
+
+	<hr>
+
+	<b>座標(</b>
+	<select name="POINTX">
 END;
 		for($i = 0; $i < $init->islandSize; $i++) {
 			if (isset($data['defaultX'])){
 				if($i == $data['defaultX']) {
-					print "<option value=\"$i\" selected>$i</option>\n";
+					echo "<option value=\"$i\" selected>$i</option>\n";
 				} else {
-					print "<option value=\"$i\">$i</option>\n";
+					echo "<option value=\"$i\">$i</option>\n";
 				}
+			} else {
+				echo "<option value=\"$i\">$i</option>\n";
 			}
 		}
-		print "</select>, <select name=\"POINTY\">\n";
+		echo "</select>, <select name=\"POINTY\">\n";
 		for($i = 0; $i < $init->islandSize; $i++) {
 			if (isset($data['defaultY'])){
 				if($i == $data['defaultY']) {
-					print "<option value=\"$i\" selected>$i</option>\n";
+					echo "<option value=\"$i\" selected>$i</option>\n";
 				} else {
-					print "<option value=\"$i\">$i</option>\n";
+					echo "<option value=\"$i\">$i</option>\n";
 				}
+			} else {
+				echo "<option value=\"$i\">$i</option>\n";
 			}
 		}
+
 		echo <<<END
-</select><b> )</b>
-<hr>
-<b>数量</b><select name="AMOUNT">
+	</select><b> )</b>
+
+	<hr>
+
+	<h3>数量</h3>
+	<select name="AMOUNT">
 END;
 		// 数量
 		for($i = 0; $i < 100; $i++) {
-			print "<option value=\"$i\">$i</option>\n";
+			echo "<option value=\"$i\">$i</option>\n";
 		}
 
 		// 船舶数
@@ -2522,29 +2666,39 @@ END;
 			$ownship += $island['ship'][$i];
 		}
 		echo <<<END
-</select>
-<hr>
-<b>目標の島</b><br>
-<select name="TARGETID" onchange="settarget(this);">
-$hako->targetList<br>
-</select>
-<input type="button" value="目標捕捉" onClick="javascript: targetopen();">
-<hr>
-<b>コマンド移動</b>：
-<a href="javascript:void(0);" onclick="cominput(InputPlan,4)" style="text-decoration:none"> ▲ </a>・・
-<a href="javascript:void(0);" onclick="cominput(InputPlan,5)" style="text-decoration:none"> ▼ </a>
-<hr>
-<input type="hidden" name="ISLANDID" value="{$island['id']}">
-<input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
-<input type="submit" value="計画送信" name="SENDPROJECT">
-<br>最後に<font color="red">計画送信ボタン</font>を<br>押すのを忘れないように。</font>
-</center>
-</form>
-<center>ミサイル発射上限数[<b> {$island['fire']} </b>]発
-<br>所有船舶数[<b> {$ownship} </b>]隻
-<br>
-<br>
+	</select>
 
+	<hr>
+
+	<h3>目標の島</h3>
+	<select name="TARGETID" onchange="settarget(this);">$hako->targetList</select>
+	<input type="button" value="目標捕捉" onClick="javascript: targetopen();">
+
+	<hr>
+
+	<h3>コマンド移動</h3>
+	<ul class="list-inline">
+		<li><a href="javascript:void(0);" onclick="cominput(InputPlan,4)" style="text-decoration:none"> ▲ </a></li>
+		<li><a href="javascript:void(0);" onclick="cominput(InputPlan,5)" style="text-decoration:none"> ▼ </a></li>
+	</ul>
+
+	<hr>
+
+	<input type="hidden" name="ISLANDID" value="{$island['id']}">
+	<input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
+	<input type="submit" class="btn btn-primary" value="計画送信" name="SENDPROJECT">
+
+	<p>最後に<font color="#C7243A">計画送信ボタン</font>を押すのを忘れないように。</p>
+
+</div>
+</form>
+
+<ul>
+	<li>ミサイル発射上限数[<b> {$island['fire']} </b>]発</li>
+	<li>所有船舶数[<b> {$ownship} </b>]隻</li>
+</ul>
+
+<p>
 <a title='数字=数量　BS=一つ前削除
 DEL=削除　INS=資金繰り
 A=整地　J=地ならし
@@ -2554,9 +2708,9 @@ N=農場整備　I=工場建設
 S=採掘場整備
 D=防衛施設建設
 M=ミサイル基地建設
-F=海底基地建設'>
-キー入力簡易説明</a>
-</center>
+F=海底基地建設'>ショートカットキー入力簡易説明</a>
+</p>
+
 </td>
 <td $init->bgMapCell id="plan" onmouseout="mc_out();return false;">
 END;
@@ -2575,17 +2729,25 @@ END;
 </table>
 <hr>
 <div id='CommentBox'>
-<h2>コメント更新</h2>
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-コメント<input type="text" name="MESSAGE" size="80" value="{$island['comment']}"><br>
-<input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
-<input type="hidden" name="mode" value="comment">
-<input type="hidden" name="DEVELOPEMODE" value="java">
-<input type="hidden" name="ISLANDID" value="{$island['id']}">
-<input type="submit" value="コメント更新">
-</FORM>
-</DIV>
-</DIV>
+	<h2>コメント更新</h2>
+	<form action="{$GLOBALS['THIS_FILE']}" method="post">
+		<div class="row">
+		  <div class="col-xs-12">
+			<div class="input-group">
+				<input type="text" name="MESSAGE" class="form-control" size="80" value="{$island['comment']}" placeholder="コメントする">
+				<input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
+				<input type="hidden" name="mode" value="comment">
+				<input type="hidden" name="ISLANDID" value="{$island['id']}">
+				<input type="hidden" name="DEVELOPEMODE" value="cgi">
+			  <span class="input-group-btn">
+				<input type="submit" class="btn btn-primary" value="コメント更新">
+			  </span>
+			</div>
+		  </div>
+		</div>
+
+	</form>
+</div>
 END;
 	}
 
@@ -2640,7 +2802,7 @@ class Error {
 		Util::makeTagMessage("パスワードが違います。", "danger");
 
     // JavaScript error の回避【追加】
-    HtmlJS::funcJavaDM();
+    //HtmlJS::funcJavaDM();
 
     HTML::footer();
     exit;

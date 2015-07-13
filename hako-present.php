@@ -27,8 +27,7 @@ class HtmlPresent extends HTML {
 		global $init;
 
 		echo <<<END
-<CENTER><a href="{$init->baseDir}/hako-main.php"><span class="big">トップへ戻る</span></a></CENTER>
-<h1 class="title">{$init->title}<br>プレゼントツール</h1>
+<h1 class="title">プレゼントツール</h1>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
 <strong>パスワード：</strong>
 <input type="password" size="32" maxlength="32" name="PASSWORD">
@@ -60,8 +59,8 @@ function targetopen() {
 }
 //-->
 </script>
-<CENTER><a href="{$init->baseDir}/hako-main.php"><span class="big">トップへ戻る</span></a></CENTER>
-<h1 class="title">{$init->title}<br>プレゼントツール</h1>
+	
+<h1 class="title">プレゼントツール</h1>
 
 <h2>管理人からのプレゼント</h2>
 <p>
@@ -84,14 +83,14 @@ $hako->islandList
 </select>の、(
 <select name="POINTX">
 END;
-		print "<option value=\"0\" selected>0</option>\n";
+		echo "<option value=\"0\" selected>0</option>\n";
 		for($i = 1; $i < $init->islandSize; $i++) {
-			print "<option value=\"{$i}\">{$i}</option>\n";
+			echo "<option value=\"{$i}\">{$i}</option>\n";
 		}
-		print "</select>, <select name=\"POINTY\">";
-		print "<option value=\"0\" selected>0</option>\n";
+		echo "</select>, <select name=\"POINTY\">";
+		echo "<option value=\"0\" selected>0</option>\n";
 		for($i = 1; $i < $init->islandSize; $i++) {
-			print "<option value=\"{$i}\">{$i}</option>\n";
+			echo "<option value=\"{$i}\">{$i}</option>\n";
 		}
 		echo <<<END
 </select> )に、
@@ -120,18 +119,18 @@ END;
 			if ( $present['item'] == 0 ) {
 				if ( $present['px'] != 0 ) {
 					$money = $present['px'] . $init->unitMoney;
-					print "{$init->tagName_}{$name}島{$init->_tagName}に<strong>{$money}</strong>の資金<br>\n";
+					echo "{$init->tagName_}{$name}島{$init->_tagName}に<strong>{$money}</strong>の資金<br>\n";
 				}
 				if ( $present['py'] != 0 ) {
 					$food = $present['py'] . $init->unitFood;
-					print "{$init->tagName_}{$name}島{$init->_tagName}に<strong>{$food}</strong>の食料<br>\n";
+					echo "{$init->tagName_}{$name}島{$init->_tagName}に<strong>{$food}</strong>の食料<br>\n";
 				}
 			} elseif ( $present['item'] > 0 ) {
 				$items = array ('地震','津波','怪獣','地盤沈下','台風','巨大隕石','隕石','噴火');
 				$item = $items[$present['item'] - 1];
 				if ( $present['item'] < 9 ) {
 					$point = ($present['item'] < 6) ? '' : '(' . $present['px'] . ',' . $present['py'] . ')';
-					print "{$init->tagName_}{$name}島{$point}{$init->_tagName}に{$init->tagDisaster_}{$item}{$init->_tagDisaster}<br>\n";
+					echo "{$init->tagName_}{$name}島{$point}{$init->_tagName}に{$init->tagDisaster_}{$item}{$init->_tagDisaster}<br>\n";
 				}
 			}
 		}
@@ -244,7 +243,7 @@ class Main {
 		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
 			return 1;
 		} else {
-			print "<h2>パスワードが違います。</h2>\n";
+			echo "<h2>パスワードが違います。</h2>\n";
 			return 0;
 		}
 	}

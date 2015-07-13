@@ -174,8 +174,10 @@ class Turn {
 
 		for($i = 0; $i < $hako->islandNumber; $i++) {
 			// 管理人預かり中の場合スキップ
-			if($hako->islands[$order[$i]]['keep']) {
-				continue;
+			if( isset($hako->islands[$order[$i]]['keep']) ) {
+				if($hako->islands[$order[$i]]['keep']) {
+					continue;
+				}
 			}
 			$island = $hako->islands[$order[$i]];
 			$this->doIslandProcess($hako, $island);
@@ -3385,7 +3387,11 @@ class Turn {
 		$addpop  = 10; // 村、町
 		$addpop2 = 0;  // 都市
 
+		// ???
+		$pop = $island['pop'];
+		
 		//
+		
 		if ( isset($island['food']) ) {}
 		if ( !isset($island['propaganda']) ) {
 			$island['propaganda'] = "";
@@ -3409,6 +3415,8 @@ class Turn {
 
 		}
 		$monsterMove = array();
+		$bx = 0;
+		$by = 0;
 
 		// ループ
 		for($i = 0; $i < $init->pointNumber; $i++) {
@@ -3416,7 +3424,7 @@ class Turn {
 			$y = $this->rpy[$i];
 			$landKind = $land[$x][$y];
 			$lv = $landValue[$x][$y];
-
+			
 			switch($landKind) {
 				case $init->landWaste:
 					//荒地
@@ -4280,7 +4288,11 @@ class Turn {
 						// 移動済みフラグは立てない
 					} elseif($init->monsterSpecial[$monsSpec['kind']] & 0x1) {
 						// 速い怪獣
-						$monsterMove[$sx][$sy] = $monsterMove[$x][$y] + 1;
+						if ( isset($monsterMove[$sx][$sy]) ) {
+							$monsterMove[$sx][$sy] = $monsterMove[$x][$y] + 1;
+						} else {
+							$monsterMove[$sx][$sy] = 1;
+						}
 					} else {
 						// 普通の怪獣
 						$monsterMove[$sx][$sy] = 2;
@@ -5577,7 +5589,7 @@ class Turn {
 			$island['food'] += $pop; // 全員野良仕事
 		}
 		if ( isset($island['present']) ) {
-			if ( $presentItem == 0 ) {
+			if ( $island['present'] == 0 ) {
 				if ( $island['present']['px'] != 0 ) {
 					$island['money'] += $island['present']['px'];
 					$this->log->presentMoney($island['id'], $island['name'], $island['present']['px']);

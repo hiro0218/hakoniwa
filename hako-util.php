@@ -165,22 +165,6 @@ class Util {
 		return mt_rand(0, $num - 1);
 	}
 
-	//---------------------------------------------------
-	// ローカル掲示板のメッセージを一つ前にずらす
-	//---------------------------------------------------
-	static function slideBackLbbsMessage(&$lbbs, $num) {
-		global $init;
-
-		array_splice($lbbs, $num, 1);
-		$lbbs[$init->lbbsMax - 1] = '0>>0>>';
-	}
-	//---------------------------------------------------
-	// ローカル掲示板のメッセージを一つ後ろにずらす
-	//---------------------------------------------------
-	static function slideLbbsMessage(&$lbbs) {
-		array_pop($lbbs);
-		array_unshift($lbbs, $lbbs[0]);
-	}
 
 	//---------------------------------------------------
 	// ランダムな座標を生成
@@ -368,10 +352,14 @@ class Util {
 		fclose($fp);
 	}
 
+
+	//---------------------------------------------------
+	// アラートタグを出力する
+	//---------------------------------------------------
 	static function makeTagMessage($message, $status = "success"){
-			echo '<div class="alert alert-'. $status .' role="alert">';
-			echo $message;
-			echo '</div>';
+		echo '<div class="alert alert-'. $status .' role="alert">';
+		echo $message;
+		echo '</div>';
 	}
 
 }

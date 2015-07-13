@@ -70,8 +70,6 @@ class Init {
 	var $urlTopPage   = "http://localhost/";
 	var $urlManu      = "#";
 
-	var $landSuffix		= "帝國"; // add
-
 	// 1ターンが何秒か
 	var $unitTime     = 10800; // 3時間（これ以上短くすることはオススメ出来ません）
 
@@ -682,6 +680,7 @@ class Init {
 	var $comAutoPrepare  = 91; // フル整地
 	var $comAutoPrepare2 = 92; // フル地ならし
 	var $comAutoDelete   = 93; // 全コマンド消去
+	var $comAutoReclaim  = 94; // フル埋め立て
 
 	var $comName;
 	var $comCost;
@@ -772,6 +771,7 @@ class Init {
 			$this->comGiveup,
 			$this->comAutoPrepare,
 			$this->comAutoPrepare2,
+			$this->comAutoReclaim,
 			$this->comAutoDelete,
 		);
 
@@ -916,6 +916,8 @@ class Init {
 		$this->comCost[$this->comAutoPrepare]  = 0;
 		$this->comName[$this->comAutoPrepare2] = '地ならし自動入力';
 		$this->comCost[$this->comAutoPrepare2] = 0;
+		$this->comName[$this->comAutoReclaim]  = '浅瀬埋め立て自動入力';
+		$this->comCost[$this->comAutoReclaim]  = 0;
 		$this->comName[$this->comAutoDelete]   = '全計画を白紙撤回';
 		$this->comCost[$this->comAutoDelete]   = 0;
 	}

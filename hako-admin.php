@@ -30,10 +30,8 @@ function go(obj) {
 }
 </script>
 
-<CENTER>
-<a href="{$init->baseDir}/hako-main.php"><span class="big">トップへ戻る</span></a>
-</CENTER>
-<h1 class="title">{$init->title}<br>管理室入り口</h1>
+
+<h1 class="title">管理室入り口</h1>
 <hr>
 <TABLE BORDER=0 width="100%">
 <TR valign="top">

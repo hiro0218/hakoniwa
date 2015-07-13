@@ -589,14 +589,14 @@ class Hako extends HakoIO {
 
 		// 座標設定
 		if($mode == 1 || $mode == 2) {
-			print "<a href=\"javascript:void(0);\" onclick=\"ps($x,$y)\">";
+			echo "<a href=\"javascript:void(0);\" onclick=\"ps($x,$y)\">";
 		}
 
-		print "<img src=\"{$image}\" width=\"32\" height=\"32\" alt=\"{$point} {$naviTitle}\" onMouseOver=\"Navi({$naviPos},'{$image}', '{$naviTitle}', '{$point}', '{$naviText}', {$naviExp});\" onMouseOut=\"NaviClose(); return false\">";
+		echo "<img src=\"{$image}\" width=\"32\" height=\"32\" alt=\"{$point} {$naviTitle}\" onMouseOver=\"Navi({$naviPos},'{$image}', '{$naviTitle}', '{$point}', '{$naviText}', {$naviExp});\" onMouseOut=\"NaviClose(); return false\">";
 
 		// 座標設定 閉じ
 		if($mode == 1 || $mode == 2) {
-			print "</a>";
+			echo "</a>";
 		}
 
 	}
@@ -624,10 +624,9 @@ class Main {
 			exit;
 		}
 		$cgi->setCookies();
-		$cgi->lastModified();
 
 		$_developmode = (isset( $cgi->dataSet['DEVELOPEMODE'] )) ? $cgi->dataSet['DEVELOPEMODE'] : "";
-		if( mb_strtolower($_developmode) == "java") {
+		if( mb_strtolower($_developmode) == "javascript") {
 			$html = new HtmlJS;
 			$com  = new MakeJS;
 		} else {
@@ -691,20 +690,6 @@ class Main {
 				$com->changeOwnerName($hako, $cgi->dataSet);
 				$html->footer();
 				break;
-
-			// case "skin":
-			// 	$html = new HtmlSetted();
-			// 	$html->header($cgi->dataSet);
-			// 	$html->setSkin();
-			// 	$html->footer();
-			// 	break;
-
-			// case "imgset":
-			// 	$html = new HtmlSetted;
-			// 	$html->header($cgi->dataSet);
-			// 	$html->setImg();
-			// 	$html->footer();
-			// 	break;
 
 			case "conf":
 				$html = new HtmlTop();

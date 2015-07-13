@@ -29,17 +29,22 @@ class HtmlAlly extends HTML {
 	//--------------------------------------------------
 	function allyTop($hako, $data) {
 		global $init;
-
-		echo "<CENTER><a href=\"{$init->baseDir}/hako-main.php\"><span class=\"big\">トップへ戻る</span></a></CENTER>\n";
-		echo "<h1 class=\"title\">{$init->title}<br>同盟管理ツール</h1>\n";
+		
+		echo "<div class='row'>";
+		echo "<div class='col-xs-12'>";
+		echo "<h1>同盟管理ツール</h1>\n";
 
 		if($init->allyUse) {
 			echo <<<END
-<input type="button" value="同盟の結成・変更・解散・加盟・脱退はこちらから" onClick="JavaScript:location.replace('{$GLOBALS['THIS_FILE']}?JoinA=1')">
+<input type="button" class="btn btn-default" value="同盟の結成・変更・解散・加盟・脱退はこちらから" onClick="JavaScript:location.replace('{$GLOBALS['THIS_FILE']}?JoinA=1')">
 <h2>各同盟の状況</h2>
 END;
 		}
 		$this->allyInfo($hako);
+		
+		echo "</div>";
+		echo "</div>";
+
 	}
 	//--------------------------------------------------
 	// 同盟の状況
@@ -50,7 +55,7 @@ END;
 		echo <<<END
 占有率は、同盟加盟の<b>総人口</b>により算出されたものです。
 <div id="IslandView">
-<table border="1">
+<table class="table table-bordered">
 <tr>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}同盟{$init->_tagTH}</th>
@@ -58,10 +63,10 @@ END;
 	<th {$init->bgTitleCell}>{$init->tagTH_}島の数{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}総人口{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}占有率{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}農場規模{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}工場規模{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}採掘場規模{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
 </tr>
 END;
@@ -96,20 +101,20 @@ END;
 
 			echo <<<END
 <tr>
-<th {$init->bgNumberCell} rowspan=2>{$init->tagNumber_}$j{$init->_tagNumber}</th>
-<td {$init->bgNameCell} rowspan=2>{$name}</td>
-<td {$init->bgMarkCell}><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
-<td {$init->bgInfoCell}>{$ally['number']}島</td>
-<td {$init->bgInfoCell}>{$pop}</td>
-<td {$init->bgInfoCell}>{$ally['occupation']}%</td>
-<td {$init->bgInfoCell}>{$farm}</td>
-<td {$init->bgInfoCell}>{$factory}</td>
-<td {$init->bgInfoCell}>{$commerce}</td>
-<td {$init->bgInfoCell}>{$mountain}</td>
-<td {$init->bgInfoCell}>{$hatuden}</td>
+	<th {$init->bgNumberCell} rowspan=2>{$init->tagNumber_}$j{$init->_tagNumber}</th>
+	<td {$init->bgNameCell} rowspan=2>{$name}</td>
+	<td {$init->bgMarkCell}><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
+	<td {$init->bgInfoCell}>{$ally['number']}島</td>
+	<td {$init->bgInfoCell}>{$pop}</td>
+	<td {$init->bgInfoCell}>{$ally['occupation']}%</td>
+	<td {$init->bgInfoCell}>{$farm}</td>
+	<td {$init->bgInfoCell}>{$factory}</td>
+	<td {$init->bgInfoCell}>{$commerce}</td>
+	<td {$init->bgInfoCell}>{$mountain}</td>
+	<td {$init->bgInfoCell}>{$hatuden}</td>
 </tr>
 <tr>
-<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$GLOBALS['THIS_FILE']}?Allypact={$ally['id']}">{$ally['oName']}</a>：{$init->_tagTH}{$ally['comment']}</td>
+	<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$GLOBALS['THIS_FILE']}?Allypact={$ally['id']}">{$ally['oName']}</a>：{$init->_tagTH}{$ally['comment']}</td>
 </tr>
 END;
 		}
@@ -129,8 +134,9 @@ END;
 
 		echo <<<END
 <DIV align='center'>
-{$init->tagBig_}{$init->tagName_}{$allyName}{$init->_tagName}の情報{$init->_tagBig}<br>
-{$GLOBALS['BACK_TO_TOP']}</DIV><BR>
+	{$init->tagBig_}{$init->tagName_}{$allyName}{$init->_tagName}の情報{$init->_tagBig}<br>
+</DIV>
+
 <DIV ID='campInfo'>
 END;
 		// 同盟状況の表示
@@ -145,7 +151,8 @@ END;
 			}
 			$allyMessage = $ally['message'];
 			if($init->autoLink) {
-				$allyMessage = preg_replace("/(^|[^=\"'])(http://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)/", "\\1<a href=\"\\2\" target=\"_top\">\\2</a>", $allyMessage);
+				//$allyMessage = preg_replace("/(^|[^=\"'])(http://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)/", "<a href='$2' target='_blank'>$2</a>", $allyMessage);
+				preg_replace("/(^|[^=\\\"'])(http:\/\/[[:alnum:]\+\$\;\?\.%,!#~*\/:@&=_-]+)/", "<a href='$2' target='_blank'>$2</a>", $allyMessage);
 			}
 			echo <<<END
 <HR>
@@ -162,13 +169,13 @@ END;
 <TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</TH>
 <TH {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</TH>
 <TH {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}面積{$init->_tagTH}</TH>
+<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</TH>
 <TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</TH>
 <TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}農場規模{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}工場規模{$init->_tagTH}</TH>
+<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</TH>
+<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</TH>
 <th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}採掘場規模{$init->_tagTH}</th>
+<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
 <th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
 </TR>
 END;
@@ -236,7 +243,7 @@ END;
 		echo <<<END
 <DIV align='center'>
 {$init->tagBig_}コメント変更（{$init->tagName_}{$ally['name']}{$init->_tagName}）{$init->_tagBig}<br>
-{$GLOBALS['BACK_TO_TOP']}</DIV><BR>
+</DIV>
 
 <DIV ID='changeInfo'>
 <table border=0 width=50%>
@@ -325,6 +332,8 @@ END;
 					$s = ' SELECTED';
 				}
 				$colorList[$i] .= "<OPTION VALUE=\"{$hx[$j]}\"$s>{$hx[$j]}\n";
+				
+				//var_dump($colorList[$i]);
 			}
 		}
 
@@ -367,12 +376,13 @@ END;
 		$joinCost = isset($init->comCost[$init->comAlly]) ? "{$init->comCost[$init->comAlly]}{$init->unitMoney}" : '無料';
 		$joinStr = $init->allyJoinComUse ? '' : "加盟・脱退の際の費用は、{$init->tagMoney_}$joinCost{$init->_tagMoney}です。<BR>";
 		$str3 = $adminMode ? "特殊パスワードは？（必須）<BR>
-<INPUT TYPE=\"password\" NAME=\"OLDPASS\" VALUE=\"{$data['defaultPassword']}\" SIZE=32 MAXLENGTH=32 class=f><BR>同盟" : "<span class='attention'>(注意)</span><BR>
+<INPUT TYPE=\"password\" NAME=\"OLDPASS\" VALUE=\"{$data['defaultPassword']}\" SIZE=32 MAXLENGTH=32 class=f><BR>同盟" : "<div class='alert alert-info'><span class='attention'>(注意)</span><BR>
 同盟の結成・変更の費用は、{$init->tagMoney_}{$makeCost}{$init->_tagMoney}です。<BR>
 また、毎ターン必要とされる維持費は{$init->tagMoney_}$keepCost{$init->_tagMoney}です。<BR>
 （維持費は同盟に所属する島で均等に負担することになります）<BR>
 {$joinStr}
-</P>
+</div>
+
 あなたの島は？（必須）<BR>
 <SELECT NAME=\"ISLANDID\" {$str2}>
 {$hako->islandList}
@@ -381,7 +391,7 @@ END;
 		echo <<<END
 <DIV align='center'>
 {$init->tagBig_}同盟の{$str0}変更・解散{$str1}{$init->_tagBig}<br>
-{$GLOBALS['BACK_TO_TOP']}</DIV><BR>
+</DIV>
 
 <DIV ID='changeInfo'>
 <table border=0 width=50%><tr><td class="M"><P>
@@ -413,31 +423,38 @@ END;
 同盟の名前（変更）<small>(全角{$init->lengthAllyName}字まで)</small><BR>
 <INPUT TYPE="text" NAME="ALLYNAME" VALUE="$allyname" SIZE=32 MAXLENGTH=32><BR>
 マーク（変更）<BR>
-<SELECT NAME="MARK" onChange=colorPack() onClick=colorPack()>
+<SELECT NAME="MARK" onChange="colorPack()" onClick="colorPack()">
 {$markList}
 </SELECT>
 <ilayer name="PARENT_CTBL" width="100%" height="100%">
    <layer name="CTBL" width="200"></layer>
    <span id="CTBL"></span>
 </ilayer>
-<BR>
-マークの色コード（変更）<BR><TABLE BORDER=0><TR>
-<TD align='center'>RED</TD>
-<TD align='center'>GREEN</TD>
-<TD align='center'>BLUE</TD>
-</TR><TR>
-<TD><SELECT NAME="COLOR1" onChange=colorPack() onClick=colorPack()>
-{$colorList[1]}</SELECT><SELECT NAME="COLOR2" onChange=colorPack() onClick=colorPack()>
-{$colorList[2]}</SELECT></TD>
-<TD><SELECT NAME="COLOR3" onChange=colorPack() onClick=colorPack()>
-{$colorList[3]}</SELECT><SELECT NAME="COLOR4" onChange=colorPack() onClick=colorPack()>
-{$colorList[4]}</SELECT></TD>
-<TD><SELECT NAME="COLOR5" onChange=colorPack() onClick=colorPack()>
-{$colorList[5]}</SELECT><SELECT NAME="COLOR6" onChange=colorPack() onClick=colorPack()>
-{$colorList[6]}</SELECT></TD>
-</TR></TABLE>
+マークの色コード（変更）<BR>
+<TABLE BORDER=0>
+<TR>
+	<TD align='center'>RED</TD>
+	<TD align='center'>GREEN</TD>
+	<TD align='center'>BLUE</TD>
+</TR>
+<TR>
+	<TD>
+		<SELECT NAME="COLOR1" onChange="colorPack()" onClick="colorPack()">{$colorList[1]}</SELECT>
+		<SELECT NAME="COLOR2" onChange="colorPack()" onClick="colorPack()">{$colorList[2]}</SELECT>
+	</TD>
+	<TD>
+		<SELECT NAME="COLOR3" onChange="colorPack()" onClick="colorPack()">{$colorList[3]}</SELECT>
+		<SELECT NAME="COLOR4" onChange="colorPack()" onClick="colorPack()">{$colorList[4]}</SELECT>
+	</TD>
+	<TD>
+		<SELECT NAME="COLOR5" onChange="colorPack()" onClick="colorPack()">{$colorList[5]}</SELECT>
+		<SELECT NAME="COLOR6" onChange="colorPack()" onClick="colorPack()">{$colorList[6]}</SELECT>
+	</TD>
+</TR>
+</TABLE>
+
 <INPUT TYPE="submit" VALUE="結成(変更)" NAME="NewAllyButton">
-<SCRIPT language="JavaScript">
+<script>
 <!--
 END;
 		if(!$adminMode) {
@@ -445,31 +462,21 @@ END;
 function colorPack() {
 	var island = new Array(128);
 	{$jsIslandList}
-	a = document.AcForm.COLOR1.value;
-	b = document.AcForm.COLOR2.value;
-	c = document.AcForm.COLOR3.value;
-	d = document.AcForm.COLOR4.value;
-	e = document.AcForm.COLOR5.value;
-	f = document.AcForm.COLOR6.value;
-	mark = document.AcForm.MARK.value;
-	number = document.AcForm.ISLANDID.value;
+	var a = document.AcForm.COLOR1.value;
+	var b = document.AcForm.COLOR2.value;
+	var c = document.AcForm.COLOR3.value;
+	var d = document.AcForm.COLOR4.value;
+	var e = document.AcForm.COLOR5.value;
+	var f = document.AcForm.COLOR6.value;
+	var mark = document.AcForm.MARK.value;
+	var number = document.AcForm.ISLANDID.value;
 
 	str = "#" + a + b + c + d + e + f;
-	// document.AcForm.AcColorValue.value = str;
 	str = '表示サンプル：『<B><span class="number"><FONT color="' + str +'">' + mark + '</FONT></B>'
 		+ island[number] + '島</span>』';
 
-	if(document.getElementById){
-		document.getElementById("CTBL").innerHTML = str;
-	} else if(document.all){
-		el = document.all("CTBL");
-		el.innerHTML = str;
-	} else if(document.layers) {
-		lay = document.layers["PARENT_CTBL"].document.layers["CTBL"];
-		lay.document.open();
-		lay.document.write(str);
-		lay.document.close();
-	}
+	document.getElementById("CTBL").innerHTML = str;
+
 	return true;
 }
 function allyPack() {
@@ -494,29 +501,20 @@ END;
 function colorPack() {
 	var island = new Array(128);
 	{$jsIslandList}
-	a = document.AcForm.COLOR1.value;
-	b = document.AcForm.COLOR2.value;
-	c = document.AcForm.COLOR3.value;
-	d = document.AcForm.COLOR4.value;
-	e = document.AcForm.COLOR5.value;
-	f = document.AcForm.COLOR6.value;
-	mark = document.AcForm.MARK.value;
+	var a = document.AcForm.COLOR1.value;
+	var b = document.AcForm.COLOR2.value;
+	var c = document.AcForm.COLOR3.value;
+	var d = document.AcForm.COLOR4.value;
+	var e = document.AcForm.COLOR5.value;
+	var f = document.AcForm.COLOR6.value;
+	var mark = document.AcForm.MARK.value;
 
-	str = "#" + a + b + c + d + e + f;
-	// document.AcForm.AcColorValue.value = str;
+	var str = "#" + a + b + c + d + e + f;
+
 	str = '表示サンプル：『<B><span class="number"><FONT color="' + str +'">' + mark + '</FONT></B>'
 		+ 'さんぷる島</span>』';
-	if(document.getElementById){
-		document.getElementById("CTBL").innerHTML = str;
-	} else if(document.all){
-		el = document.all("CTBL");
-		el.innerHTML = str;
-	} else if(document.layers) {
-		lay = document.layers["PARENT_CTBL"].document.layers["CTBL"];
-		lay.document.open();
-		lay.document.write(str);
-		lay.document.close();
-	}
+	
+	document.getElementById("CTBL").innerHTML = str;
 
 	return true;
 }
@@ -545,7 +543,11 @@ colorPack();
 //-->
 </script>
 </form>
-</td></tr></table></div>
+
+</td>
+</tr>
+</table>
+</div>
 END;
 	}
 }
@@ -554,14 +556,12 @@ END;
 //------------------------------------------------------------
 class AllySetted extends HtmlAlly {
 	// 盟主コメント変更完了
-	function allyPactOK($name) {
-		global $init;
-		echo "{$init->tagBig_}{$name}のコメントを変更しました。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+	static function allyPactOK($name) {
+		echo "{$name}のコメントを変更しました。\n";
 	}
 	// 同盟データの再構成
-	function allyDataUp() {
-		global $init;
-		echo "{$init->tagBig_}同盟データを再構成しました。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+	static function allyDataUp() {
+		echo "同盟データを再構成しました。\n";
 	}
 }
 //------------------------------------------------------------
@@ -571,42 +571,42 @@ class AllyError {
 	// すでにその名前の同盟がある場合
 	function newAllyAlready() {
 		global $init;
-		echo "{$init->tagBig_}その同盟ならすでに結成されています。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}その同盟ならすでに結成されています。\n";
 	}
 	// すでにそのマークの同盟がある場合
 	function markAllyAlready() {
 		global $init;
-		echo "{$init->tagBig_}そのマークはすでに使用されています。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}そのマークはすでに使用されています。\n";
 	}
 	// 別の同盟を結成している
 	function leaderAlready() {
 		global $init;
-		echo "{$init->tagBig_}盟主は、自分の同盟以外には加盟できません。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}盟主は、自分の同盟以外には加盟できません。\n";
 	}
 	// 別の同盟に加盟している
 	function otherAlready() {
 		global $init;
-		echo "{$init->tagBig_}ひとつの同盟にしか加盟できません。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}ひとつの同盟にしか加盟できません。\n";
 	}
 	// 資金足りず
 	function noMoney() {
 		global $init;
-		echo "{$init->tagBig_}資金不足です(/_<。){$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}資金不足です(/_<。)\n";
 	}
 	// IDチェックにひっかかる
 	function wrongAlly() {
 		global $init;
-		echo "{$init->tagBig_}あなたは盟主ではないと思う。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}あなたは盟主ではないと思う。\n";
 	}
 	// 新規で同盟がない場合
 	function newAllyNoName() {
 		global $init;
-		echo "{$init->tagBig_}同盟につける名前が必要です。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}同盟につける名前が必要です。\n";
 	}
 	// 管理者以外結成不可
 	function newAllyForbbiden() {
 		global $init;
-		echo "{$init->tagBig_}申し訳ありません、受付を中止しています。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+		echo "{$init->tagBig_}申し訳ありません、受付を中止しています。\n";
 	}
 }
 
@@ -706,7 +706,7 @@ class MakeAlly {
 					}
 				}
 				if(!$flag) {
-					echo "{$init->tagBig_}変更できません。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+					echo "{$init->tagBig_}変更できません。\n";
 					return;
 				}
 				$hako->ally[$n]['id']       = $allyID;
@@ -804,7 +804,8 @@ class MakeAlly {
 		$adminMode = 0;
 
 		// パスワードチェック
-		if(Util::checkPassword("", $data['OLDPASS'])) {
+		$passCheck = isset($data['OLDPASS']) ? Util::checkPassword("", $data['OLDPASS']) : false;
+		if ($passCheck) {
 			$n = $currentAnumber;
 			$currentID = $hako->ally[$n]['id'];
 			$adminMode = 1;
@@ -829,7 +830,7 @@ class MakeAlly {
 		$allyMember = $hako->ally[$n]['memberId'];
 
 		if($adminMode && (($allyMember[0] != '') || ($n == ''))){
-			echo "{$init->tagBig_}削除できません。{$init->_tagBig}<br>{$GLOBALS['BACK_TO_TOP']}\n";
+			echo "{$init->tagBig_}削除できません。\n";
 			return;
 		}
 		foreach ($allyMember as $id) {

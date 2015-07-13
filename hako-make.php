@@ -509,12 +509,14 @@ class Make {
 		}
 		// モードで分岐
 		$command = $island['command'];
+							
 
 		if(strcmp($data['COMMANDMODE'], 'delete') == 0) {
 			Util::slideFront($command, $data['NUMBER']);
 			HtmlSetted::commandDelete();
-		} elseif(($data['COMMAND'] == $init->comAutoPrepare) ||
-				 ($data['COMMAND'] == $init->comAutoPrepare2)) {
+			
+		} else if(($data['COMMAND'] == $init->comAutoPrepare) ||
+				  ($data['COMMAND'] == $init->comAutoPrepare2)) {
 			// フル整地、フル地ならし
 			// 座標配列を作る
 			$r = Util::makeRandomPointArray();
@@ -522,18 +524,26 @@ class Make {
 			$rpy = $r[1];
 			$land = $island['land'];
 			// コマンドの種類決定
-			$kind = $init->comPrepare;
-			if($data['COMMAND'] == $init->comAutoPrepare2) {
-				$kind = $init->comPrepare2;
+			switch ($data['COMMAND']){
+				case $init->comAutoPrepare:
+					$kind = $init->comPrepare;
+					break;
+				case $init->comAutoPrepare2:
+					$kind = $init->comPrepare2;
+					break;
 			}
+//			$kind = $init->comPrepare;
+//			if($data['COMMAND'] == $init->comAutoPrepare2) {
+//				$kind = $init->comPrepare2;
+//			}
 			$i = $data['NUMBER'];
 			$j = 0;
 			while(($j < $init->pointNumber) && ($i < $init->commandMax)) {
 				$x = $rpx[$j];
 				$y = $rpy[$j];
 				if($land[$x][$y] == $init->landWaste) {
-					Util::slideBack($command, $data['NUMBER']);
-					$command[$data['NUMBER']] = array (
+					Util::slideBack($command, $i);
+					$command[$i] = array (
 						'kind'   => $kind,
 						'target' => 0,
 						'x'      => $x,
@@ -545,7 +555,132 @@ class Make {
 				$j++;
 			}
 			HtmlSetted::commandAdd();
-		} elseif($data['COMMAND'] == $init->comAutoDelete) {
+			
+		} else if ($data['COMMAND'] == $init->comAutoReclaim) {
+			$r = Util::makeRandomPointArray();
+			$rpx = $r[0];
+			$rpy = $r[1];
+			$land = $island['land'];
+			$landValue = $island['landValue'];
+			
+			$i = $data['NUMBER'];
+			$j = 0;
+			while(($j < $init->pointNumber) && ($i < $init->commandMax)) {
+				$x = $rpx[$j];
+				$y = $rpy[$j];
+				$kind = $land[$x][$y]; 
+				$lv = $landValue[$x][$y];
+
+				if (($kind == $init->landSea) && ($lv == 1)) {
+					Util::slideBack($command, $i);
+					$command[$i] = array (
+						'kind'   => $init->comReclaim,
+						'target' => 0,
+						'x'      => $x,
+						'y'      => $y,
+						'arg'    => 0,
+					);
+					$i++;
+				}
+				$j++;
+			}
+/*
+    } elsif($HcommandKind == $HcomAutoDestroy) {
+        # 浅瀬掘削
+        makeRandomPointArray();
+        my($land) = $island->{'land'};
+        my($landValue) = $island->{'landValue'};
+
+        my($x, $y, $kind, $lv, $i, $n);
+        $n = 0;
+        for ($i = 0; ($i < $HpointNumber) && ($n < $HcommandMax); $i++) {
+            $x = $Hrpx[$i];
+            $y = $Hrpy[$i];
+            $kind = $land->[$x][$y];
+            $lv = $landValue->[$x][$y];
+
+            if (($kind == $HlandSea) && ($lv == 1)) {
+                # 浅瀬
+                slideBack($command, $HcommandPlanNumber);
+                $command->[$HcommandPlanNumber] = {
+                    'kind' => $HcomDestroy, # 掘削
+                    'target' => 0,
+                    'x' => $x,
+                    'y' => $y,
+                    'arg' => 0
+                    };
+                $n++;
+            }
+        }
+        tempCommandAdd();
+    } elsif($HcommandKind == $HcomAutoSellTree) {
+        # 伐採
+        # （数量×２００本より多い森だけが対象）
+        makeRandomPointArray();
+        my($land) = $island->{'land'};
+        my($landValue) = $island->{'landValue'};
+
+        my($x, $y, $kind, $lv, $i, $n);
+        $n = 0;
+        for ($i = 0; ($i < $HpointNumber) && ($n < $HcommandMax - 1); $i++) {
+            $x = $Hrpx[$i];
+            $y = $Hrpy[$i];
+            $kind = $land->[$x][$y];
+            $lv = $landValue->[$x][$y];
+
+            if (($kind == $HlandForest) && ($lv > $HcommandArg * 2)) {
+                # 森
+                slideBack($command, $HcommandPlanNumber);
+                $command->[$HcommandPlanNumber] = {
+                    'kind' => $HcomSellTree, # 伐採
+                    'target' => 0,
+                    'x' => $x,
+                    'y' => $y,
+                    'arg' => 0
+                    };
+                $n += 2;
+            }
+        }
+        tempCommandAdd();
+    } elsif($HcommandKind == $HcomAutoForestry) {
+        # 伐採と植林
+        # （数量×２００本より多い森だけが対象）
+        makeRandomPointArray();
+        my($land) = $island->{'land'};
+        my($landValue) = $island->{'landValue'};
+
+        my($x, $y, $kind, $lv, $i, $n);
+        $n = 0;
+        for ($i = 0; ($i < $HpointNumber) && ($n < $HcommandMax - 1); $i++) {
+            $x = $Hrpx[$i];
+            $y = $Hrpy[$i];
+            $kind = $land->[$x][$y];
+            $lv = $landValue->[$x][$y];
+
+            if (($kind == $HlandForest) && ($lv > $HcommandArg * 2)) {
+                # 森
+                slideBack($command, $HcommandPlanNumber);
+                $command->[$HcommandPlanNumber] = {
+                    'kind' => $HcomPlant, # 植林
+                    'target' => 0,
+                    'x' => $x,
+                    'y' => $y,
+                    'arg' => 0
+                    };
+                slideBack($command, $HcommandPlanNumber);
+                $command->[$HcommandPlanNumber] = {
+                    'kind' => $HcomSellTree, # 伐採
+                    'target' => 0,
+                    'x' => $x,
+                    'y' => $y,
+                    'arg' => 0
+                    };
+                $n += 2;
+            }
+        }
+        tempCommandAdd();
+ */
+		} else if($data['COMMAND'] == $init->comAutoDelete) {
 			// 全消し
 			for($i = 0; $i < $init->commandMax; $i++) {
 				Util::slideFront($command, 0);
@@ -565,6 +700,7 @@ class Make {
 				'arg'    => $data['AMOUNT'],
 			);
 		}
+		
 		// データの書き出し
 		$island['command'] = $command;
 		$hako->islands[$num] = $island;

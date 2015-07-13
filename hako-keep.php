@@ -27,27 +27,20 @@ class HTMLKP extends HTML {
 		global $init;
 
 		echo <<<END
-<CENTER><a href="{$init->baseDir}/hako-main.php"><span class="big">トップへ戻る</span></a></CENTER>
-<h1 class="title">{$init->title}<br>島預かり管理ツール</h1>
+<h1 class="title">島預かり管理ツール</h1>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<h2>管理人預かりに変更</h2><br>
-<br>
-<select name="ISLANDID">
-$hako->islandListNoKP
-</select>
-<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-<input type="hidden" name="mode" value="TOKP">
-<input type="submit" value="管理人預かりに変更">
+	<h2>管理人預かりに変更</h2>
+	<select name="ISLANDID">$hako->islandListNoKP</select>
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="TOKP">
+	<input type="submit" value="管理人預かりに変更">
 </form>
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-<h2>管理人預かりを解除</h2><br>
-<br>
-<select name="ISLANDID">
-$hako->islandListKP
-</select>
-<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-<input type="hidden" name="mode" value="FROMKP">
-<input type="submit" value="管理人預かりを解除">
+	<h2>管理人預かりを解除</h2>
+	<select name="ISLANDID">$hako->islandListKP</select>
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="FROMKP">
+	<input type="submit" value="管理人預かりを解除">
 </form>
 END;
 	}
@@ -166,7 +159,7 @@ class Main {
 		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
 			return 1;
 		} else {
-			print "<h2>パスワードが違います。</h2>\n";
+			echo "<h2>パスワードが違います。</h2>\n";
 			return 0;
 		}
 	}
