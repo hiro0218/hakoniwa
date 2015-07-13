@@ -16,7 +16,7 @@ class HTML {
 	//---------------------------------------------------
 	// HTML ヘッダ出力
 	//---------------------------------------------------
-	function header($data = "") {
+	static function header($data = "") {
 		global $init;
 
 		// $css  = (empty($data['defaultSkin'])) ? $init->cssList[0] : $data['defaultSkin'];

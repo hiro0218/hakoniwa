@@ -469,7 +469,10 @@ class HakoIO {
 				}
 				// データディレクトリの中身を空にする
 				$to_del = "{$init->dirName}.bak{$i}";
-				$dir = opendir("{$to_del}/");
+				if ( file_exists("{$to_del}/") ) {
+					$dir = opendir("{$to_del}/");
+				}
+				
 				while ($fileName = readdir($dir)) {
 					if (!(strcmp($fileName, ".") == 0 || strcmp($fileName, "..") == 0))
 						unlink("{$to_del}/{$fileName}");
@@ -477,7 +480,13 @@ class HakoIO {
 				closedir($dir);
 
 				// データディレクトリを開く
+				if ( file_exists($dir2) ) {
+					$dir = opendir($dir2);
+				} else {
+					mkdir($dir2);
+				}
 				$dir = opendir($dir2);
+				
 				while ($copyFile = readdir($dir)) {
 					if (is_file("{$dir2}/{$copyFile}")) {
 						// コピー元

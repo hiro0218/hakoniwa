@@ -370,8 +370,8 @@ class Init {
 	public $disPooPop     = 500;  // 暴動が発生する最低人口（50000人）
 
 	// 地盤沈下
-	public $disFallBorder = 100; // 安全限界の広さ(Hex数)
-	public $disFalldown   = 30;  // その広さを超えた場合の確率
+	public $disFallBorder = 290;//100; // 安全限界の広さ(Hex数)
+	public $disFalldown   = 10;//30;  // その広さを超えた場合の確率
 
 	//---------------------------------------------------
 	// 怪獣に関する設定
