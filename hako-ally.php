@@ -29,7 +29,7 @@ class HtmlAlly extends HTML {
 	//--------------------------------------------------
 	function allyTop($hako, $data) {
 		global $init;
-		
+
 		echo "<div class='row'>";
 		echo "<div class='col-xs-12'>";
 		echo "<h1>同盟管理ツール</h1>\n";
@@ -41,7 +41,7 @@ class HtmlAlly extends HTML {
 END;
 		}
 		$this->allyInfo($hako);
-		
+
 		echo "</div>";
 		echo "</div>";
 
@@ -332,7 +332,7 @@ END;
 					$s = ' SELECTED';
 				}
 				$colorList[$i] .= "<OPTION VALUE=\"{$hx[$j]}\"$s>{$hx[$j]}\n";
-				
+
 				//var_dump($colorList[$i]);
 			}
 		}
@@ -513,7 +513,7 @@ function colorPack() {
 
 	str = '表示サンプル：『<B><span class="number"><FONT color="' + str +'">' + mark + '</FONT></B>'
 		+ 'さんぷる島</span>』';
-	
+
 	document.getElementById("CTBL").innerHTML = str;
 
 	return true;
@@ -1575,7 +1575,6 @@ class Main {
 			exit();
 		}
 		$cgi->setCookies();
-		$cgi->lastModified();
 
 		$html = new HtmlAlly;
 		$com = new MakeAlly;

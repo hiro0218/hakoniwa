@@ -2692,7 +2692,7 @@ END;
 </ul>
 
 <p>
-<a title='数字=数量　BS=一つ前削除
+<a href="javascript:void(0)" title='数字=数量　BS=一つ前削除
 DEL=削除　INS=資金繰り
 A=整地　J=地ならし
 K=掘削　U=埋め立て
