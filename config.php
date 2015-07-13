@@ -37,7 +37,7 @@ class Init {
 	// CSSファイルを置くディレクトリ
 	var $cssDir  = "http://localhost/php/css";
 	// CSSリスト
-	var $cssList = array('SkyBlue.css', 'Autumn.css', 'Black.css', 'Blue.css', 'Verdure.css', 'Monotone.css', 'Notebook.css', 'Onepiece.css', 'Tropical.css','Green.css');
+	var $cssList = array('SkyBlue.css');
 	
 	// データディレクトリの名前（必ず変更してください）
 	var $dirName = "data";
