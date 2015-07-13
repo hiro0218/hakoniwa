@@ -2052,11 +2052,12 @@ class Turn {
 					}
 					$bx = $by = 0;
 					// 金が尽きるか指定数に足りるか基地全部が撃つまでループ
+					$count = 0;
 					while(($arg > 0) && ($island['money'] >= $cost)) {
 						// 基地を見つけるまでループ
 						while($count < $init->pointNumber) {
-							$bx = $this->rpx[$count];
-							$by = $this->rpy[$count];
+							$bx = isset($this->rpx[$count]) ? $this->rpx[$count] : 0;
+							$by = isset($this->rpx[$count]) ? $this->rpy[$count] : 0;
 							if(($land[$bx][$by] == $init->landBase) || ($land[$bx][$by] == $init->landSbase)) {
 								break;
 							}
@@ -2101,6 +2102,52 @@ class Turn {
 
 							// 防衛施設判定
 							$defence = 0;
+							if ( isset($defenceHex[$id][$tx][$ty]) ) {
+								if($defenceHex[$id][$tx][$ty] == 1) {
+									$defence = 1;
+								} elseif($defenceHex[$id][$tx][$ty] == -1) {
+									$defence = 0;
+								}
+							} else {
+								if(($tL == $init->landDefence) || ($tL == $init->landSdefence) || ($tL == $init->landProcity)) {
+									// 防衛施設に命中
+									if(($tLv > 1) &&
+										(($kind == $init->comMissileNM) ||
+										($kind == $init->comMissilePP) ||
+										($kind == $init->comMissileST))) {
+										// 防衛施設の耐久力を下げる
+										$tLv --;
+									} elseif($kind == $init->comMissileSP) {
+										break;
+									} else {
+										// 耐久力が１か、他のミサイル直撃なら、防衛施設破壊
+										$tLv = 0;
+										// フラグをクリア
+										for($i = 0; $i < 19; $i++) {
+											$sx = $tx + $init->ax[$i];
+											$sy = $ty + $init->ay[$i];
+											// 行による位置調整
+											if((($sy % 2) == 0) && (($ty % 2) == 1)) {
+												$sx--;
+											}
+											if(($sx < 0) || ($sx >= $init->islandSize) || ($sy < 0) || ($sy >= $init->islandSize)) {
+												// 範囲外の場合何もしない
+											} else {
+												// 範囲内の場合
+												$defenceHex[$id][$sx][$sy] = 0;
+											}
+										}
+									}
+								} elseif(Turn::countAround($tLand, $tx, $ty, 19, array($init->landDefence, $init->landSdefence)) +
+									Turn::countAround($tLand, $tx, $ty, 7, array($init->landProcity))) {
+									$defenceHex[$id][$tx][$ty] = 1;
+									$defence = 1;
+								} else {
+									$defenceHex[$id][$tx][$ty] = -1;
+									$defence = 0;
+								}
+							}
+							/*
 							if($defenceHex[$id][$tx][$ty] == 1) {
 								$defence = 1;
 							} elseif($defenceHex[$id][$tx][$ty] == -1) {
@@ -2144,6 +2191,7 @@ class Turn {
 									$defence = 0;
 								}
 							}
+							*/
 							if($defence == 1) {
 								// 空中爆破
 								$missileB++;
@@ -4785,6 +4833,7 @@ class Turn {
 		}
 
 		// 暴動判定
+		$island['pop'] = ($island['pop'] < 0) ? 1 : $island['pop'];
 		$unemployed = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
 		if (($island['isBF'] != 1) && (Util::random(1000) < $unemployed) && ($unemployed > $init->disPoo) && ($island['pop'] >= $init->disPooPop)) {
 			// 暴動発生
