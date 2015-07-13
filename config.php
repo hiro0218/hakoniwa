@@ -8,8 +8,14 @@
 	config.php by SERA - 2013/07/06
 
 *******************************************************************/
+
+// 開発用の設定
 ini_set('display_errors', 1);
+set_time_limit (0);
 error_reporting(E_ALL);
+header("Cache-Control: no-cache, must-revalidate"); // HTTP/1.1
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // 過去の日付
+
 date_default_timezone_set('Asia/Tokyo');
 
 define("DEBUG", true); 								// true: デバッグ false: 通常

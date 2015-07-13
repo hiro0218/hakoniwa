@@ -16,8 +16,7 @@ require_once ABSOLUTE_PATH.'hako-html.php';
 
 define("READ_LINE", 1024);
 
-$init = new Init;
-$GAME_TOP   = $init->baseDir . "/hako-main.php";
+$init = new Init();
 $THIS_FILE  = $init->baseDir . "/hako-ally.php";
 
 //------------------------------------------------------------
@@ -120,6 +119,7 @@ END;
 		}
 		echo "</table>\n";
 		echo "</div>\n";
+
 		echo "<b>※</b>同盟の名前をクリックすると「同盟の情報」欄へ、盟主島の名前だと「コメント変更」欄へ移動します。\n";
 	}
 	//--------------------------------------------------
@@ -133,11 +133,11 @@ END;
 		$allyName = "<FONT COLOR=\"{$ally['color']}\"><B>{$ally['mark']}</B></FONT>{$ally['name']}";
 
 		echo <<<END
-<DIV align='center'>
+<div class='text-center'>
 	{$init->tagBig_}{$init->tagName_}{$allyName}{$init->_tagName}の情報{$init->_tagBig}<br>
-</DIV>
+</div>
 
-<DIV ID='campInfo'>
+<div ID='campInfo'>
 END;
 		// 同盟状況の表示
 		if($ally['number']) {
@@ -155,29 +155,31 @@ END;
 				preg_replace("/(^|[^=\\\"'])(http:\/\/[[:alnum:]\+\$\;\?\.%,!#~*\/:@&=_-]+)/", "<a href='$2' target='_blank'>$2</a>", $allyMessage);
 			}
 			echo <<<END
-<HR>
-<TABLE BORDER width=80%>
-<TR><TH {$init->bgTitleCell}>{$init->tagTH_}$allyTitle{$init->_tagTH}</TH></TR>
-<TR><TD {$init->bgCommentCell}><blockquote>$allyMessage</blockquote></TD></TR>
-</TABLE>
+<hr>
+
+<table class="table table-bordered" width="80%">
+	<TR><TH {$init->bgTitleCell}>{$init->tagTH_}$allyTitle{$init->_tagTH}</TH></TR>
+	<TR><TD {$init->bgCommentCell}><blockquote>$allyMessage</blockquote></TD></TR>
+</table>
 END;
 		}
         // メンバー一覧の表示
 		echo <<<END
 <HR>
-<TABLE BORDER><TR>
-<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</TH>
-<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</TH>
-<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
-</TR>
+<TABLE class="table table-bordered">
+	<TR>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</TH>
+		<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
+	</TR>
 END;
 		if(!$ally['number']) {
 			echo "<TR><TH colspan=12>所属している島がありません！</TH></TR>";
@@ -251,10 +253,10 @@ END;
 	<td class="M">
 		<FORM action="{$GLOBALS['THIS_FILE']}" method="POST">
 			<B>盟主パスワードは？</B><BR>
-			<INPUT TYPE="password" NAME="Allypact" VALUE="{$data['defaultPassword']}" SIZE=32 MAXLENGTH=32 class=f>
+			<INPUT TYPE="password" NAME="Allypact" VALUE="{$data['defaultPassword']}" SIZE=32 MAXLENGTH=32 class="f" class="form-control">
 			<INPUT TYPE="hidden"  NAME="ALLYID" VALUE="{$ally['id']}">
 			<INPUT TYPE="submit" VALUE="送信" NAME="AllypactButton"><BR>
-			<B>コメント</B><small>(全角{$init->lengthAllyComment}字ま���：トップページの「各同盟の状況」欄に表示されます)</small><BR>
+			<B>コメント</B><small>(全角{$init->lengthAllyComment}字まで：トップページの「各同盟の状況」欄に表示されます)</small><BR>
 			<INPUT TYPE="text" NAME="ALLYCOMMENT"  VALUE="{$ally['comment']}" SIZE=100 MAXLENGTH=50><BR>
 			<BR>
 			<B>メッセージ・盟約など</B><small>(「同盟の情報」欄の上に表示されます)</small><BR>
@@ -280,6 +282,11 @@ END;
 
 		$adminMode = 0;
 
+		$jsAllyList      = "";
+		$jsAllyIdList    = "";
+		$jsAllyMarkList  = "";
+		$jsAllyColorList = "";
+
 		$data['defaultPassword'] = isset($data['defaultPassword']) ? $data['defaultPassword'] : "";
 		if(Util::checkPassword("", $data['defaultPassword'])) {
 			// 管理者の判定は、お菓子のパスワード、盟主の変更可
@@ -288,7 +295,7 @@ END;
 			$this->allyTop($hako, $data);
 		}
 
-		$jsIslandList = '';
+		$jsIslandList    = "";
 		$num = (int)$hako->islandNumber;
 		for($i=0; $i<$num; $i++) {
 			$name = $hako->islands[$i]['name'];
@@ -313,40 +320,38 @@ END;
 		foreach ($init->allyMark as $aMark) {
 			$s = '';
 			if($aMark == $defaultMark) {
-				$s = ' SELECTED';
+				$s = ' selected';
 			}
-			$markList .= "<OPTION VALUE=\"$aMark\"$s>$aMark\n";
+			$markList .= "<option value=\"$aMark\"$s>$aMark</option>\n";
 		}
 
 		$hx = array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F');
-		$colorList = array();
+		$colorList = array('','','','','','','');
 		for($i=1; $i<7; $i++) {
 			if($n == '') {
 				$allycolor[$i] = '0';
 			} else {
 				$allycolor[$i] = substr($hako->ally[$n]['color'], $i, 1);
 			}
-			for($j=0; $j<16; $j++) {
+			for($j=0; $j<count($hx); $j++) {
 				$s = '';
 				if($hx[$j] == $allycolor[$i]) {
-					$s = ' SELECTED';
+					$s = ' selected';
 				}
-				$colorList[$i] .= "<OPTION VALUE=\"{$hx[$j]}\"$s>{$hx[$j]}\n";
-
-				//var_dump($colorList[$i]);
+				$colorList[$i] .= "<option value=\"{$hx[$j]}\"$s>{$hx[$j]}</option>\n";
 			}
 		}
 
 		$max = 201;
 		if($hako->allyNumber) {
-			$jsAllyList = "ally = [";
-			$jsAllyIdList = "allyID = [";
-			$jsAllyMarkList = "allyMark = [";
-			$jsAllyColorList = "allyColor = [";
+			$jsAllyList      = "var ally = [";
+			$jsAllyIdList    = "var allyID = [";
+			$jsAllyMarkList  = "var allyMark = [";
+			$jsAllyColorList = "var allyColor = [";
 			for($i=0; $i<count($hako->ally); $i++) {
 				$s = "";
-				if($hako->ally[$i]['id'] == $defaultAllyId) $s = ' SELECTED';
-				$allyList .= "<OPTION VALUE=\"$i\"$s>{$hako->ally[$i]['name']}\n";
+				if($hako->ally[$i]['id'] == $defaultAllyId) $s = ' selected';
+				$allyList .= "<option value=\"$i\"$s>{$hako->ally[$i]['name']}</option>\n";
 				$jsAllyList .= "'{$hako->ally[$i]['name']}'";
 				$jsAllyIdList .= "{$hako->ally[$i]['id']}";
 				$jsAllyMarkList .= "'{$hako->ally[$i]['mark']}'";
@@ -396,9 +401,8 @@ END;
 <DIV ID='changeInfo'>
 <table border=0 width=50%><tr><td class="M"><P>
 <FORM name="AcForm" action="{$GLOBALS['THIS_FILE']}" method="POST">
-{$str3}
-のパスワードは？（必須）<BR>
-<INPUT TYPE="password" NAME="PASSWORD" SIZE=32 MAXLENGTH=32 class=f>
+{$str3}のパスワードは？（必須）<BR>
+<INPUT TYPE="password" NAME="PASSWORD" SIZE="32" MAXLENGTH="32" class="f" class="form-control">
 END;
 		if($hako->allyNumber) {
 			$str4 = $adminMode ? '・結成・変更' : $init->allyJoinComUse ? '' : '・加盟・脱退';
@@ -411,27 +415,26 @@ END;
 {$allyList}
 </SELECT>
 <BR>
-<INPUT TYPE="submit" VALUE="解散" NAME="DeleteAllyButton">
+<INPUT TYPE="submit" VALUE="解散" NAME="DeleteAllyButton" class="btn btn-danger">
 {$str5}
 <BR>
 END;
 		}
-		$str7 = $adminMode ? "盟主島の変更(上のメニューで同盟を選択)<BR> or 同盟の新規作成(上のメニューは無効)<BR><SELECT NAME=\"ALLYID\"><OPTION VALUE=\"$max\">新規作成\n{$hako->islandList}</SELECT><BR>" : "<BR><B><FONT SIZE=4>［{$str0}変更］</FONT></B><BR>";
+		$str7 = $adminMode ? "盟主島の変更(上のメニューで同盟を選択)<BR> or 同盟の新規作成(上のメニューは無効)<BR><SELECT NAME=\"ALLYID\"><option value=\"$max\">新規作成\n{$hako->islandList}</option></SELECT><BR>" : "<BR><B><FONT SIZE=4>［{$str0}変更］</FONT></B><BR>";
 		echo <<<END
 <BR>
 {$str7}
 同盟の名前（変更）<small>(全角{$init->lengthAllyName}字まで)</small><BR>
-<INPUT TYPE="text" NAME="ALLYNAME" VALUE="$allyname" SIZE=32 MAXLENGTH=32><BR>
+<INPUT TYPE="text" NAME="ALLYNAME" VALUE="$allyname" SIZE=32 MAXLENGTH=32 class="form-control"><BR>
 マーク（変更）<BR>
-<SELECT NAME="MARK" onChange="colorPack()" onClick="colorPack()">
-{$markList}
-</SELECT>
+<SELECT NAME="MARK" onChange="colorPack()" onClick="colorPack()">{$markList}</SELECT>
+<br>
 <ilayer name="PARENT_CTBL" width="100%" height="100%">
    <layer name="CTBL" width="200"></layer>
    <span id="CTBL"></span>
 </ilayer>
 マークの色コード（変更）<BR>
-<TABLE BORDER=0>
+<TABLE class="table table-bordered table-condensed">
 <TR>
 	<TD align='center'>RED</TD>
 	<TD align='center'>GREEN</TD>
@@ -453,12 +456,11 @@ END;
 </TR>
 </TABLE>
 
-<INPUT TYPE="submit" VALUE="結成(変更)" NAME="NewAllyButton">
-<script>
-<!--
+<INPUT TYPE="submit" VALUE="結成 (変更)" NAME="NewAllyButton" class="btn btn-primary">
 END;
 		if(!$adminMode) {
 			echo <<<END
+<script>
 function colorPack() {
 	var island = new Array(128);
 	{$jsIslandList}
@@ -472,6 +474,7 @@ function colorPack() {
 	var number = document.AcForm.ISLANDID.value;
 
 	str = "#" + a + b + c + d + e + f;
+
 	str = '表示サンプル：『<B><span class="number"><FONT color="' + str +'">' + mark + '</FONT></B>'
 		+ island[number] + '島</span>』';
 
@@ -540,7 +543,6 @@ END;
 		}
 		echo <<<END
 colorPack();
-//-->
 </script>
 </form>
 
