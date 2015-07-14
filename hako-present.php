@@ -137,7 +137,7 @@ END;
 	}
 }
 
-class Hako extends HakoIO {
+class Hako extends File {
 	var $islandList;  // 島リスト
 
 	function init($cgi) {

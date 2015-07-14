@@ -24,7 +24,7 @@ $BACK_TO_TOP = "<A HREF=\"JavaScript:void(0);\" onClick=\"document.TOP.submit();
 ini_set('display_errors', 0);
 
 //----------------------------------------------------------------------
-class Hako extends HakoIO {
+class Hako extends File {
 
 	function readIslands(&$cgi) {
 		global $init;

@@ -11,21 +11,21 @@
 *******************************************************************/
 
 //--------------------------------------------------------------------
-class HakoIO {
-	var $islandTurn;      // ターン数
-	var $islandLastTime;  // 最終更新時刻
-	var $islandNumber;    // 島の総数
-	var $islandNextID;    // 次に割り当てる島ID
-	var $islands;         // 全島の情報を格納
-	var $idToNumber;
-	var $idToName;
-	var $islandNumberBF;   // BFに設定されている島の数
-	var $islandNumberNoBF; // 普通の島の数
-	var $islandNumberKP;   // 管理人預かりに設定されている島の数
-	var $islandNumberNoKP; // 普通の島の数
-	var $allyNumber;       // 同盟の総数
-	var $ally;             // 各同盟の情報を格納
-	var $idToAllyNumber;
+class File {
+	public $islandTurn;      // ターン数
+	public $islandLastTime;  // 最終更新時刻
+	public $islandNumber;    // 島の総数
+	public $islandNextID;    // 次に割り当てる島ID
+	public $islands;         // 全島の情報を格納
+	public $idToNumber;
+	public $idToName;
+	public $islandNumberBF;   // BFに設定されている島の数
+	public $islandNumberNoBF; // 普通の島の数
+	public $islandNumberKP;   // 管理人預かりに設定されている島の数
+	public $islandNumberNoKP; // 普通の島の数
+	public $allyNumber;       // 同盟の総数
+	public $ally;             // 各同盟の情報を格納
+	public $idToAllyNumber;
 
 	//---------------------------------------------------
 	// 全島データを読み込む

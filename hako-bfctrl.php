@@ -45,7 +45,7 @@ END;
 	}
 }
 
-class Hako extends HakoIO {
+class Hako extends File {
 	var $islandListNoBF;	// 普通の島リスト
 	var $islandListBF;		// BFな島リスト
 

@@ -18,7 +18,10 @@ define("READ_LINE", 1024);
 $init = new Init();
 $THIS_FILE = $init->baseDir . "/hako-mente.php";
 
+//--------------------------------------------------------------------
+
 class HtmlMente extends HTML {
+	
 	function enter() {
 		global $init;
 

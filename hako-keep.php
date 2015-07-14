@@ -46,7 +46,7 @@ END;
 	}
 }
 
-class Hako extends HakoIO {
+class Hako extends File {
 	var $islandListNoKP;	// 普通の島リスト
 	var $islandListKP;	// 管理人預かり島リスト
 
@@ -68,13 +68,13 @@ class Hako extends HakoIO {
 }
 
 class Main {
-	var $mode;
-	var $dataSet = array();
+	public $mode;
+	public $dataSet = array();
 
 	function execute() {
-		$html = new HTMLKP;
-		$cgi = new Cgi;
-		$hako =& new Hako;
+		$html = new HTMLKP();
+		$cgi = new Cgi();
+		$hako =& new Hako();
 		$this->parseInputData();
 		$hako->init($this);
 		$cgi->getCookies();
@@ -111,8 +111,6 @@ class Main {
 		$this->mode = $_POST['mode'];
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
-				// 半角カナがあれば全角に変換して返す
-				// JcodeConvert($value, 0, 2);
 				$value = str_replace(",", "", $value);
 				$this->dataSet["{$name}"] = $value;
 			}
@@ -151,6 +149,7 @@ class Main {
 
 	function passCheck() {
 		global $init;
+		
 		if(file_exists("{$init->passwordFile}")) {
 			$fp = fopen("{$init->passwordFile}", "r");
 			$masterPassword = chop(fgets($fp, READ_LINE));

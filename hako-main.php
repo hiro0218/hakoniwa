@@ -24,7 +24,7 @@ $THIS_FILE = $init->baseDir . "/hako-main.php";
 $ISLAND_TURN; // ターン数
 
 //--------------------------------------------------------------------
-class Hako extends HakoIO {
+class Hako extends File {
 	var $islandList;    // 島リスト
 	var $targetList;    // ターゲットの島リスト
 	var $defaultTarget; // 目標補足用ターゲット
