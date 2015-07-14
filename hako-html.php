@@ -414,7 +414,7 @@ END;
 		for($i = $start; $i < $sentinel ; $i++) {
 			$island        = $hako->islands[$i];
 			$island['pop'] = ($island['pop'] < 0) ? 1 : $island['pop'];
-			
+
 			$j            = ($island['isBF']) ? '★' : $i + 1;
 			$id           = $island['id'];
 			$pop          = $island['pop'] . $init->unitPop;
@@ -2749,7 +2749,7 @@ END;
 	// 関数ダミー【追加】
 	static function funcJavaDM() {
 		echo <<<END
-<script type="text/javascript">
+<script>
 function init(){}
 function SelectList(theForm){}
 </script>
@@ -2758,10 +2758,6 @@ END;
 }
 
 class HtmlSetted extends HTML {
-	// static function setSkin() {
-	// 	global $init;
-	// 	Util::makeTagMessage("スタイルシートを設定しました。", "success");
-	// }
 
 	static function comment() {
 		global $init;

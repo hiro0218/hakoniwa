@@ -472,7 +472,7 @@ class HakoIO {
 				if ( file_exists("{$to_del}/") ) {
 					$dir = opendir("{$to_del}/");
 				}
-				
+
 				while ($fileName = readdir($dir)) {
 					if (!(strcmp($fileName, ".") == 0 || strcmp($fileName, "..") == 0))
 						unlink("{$to_del}/{$fileName}");
@@ -486,7 +486,7 @@ class HakoIO {
 					mkdir($dir2);
 				}
 				$dir = opendir($dir2);
-				
+
 				while ($copyFile = readdir($dir)) {
 					if (is_file("{$dir2}/{$copyFile}")) {
 						// コピー元

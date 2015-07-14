@@ -1103,20 +1103,6 @@ class Main {
 				$html->footer();
 				break;
 
-			// case "skin":
-			// 	$html = new HtmlSetted;
-			// 	$html->header($cgi->dataSet);
-			// 	$html->setSkin();
-			// 	$html->footer();
-			// 	break;
-
-			// case "imgset":
-			// 	$html = new HtmlSetted;
-			// 	$html->header($cgi->dataSet);
-			// 	$html->setImg();
-			// 	$html->footer();
-			// 	break;
-
 			default:
 				$html = new HtmlTop;
 				$html->header($cgi->dataSet);
@@ -1127,5 +1113,5 @@ class Main {
 	}
 }
 
-$start = new Main;
+$start = new Main();
 $start->execute();
