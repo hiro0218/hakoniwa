@@ -47,8 +47,8 @@ END;
 }
 
 class Hako extends File {
-	var $islandListNoKP;	// 普通の島リスト
-	var $islandListKP;	// 管理人預かり島リスト
+	public $islandListNoKP;	// 普通の島リスト
+	public $islandListKP;	// 管理人預かり島リスト
 
 	function init($cgi) {
 		$this->readIslandsFile($cgi);

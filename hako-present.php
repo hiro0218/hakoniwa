@@ -158,9 +158,9 @@ class Main {
 	var $dataSet = array();
 
 	function execute() {
-		$html = new HtmlPresent;
-		$hako =& new Hako;
-		$cgi = new Cgi;
+		$html = new HtmlPresent();
+		$hako =& new Hako();
+		$cgi = new Cgi();
 		$this->parseInputData();
 		$hako->init($this);
 		$cgi->getCookies();

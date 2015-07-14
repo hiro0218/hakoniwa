@@ -46,8 +46,8 @@ END;
 }
 
 class Hako extends File {
-	var $islandListNoBF;	// 普通の島リスト
-	var $islandListBF;		// BFな島リスト
+	public $islandListNoBF;	// 普通の島リスト
+	public $islandListBF;		// BFな島リスト
 
 	function init($cgi) {
 		$this->readIslandsFile($cgi);
@@ -67,13 +67,13 @@ class Hako extends File {
 }
 
 class Main {
-	var $mode;
-	var $dataSet = array();
+	public $mode;
+	public $dataSet = array();
 
 	function execute() {
-		$html = new HtmlBF;
-		$hako =& new Hako;
-		$cgi = new Cgi;
+		$html = new HtmlBF();
+		$hako =& new Hako();
+		$cgi = new Cgi();
 		$this->parseInputData();
 		$hako->init($this);
 		$cgi->getCookies();

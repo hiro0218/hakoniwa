@@ -18,7 +18,7 @@ class Make {
 	function newIsland($hako, $data) {
 		global $init;
 
-		$log = new Log;
+		$log = new Log();
 		if($hako->islandNumber >= $init->maxIsland) {
 			Error::newIslandFull();
 			return;
@@ -87,7 +87,7 @@ class Make {
 		}
 		$hako->writeIslandsFile($island['id']);
 		$log->discover($island['id'], $island['name']);
-		$htmlMap = new HtmlMap;
+		$htmlMap = new HtmlMap();
 		$htmlMap->newIslandHead($island['name']);
 		$htmlMap->islandInfo($island, $newNumber);
 		$htmlMap->islandMap($hako, $island, 1, $data);
@@ -373,9 +373,9 @@ class Make {
 
 		// owner modeへ
 		if($data['DEVELOPEMODE'] == "cgi") {
-			$html = new HtmlMap;
+			$html = new HtmlMap();
 		} else {
-			$html = new HtmlJS;
+			$html = new HtmlJS();
 		}
 		$html->owner($hako, $data);
 	}
@@ -386,7 +386,7 @@ class Make {
 	//---------------------------------------------------
 	function changeMain($hako, $data) {
 		global $init;
-		$log = new Log;
+		$log = new Log();
 
 		$id = $data['ISLANDID'];
 		$num = $hako->idToNumber[$id];
@@ -707,7 +707,7 @@ class Make {
 		$hako->writeIslandsFile($island['id']);
 
 		// owner modeへ
-		$html = new HtmlMap;
+		$html = new HtmlMap();
 		$html->owner($hako, $data);
 	}
 
@@ -717,7 +717,7 @@ class Make {
 	function deleteIsland($hako, $data) {
 		global $init;
 
-		$log = new Log;
+		$log = new Log();
 		$id = $data['ISLANDID'];
 		$num = $hako->idToNumber[$id];
 		$island = $hako->islands[$num];
@@ -793,7 +793,7 @@ class MakeJS extends Make {
 		$hako->writeIslandsFile($island['id']);
 
 		// owner modeへ
-		$html = new HtmlJS;
+		$html = new HtmlJS();
 		$html->owner($hako, $data);
 	}
 }

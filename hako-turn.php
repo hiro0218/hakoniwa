@@ -26,7 +26,7 @@ class Turn {
 	function turnMain(&$hako, $data) {
 		global $init;
 
-		$this->log = new Log;
+		$this->log = new Log();
 
 		// 最終更新時間を更新
 		if($init->contUpdate == 1) {

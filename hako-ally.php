@@ -818,7 +818,7 @@ class MakeAlly {
 		$hako->writeAllyFile();
 
 		// トップへ
-		$html = new HtmlAlly;
+		$html = new HtmlAlly();
 		$html->allyTop($hako, $data);
 	}
 	//--------------------------------------------------
@@ -887,7 +887,7 @@ class MakeAlly {
 		$hako->writeAllyFile();
 
 		// トップへ
-		$html = new HtmlAlly;
+		$html = new HtmlAlly();
 		$html->allyTop($hako, $data);
 	}
 	//--------------------------------------------------
@@ -964,7 +964,7 @@ class MakeAlly {
 		$hako->writeAllyFile();
 
 		// トップへ
-		$html = new HtmlAlly;
+		$html = new HtmlAlly();
 		$html->allyTop($hako, $data);
 	}
 	//--------------------------------------------------
@@ -1597,8 +1597,8 @@ class Main {
 	function execute() {
 		global $init;
 
-		$ally = new Ally;
-		$cgi = new Cgi;
+		$ally = new Ally();
+		$cgi = new Cgi();
 
 		$this->parseInputData();
 		$cgi->getCookies();
@@ -1611,8 +1611,8 @@ class Main {
 		}
 		$cgi->setCookies();
 
-		$html = new HtmlAlly;
-		$com = new MakeAlly;
+		$html = new HtmlAlly();
+		$com = new MakeAlly();
 		$html->header($cgi->dataSet);
 		switch($this->mode) {
 			case "JoinA":

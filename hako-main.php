@@ -25,9 +25,9 @@ $ISLAND_TURN; // ターン数
 
 //--------------------------------------------------------------------
 class Hako extends File {
-	var $islandList;    // 島リスト
-	var $targetList;    // ターゲットの島リスト
-	var $defaultTarget; // 目標補足用ターゲット
+	public $islandList;    // 島リスト
+	public $targetList;    // ターゲットの島リスト
+	public $defaultTarget; // 目標補足用ターゲット
 
 	function readIslands(&$cgi) {
 		global $init;
@@ -624,11 +624,11 @@ class Main {
 
 		$_developmode = (isset( $cgi->dataSet['DEVELOPEMODE'] )) ? $cgi->dataSet['DEVELOPEMODE'] : "";
 		if( mb_strtolower($_developmode) == "javascript") {
-			$html = new HtmlJS;
-			$com  = new MakeJS;
+			$html = new HtmlJS();
+			$com  = new MakeJS();
 		} else {
-			$html = new HtmlMap;
-			$com  = new Make;
+			$html = new HtmlMap();
+			$com  = new Make();
 		}
 		switch($cgi->mode) {
 			case "turn":

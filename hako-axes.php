@@ -85,12 +85,12 @@ END;
 }
 
 class Main {
-	var $mode;
-	var $dataSet = array();
+	public $mode;
+	public $dataSet = array();
 
 	function execute() {
-		$html = new HtmlMente;
-		$cgi = new Cgi;
+		$html = new HtmlMente();
+		$cgi = new Cgi();
 		$this->parseInputData();
 		$cgi->getCookies();
 		$html->header($cgi->dataSet);

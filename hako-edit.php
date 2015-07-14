@@ -503,8 +503,8 @@ class Hako extends File {
 
 //----------------------------------------------------------------------
 class Cgi {
-	var $mode = "";
-	var $dataSet = array();
+	public $mode = "";
+	public $dataSet = array();
 	//---------------------------------------------------
 	// POST、GETのデータを取得
 	//---------------------------------------------------
@@ -750,7 +750,7 @@ END;
 			Error::wrongPassword();
 			return;
 		}
-		$html = new HtmlMap;
+		$html = new HtmlMap();
 		$id = $data['ISLANDID'];
 		$number = $hako->idToNumber[$id];
 		$island = $hako->islands[$number];
@@ -1061,8 +1061,8 @@ END;
 class Main {
 
 	function execute() {
-		$hako = new Hako;
-		$cgi = new Cgi;
+		$hako = new Hako();
+		$cgi = new Cgi();
 		$cgi->parseInputData();
 		$cgi->getCookies();
 		if(!$hako->readIslands($cgi)) {
@@ -1076,35 +1076,35 @@ class Main {
 
 		switch($cgi->mode) {
 			case "enter":
-				$html = new HtmlTop;
+				$html = new HtmlTop();
 				$html->header($cgi->dataSet);
 				$edit->main($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "list":
-				$html = new HtmlTop;
+				$html = new HtmlTop();
 				$html->header($cgi->dataSet);
 				$edit->main($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "map":
-				$html = new HtmlTop;
+				$html = new HtmlTop();
 				$html->header($cgi->dataSet);
 				$edit->editMap($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "regist":
-				$html = new HtmlTop;
+				$html = new HtmlTop();
 				$html->header($cgi->dataSet);
 				$edit->register($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			default:
-				$html = new HtmlTop;
+				$html = new HtmlTop();
 				$html->header($cgi->dataSet);
 				$edit->enter();
 				$html->footer();

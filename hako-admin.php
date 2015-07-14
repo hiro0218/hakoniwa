@@ -65,8 +65,8 @@ END;
 }
 
 class Main {
-	var $urllist  = array();
-	var $menulist = array();
+	public $urllist  = array();
+	public $menulist = array();
 
 	function Main() {
 		$this->urllist  = array( ini_get('safe_mode') ? '/hako-mente-safemode.php' : '/hako-mente.php', '/hako-axes.php', '/hako-keep.php', '/hako-present.php', '/hako-edit.php', '/hako-bfctrl.php');
