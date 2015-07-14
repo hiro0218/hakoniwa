@@ -17,7 +17,7 @@ require_once ABSOLUTE_PATH.'hako-html.php';
 
 define("READ_LINE", 1024);
 
-$init = new Init;
+$init = new Init();
 $THIS_FILE = $init->baseDir . "/hako-keep.php";
 $MAIN_FILE = $init->baseDir . "/hako-main.php";
 

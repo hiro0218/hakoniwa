@@ -10,6 +10,8 @@
 
 *******************************************************************/
 
+require_once ABSOLUTE_PATH.'hako-error.php';
+
 //--------------------------------------------------------------------
 class HTML {
 
@@ -2787,94 +2789,3 @@ class HtmlSetted extends HTML {
 	}
 }
 
-class Error {
-	static function wrongPassword() {
-		global $init;
-		Util::makeTagMessage("パスワードが違います。", "danger");
-
-	    // JavaScript error の回避【追加】
-	    //HtmlJS::funcJavaDM();
-
-	    HTML::footer();
-	    exit;
-	}
-
-	static function wrongID() {
-		global $init;
-		Util::makeTagMessage("IDが違います。", "danger");
-		HTML::footer();
-		exit;
-	}
-
-	// hakojima.datがない
-	static function noDataFile() {
-		global $init;
-		Util::makeTagMessage("データファイルが開けません。", "danger");
-		HTML::footer();
-		exit;
-	}
-
-	static function newIslandFull() {
-		global $init;
-		Util::makeTagMessage("申し訳ありません、島が一杯で登録できません！！", "danger");
-		HTML::footer();
-		exit;
-	}
-
-	static function newIslandNoName() {
-		global $init;
-		Util::makeTagMessage("島につける名前が必要です。", "danger");
-		HTML::footer();
-		exit;
-	}
-
-	static function newIslandBadName() {
-		global $init;
-		Util::makeTagMessage(",?()&lt;&gt;\$とか入ってたり、変な名前はやめましょう。", "danger");
-		HTML::footer();
-		exit;
-	}
-
-	static function newIslandAlready() {
-		global $init;
-		Util::makeTagMessage("その島ならすでに発見されています。", "danger");
-		HTML::footer();
-		exit;
-	}
-
-	static function newIslandNoPassword() {
-		global $init;
-		Util::makeTagMessage("パスワードが必要です。", "danger");
-		HTML::footer();
-		exit;
-	}
-
-	static function changeNoMoney() {
-		global $init;
-		Util::makeTagMessage("資金不足のため変更できません", "danger");
-		HTML::footer();
-		exit;
-	}
-
-	static function changeNothing() {
-		global $init;
-		Util::makeTagMessage("名前、パスワードともに空欄です", "danger");
-		HTML::footer();
-		exit;
-	}
-
-	static function problem() {
-		global $init;
-		Util::makeTagMessage("問題が発生しました。", "danger");
-		HTML::footer();
-		exit;
-	}
-
-	static function lockFail() {
-		global $init;
-		Util::makeTagMessage("同時アクセスエラーです。<BR>ブラウザの「戻る」ボタンを押し、<BR>しばらく待ってから再度お試し下さい。", "danger");
-		HTML::footer();
-		exit;
-	}
-
-}
