@@ -11,6 +11,7 @@
 *******************************************************************/
 
 require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-init.php';
 require_once ABSOLUTE_PATH.'hako-log.php';
 require_once ABSOLUTE_PATH.'hako-make.php';
 

@@ -11,6 +11,7 @@
 *******************************************************************/
 
 require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-init.php';
 require_once ABSOLUTE_PATH.'hako-cgi.php';
 require_once ABSOLUTE_PATH.'hako-html.php';
 
@@ -164,7 +165,7 @@ function timeToString($t) {
 class Main {
 	public $mode;
 	public $dataSet = array();
-	
+
 	function execute() {
 		$html = new HtmlMente();
 		$cgi = new Cgi();

@@ -11,6 +11,7 @@
 *******************************************************************/
 
 require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-init.php';
 require_once ABSOLUTE_PATH.'hako-cgi.php';
 require_once ABSOLUTE_PATH.'hako-file.php';
 require_once ABSOLUTE_PATH.'hako-html.php';
@@ -149,7 +150,7 @@ class Main {
 
 	function passCheck() {
 		global $init;
-		
+
 		if(file_exists("{$init->passwordFile}")) {
 			$fp = fopen("{$init->passwordFile}", "r");
 			$masterPassword = chop(fgets($fp, READ_LINE));
