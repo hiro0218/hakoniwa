@@ -904,7 +904,7 @@ class Init {
 		$this->comCost[$this->comAutoDelete]   = 0;
 	}
 
-	function Init() {
+	function __construct() {
 		$this->CPU_start = microtime();
 		$this->setpubliciable();
 		mt_srand($_SERVER['REQUEST_TIME']);

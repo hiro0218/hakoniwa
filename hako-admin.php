@@ -65,10 +65,10 @@ END;
 }
 
 class Main {
-	public $urllist  = array();
-	public $menulist = array();
+	private $urllist  = array();
+	private $menulist = array();
 
-	function Main() {
+	function __construct() {
 		$this->urllist  = array( ini_get('safe_mode') ? '/hako-mente-safemode.php' : '/hako-mente.php', '/hako-axes.php', '/hako-keep.php', '/hako-present.php', '/hako-edit.php', '/hako-bfctrl.php');
 		$this->menulist = array('データ管理','アクセスログ閲覧','島預かり管理','プレゼント','マップエディタ','BattleField管理');
 	}

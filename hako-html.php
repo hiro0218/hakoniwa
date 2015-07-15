@@ -42,12 +42,12 @@ class HTML {
 <div class="container-fluid">
 	<header>
 		<ul class="list-inline">
-			<li><a href="http://www.bekkoame.ne.jp/~tokuoka/hakoniwa.html">箱庭諸島スクリプト配布元</a> <a href="http://scrlab.g-7.ne.jp">[PHP]</a></li>
-			<li><a href="http://hakoniwa.symphonic-net.com">箱庭諸島S.E配布元</a></li>
-			<li><a href="http://snufkin.jp.land.to">沙布巾の箱庭</a></li>
-			<li><a href="http://www.s90259900.onlinehome.us/">箱庭の箱庭</a></li>
-			<li><a href="http://no-one.s53.xrea.com">The Return of Neptune</a></li>
-			<li><a href="http://minnano.min-ai.net/ocn/">みんなのあいらんど</a></li>
+			<li><a href="http://www.bekkoame.ne.jp/~tokuoka/hakoniwa.html" target="_blank">箱庭諸島スクリプト配布元</a> <a href="http://scrlab.g-7.ne.jp">[PHP]</a></li>
+			<li><a href="http://hakoniwa.symphonic-net.com" target="_blank">箱庭諸島S.E配布元</a></li>
+			<li><a href="http://snufkin.jp.land.to" target="_blank">沙布巾の箱庭</a></li>
+			<li><a href="http://www.s90259900.onlinehome.us/" target="_blank">箱庭の箱庭</a></li>
+			<li><a href="http://no-one.s53.xrea.com" target="_blank">The Return of Neptune</a></li>
+			<li><a href="http://minnano.min-ai.net/ocn/" target="_blank">みんなのあいらんど</a></li>
 		</ul>
 
 		<nav class="navbar navbar-default">
