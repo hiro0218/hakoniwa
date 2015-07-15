@@ -357,4 +357,23 @@ class Util {
 		echo '</div>';
 	}
 
+	/**
+	 * ランダムな文字列を返す
+	 * @param  integer $max [description]
+	 * @return [type]       [description]
+	 */
+	static function rand_string($max = 32) {
+		return substr(md5(uniqid(rand_number(), true)), 0, $max);
+	}
+
+	/**
+	 * 文字列内のURLをリンクにする
+	 * @param  [type] $string [description]
+	 * @return [type]         [description]
+	 */
+	static function string_autolink($string) {
+		$string = preg_replace('/(^|[^\"\w\.\~\-\/\?\&\#\+\=\:\;\@\%\!])(https?\:\/\/[\w\.\~\-\/\?\&\#\+\=\:\;\@\%\!]+)/', '$1<a href="$2" target="_blank">$2</a>', $string);
+
+		return $string;
+	}
 }

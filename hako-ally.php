@@ -168,8 +168,8 @@ END;
 			}
 			$allyMessage = $ally['message'];
 			if($init->autoLink) {
-				//$allyMessage = preg_replace("/(^|[^=\"'])(http://[[:alnum:]\+\$\;\?\.%,!#~*/:@&=_-]+)/", "<a href='$2' target='_blank'>$2</a>", $allyMessage);
-				preg_replace("/(^|[^=\\\"'])(http:\/\/[[:alnum:]\+\$\;\?\.%,!#~*\/:@&=_-]+)/", "<a href='$2' target='_blank'>$2</a>", $allyMessage);
+				//preg_replace("/(^|[^=\\\"'])(http:\/\/[[:alnum:]\+\$\;\?\.%,!#~*\/:@&=_-]+)/", "<a href='$2' target='_blank'>$2</a>", $allyMessage);
+				$allyMessage = Util::string_autolink($allyMessage);
 			}
 			echo <<<END
 <hr>
