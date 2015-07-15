@@ -220,7 +220,7 @@ class LogIO {
 
 //--------------------------------------------------------------------
 class Log extends LogIO {
-	
+
 	function discover($id, $name) {
 		global $init;
 		$this->history("<A href=\"{$GLOBALS['THIS_FILE']}?Sight={$id}\">{$init->tagName_}{$name}島</A>{$init->_tagName}が発見される。");

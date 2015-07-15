@@ -2788,4 +2788,3 @@ class HtmlSetted extends HTML {
 		Util::makeTagMessage("{$name}島を強制削除しました", "success");
 	}
 }
-

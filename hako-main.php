@@ -16,7 +16,6 @@ require_once ABSOLUTE_PATH.'hako-cgi.php';
 require_once ABSOLUTE_PATH.'hako-file.php';
 require_once ABSOLUTE_PATH.'hako-html.php';
 require_once ABSOLUTE_PATH.'hako-turn.php';
-require_once ABSOLUTE_PATH.'hako-util.php';
 
 $init = new Init();
 

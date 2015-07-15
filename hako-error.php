@@ -1,7 +1,7 @@
 <?php
 
 class Error {
-	
+
 	static function wrongPassword() {
 		Util::makeTagMessage("パスワードが違います。", "danger");
 	    HTML::footer();

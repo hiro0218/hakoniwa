@@ -1,5 +1,6 @@
 <?php
 require_once 'config.php';
+require_once ABSOLUTE_PATH.'hako-util.php';
 
 //--------------------------------------------------------------------
 class Init {

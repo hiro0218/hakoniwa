@@ -15,7 +15,6 @@ require_once ABSOLUTE_PATH.'hako-init.php';
 require_once ABSOLUTE_PATH.'hako-cgi.php';
 require_once ABSOLUTE_PATH.'hako-file.php';
 require_once ABSOLUTE_PATH.'hako-html.php';
-require_once ABSOLUTE_PATH.'hako-util.php';
 
 define("READ_LINE", 1024);
 $init = new Init();
