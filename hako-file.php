@@ -84,7 +84,7 @@ class File {
 		$name = chop(fgets($fp, READ_LINE));
 		list($name, $owner, $monster, $port, $ship0, $ship1, $ship2, $ship3, $ship4, $ship5, $ship6, $ship7, $ship8, $ship9, $ship10, $ship11, $ship12, $ship13, $ship14) = array_pad(explode(",", $name), 20, NULL);
 		$id = chop(fgets($fp, READ_LINE));
-		list($id, $starturn, $isBF, $keep) = explode(",", $id);
+		list($id, $starturn, $isBF, $keep) = array_pad(explode(",", $id), 4, NULL);
 		if ($isBF) {
 			$isBF = 1;
 		}
@@ -94,10 +94,10 @@ class File {
 		$prize = chop(fgets($fp, READ_LINE));
 		$absent = chop(fgets($fp, READ_LINE));
 		$comment = chop(fgets($fp, READ_LINE));
-		list($comment, $comment_turn) = explode(",", $comment);
+		list($comment, $comment_turn) = array_pad(explode(",", $comment), 2, NULL);
 		$password = chop(fgets($fp, READ_LINE));
 		$point = chop(fgets($fp, READ_LINE));
-		list($point, $pots) = explode(",", $point);
+		list($point, $pots) = array_pad(explode(",", $point), 2, NULL);
 		$eisei = chop(fgets($fp, READ_LINE));
 		list($eisei0, $eisei1, $eisei2, $eisei3, $eisei4, $eisei5) = array_pad(explode(",", $eisei), 6, NULL);
 		$zin = chop(fgets($fp, READ_LINE));
@@ -105,16 +105,16 @@ class File {
 		$item = chop(fgets($fp, READ_LINE));
 		list($item0, $item1, $item2, $item3, $item4, $item5, $item6, $item7, $item8, $item9, $item10, $item11, $item12, $item13, $item14, $item15, $item16, $item17, $item18, $item19, $item20) = array_pad(explode(",", $item), 21, NULL);
 		$money = chop(fgets($fp, READ_LINE));
-		list($money, $lot, $gold) = explode(",", $money);
+		list($money, $lot, $gold) = array_pad(explode(",", $money), 3, NULL);
 		$food = chop(fgets($fp, READ_LINE));
-		list($food, $rice) = explode(",", $food);
+		list($food, $rice) = array_pad(explode(",", $food), 2, NULL);
 		$pop = chop(fgets($fp, READ_LINE));
-		list($pop, $peop) = explode(",", $pop);
+		list($pop, $peop) = array_pad(explode(",", $pop), 2, NULL);
 		$area = chop(fgets($fp, READ_LINE));
 		$job = chop(fgets($fp, READ_LINE));
-		list($farm, $factory, $commerce, $mountain, $hatuden) = explode(",", $job);
+		list($farm, $factory, $commerce, $mountain, $hatuden) = array_pad(explode(",", $job), 5, NULL);
 		$power = chop(fgets($fp, READ_LINE));
-		list($taiji, $rena, $fire) = explode(",", $power);
+		list($taiji, $rena, $fire) = array_pad(explode(",", $power), 3, NULL);
 		$tenki = chop(fgets($fp, READ_LINE));
 		$soccer = chop(fgets($fp, READ_LINE));
 		list($soccer, $team, $shiai, $kachi, $make, $hikiwake, $kougeki, $bougyo, $tokuten, $shitten) = array_pad(explode(",", $soccer), 10, NULL);
@@ -122,7 +122,20 @@ class File {
 		$this->idToName[$id] = $name;
 
 		if(($num == -1) || ($num == $id)) {
-			$fp_i = fopen("{$init->dirName}/island.{$id}", "r");
+			$fp_i;
+
+			// データファイルの存在チェック
+			if ( file_exists("{$init->dirName}/island.{$id}") ) {
+				$fp_i = fopen("{$init->dirName}/island.{$id}", "r");
+			} else {
+				$fp_i = false;
+			}
+
+			if ($fp_i === false) {
+				Html::header();
+				Error::problem();
+			}
+			
 
 			// 地形
 			$offset = 7; // 一対のデータが何文字か
@@ -151,6 +164,7 @@ class File {
 
 			fclose($fp_i);
 		}
+
 		return array(
 			'name'         => $name,
 			'owner'        => $owner,
@@ -193,10 +207,10 @@ class File {
 			'bougyo'       => $bougyo,
 			'tokuten'      => $tokuten,
 			'shitten'      => $shitten,
-			'land'         => isset($land)      ? $land : "",
+			'land'         => isset($land)      ? $land      : "",
 			'landValue'    => isset($landValue) ? $landValue : "",
-			'command'      => isset($command)   ? $command: "",
-			'lbbs'         => isset($lbbs)      ? $lbbs : "",
+			'command'      => isset($command)   ? $command   : "",
+			'lbbs'         => isset($lbbs)      ? $lbbs      : "",
 			'port'         => $port,
 			'ship'         => array(0 => $ship0, 1 => $ship1, 2 => $ship2, 3 => $ship3, 4 => $ship4, 5 => $ship5, 6 => $ship6, 7 => $ship7, 8 => $ship8, 9 => $ship9, 10 => $ship10, 11 => $ship11, 12 => $ship12, 13 => $ship13, 14 => $ship14),
 			'eisei'        => array(0 => $eisei0, 1 => $eisei1, 2 => $eisei2, 3 => $eisei3, 4 => $eisei4, 5 => $eisei5),

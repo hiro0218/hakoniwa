@@ -415,7 +415,7 @@ END;
 
 		for($i = $start; $i < $sentinel ; $i++) {
 			$island        = $hako->islands[$i];
-			$island['pop'] = ($island['pop'] < 0) ? 1 : $island['pop'];
+			$island['pop'] = ($island['pop'] <= 0) ? 1 : $island['pop'];
 
 			$j            = ($island['isBF']) ? '★' : $i + 1;
 			$id           = $island['id'];
@@ -934,7 +934,7 @@ END;
 	//---------------------------------------------------
 	function islandInfo($island, $number = 0, $mode = 0) {
 		global $init;
-		$island['pop'] = ($island['pop'] < 0) ? 1 : $island['pop'];
+		$island['pop'] = ($island['pop'] <= 0) ? 1 : $island['pop'];
 
 		$rank       = ($island['isBF']) ? '★' : $number + 1;
 		$pop        = $island['pop'] . $init->unitPop;

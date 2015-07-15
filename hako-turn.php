@@ -4777,7 +4777,7 @@ class Turn {
 		}
 
 		// 暴動判定
-		$island['pop'] = ($island['pop'] < 0) ? 1 : $island['pop'];
+		$island['pop'] = ($island['pop'] <= 0) ? 1 : $island['pop'];
 		$unemployed = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
 		if (($island['isBF'] != 1) && (Util::random(1000) < $unemployed) && ($unemployed > $init->disPoo) && ($island['pop'] >= $init->disPooPop)) {
 			// 暴動発生
