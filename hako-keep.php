@@ -45,7 +45,7 @@ END;
 	}
 }
 
-class Hako extends File {
+class HakoKP extends File {
 	public $islandListNoKP;	// 普通の島リスト
 	public $islandListKP;	// 管理人預かり島リスト
 
@@ -73,7 +73,7 @@ class Main {
 	function execute() {
 		$html = new HTMLKP();
 		$cgi = new Cgi();
-		$hako =& new Hako();
+		$hako =& new HakoKP();
 		$this->parseInputData();
 		$hako->init($this);
 		$cgi->getCookies();

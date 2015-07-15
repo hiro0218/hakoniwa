@@ -135,7 +135,7 @@ END;
 	}
 }
 
-class Hako extends File {
+class HakoPresent extends File {
 	var $islandList;  // 島リスト
 
 	function init($cgi) {
@@ -152,12 +152,12 @@ class Hako extends File {
 }
 
 class Main {
-	var $mode;
-	var $dataSet = array();
+	public $mode;
+	public $dataSet = array();
 
 	function execute() {
 		$html = new HtmlPresent();
-		$hako =& new Hako();
+		$hako =& new HakoPresent();
 		$cgi = new Cgi();
 		$this->parseInputData();
 		$hako->init($this);

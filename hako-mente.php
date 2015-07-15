@@ -93,7 +93,7 @@ END;
 		$lastTurn = chop(fgets($fp, READ_LINE));
 		$lastTime = chop(fgets($fp, READ_LINE));
 		fclose($fp);
-		$timeString = timeToString($lastTime);
+		$timeString = self::timeToString($lastTime);
 		echo <<<END
 <strong>ターン$lastTurn</strong><br>
 <strong>最終更新時間</strong>:$timeString<br>
@@ -133,17 +133,19 @@ END;
 END;
 		}
 	}
+
+	function timeToString($t) {
+		$time = localtime($t, TRUE);
+		$time['tm_year'] += 1900;
+		$time['tm_mon']++;
+		return "{$time['tm_year']}年 {$time['tm_mon']}月 {$time['tm_mday']}日 {$time['tm_hour']}時 {$time['tm_min']}分 {$time['tm_sec']}秒";
+	}
 }
 
-function timeToString($t) {
-	$time = localtime($t, TRUE);
-	$time['tm_year'] += 1900;
-	$time['tm_mon']++;
-	return "{$time['tm_year']}年 {$time['tm_mon']}月 {$time['tm_mday']}日 {$time['tm_hour']}時 {$time['tm_min']}分 {$time['tm_sec']}秒";
-}
+
 
 class Main {
-	public $mode;
+	public $mode = "";
 	public $dataSet = array();
 
 	function execute() {

@@ -17,8 +17,8 @@ require_once ABSOLUTE_PATH.'hako-file.php';
 require_once ABSOLUTE_PATH.'hako-html.php';
 
 $init = new Init();
-// $THIS_FILE = $init->baseDir . "/hako-bfctrl.php";
-// $MAIN_FILE = $init->baseDir . "/hako-main.php";
+$THIS_FILE = $init->baseDir . "/hako-bfctrl.php";
+$MAIN_FILE = $init->baseDir . "/hako-main.php";
 
 class HtmlBF extends HTML {
 	function main($data, $hako) {
@@ -44,7 +44,7 @@ END;
 	}
 }
 
-class Hako extends File {
+class HakoBF extends File {
 	public $islandListNoBF;	// 普通の島リスト
 	public $islandListBF;		// BFな島リスト
 
@@ -71,7 +71,7 @@ class Main {
 
 	function execute() {
 		$html = new HtmlBF();
-		$hako =& new Hako();
+		$hako =& new HakoBF();
 		$cgi = new Cgi();
 		$this->parseInputData();
 		$hako->init($this);

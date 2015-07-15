@@ -18,12 +18,11 @@ require_once ABSOLUTE_PATH.'hako-html.php';
 $init = new Init();
 
 $THIS_FILE = $init->baseDir . "/hako-edit.php";
-$BACK_TO_TOP = "<A HREF=\"JavaScript:void(0);\" onClick=\"document.TOP.submit();return false;\">{$init->tagBig_}トップへ戻る{$init->_tagBig}</A>";
 
 ini_set('display_errors', 0);
 
 //----------------------------------------------------------------------
-class Hako extends File {
+class HakoEdit extends File {
 
 	function readIslands(&$cgi) {
 		global $init;
@@ -851,7 +850,6 @@ END;
 		);
 		echo <<<END
 <script type="text/javascript">
-<!--
 function ps(x, y, ld, lv) {
 	document.InputPlan.POINTX.options[x].selected = true;
 	document.InputPlan.POINTY.options[y].selected = true;
@@ -867,16 +865,15 @@ function ps(x, y, ld, lv) {
 	}
 	return true;
 }
-//-->
 </script>
-<div align="center">
-{$init->tagBig_}{$init->tagName_}{$island['name']}島{$init->_tagName}マップ・エディタ{$init->_tagBig}<br>
-{$GLOBALS['BACK_TO_TOP']}
+
+<div class="text-center">
+	{$init->tagBig_}{$init->tagName_}{$island['name']}島{$init->_tagName}マップ・エディタ{$init->_tagBig}<br>
 </div>
 
 <form name="TOP" action="{$GLOBALS['THIS_FILE']}" method="post">
-<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-<input type="hidden" name="mode" value="list">
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="list">
 </form>
 END;
 		// 島の情報を表示
@@ -884,21 +881,20 @@ END;
 
 		// 説明文を表示
 		echo <<<END
-<div align="center">
+<div class="text-center">
 <table class="table table-bordered">
 <tr valign="top">
 <td {$init->bgCommandCell}>
-<b>レベルについて</b>
-<ul>
-<li><b>海、浅瀬</b><br>レベル 0 のとき海<br>1 のとき浅瀬<br>それ以外 のとき財宝
-<li><b>荒地</b><br>レベル 1 のとき着弾点
-<li><b>村、町、都市</b><br>レベル 30 未満が村<br>レベル 100 未満が町<br>レベル 200 未満が都市
-<li><b>ミサイル基地</b><br>経験値
-<li><b>山、採掘場</b><br>レベル 1 以上のとき採掘場
-<li><b>怪獣</b><br>各怪獣の最大レベルを超える<br>設定はできません
-<li><b>海底基地</b><br>経験値
-</ul>
-
+	<b>レベルについて</b>
+	<ul>
+		<li><b>海、浅瀬</b><br>レベル 0 のとき海<br>1 のとき浅瀬<br>それ以外 のとき財宝
+		<li><b>荒地</b><br>レベル 1 のとき着弾点
+		<li><b>村、町、都市</b><br>レベル 30 未満が村<br>レベル 100 未満が町<br>レベル 200 未満が都市
+		<li><b>ミサイル基地</b><br>経験値
+		<li><b>山、採掘場</b><br>レベル 1 以上のとき採掘場
+		<li><b>怪獣</b><br>各怪獣の最大レベルを超える<br>設定はできません
+		<li><b>海底基地</b><br>経験値
+	</ul>
 </td>
 <td {$init->bgMapCell}>
 END;
@@ -909,15 +905,16 @@ END;
 		echo <<<END
 </td>
 <td {$init->bgInputCell}>
-<div align="center">
-<form action="{$GLOBALS['THIS_FILE']}" method="post" name="InputPlan">
-<input type="hidden" name="mode" value="regist">
-<input type="hidden" name="ISLANDID" value="{$island['id']}">
-<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-<strong>マップ・エディタ</strong><br>
-<hr>
-<strong>座標(</strong>
-<select name="POINTX">
+<div class="text-center">
+	<form action="{$GLOBALS['THIS_FILE']}" method="post" name="InputPlan">
+		<input type="hidden" name="mode" value="regist">
+		<input type="hidden" name="ISLANDID" value="{$island['id']}">
+		<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+
+		<strong>マップ・エディタ</strong><br>
+		<hr>
+		<strong>座標(</strong>
+		<select name="POINTX">
 END;
 		for($i = 0; $i < $init->islandSize; $i++) {
 			if($i == $data['defaultX']) {
@@ -935,10 +932,10 @@ END;
 			}
 		}
 		echo <<<END
-</select><strong>)</strong>
-<hr>
-<strong>地形</strong>
-<select name="LAND">
+		</select><strong>)</strong>
+		<hr>
+		<strong>地形</strong>
+		<select name="LAND">
 END;
 		for($i = 0; $i < count($landList); $i++) {
 			if($landList[$i] == $data['defaultLAND']) {
@@ -948,10 +945,10 @@ END;
 			}
 		}
 		echo <<<END
-</select>
-<hr>
-<strong>怪獣の種類</strong>
-<select name="MONSTER">
+		</select>
+		<hr>
+		<strong>怪獣の種類</strong>
+		<select name="MONSTER">
 END;
 		for($i = 0; $i < $init->monsterNumber; $i++) {
 			if($i == $data['defaultMONSTER']) {
@@ -961,10 +958,10 @@ END;
 			}
 		}
 		echo <<<END
-</select>
-<hr>
-<strong>船舶の種類</strong>
-<select name="SHIP">
+		</select>
+		<hr>
+		<strong>船舶の種類</strong>
+		<select name="SHIP">
 END;
 		for($i = 0; $i < 15; $i++) {
 			if($init->shipName[$i] != "") {
@@ -976,21 +973,21 @@ END;
 			}
 		}
 		echo <<<END
-</select>
-<hr>
-<strong>レベル</strong>
-<input type="number" min="0" max="1048575" size="8" maxlength="7" name="LEVEL" value="{$data['defaultLEVEL']}">
-<hr>
-<input type="submit" value="登録">
-</form>
+		</select>
+		<hr>
+		<strong>レベル</strong>
+		<input type="number" min="0" max="1048575" size="8" maxlength="7" name="LEVEL" value="{$data['defaultLEVEL']}">
+		<hr>
+		<input type="submit" value="登録">
+	</form>
 </div>
 
 <ul>
-<li>登録するときは十分注意願います。
-<li>データを破壊する場合があります。
-<li>バックアップを行ってから<br>行う様にしましょう。
-<li>地形データを変更するのみで、<br>他のデータは変更されません。<br>
-ターン更新で他のデータへ<br>反映されます。
+	<li>登録するときは十分注意願います。
+	<li>データを破壊する場合があります。
+	<li>バックアップを行ってから<br>行う様にしましょう。
+	<li>地形データを変更するのみで、<br>他のデータは変更されません。<br>
+	ターン更新で他のデータへ<br>反映されます。
 </ul>
 
 </td>
@@ -1060,7 +1057,7 @@ END;
 class Main {
 
 	function execute() {
-		$hako = new Hako();
+		$hako = new HakoEdit();
 		$cgi = new Cgi();
 		$cgi->parseInputData();
 		$cgi->getCookies();
