@@ -71,9 +71,9 @@ END;
 	<th {$init->bgTitleCell}>{$init->tagTH_}占有率{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameCommercialScale}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePowerPlantScale}{$init->_tagTH}</th>
 </tr>
 </thead>
 END;
@@ -100,10 +100,10 @@ END;
 
 			$name      = ($num) ? "{$init->tagName_}{$ally['name']}{$init->_tagName}" : "<a href=\"{$GLOBALS['THIS_FILE']}?AmiOfAlly={$ally['id']}\">{$ally['name']}</a>";
 			$pop       = $pop . $init->unitPop;
-			$farm      = ($farm <= 0)     ? "保有せず" : $farm * 10 . $init->unitPop;
-			$factory   = ($factory <= 0)  ? "保有せず" : $factory * 10 . $init->unitPop;
-			$commerce  = ($commerce <= 0) ? "保有せず" : $commerce * 10 . $init->unitPop;
-			$mountain  = ($mountain <= 0) ? "保有せず" : $mountain * 10 . $init->unitPop;
+			$farm      = ($farm <= 0)     ? $init->notHave : $farm * 10 . $init->unitPop;
+			$factory   = ($factory <= 0)  ? $init->notHave : $factory * 10 . $init->unitPop;
+			$commerce  = ($commerce <= 0) ? $init->notHave : $commerce * 10 . $init->unitPop;
+			$mountain  = ($mountain <= 0) ? $init->notHave : $mountain * 10 . $init->unitPop;
 			$hatuden   = ($hatuden <= 0)  ? "0kw" : $hatuden * 1000 . kw;
 
 			$ally['comment'] = isset($ally['comment']) ? $ally['comment'] : "";
@@ -193,9 +193,9 @@ END;
 		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</TH>
 		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</TH>
 		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</TH>
-		<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameCommercialScale}{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePowerPlantScale}{$init->_tagTH}</th>
 	</TR>
 END;
 		if(!$ally['number']) {
@@ -218,10 +218,10 @@ END;
 			} else {
 				$name = "{$init->tagName2_}<a href=\"{$init->baseDir}/hako-main.php?Sight={$island['id']}\">{$name}</a>({$island['absent']}){$init->_tagName2}";
 			}
-			$farm = ($farm == 0) ? "保有せず" : "{$farm}0$init->unitPop";
-			$factory = ($factory == 0) ? "保有せず" : "{$factory}0$init->unitPop";
-			$commerce  = ($commerce == 0) ? "保有せず" : "{$commerce}0$init->unitPop";
-			$mountain = ($mountain == 0) ? "保有せず" : "{$mountain}0$init->unitPop";
+			$farm = ($farm == 0) ? $init->notHave : "{$farm}0$init->unitPop";
+			$factory = ($factory == 0) ? $init->notHave : "{$factory}0$init->unitPop";
+			$commerce  = ($commerce == 0) ? $init->notHave : "{$commerce}0$init->unitPop";
+			$mountain = ($mountain == 0) ? $init->notHave : "{$mountain}0$init->unitPop";
 			$hatuden  = ($hatuden == 0) ? "0kw" : "{$hatuden}000kw";
 
 			echo <<<END

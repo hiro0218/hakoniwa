@@ -149,6 +149,7 @@ class Init {
 	public $nameGin                        = "ジン";
 	public $nameItems                      = "アイテム";
 
+	public $notHave 	= "保有せず";
 
 	//---------------------------------------------------
 	// 各種単位の設定

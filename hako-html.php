@@ -294,9 +294,9 @@ END;
 	<th {$init->bgTitleCell}>{$init->tagTH_}占有率{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameCommercialScale}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePowerPlantScale}{$init->_tagTH}</th>
 </tr>
 END;
 			for($i=0; $i<$hako->allyNumber; $i++) {
@@ -319,10 +319,10 @@ END;
 				}
 				$name = /*($num) ? "{$init->tagName_}{$ally['name']}{$init->_tagName}" : */"<a href=\"{$allyfile}?AmiOfAlly={$ally['id']}\">{$ally['name']}</a>";
 				$pop = $pop . $init->unitPop;
-				$farm = ($farm <= 0) ? "保有せず" : $farm * 10 . $init->unitPop;
-				$factory = ($factory <= 0) ? "保有せず" : $factory * 10 . $init->unitPop;
-				$commerce = ($commerce <= 0) ? "保有せず" : $commerce * 10 . $init->unitPop;
-				$mountain = ($mountain <= 0) ? "保有せず" : $mountain * 10 . $init->unitPop;
+				$farm = ($farm <= 0) ? $init->notHave : $farm * 10 . $init->unitPop;
+				$factory = ($factory <= 0) ? $init->notHave : $factory * 10 . $init->unitPop;
+				$commerce = ($commerce <= 0) ? $init->notHave : $commerce * 10 . $init->unitPop;
+				$mountain = ($mountain <= 0) ? $init->notHave : $mountain * 10 . $init->unitPop;
 				$hatuden = ($hatuden <= 0) ? "0kw" : $hatuden * 1000 . kw;
 
 				echo <<<END
@@ -442,11 +442,11 @@ END;
 			$food         = $island['food'] . $init->unitFood;
 			$unemployed   = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
 			$unemployed   = '<font color="' . ($unemployed < 0 ? 'black' : '#C7243A') . '">' . sprintf("%-3d%%", $unemployed) . '</font>';
-			$farm         = ($island['farm'] <= 0) ? "保有せず" : $island['farm'] * 10 . $init->unitPop;
-			$factory      = ($island['factory'] <= 0) ? "保有せず" : $island['factory'] * 10 . $init->unitPop;
-			$commerce     = ($island['commerce'] <= 0) ? "保有せず" : $island['commerce'] * 10 . $init->unitPop;
-			$mountain     = ($island['mountain'] <= 0) ? "保有せず" : $island['mountain'] * 10 . $init->unitPop;
-			$hatuden      = ($island['hatuden'] <= 0) ? "保有せず" : $island['hatuden'] * 10 . $init->unitPop;
+			$farm         = ($island['farm'] <= 0) ? $init->notHave : $island['farm'] * 10 . $init->unitPop;
+			$factory      = ($island['factory'] <= 0) ? $init->notHave : $island['factory'] * 10 . $init->unitPop;
+			$commerce     = ($island['commerce'] <= 0) ? $init->notHave : $island['commerce'] * 10 . $init->unitPop;
+			$mountain     = ($island['mountain'] <= 0) ? $init->notHave : $island['mountain'] * 10 . $init->unitPop;
+			$hatuden      = ($island['hatuden'] <= 0) ? $init->notHave : $island['hatuden'] * 10 . $init->unitPop;
 			$taiji        = ($island['taiji'] <= 0) ? "0匹" : $island['taiji'] * 1 . $init->unitMonster;
 			$peop         = ($island['peop'] < 0) ? "{$island['peop']}{$init->unitPop}" : "+{$island['peop']}{$init->unitPop}";
 			$okane        = ($island['gold'] < 0) ? "{$island['gold']}{$init->unitMoney}" : "+{$island['gold']}{$init->unitMoney}";
@@ -605,7 +605,7 @@ END;
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameWeather}{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}失業率{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameUnemploymentRate}{$init->_tagTH}</th>
 	</tr>
 </thead>
 END;
@@ -631,10 +631,10 @@ END;
 	<tr>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameCommercialScale}{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}電力供給率{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePowerPlantScale}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePowerSupplyRate}{$init->_tagTH}</th>
 		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameSatellite}{$init->_tagTH}</th>
 	</tr>
 	<tr>
@@ -959,11 +959,11 @@ END;
 		$food       = $island['food'] . $init->unitFood;
 		$unemployed = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
 		$unemployed = '<font color="' . ($unemployed < 0 ? 'black' : '#C7243A') . '">' . sprintf("%-3d%%", $unemployed) . '</font>';
-		$farm       = ($island['farm'] <= 0) ? "保有せず" : $island['farm'] * 10 . $init->unitPop;
-		$factory    = ($island['factory'] <= 0) ? "保有せず" : $island['factory'] * 10 . $init->unitPop;
-		$commerce   = ($island['commerce'] <= 0) ? "保有せず" : $island['commerce'] * 10 . $init->unitPop;
-		$mountain   = ($island['mountain'] <= 0) ? "保有せず" : $island['mountain'] * 10 . $init->unitPop;
-		$hatuden    = ($island['hatuden'] <= 0) ? "保有せず" : $island['hatuden'] * 10 . $init->unitPop;
+		$farm       = ($island['farm'] <= 0) ? $init->notHave : $island['farm'] * 10 . $init->unitPop;
+		$factory    = ($island['factory'] <= 0) ? $init->notHave : $island['factory'] * 10 . $init->unitPop;
+		$commerce   = ($island['commerce'] <= 0) ? $init->notHave : $island['commerce'] * 10 . $init->unitPop;
+		$mountain   = ($island['mountain'] <= 0) ? $init->notHave : $island['mountain'] * 10 . $init->unitPop;
+		$hatuden    = ($island['hatuden'] <= 0) ? $init->notHave : $island['hatuden'] * 10 . $init->unitPop;
 		$taiji      = ($island['taiji'] <= 0) ? "0匹" : $island['taiji'] * 1 . $init->unitMonster;
 		$tenki      = $island['tenki'];
 		$team       = $island['team'];
@@ -1070,13 +1070,13 @@ END;
 				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
 				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
 				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
-				<th {$init->bgTitleCell}>{$init->tagTH_}失業率{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameUnemploymentRate}{$init->_tagTH}</th>
 				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
 				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
-				<th {$init->bgTitleCell}>{$init->tagTH_}商業規模{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameCommercialScale}{$init->_tagTH}</th>
 				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
-				<th {$init->bgTitleCell}>{$init->tagTH_}発電所規模{$init->_tagTH}</th>
-				<th {$init->bgTitleCell}>{$init->tagTH_}電力供給率{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePowerPlantScale}{$init->_tagTH}</th>
+				<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePowerSupplyRate}{$init->_tagTH}</th>
 			</tr>
 		</thead>
 		<tr>
