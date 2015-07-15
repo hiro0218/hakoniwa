@@ -135,7 +135,7 @@ class File {
 				Html::header();
 				Error::problem();
 			}
-			
+
 
 			// 地形
 			$offset = 7; // 一対のデータが何文字か
@@ -310,7 +310,7 @@ class File {
 		$ext = explode(",", $tmp); // 拡張領域
 		$comment = chop(fgets($fp, READ_LINE));
 		$title = chop(fgets($fp, READ_LINE));
-		list($title, $message) = explode("<>", $title);
+		list($title, $message) = array_pad(explode("<>", $title), 2, NULL);
 
 		return array(
 			'name'       => $name,
