@@ -17,7 +17,6 @@ require_once ABSOLUTE_PATH.'hako-html.php';
 
 $init = new Init();
 
-define("READ_LINE", 1024);
 $THIS_FILE = $init->baseDir . "/hako-edit.php";
 $BACK_TO_TOP = "<A HREF=\"JavaScript:void(0);\" onClick=\"document.TOP.submit();return false;\">{$init->tagBig_}トップへ戻る{$init->_tagBig}</A>";
 

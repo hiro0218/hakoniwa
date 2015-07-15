@@ -94,7 +94,7 @@ class Init {
 	// セーフモードなら1をそうでないなら0を設定してください
 	public $safemode    = 1;
 	// バックアップを何ターンおきに取るか
-	public $backupTurn  = 6;
+	public $backupTurn  = 1;
 	// バックアップを何回分残すか
 	public $backupTimes = 5;
 

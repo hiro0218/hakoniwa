@@ -358,11 +358,6 @@ class File {
 	function writeIsland($fp, $num, $island) {
 		global $init;
 
-		$ships  = "";
-		$eiseis = "";
-		$zins   = "";
-		$items  = "";
-
 		if ( !isset($island['ship']) ) {
 			for ($i=0; $i<=14; $i++) {
 				if ( !isset($island['ship'][$i]) ) {
@@ -513,6 +508,7 @@ class File {
 			}
 			for ($i = ($init->backupTimes - 1); $i >= 0; $i--) {
 				$from = $i - 1;
+				$dir;
 				$dir2;
 				if ($from >= 0) {
 					$dir2 = "./{$init->dirName}.bak{$from}";
@@ -523,13 +519,17 @@ class File {
 				$to_del = "{$init->dirName}.bak{$i}";
 				if ( file_exists("{$to_del}/") ) {
 					$dir = opendir("{$to_del}/");
+				} else {
+					$dir = false;
 				}
 
-				while ($fileName = readdir($dir)) {
-					if (!(strcmp($fileName, ".") == 0 || strcmp($fileName, "..") == 0))
-						unlink("{$to_del}/{$fileName}");
+				if ( $dir != false ) {
+					while ($fileName = readdir($dir)) {
+						if (!(strcmp($fileName, ".") == 0 || strcmp($fileName, "..") == 0))
+							unlink("{$to_del}/{$fileName}");
+					}
+					closedir($dir);
 				}
-				closedir($dir);
 
 				// データディレクトリを開く
 				if ( file_exists($dir2) ) {

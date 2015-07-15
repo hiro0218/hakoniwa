@@ -25,3 +25,5 @@ define("LOCK_RETRY_INTERVAL", 1000);	// 再ロック処理実施までの時間(
 // 絶対パス定義
 defined("DS") || define("DS", DIRECTORY_SEPARATOR);
 define("ABSOLUTE_PATH", dirname(__FILE__) . DS);
+
+define("READ_LINE", 1024);

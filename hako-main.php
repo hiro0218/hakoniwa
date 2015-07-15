@@ -19,7 +19,6 @@ require_once ABSOLUTE_PATH.'hako-turn.php';
 
 $init = new Init();
 
-define("READ_LINE", 1024);
 $THIS_FILE = $init->baseDir . "/hako-main.php";
 $ISLAND_TURN; // ターン数
 
