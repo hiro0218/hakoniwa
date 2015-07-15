@@ -172,10 +172,12 @@ END;
 
 <div class="row">
 <div class="col-xs-6">
+END;
+
+if ( count($hako->islandList) != 0 ) {
+	echo <<<END
 <h2>自分の島へ</h2>
-
 <form action="{$GLOBALS['THIS_FILE']}" method="post">
-
 	<div class="form-group">
 		<label>あなたの島の名前は？</label>
 		<select name="ISLANDID" class="form-control">
@@ -204,8 +206,11 @@ END;
 	<input type="submit" class="btn btn-primary" value="開発しに行く">
 	</div>
 </form>
-</div>
+END;
+}
 
+echo <<<END
+</div>
 <div class="col-xs-6">
 END;
 		$this->infoPrint(); // 「お知らせ」を表示
@@ -346,6 +351,9 @@ END;
 
 		echo "<h2>諸島の状況</h2>";
 
+		$islandListStart = 0;
+		$islandListSentinel = 0;
+
 		if ($hako->islandNumber != 0) {
 			$islandListStart = $data['islandListStart'];
 			if ($init->islandListRange == 0) {
@@ -361,7 +369,8 @@ END;
 		echo "島の名前をクリックすると、<strong>観光</strong>することができます。\n";
 		echo "</p>\n";
 
-		if (($islandListStart != 1) || ($islandListSentinel != $hako->islandNumberNoBF)) {
+
+		if (($islandListStart  != 1) || ($islandListSentinel != $hako->islandNumberNoBF)) {
 			for ($i = 1; $i <= $hako->islandNumberNoBF ; $i += $init->islandListRange) {
 				$j = $i + $init->islandListRange - 1;
 				if ($j > $hako->islandNumberNoBF) {
@@ -410,6 +419,9 @@ END;
 	function islandTable(&$hako, $start, $sentinel) {
 		global $init;
 
+		if ($sentinel == 0) {
+			return;
+		}
 		echo '<div class="table-responsive">';
 		echo '<table class="table table-bordered table-condensed">';
 
@@ -417,7 +429,7 @@ END;
 			$island        = $hako->islands[$i];
 			$island['pop'] = ($island['pop'] <= 0) ? 1 : $island['pop'];
 
-			$j            = ($island['isBF']) ? '★' : $i + 1;
+			$j            = isset($island['isBF']) ? '★' : $i + 1;
 			$id           = $island['id'];
 			$pop          = $island['pop'] . $init->unitPop;
 			$area         = $island['area'] . $init->unitArea;

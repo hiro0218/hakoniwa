@@ -43,7 +43,8 @@ class File {
 		$this->islandTurn = chop(fgets($fp, READ_LINE));
 		$this->islandLastTime = chop(fgets($fp, READ_LINE));
 		$str = chop(fgets($fp, READ_LINE));
-		list ($this->islandNumber, $this->islandNumberBF, $this->islandNumberKP) = explode(",", $str);
+		list ($this->islandNumber, $this->islandNumberBF, $this->islandNumberKP) = array_pad(explode(",", $str), 3, 0);
+
 		$this->islandNextID = chop(fgets($fp, READ_LINE));
 
 		$GLOBALS['ISLAND_TURN'] = $this->islandTurn;
@@ -82,9 +83,9 @@ class File {
 		global $init;
 
 		$name = chop(fgets($fp, READ_LINE));
-		list($name, $owner, $monster, $port, $ship0, $ship1, $ship2, $ship3, $ship4, $ship5, $ship6, $ship7, $ship8, $ship9, $ship10, $ship11, $ship12, $ship13, $ship14) = array_pad(explode(",", $name), 20, NULL);
+		list($name, $owner, $monster, $port, $ship0, $ship1, $ship2, $ship3, $ship4, $ship5, $ship6, $ship7, $ship8, $ship9, $ship10, $ship11, $ship12, $ship13, $ship14) = array_pad(explode(",", $name), 20, 0);
 		$id = chop(fgets($fp, READ_LINE));
-		list($id, $starturn, $isBF, $keep) = array_pad(explode(",", $id), 4, NULL);
+		list($id, $starturn, $isBF, $keep) = array_pad(explode(",", $id), 4, 0);
 		if ($isBF) {
 			$isBF = 1;
 		}
@@ -94,30 +95,30 @@ class File {
 		$prize = chop(fgets($fp, READ_LINE));
 		$absent = chop(fgets($fp, READ_LINE));
 		$comment = chop(fgets($fp, READ_LINE));
-		list($comment, $comment_turn) = array_pad(explode(",", $comment), 2, NULL);
+		list($comment, $comment_turn) = array_pad(explode(",", $comment), 2, 0);
 		$password = chop(fgets($fp, READ_LINE));
 		$point = chop(fgets($fp, READ_LINE));
 		list($point, $pots) = array_pad(explode(",", $point), 2, NULL);
 		$eisei = chop(fgets($fp, READ_LINE));
-		list($eisei0, $eisei1, $eisei2, $eisei3, $eisei4, $eisei5) = array_pad(explode(",", $eisei), 6, NULL);
+		list($eisei0, $eisei1, $eisei2, $eisei3, $eisei4, $eisei5) = array_pad(explode(",", $eisei), 6, 0);
 		$zin = chop(fgets($fp, READ_LINE));
-		list($zin0, $zin1, $zin2, $zin3, $zin4, $zin5, $zin6) = array_pad(explode(",", $zin), 7, NULL);
+		list($zin0, $zin1, $zin2, $zin3, $zin4, $zin5, $zin6) = array_pad(explode(",", $zin), 7, 0);
 		$item = chop(fgets($fp, READ_LINE));
 		list($item0, $item1, $item2, $item3, $item4, $item5, $item6, $item7, $item8, $item9, $item10, $item11, $item12, $item13, $item14, $item15, $item16, $item17, $item18, $item19, $item20) = array_pad(explode(",", $item), 21, NULL);
 		$money = chop(fgets($fp, READ_LINE));
-		list($money, $lot, $gold) = array_pad(explode(",", $money), 3, NULL);
+		list($money, $lot, $gold) = array_pad(explode(",", $money), 3, 0);
 		$food = chop(fgets($fp, READ_LINE));
-		list($food, $rice) = array_pad(explode(",", $food), 2, NULL);
+		list($food, $rice) = array_pad(explode(",", $food), 2, 0);
 		$pop = chop(fgets($fp, READ_LINE));
-		list($pop, $peop) = array_pad(explode(",", $pop), 2, NULL);
+		list($pop, $peop) = array_pad(explode(",", $pop), 2, 0);
 		$area = chop(fgets($fp, READ_LINE));
 		$job = chop(fgets($fp, READ_LINE));
-		list($farm, $factory, $commerce, $mountain, $hatuden) = array_pad(explode(",", $job), 5, NULL);
+		list($farm, $factory, $commerce, $mountain, $hatuden) = array_pad(explode(",", $job), 5, 0);
 		$power = chop(fgets($fp, READ_LINE));
-		list($taiji, $rena, $fire) = array_pad(explode(",", $power), 3, NULL);
+		list($taiji, $rena, $fire) = array_pad(explode(",", $power), 3, 0);
 		$tenki = chop(fgets($fp, READ_LINE));
 		$soccer = chop(fgets($fp, READ_LINE));
-		list($soccer, $team, $shiai, $kachi, $make, $hikiwake, $kougeki, $bougyo, $tokuten, $shitten) = array_pad(explode(",", $soccer), 10, NULL);
+		list($soccer, $team, $shiai, $kachi, $make, $hikiwake, $kougeki, $bougyo, $tokuten, $shitten) = array_pad(explode(",", $soccer), 10, 0);
 
 		$this->idToName[$id] = $name;
 
@@ -310,7 +311,7 @@ class File {
 		$ext = explode(",", $tmp); // 拡張領域
 		$comment = chop(fgets($fp, READ_LINE));
 		$title = chop(fgets($fp, READ_LINE));
-		list($title, $message) = array_pad(explode("<>", $title), 2, NULL);
+		list($title, $message) = array_pad(explode("<>", $title), 2, 0);
 
 		return array(
 			'name'       => $name,
@@ -362,18 +363,39 @@ class File {
 		$zins   = "";
 		$items  = "";
 
-		if ( isset($island['ship']) ) {
-			$ships  = $island['ship'][0].",".$island['ship'][1].",".$island['ship'][2].",".$island['ship'][3].",".$island['ship'][4].",".$island['ship'][5].",".$island['ship'][6].",".$island['ship'][7].",".$island['ship'][8].",".$island['ship'][9].",".$island['ship'][10].",".$island['ship'][11].",".$island['ship'][12].",".$island['ship'][13].",".$island['ship'][14];
+		if ( !isset($island['ship']) ) {
+			for ($i=0; $i<=14; $i++) {
+				if ( !isset($island['ship'][$i]) ) {
+					$island['ship'][$i] = "";
+				}
+			}
 		}
-		if ( isset($island['eisei']) ) {
-			$eiseis = $island['eisei'][0].",".$island['eisei'][1].",".$island['eisei'][2].",".$island['eisei'][3].",".$island['eisei'][4].",".$island['eisei'][5];
+		if ( !isset($island['eisei']) ) {
+			for ($i=0; $i<=5; $i++) {
+				if ( !isset($island['eisei'][$i]) ) {
+					$island['eisei'][$i] = "";
+				}
+			}
 		}
-		if ( isset($island['zin']) ) {
-			$zins = $island['zin'][0].",".$island['zin'][1].",".$island['zin'][2].",".$island['zin'][3].",".$island['zin'][4].",".$island['zin'][5].",".$island['zin'][6];
+		if ( !isset($island['zin']) ) {
+			for ($i=0; $i<=6; $i++) {
+				if ( !isset($island['zin'][$i]) ) {
+					$island['zin'][$i] = "";
+				}
+			}
 		}
-		if ( isset($island['item']) ) {
-			$items = $island['item'][0].",".$island['item'][1].",".$island['item'][2].",".$island['item'][3].",".$island['item'][4].",".$island['item'][5].",".$island['item'][6].",".$island['item'][7].",".$island['item'][8].",".$island['item'][9].",".$island['item'][10].",".$island['item'][11].",".$island['item'][12].",".$island['item'][13].",".$island['item'][14].",".$island['item'][15].",".$island['item'][16].",".$island['item'][17].",".$island['item'][18].",".$island['item'][19].",".$island['item'][20];
+		if ( !isset($island['item']) ) {
+			for ($i=0; $i<=20; $i++) {
+				if ( !isset($island['item'][$i]) ) {
+					$island['item'][$i] = "";
+				}
+			}
 		}
+
+		$ships  = $island['ship'][0].",".$island['ship'][1].",".$island['ship'][2].",".$island['ship'][3].",".$island['ship'][4].",".$island['ship'][5].",".$island['ship'][6].",".$island['ship'][7].",".$island['ship'][8].",".$island['ship'][9].",".$island['ship'][10].",".$island['ship'][11].",".$island['ship'][12].",".$island['ship'][13].",".$island['ship'][14];
+		$eiseis = $island['eisei'][0].",".$island['eisei'][1].",".$island['eisei'][2].",".$island['eisei'][3].",".$island['eisei'][4].",".$island['eisei'][5];
+		$zins   = $island['zin'][0].",".$island['zin'][1].",".$island['zin'][2].",".$island['zin'][3].",".$island['zin'][4].",".$island['zin'][5].",".$island['zin'][6];
+		$items  = $island['item'][0].",".$island['item'][1].",".$island['item'][2].",".$island['item'][3].",".$island['item'][4].",".$island['item'][5].",".$island['item'][6].",".$island['item'][7].",".$island['item'][8].",".$island['item'][9].",".$island['item'][10].",".$island['item'][11].",".$island['item'][12].",".$island['item'][13].",".$island['item'][14].",".$island['item'][15].",".$island['item'][16].",".$island['item'][17].",".$island['item'][18].",".$island['item'][19].",".$island['item'][20];
 
 		fputs($fp, $island['name'] . "," . $island['owner'] . "," . $island['monster'] . "," . $island['port'] . "," . $ships . "\n");
 		fputs($fp, $island['id'] . "," . $island['starturn'] . "," . $island['isBF'] . "," . $island['keep'] . "\n");
@@ -382,23 +404,29 @@ class File {
 		fputs($fp, $island['comment'] . "," . $island['comment_turn'] . "\n");
 		fputs($fp, $island['password'] . "\n");
 
-		if ( isset($island['pots']) ) {
-			fputs($fp, $island['point'] . "," . $island['pots'] . "\n");
+		if ( !isset($island['pots']) ) {
+			$island['pots'] = "0";
+		}
+		if ( !isset($island['lot']) ){
+			$island['lot'] = "0";
+		}
+		if ( !isset($island['gold']) ) {
+			$island['gold'] = "0";
+		}
+		if ( !isset($island['rice']) ) {
+			$island['rice'] = "0";
+		}
+		if ( !isset($island['peop']) ) {
+			$island['peop'] = "0";
 		}
 
+		fputs($fp, $island['point'] . "," . $island['pots'] . "\n");
 		fputs($fp, $eiseis . "\n");
 		fputs($fp, $zins . "\n");
 		fputs($fp, $items . "\n");
-
-		if ( isset($island['lot']) && isset($island['gold']) ) {
-			fputs($fp, $island['money'] . "," . $island['lot'] . "," . $island['gold'] . "\n");
-		}
-		if ( isset($island['rice']) ) {
-			fputs($fp, $island['food'] . "," . $island['rice'] . "\n");
-		}
-		if ( isset($island['peop']) ) {
-			fputs($fp, $island['pop'] . "," . $island['peop'] . "\n");
-		}
+		fputs($fp, $island['money'] . "," . $island['lot'] . "," . $island['gold'] . "\n");
+		fputs($fp, $island['food'] . "," . $island['rice'] . "\n");
+		fputs($fp, $island['pop'] . "," . $island['peop'] . "\n");
 
 		fputs($fp, $island['area'] . "\n");
 		fputs($fp, $island['farm'] . "," . $island['factory'] . "," . $island['commerce'] . "," . $island['mountain'] ."," . $island['hatuden'] . "\n");
