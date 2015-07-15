@@ -368,14 +368,24 @@ class File {
 		fputs($fp, $island['comment'] . "," . $island['comment_turn'] . "\n");
 		fputs($fp, $island['password'] . "\n");
 
-		fputs($fp, $island['point'] . "," . $island['pots'] . "\n");
+		if ( isset($island['pots']) ) {
+			fputs($fp, $island['point'] . "," . $island['pots'] . "\n");
+		}
 
 		fputs($fp, $eiseis . "\n");
 		fputs($fp, $zins . "\n");
 		fputs($fp, $items . "\n");
-		fputs($fp, $island['money'] . "," . $island['lot'] . "," . $island['gold'] . "\n");
-		fputs($fp, $island['food'] . "," . $island['rice'] . "\n");
-		fputs($fp, $island['pop'] . "," . $island['peop'] . "\n");
+
+		if ( isset($island['lot']) && isset($island['gold']) ) {
+			fputs($fp, $island['money'] . "," . $island['lot'] . "," . $island['gold'] . "\n");
+		}
+		if ( isset($island['rice']) ) {
+			fputs($fp, $island['food'] . "," . $island['rice'] . "\n");
+		}
+		if ( isset($island['peop']) ) {
+			fputs($fp, $island['pop'] . "," . $island['peop'] . "\n");
+		}
+
 		fputs($fp, $island['area'] . "\n");
 		fputs($fp, $island['farm'] . "," . $island['factory'] . "," . $island['commerce'] . "," . $island['mountain'] ."," . $island['hatuden'] . "\n");
 		fputs($fp, $island['taiji'] . "," . $island['rena'] . "," . $island['fire'] . "\n");

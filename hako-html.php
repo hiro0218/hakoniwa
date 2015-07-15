@@ -1666,10 +1666,9 @@ END;
 		global $init;
 
 		echo <<<END
-<div align="center">
-{$init->tagBig_}島を発見しました！！{$init->_tagBig}<br>
-{$init->tagBig_}{$init->tagName_}「{$name}島」{$init->_tagName}と命名します。{$init->_tagBig}<br>
-{$GLOBALS['BACK_TO_TOP']}<br>
+<div class="text-center">
+	{$init->tagBig_}島を発見しました！！{$init->_tagBig}<br>
+	{$init->tagBig_}{$init->tagName_}「{$name}島」{$init->_tagName}と命名します。{$init->_tagBig}
 </div>
 END;
 	}
