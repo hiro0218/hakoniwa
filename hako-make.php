@@ -375,7 +375,7 @@ class Make {
 		if($data['DEVELOPEMODE'] == "cgi") {
 			$html = new HtmlMap();
 		} else {
-			$html = new HtmlJS();
+			$html = new HtmlMapJS();
 		}
 		$html->owner($hako, $data);
 	}
@@ -793,7 +793,7 @@ class MakeJS extends Make {
 		$hako->writeIslandsFile($island['id']);
 
 		// owner modeへ
-		$html = new HtmlJS();
+		$html = new HtmlMapJS();
 		$html->owner($hako, $data);
 	}
 }

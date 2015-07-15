@@ -623,7 +623,7 @@ class Main {
 
 		$_developmode = (isset( $cgi->dataSet['DEVELOPEMODE'] )) ? $cgi->dataSet['DEVELOPEMODE'] : "";
 		if( mb_strtolower($_developmode) == "javascript") {
-			$html = new HtmlJS();
+			$html = new HtmlMapJS();
 			$com  = new MakeJS();
 		} else {
 			$html = new HtmlMap();

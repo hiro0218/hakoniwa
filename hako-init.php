@@ -86,7 +86,7 @@ class Init {
 
 	// 負荷計測するか？(0:しない、1:する)
 	public $performance  = 1;
-	public $CPU_start;
+	public $CPU_start = 0;
 
 	//---------------------------------------------------
 	// バックアップに関する設定

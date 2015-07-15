@@ -89,10 +89,10 @@ END;
     }
 </script>
 
-<div class="row">
-	<div class="col-xs-12">
-		<footer>
-			<p>Produced by <a href="https://twitter.com/{$init->twitterID}">{$init->adminName}</a> (<a href="{$init->urlTopPage}">{$init->urlTopPage}</a>)
+			<div class="row">
+				<div class="col-xs-12">
+					<footer>
+						<p>Produced by <a href="https://twitter.com/{$init->twitterID}">{$init->adminName}</a> (<a href="{$init->urlTopPage}">{$init->urlTopPage}</a>)
 END;
 		if($init->performance) {
 			echo '<small class="pull-right">';
@@ -102,13 +102,13 @@ END;
 			echo '</small>';
 		}
 		echo <<<END
-		</p>
-</footer>
-	</div>
-</div>
+						</p>
+					</footer>
+				</div>
+			</div>
 
-</div><!-- container -->
-</body>
+		</div><!-- container -->
+	</body>
 </html>
 END;
 	}
@@ -132,6 +132,7 @@ END;
 END;
 	}
 }
+
 //--------------------------------------------------------------------
 class HtmlTop extends HTML {
 	//---------------------------------------------------
@@ -1711,7 +1712,7 @@ function ps(x, y) {
 //-->
 </script>
 
-<div align="center">
+<div class="text-center">
 {$init->tagBig_}{$init->tagName_}{$island['name']}島{$init->_tagName}{$init->_tagBig}<br>
 </div>
 END;
@@ -1721,7 +1722,7 @@ END;
 }
 
 //------------------------------------------------------------------
-class HtmlJS extends HtmlMap {
+class HtmlMapJS extends HtmlMap {
 
 	//---------------------------------------------------
 	// 開発画面
@@ -2545,7 +2546,7 @@ END;
 	</form>
 </div>
 
-<div align="center">
+<div class="text-center">
 <table class="table table-bordered">
 <tr valign="top">
 <td $init->bgInputCell>
