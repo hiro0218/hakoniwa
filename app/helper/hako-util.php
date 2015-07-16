@@ -1,16 +1,11 @@
 <?php
+/**
+ * 箱庭諸島 S.E - 各種ユーティリティ定義用ファイル -
+ * @copyright 箱庭諸島 ver2.30
+ * @since 箱庭諸島 S.E ver23_r09 by SERA
+ * @author hiro <@hiro0218>
+ */
 
-/*******************************************************************
-
-	箱庭諸島 S.E
-
-	- 各種ユーティリティ定義用ファイル -
-
-	hako-util.php by SERA - 2012/07/08
-
-*******************************************************************/
-
-//--------------------------------------------------------------------
 class Util {
 	//---------------------------------------------------
 	// 資金の表示
@@ -353,7 +348,7 @@ class Util {
 	 */
 	static function makeTagMessage($message, $status = "success"){
 		echo '<div class="alert alert-'. $status .' role="alert">';
-		echo $message;
+		echo nl2br($message);
 		echo '</div>';
 	}
 

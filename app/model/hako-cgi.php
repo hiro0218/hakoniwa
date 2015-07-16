@@ -1,14 +1,10 @@
 <?php
-
-/*******************************************************************
-
-	箱庭諸島 S.E
-
-	- Cookie定義用ファイル -
-
-	hako-cgi.php by SERA - 2012/04/03
-
-*******************************************************************/
+/**
+ * 箱庭諸島 S.E - Cookie定義用ファイル -
+ * @copyright 箱庭諸島 ver2.30
+ * @since 箱庭諸島 S.E ver23_r09 by SERA
+ * @author hiro <@hiro0218>
+ */
 
 class Cgi {
 	public $mode = "";
@@ -20,7 +16,7 @@ class Cgi {
 	function parseInputData() {
 		global $init;
 
-		$this->mode = (array_key_exists('mode', $_POST)) ? $_POST['mode'] : "";
+		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
 
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {

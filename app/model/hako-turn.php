@@ -1,19 +1,15 @@
 <?php
-
-/*******************************************************************
-
-	箱庭諸島 S.E
-
-	- ターン更新用ファイル -
-
-	hako-turn.php by SERA - 2013/06/01
-
-*******************************************************************/
+/**
+ * 箱庭諸島 S.E - ターン更新用ファイル -
+ * @copyright 箱庭諸島 ver2.30
+ * @since 箱庭諸島 S.E ver23_r09 by SERA
+ * @author hiro <@hiro0218>
+ */
 
 require_once 'config.php';
-require_once ABSOLUTE_PATH.'hako-init.php';
-require_once ABSOLUTE_PATH.'hako-log.php';
-require_once ABSOLUTE_PATH.'hako-make.php';
+
+require_once APPPATH.'/model/hako-log.php';
+require_once APPPATH.'/model/hako-make.php';
 
 //--------------------------------------------------------------------
 class Turn {

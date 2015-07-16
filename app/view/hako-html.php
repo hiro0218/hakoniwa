@@ -1,29 +1,21 @@
 <?php
+/**
+ * 箱庭諸島 S.E - 画面出力用ファイル -
+ * @copyright 箱庭諸島 ver2.30
+ * @since 箱庭諸島 S.E ver23_r09 by SERA
+ * @author hiro <@hiro0218>
+ */
 
-/*******************************************************************
+require_once APPPATH.'/model/hako-error.php';
 
-	箱庭諸島 S.E
-
-	- 画面出力用ファイル -
-
-	hako-html.php by SERA - 2013/05/12
-
-*******************************************************************/
-
-require_once ABSOLUTE_PATH.'hako-error.php';
-
-//--------------------------------------------------------------------
 class HTML {
 
-	//---------------------------------------------------
-	// HTML ヘッダ出力
-	//---------------------------------------------------
-	static function header($data = "") {
+	/**
+	* HTML <head>
+	 * @return [type] [description]
+	 */
+	static function header() {
 		global $init;
-
-		// $css  = (empty($data['defaultSkin'])) ? $init->cssList[0] : $data['defaultSkin'];
-		$css  = $init->cssList[0];
-		$bimg = (empty($data['defaultImg']))  ? $init->imgDir : $data['defaultImg'];
 
 		echo <<<END
 <!DOCTYPE html>
@@ -31,14 +23,24 @@ class HTML {
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="{$init->cssDir}/{$css}">
-	<!-- <link rel="shortcut icon" href="{$init->baseDir}/favicon.ico"> -->
 	<title>{$init->title}</title>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{$init->cssDir}/{$init->css}">
+	<!-- <link rel="shortcut icon" href="{$init->baseDir}/favicon.ico"> -->
 	<script type="text/javascript" src="{$init->jsDir}/{$init->js}"></script>
 </head>
-<body>
+END;
+		self::body();
+	}
 
+	/**
+	 * HTML <body>
+	 * @return [type] [description]
+	 */
+	static function body() {
+		global $init;
+		echo <<<END
+<body>
 <div class="container-fluid">
 	<header>
 		<ul class="list-inline">
@@ -63,31 +65,30 @@ class HTML {
 			</div>
 		</nav>
 	</header>
-
 END;
-
 	}
 
-	//---------------------------------------------------
-	// HTML フッタ出力
-	//---------------------------------------------------
+	/**
+	 * HTML <footer>
+	 * @return [type] [description]
+	 */
 	static function footer() {
 		global $init;
 
 		echo <<<END
 <hr>
-<script>
-	// JavaScriptモード関連
-    if (document.addEventListener) {
-        if (typeof(init) == "function") {
-            document.addEventListener("DOMContentLoaded", init(), false);
-        }
-    } else {
-        if (typeof(init) == "function") {
-            window.onload = init;
-        }
-    }
-</script>
+			<script>
+				// JavaScriptモード関連
+			    if (document.addEventListener) {
+			        if (typeof(init) == "function") {
+			            document.addEventListener("DOMContentLoaded", init(), false);
+			        }
+			    } else {
+			        if (typeof(init) == "function") {
+			            window.onload = init;
+			        }
+			    }
+			</script>
 
 			<div class="row">
 				<div class="col-xs-12">
@@ -122,30 +123,29 @@ END;
 		$timeString = date("Y年m月d日 H時", $hako->islandLastTime);
 		echo <<<END
 <div class="lastModified">
-<p>最終更新時間: $timeString<br>
-(次のターンまで、あと
-<script type="text/javascript">
-	remainTime($hako->islandLastTime + $init->unitTime);
-</script>
-</p>
+	<p>最終更新時間: $timeString<br>
+	(次のターンまで、あと
+	<script type="text/javascript">
+		remainTime($hako->islandLastTime + $init->unitTime);
+	</script>
+	</p>
 </div>
 END;
 	}
 }
 
-//--------------------------------------------------------------------
+
 class HtmlTop extends HTML {
-	//---------------------------------------------------
-	// ＴＯＰページ
-	//---------------------------------------------------
+
 	function main($hako, $data) {
 		global $init;
+		$this_file = $init->baseDir . "/hako-main.php";
 
 		echo "<h1>{$init->title} トップ</h1>\n";
 
 		if(DEBUG === true) {
 			echo <<<END
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
+<form action="{$this_file}" method="post">
 	<input type="hidden" name="mode" value="debugTurn">
 	<input type="submit" class="btn btn-default" value="ターンを進める">
 </form>
@@ -175,10 +175,10 @@ END;
 <div class="col-xs-6">
 END;
 
-if ( count($hako->islandList) != 0 ) {
-	echo <<<END
+		if ( count($hako->islandList) != 0 ) {
+			echo <<<END
 <h2>自分の島へ</h2>
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
+<form action="{$this_file}" method="post">
 	<div class="form-group">
 		<label>あなたの島の名前は？</label>
 		<select name="ISLANDID" class="form-control">
@@ -208,21 +208,19 @@ if ( count($hako->islandList) != 0 ) {
 	</div>
 </form>
 END;
-}
+		}
 
-echo <<<END
+		echo <<<END
 </div>
 <div class="col-xs-6">
 END;
 		$this->infoPrint(); // 「お知らせ」を表示
-echo <<<END
+		echo <<<END
 </div>
-
 </div>
-
-
 
 <hr>
+
 <h2>各部門ランキング</h2>
 <div class="table-responsive">
 <table class="table table-condensed">
@@ -267,7 +265,7 @@ END;
 				echo "<td width=\"15%\" class=\"M\">";
 				echo "<table class=\"table table-bordered\">\n";
 				echo "<thead><tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr></thead>\n";
-				echo "<tr><td class=\"TenkiCell\"><a href=\"{$GLOBALS['THIS_FILE']}?Sight={$island['id']}\">{$init->tagName_}{$name}{$init->_tagName}</a></td></tr>\n";
+				echo "<tr><td class=\"TenkiCell\"><a href=\"{$this_file}?Sight={$island['id']}\">{$init->tagName_}{$name}{$init->_tagName}</a></td></tr>\n";
 				echo "<tr><td class=\"TenkiCell\">{$max}{$bumonUnit[$r]}</td></tr>\n";
 				echo "</table></td>\n";
 				if(($r % 6) == 5) {
@@ -379,7 +377,7 @@ END;
 				}
 				echo " ";
 				if ( $i != $islandListStart ) {
-					echo "<a href=\"" . $GLOBALS['THIS_FILE'] . "?islandListStart=" . $i ."\">";
+					echo "<a href=\"" . $this_file . "?islandListStart=" . $i ."\">";
 				}
 				echo " [ ". $i . " - " . $j . " ]";
 
@@ -404,7 +402,7 @@ END;
 
 		if($init->registMode) {
 			echo <<<END
-<FORM action="{$GLOBALS['THIS_FILE']}?mode=conf" method="POST">
+<FORM action="{$this_file}?mode=conf" method="POST">
 	<div class="text-right">
 		<INPUT TYPE="password" NAME="PASSWORD" SIZE=8 MAXLENGTH=32 required>
 		<INPUT TYPE="submit" VALUE="管理用" NAME="AdminButton">
@@ -419,6 +417,7 @@ END;
 	//---------------------------------------------------
 	function islandTable(&$hako, $start, $sentinel) {
 		global $init;
+		$this_file = $init->baseDir . "/hako-main.php";
 
 		if ($sentinel == 0) {
 			return;
@@ -616,7 +615,7 @@ END;
 	<tr>
 		<th {$init->bgNumberCell} rowspan="5">{$init->tagNumber_}$j{$init->_tagNumber}</th>
 		<td {$init->bgNameCell} rowspan="5" valign="top">
-			<h3><a href="{$GLOBALS['THIS_FILE']}?Sight={$id}">{$name}</a> <small>{$start}{$monster}{$soccer}</small></h3>
+			<h3><a href="{$this_file}?Sight={$id}">{$name}</a> <small>{$start}{$monster}{$soccer}</small></h3>
 			{$prize}{$viking}<br>
 			{$zins}<br>
 			<small>({$peop} {$okane} {$gohan} {$poin})</small>
@@ -690,6 +689,7 @@ END;
 	//---------------------------------------------------
 	function newDiscovery($number) {
 		global $init;
+		$this_file = $init->baseDir . "/hako-main.php";
 
 		echo "<div id=\"NewIsland\">\n";
 		echo "<h2>新しい島を探す</h2>\n";
@@ -700,7 +700,7 @@ END;
 				echo "参加希望の方は、管理者に「島名」と「パスワード」を送信してください。<BR>\n";
 			} else {
 				echo <<<END
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
+<form action="{$this_file}" method="post">
 	<div class="form-group">
 		<label>どんな名前をつける予定？</label>
 		<div class="input-group">
@@ -739,6 +739,7 @@ END;
 	//---------------------------------------------------
 	function changeIslandInfo($islandList = "") {
 		global $init;
+		$this_file = $init->baseDir . "/hako-main.php";
 
 		echo <<<END
 <div id="ChangeInfo">
@@ -746,7 +747,7 @@ END;
 
 	<p class="alert alert-info" role="alert">(注意) 名前の変更には{$init->costChangeName}{$init->unitMoney}かかります。</p>
 
-	<form action="{$GLOBALS['THIS_FILE']}" method="post">
+	<form action="{$this_file}" method="post">
 		<div class="form-group">
 			<label>どの島ですか？</label>
 			<select NAME="ISLANDID" class="form-control">$islandList</select>
@@ -786,11 +787,12 @@ END;
 	//---------------------------------------------------
 	function changeOwnerName($islandList = "") {
 		global $init;
+		$this_file = $init->baseDir . "/hako-main.php";
 
 		echo <<<END
 <div id="ChangeOwnerName">
 	<h2>オーナー名の変更</h2>
-	<form action="{$GLOBALS['THIS_FILE']}" method="post">
+	<form action="{$this_file}" method="post">
 		<div class="form-group">
 			<label>どの島ですか？</label>
 			<select name="ISLANDID" class="form-control">{$islandList}</select>
@@ -860,13 +862,15 @@ END;
 	}
 
 }
-//------------------------------------------------------------------
+
+
 class HtmlMap extends HTML {
 	//---------------------------------------------------
 	// 開発画面
 	//---------------------------------------------------
 	function owner($hako, $data) {
 		global $init;
+		$this_file = $init->baseDir . "/hako-main.php";
 
 		$id = $data['ISLANDID'];
 		$number = $hako->idToNumber[$id];
@@ -909,6 +913,8 @@ class HtmlMap extends HTML {
 	//---------------------------------------------------
 	function visitor($hako, $data) {
 		global $init;
+		$this_file = $init->baseDir . "/hako-main.php";
+
 		// idから島番号を取得
 		$id = $data['ISLANDID'];
 		$number = isset($hako->idToNumber[$id]) ? $hako->idToNumber[$id] : -1;
@@ -932,7 +938,7 @@ END;
 		// 他の島へ
 		echo <<<END
 <div class="text-center">
-	<form action="{$GLOBALS['THIS_FILE']}" method="get">
+	<form action="{$this_file}" method="get">
 	<select name="Sight">$hako->islandList</select>
 	<input type="submit" value="観光">
 </form>
@@ -1237,6 +1243,8 @@ END;
 	//---------------------------------------------------
 	function tempOwer($hako, $data, $number = 0) {
 		global $init;
+		$this_file = $init->baseDir . "/hako-main.php";
+
 		$island = $hako->islands[$number];
 		$name   = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
 		$width  = $init->islandSize * 32 + 50;
@@ -1262,7 +1270,7 @@ function settarget(part){
 	p = part.options[part.selectedIndex].value;
 }
 function targetopen() {
-	w = window.open("{$GLOBALS['THIS_FILE']}?target=" + p, "","width={$width},height={$height},scrollbars=1,resizable=1,toolbar=1,menubar=1,location=1,directories=0,status=1");
+	w = window.open("{$this_file}?target=" + p, "","width={$width},height={$height},scrollbars=1,resizable=1,toolbar=1,menubar=1,location=1,directories=0,status=1");
 }
 </script>
 
@@ -1278,7 +1286,7 @@ END;
 <tr>
 <td {$init->bgInputCell}>
 <div class="text-center">
-<form action="{$GLOBALS['THIS_FILE']}" method="post" name="InputPlan">
+<form action="{$this_file}" method="post" name="InputPlan">
 <input type="hidden" name="mode" value="command">
 <input type="hidden" name="ISLANDID" value="{$island['id']}">
 <input type="hidden" name="PASSWORD" value="{$data['defaultPassword']}">
@@ -1423,7 +1431,7 @@ END;
 
 <div id='CommentBox'>
 	<h2>コメント更新</h2>
-	<form action="{$GLOBALS['THIS_FILE']}" method="post">
+	<form action="{$this_file}" method="post">
 		<div class="row">
 		  <div class="col-xs-12">
 			<div class="input-group">
@@ -1729,6 +1737,7 @@ class HtmlMapJS extends HtmlMap {
 	//---------------------------------------------------
 	function tempOwer($hako, $data, $number = 0) {
 		global $init;
+		$this_file = $init->baseDir . "/hako-main.php";
 
 		$island = $hako->islands[$number];
 		$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
@@ -2495,7 +2504,7 @@ function settarget(part){
 }
 
 function targetopen() {
-	w = window.open("{$GLOBALS['THIS_FILE']}?target=" + p, "","width={$width},height={$height},scrollbars=1,resizable=1,toolbar=1,menubar=1,location=1,directories=0,status=1");
+	w = window.open("{$this_file}?target=" + p, "","width={$width},height={$height},scrollbars=1,resizable=1,toolbar=1,menubar=1,location=1,directories=0,status=1");
 }
 
 </script>
@@ -2551,12 +2560,12 @@ END;
 <tr valign="top">
 <td $init->bgInputCell>
 
-<form action="{$GLOBALS['THIS_FILE']}" method="post" name="InputPlan">
-<input type="hidden" name="mode" value="command">
-<input type="hidden" name="COMARY" value="comary">
-<input type="hidden" name="DEVELOPEMODE" value="javascript">
+<form action="{$this_file}" method="post" name="InputPlan">
+	<input type="hidden" name="mode" value="command">
+	<input type="hidden" name="COMARY" value="comary">
+	<input type="hidden" name="DEVELOPEMODE" value="javascript">
 
-<div class="text-center">
+	<div class="text-center">
 
 	<input type="submit" class="btn btn-primary" value="計画送信" name="SENDPROJECT">
 
@@ -2736,10 +2745,12 @@ END;
 </td>
 </tr>
 </table>
+
 <hr>
+
 <div id='CommentBox'>
 	<h2>コメント更新</h2>
-	<form action="{$GLOBALS['THIS_FILE']}" method="post">
+	<form action="{$this_file}" method="post">
 		<div class="row">
 		  <div class="col-xs-12">
 			<div class="input-group">
@@ -2774,29 +2785,1144 @@ END;
 class HtmlSetted extends HTML {
 
 	static function comment() {
-		global $init;
 		Util::makeTagMessage("コメントを更新しました", "success");
 	}
 
 	static function change() {
-		global $init;
+		Util::makeTagMessage("変更完了しました", "success");
 	}
 
 	// コマンド削除
 	static function commandDelete() {
-		global $init;
 		Util::makeTagMessage("コマンドを削除しました", "success");
 	}
 
 	// コマンド登録
 	static function commandAdd() {
-		global $init;
 		Util::makeTagMessage("コマンドを登録しました", "success");
 	}
 
 	// 島の強制削除
 	static function deleteIsland($name) {
-		global $init;
 		Util::makeTagMessage("{$name}島を強制削除しました", "success");
+	}
+}
+
+class HtmlAdmin extends HTML {
+	function enter($urllist, $menulist) {
+		global $init;
+		echo <<<END
+<script>
+function go(obj) {
+	if(obj.menulist.value) {
+		obj.action = obj.menulist.value;
+	}
+}
+</script>
+
+<h1 class="title">管理室入り口</h1>
+<hr>
+<TABLE BORDER=0 width="100%">
+<TR valign="top">
+<TD class="M">
+<div id="AdminEnter">
+<h2>管理室へ</h2>
+<form method="post" onSubmit="go(this)">
+<strong>パスワード：</strong>
+<input type="password" size="32" maxlength="32" name="PASSWORD">
+<input type="hidden" name="mode" value="enter">
+<select name="menulist">
+END;
+		$urllistCnt = (int)count($urllist);
+		for ( $i = 0; $i < $urllistCnt; $i++ ) {
+			if ($i === 0) {
+				echo "<option value=\"{$init->baseDir}{$urllist[$i]}\" selected=\"selected\">{$menulist[$i]}</option>\n";
+			} else {
+				echo "<option value=\"{$init->baseDir}{$urllist[$i]}\">{$menulist[$i]}</option>\n";
+			}
+		}
+		echo "</select>\n";
+		echo "<input type=\"submit\" value=\"管理室へ\">\n";
+		echo "</form>\n";
+		echo <<<END
+</TD>
+</TR>
+</TABLE>
+<BR>
+END;
+	}
+}
+
+class HtmlPresent extends HTML {
+	function enter() {
+		global $init;
+		$this_file = $init->baseDir . "/hako-present.php";
+		$main_file = $init->baseDir . "/hako-main.php";
+
+		echo <<<END
+<h1 class="title">プレゼントツール</h1>
+<form action="{$this_file}" method="post">
+<strong>パスワード：</strong>
+<input type="password" size="32" maxlength="32" name="PASSWORD">
+<input type="hidden" name="mode" value="enter">
+<input type="submit" value="メンテナンス">
+</form>
+END;
+	}
+
+	function main($data, $hako) {
+		global $init;
+		$this_file = $init->baseDir . "/hako-present.php";
+		$main_file = $init->baseDir . "/hako-main.php";
+
+		$width = $init->islandSize * 32 + 50;
+		$height = $init->islandSize * 32 + 100;
+		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
+
+		echo <<<END
+<script type="text/javascript">
+<!--
+var w;
+var p = 0;
+
+function settarget(part){
+	p = part.options[part.selectedIndex].value;
+}
+
+function targetopen() {
+	w = window.open("{$main_file}?target=" + p, "","width={$width},height={$height},scrollbars=1,resizable=1,toolbar=1,menubar=1,location=1,directories=0,status=1");
+}
+//-->
+</script>
+
+<h1 class="title">プレゼントツール</h1>
+
+<h2>管理人からのプレゼント</h2>
+<form action="{$this_file}" method="post">
+	<select name="ISLANDID">$hako->islandList</select>に、
+	資金：<input type="text" size="10" name="MONEY" value="0">{$init->unitMoney}、
+	食料：<input type="text" size="10" name="FOOD" value="0">{$init->unitFood}を
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="PRESENT">
+	<input type="submit" value="プレゼントする">
+</form>
+
+<h2>管理人からの災害プレゼント&hearts;</h2>
+<form action="{$this_file}" method="post" name="InputPlan">
+<select name="ISLANDID" onchange="settarget(this);">
+$hako->islandList
+</select>の、(
+<select name="POINTX">
+END;
+		echo "<option value=\"0\" selected>0</option>\n";
+		for($i = 1; $i < $init->islandSize; $i++) {
+			echo "<option value=\"{$i}\">{$i}</option>\n";
+		}
+		echo "</select>, <select name=\"POINTY\">";
+		echo "<option value=\"0\" selected>0</option>\n";
+		for($i = 1; $i < $init->islandSize; $i++) {
+			echo "<option value=\"{$i}\">{$i}</option>\n";
+		}
+		echo <<<END
+</select> )に、
+<select name="PUNISH">
+	<option VALUE="0">キャンセル</option>
+	<option VALUE="1">地震</option>
+	<option VALUE="2">津波</option>
+	<option VALUE="3">怪獣</option>
+	<option VALUE="4">地盤沈下</option>
+	<option VALUE="5">台風</option>
+	<option VALUE="6">巨大隕石○</option>
+	<option VALUE="7">隕石○</option>
+	<option VALUE="8">噴火○</option>
+</select>を
+<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+<input type="hidden" name="mode" value="PUNISH">
+<input type="submit" value="プレゼントしちゃう"><br>
+<input type="button" value="目標捕捉" onClick="javascript: targetopen();">
+</form>
+
+<h2>現在のプレゼントリスト</h2>
+END;
+		for ($i=0; $i < $hako->islandNumber; $i++) {
+			$present =&$hako->islands[$i]['present'];
+			$name =&$hako->islands[$i]['name'];
+			if ( $present['item'] == 0 ) {
+				if ( $present['px'] != 0 ) {
+					$money = $present['px'] . $init->unitMoney;
+					echo "{$init->tagName_}{$name}島{$init->_tagName}に<strong>{$money}</strong>の資金<br>\n";
+				}
+				if ( $present['py'] != 0 ) {
+					$food = $present['py'] . $init->unitFood;
+					echo "{$init->tagName_}{$name}島{$init->_tagName}に<strong>{$food}</strong>の食料<br>\n";
+				}
+			} elseif ( $present['item'] > 0 ) {
+				$items = array ('地震','津波','怪獣','地盤沈下','台風','巨大隕石','隕石','噴火');
+				$item = $items[$present['item'] - 1];
+				if ( $present['item'] < 9 ) {
+					$point = ($present['item'] < 6) ? '' : '(' . $present['px'] . ',' . $present['py'] . ')';
+					echo "{$init->tagName_}{$name}島{$point}{$init->_tagName}に{$init->tagDisaster_}{$item}{$init->_tagDisaster}<br>\n";
+				}
+			}
+		}
+	}
+}
+
+class HtmlMente extends HTML {
+
+	function enter() {
+		global $init;
+		$this_file = $init->baseDir . "/hako-mente.php";
+
+		echo "<h1 class=\"title\">メンテナンスツール</h1>";
+		if(file_exists("{$init->passwordFile}")) {
+			echo <<<END
+<form action="{$this_file}" method="post">
+<strong>パスワード：</strong>
+<input type="password" size="32" maxlength="32" name="PASSWORD">
+<input type="hidden" name="mode" value="enter">
+<input type="submit" value="メンテナンス">
+END;
+		} else {
+			echo <<<END
+<form action="{$this_file}" method="post">
+<H2>マスタパスワードと特殊パスワードを決めてください。</H2>
+<P>※入力ミスを防ぐために、それぞれ２回ずつ入力してください。</P>
+<B>マスタパスワード：</B><BR>
+(1) <INPUT type="password" name="MPASS1" value="$mpass1">&nbsp;&nbsp;(2) <INPUT type="password" name="MPASS2" value="$mpass2"><BR>
+<BR>
+<B>特殊パスワード：</B><BR>
+(1) <INPUT type="password" name="SPASS1" value="$spass1">&nbsp;&nbsp;(2) <INPUT type="password" name="SPASS2" value="$spass2"><BR>
+<BR>
+<input type="hidden" name="mode" value="setup">
+<INPUT type="submit" value="パスワードを設定する">
+END;
+		}
+		echo "</form>\n";
+	}
+
+	function main($data) {
+		global $init;
+		$this_file = $init->baseDir . "/hako-mente.php";
+
+		echo "<h1 class=\"title\">メンテナンスツール</h1>\n";
+		if(is_dir("{$init->dirName}")) {
+			$this->dataPrint($data);
+		} else {
+			echo "<hr>\n";
+			echo "<form action=\"{$this_file}\" method=\"post\">\n";
+			echo "<input type=\"hidden\" name=\"PASSWORD\" value=\"{$data['PASSWORD']}\">\n";
+			echo "<input type=\"hidden\" name=\"mode\" value=\"NEW\">\n";
+			echo "<input type=\"submit\" value=\"新しいデータを作る\">\n";
+			echo "</form>\n";
+		}
+		// バックアップデータ
+		$dir = opendir("./");
+		while($dn = readdir($dir)) {
+			if(preg_match("/{$init->dirName}\.bak(.*)$/", $dn, $suf)) {
+				if (is_file("{$init->dirName}.bak{$suf[1]}/hakojima.dat")) {
+					$this->dataPrint($data, $suf[1]);
+				}
+			}
+		}
+		closedir($dir);
+	}
+
+	// 表示モード
+	function dataPrint($data, $suf = "") {
+		global $init;
+		$this_file = $init->baseDir . "/hako-mente.php";
+
+		echo "<HR>";
+		if(strcmp($suf, "") == 0) {
+			$fp = fopen("{$init->dirName}/hakojima.dat", "r");
+			echo "<h2>現役データ</h2>\n";
+		} else {
+			$fp = fopen("{$init->dirName}.bak{$suf}/hakojima.dat", "r");
+			echo "<h2>バックアップ{$suf}</h2>\n";
+		}
+		$lastTurn = chop(fgets($fp, READ_LINE));
+		$lastTime = chop(fgets($fp, READ_LINE));
+		fclose($fp);
+		$timeString = self::timeToString($lastTime);
+		echo <<<END
+<strong>ターン$lastTurn</strong><br>
+<strong>最終更新時間</strong>:$timeString<br>
+<strong>最終更新時間(秒数表\示)</strong>:1970年1月1日から$lastTime 秒<br>
+<form action="{$this_file}" method="post">
+<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+<input type="hidden" name="mode" value="DELETE">
+<input type="hidden" name="NUMBER" value="{$suf}">
+<input type="submit" value="このデータを削除">
+</form>
+END;
+		if(strcmp($suf, "") == 0) {
+			$time = localtime($lastTime, TRUE);
+			$time['tm_year'] += 1900;
+			$time['tm_mon']++;
+			echo <<<END
+<h2>最終更新時間の変更</h2>
+<form action="{$this_file}" method="post">
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="NTIME">
+	<input type="hidden" name="NUMBER" value="{$suf}">
+	<input type="text" size="4" name="YEAR" value="{$time['tm_year']}">年
+	<input type="text" size="2" name="MON" value="{$time['tm_mon']}">月
+	<input type="text" size="2" name="DATE" value="{$time['tm_mday']}">日
+	<input type="text" size="2" name="HOUR" value="{$time['tm_hour']}">時
+	<input type="text" size="2" name="MIN" value="{$time['tm_min']}">分
+	<input type="text" size="2" name="NSEC" value="{$time['tm_sec']}">秒
+	<input type="submit" value="変更">
+</form>
+<form action="{$this_file}" method="post">
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="STIME">
+	<input type="hidden" name="NUMBER" value="{$suf}">
+	1970年1月1日から<input type="text" size="32" name="SSEC" value="$lastTime">秒
+	<input type="submit" value="秒指定で変更">
+</form>
+END;
+		}
+	}
+
+	function timeToString($t) {
+		$time = localtime($t, TRUE);
+		$time['tm_year'] += 1900;
+		$time['tm_mon']++;
+		return "{$time['tm_year']}年 {$time['tm_mon']}月 {$time['tm_mday']}日 {$time['tm_hour']}時 {$time['tm_min']}分 {$time['tm_sec']}秒";
+	}
+}
+
+class HtmlMenteSafe extends HTML {
+	function enter() {
+		global $init;
+		$this_file = $init->baseDir . "/hako-mente-safemode.php";
+
+		echo "<h1 class=\"title\">メンテナンスツール</h1>";
+		if(file_exists("{$init->passwordFile}")) {
+			echo <<<END
+<form action="{$this_file}" method="post">
+<strong>パスワード：</strong>
+<input type="password" size="32" maxlength="32" name="PASSWORD">
+<input type="hidden" name="mode" value="enter">
+<input type="submit" value="メンテナンス">
+END;
+		} else {
+			echo <<<END
+<form action="{$this_file}" method="post">
+<H2>マスタパスワードと特殊パスワードを決めてください。</H2>
+<P>※入力ミスを防ぐために、それぞれ２回ずつ入力してください。</P>
+<B>マスタパスワード：</B><BR>
+(1) <INPUT type="password" name="MPASS1" value="$mpass1">&nbsp;&nbsp;(2) <INPUT type="password" name="MPASS2" value="$mpass2"><BR>
+<BR>
+<B>特殊パスワード：</B><BR>
+(1) <INPUT type="password" name="SPASS1" value="$spass1">&nbsp;&nbsp;(2) <INPUT type="password" name="SPASS2" value="$spass2"><BR>
+<BR>
+<input type="hidden" name="mode" value="setup">
+<INPUT type="submit" value="パスワードを設定する">
+END;
+		}
+		echo "</form>\n";
+	}
+
+	function main($data) {
+		global $init;
+		$this_file = $init->baseDir . "/hako-mente-safemode.php";
+
+		echo "<h1 class=\"title\">{$init->title}<br>メンテナンスツール</h1>\n";
+		// データ保存用ディレクトリの存在チェック
+		if(!is_dir("{$init->dirName}")) {
+			echo "{$init->tagBig_}データ保存用のディレクトリが存在しません{$init->_tagBig}";
+			HTML::footer();
+			exit();
+		}
+		// データ保存用ディレクトリのパーミッションチェック
+		if(!is_writeable("{$init->dirName}") || !is_readable("{$init->dirName}")) {
+			echo "{$init->tagBig_}データ保存用のディレクトリのパーミッションが不正です。パーミッションを0777等の値に設定してください。{$init->_tagBig}";
+			HTML::footer();
+			exit();
+		}
+		if(is_file("{$init->dirName}/hakojima.dat")) {
+			$this->dataPrint($data);
+		} else {
+			echo "<hr>\n";
+			echo "<form action=\"{$this_file}\" method=\"post\">\n";
+			echo "<input type=\"hidden\" name=\"PASSWORD\" value=\"{$data['PASSWORD']}\">\n";
+			echo "<input type=\"hidden\" name=\"mode\" value=\"NEW\">\n";
+			echo "<input type=\"submit\" value=\"新しいデータを作る\">\n";
+			echo "</form>\n";
+		}
+		// バックアップデータ
+		$dir = opendir("./");
+		while($dn = readdir($dir)) {
+			if(preg_match("/{$init->dirName}\.bak(.*)$/", $dn, $suf)) {
+				if (is_file("{$init->dirName}.bak{$suf[1]}/hakojima.dat")) {
+					$this->dataPrint($data, $suf[1]);
+				}
+			}
+		}
+		closedir($dir);
+	}
+
+	// 表示モード
+	function dataPrint($data, $suf = "") {
+		global $init;
+		$this_file = $init->baseDir . "/hako-mente-safemode.php";
+
+		echo "<HR>";
+		if(strcmp($suf, "") == 0) {
+			$fp = fopen("{$init->dirName}/hakojima.dat", "r");
+			echo "<h2>現役データ</h2>\n";
+		} else {
+			$fp = fopen("{$init->dirName}.bak{$suf}/hakojima.dat", "r");
+			echo "<h2>バックアップ{$suf}</h2>\n";
+		}
+		$lastTurn = chop(fgets($fp, READ_LINE));
+		$lastTime = chop(fgets($fp, READ_LINE));
+		fclose($fp);
+		$timeString = self::timeToString($lastTime);
+
+		echo <<<END
+<strong>ターン$lastTurn</strong><br>
+<strong>最終更新時間</strong>:$timeString<br>
+<strong>最終更新時間(秒数表\示)</strong>:1970年1月1日から$lastTime 秒<br>
+<form action="{$this_file}" method="post">
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="DELETE">
+	<input type="hidden" name="NUMBER" value="{$suf}">
+	<input type="submit" value="このデータを削除">
+</form>
+END;
+		if(strcmp($suf, "") == 0) {
+			$time = localtime($lastTime, TRUE);
+			$time['tm_year'] += 1900;
+			$time['tm_mon']++;
+			echo <<<END
+<h2>最終更新時間の変更</h2>
+<form action="{$this_file}" method="post">
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="NTIME">
+	<input type="hidden" name="NUMBER" value="{$suf}">
+	<input type="text" size="4" name="YEAR" value="{$time['tm_year']}">年
+	<input type="text" size="2" name="MON" value="{$time['tm_mon']}">月
+	<input type="text" size="2" name="DATE" value="{$time['tm_mday']}">日
+	<input type="text" size="2" name="HOUR" value="{$time['tm_hour']}">時
+	<input type="text" size="2" name="MIN" value="{$time['tm_min']}">分
+	<input type="text" size="2" name="NSEC" value="{$time['tm_sec']}">秒
+	<input type="submit" value="変更">
+</form>
+<form action="{$this_file}" method="post">
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="STIME">
+	<input type="hidden" name="NUMBER" value="{$suf}">
+	1970年1月1日から<input type="text" size="32" name="SSEC" value="$lastTime">秒
+	<input type="submit" value="秒指定で変更">
+</form>
+END;
+		} else {
+			echo <<<END
+<form action="{$this_file}" method="post">
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="NUMBER" value="{$suf}">
+	<input type="hidden" name="mode" value="CURRENT">
+	<input type="submit" value="このデータを現役に">
+</form>
+END;
+		}
+	}
+
+	static function timeToString($t) {
+		$time = localtime($t, TRUE);
+		$time['tm_year'] += 1900;
+		$time['tm_mon']++;
+		return "{$time['tm_year']}年 {$time['tm_mon']}月 {$time['tm_mday']}日 {$time['tm_hour']}時 {$time['tm_min']}分 {$time['tm_sec']}秒";
+	}
+}
+
+class HtmlAxes extends HTML {
+	function enter() {
+		global $init;
+		$this_file = $init->baseDir . "/hako-axes.php";
+
+		echo <<<END
+<h1 class="title">{$init->title}<br>アクセスログ閲覧室</h1>
+<form action="{$this_file}" method="post">
+	<strong>パスワード：</strong>
+	<input type="password" size="32" maxlength="32" name="PASSWORD">
+	<input type="hidden" name="mode" value="enter">
+	<input type="submit" value="入室する">
+</form>
+END;
+	}
+
+	function main($data) {
+		global $init;
+		echo "<h1 class=\"title\">アクセスログ閲覧室</h1>\n";
+		$this->dataPrint($data);
+	}
+
+	// 表示モード
+	function dataPrint($data, $suf = "") {
+		global $init;
+
+		echo "<HR>";
+		echo <<<END
+<br>
+<h2>アクセスログ</h2>
+<form action="#">
+<input type="button" value="オートフィルタ表示" onclick="Button_DispFilter(this, 'DATA-TABLE')" onkeypress="Button_DispFilter(this, 'DATA-TABLE')">
+<table id="DATA-TABLE">
+	<thead>
+		<tr class="NumberCell">
+			<td scope="row"><input type="button" tabindex="1" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [0])" value="ログインした時間"></td>
+			<td scope="row"><input type="button" tabindex="2" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [1, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [1, 0])" value="島ＩＤ"></td>
+			<td scope="row"><input type="button" tabindex="3" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [2, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [2, 0])" value="島の名前"></td>
+			<td scope="row"><input type="button" tabindex="4" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [3, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [3, 0])" value="ＩＰ情報"></td>
+			<td scope="row"><input type="button" tabindex="5" onclick="g_cSortTable.Button_Sort('DATA-TABLE', [4, 0])" onkeypress="g_cSortTable.Button_Sort('DATA-TABLE', [4, 0])" value="ホスト情報"></td>
+		</tr>
+	</thead>
+	<tbody>
+END;
+		// ファイルを読み込み専用でオープンする
+		$fp = fopen("{$init->dirName}/{$init->logname}", 'r');
+
+		// 終端に達するまでループ
+		while (!feof($fp)) {
+			// ファイルから一行読み込む
+			$line = fgets($fp);
+			if($line !== FALSE) {
+				$line = substr_replace($line, ",<center>", 32, 1);
+				$wpos = strpos($line, ',', 33);
+				$line = substr_replace($line, "</center>,", $wpos, 1);
+				$num  = preg_replace( "/,/", "</TD><TD>", $line);
+				echo "<TR>\n";
+				echo "<TD scope=\"col\">{$num}</TD>\n";
+				echo "</TR>\n";
+			}
+		}
+		fclose($fp);
+		echo "</tbody>\n</table>\n</form>";
+	}
+}
+
+class HtmlBF extends HTML {
+	function main($data, $hako) {
+		global $init;
+		$this_file = $init->baseDir . "/hako-bf.php";
+
+		echo <<<END
+<h1 class="title">BattleFields管理ツール</h1>
+<form action="{$this_file}" method="post">
+	<h2>通常の島からBattleFieldに変更</h2>
+	<select name="ISLANDID">$hako->islandListNoBF</select>
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="TOBF">
+	<input type="submit" value="BattleFieldに変更">
+</form>
+<form action="{$this_file}" method="post">
+	<h2>BattleFieldから通常の島に変更</h2>
+	<select name="ISLANDID">$hako->islandListBF</select>
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="FROMBF">
+	<input type="submit" value="通常の島に変更">
+</form>
+END;
+	}
+}
+
+class HTMLKP extends HTML {
+	function main($data, $hako) {
+		global $init;
+		$this_file = $init->baseDir . "/hako-keep.php";
+
+		echo <<<END
+<h1 class="title">島預かり管理ツール</h1>
+<form action="{$this_file}" method="post">
+	<h2>管理人預かりに変更</h2>
+	<select name="ISLANDID">$hako->islandListNoKP</select>
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="TOKP">
+	<input type="submit" value="管理人預かりに変更">
+</form>
+<form action="{$this_file}" method="post">
+	<h2>管理人預かりを解除</h2>
+	<select name="ISLANDID">$hako->islandListKP</select>
+	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
+	<input type="hidden" name="mode" value="FROMKP">
+	<input type="submit" value="管理人預かりを解除">
+</form>
+END;
+	}
+}
+
+class HtmlAlly extends HTML {
+	//--------------------------------------------------
+	// 初期画面
+	//--------------------------------------------------
+	function allyTop($hako, $data) {
+		global $init;
+		$this_file  = $init->baseDir . "/hako-ally.php";
+
+		echo "<div class='row'>";
+		echo "<div class='col-xs-12'>";
+		echo "<h1>同盟管理ツール</h1>\n";
+
+		if($init->allyUse) {
+			echo <<<END
+<input type="button" class="btn btn-default" value="同盟の結成・変更・解散・加盟・脱退はこちらから" onClick="JavaScript:location.replace('{$this_file}?JoinA=1')">
+<h2>各同盟の状況</h2>
+END;
+		}
+		$this->allyInfo($hako);
+
+		echo "</div>";
+		echo "</div>";
+
+	}
+
+	//--------------------------------------------------
+	// 同盟の状況
+	//--------------------------------------------------
+	function allyInfo($hako, $num = 0) {
+		global $init;
+		$this_file  = $init->baseDir . "/hako-ally.php";
+
+		$tag = "";
+		$allyNumber = (int)$hako->allyNumber;
+		if ( $allyNumber <= 0 ) {
+			echo "同盟がありません。";
+			return;
+		}
+
+		echo <<<END
+占有率は、同盟加盟の<b>総人口</b>により算出されたものです。
+<div id="IslandView" class="table-responsive">
+<table class="table table-bordered">
+<thead>
+<tr>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}同盟{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}マーク{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}島の数{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}総人口{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}占有率{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameCommercialScale}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePowerPlantScale}{$init->_tagTH}</th>
+</tr>
+</thead>
+END;
+
+		for($i=0; $i<$allyNumber; $i++) {
+			if($num && ($i != $hako->idToAllyNumber[$num])) {
+				continue;
+			}
+			$ally = $hako->ally[$i];
+			$j = $i + 1;
+			$pop = $farm = $factory = $commerce = $mountain = $hatuden = $missiles = 0;
+
+			$num = (int)$ally['number'];
+			for($k=0; $k<$num; $k++) {
+				$id = $ally['memberId'][$k];
+				$island = $hako->islands[$hako->idToNumber[$id]];
+				$pop      += $island['pop'];
+				$farm     += $island['farm'];
+				$factory  += $island['factory'];
+				$commerce += $island['commerce'];
+				$mountain += $island['mountain'];
+				$hatuden  += $island['hatuden'];
+			}
+
+			$name      = ($num) ? "{$init->tagName_}{$ally['name']}{$init->_tagName}" : "<a href=\"{$this_file}?AmiOfAlly={$ally['id']}\">{$ally['name']}</a>";
+			$pop       = $pop . $init->unitPop;
+			$farm      = ($farm <= 0)     ? $init->notHave : $farm * 10 . $init->unitPop;
+			$factory   = ($factory <= 0)  ? $init->notHave : $factory * 10 . $init->unitPop;
+			$commerce  = ($commerce <= 0) ? $init->notHave : $commerce * 10 . $init->unitPop;
+			$mountain  = ($mountain <= 0) ? $init->notHave : $mountain * 10 . $init->unitPop;
+			$hatuden   = ($hatuden <= 0)  ? "0kw" : $hatuden * 1000 . kw;
+
+			$ally['comment'] = isset($ally['comment']) ? $ally['comment'] : "";
+
+
+			echo <<<END
+<tbody>
+	<tr>
+		<th {$init->bgNumberCell} rowspan=2>{$init->tagNumber_}$j{$init->_tagNumber}</th>
+		<td {$init->bgNameCell} rowspan=2>{$name}</td>
+		<td {$init->bgMarkCell}><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
+		<td {$init->bgInfoCell}>{$ally['number']}島</td>
+		<td {$init->bgInfoCell}>{$pop}</td>
+		<td {$init->bgInfoCell}>{$ally['occupation']}%</td>
+		<td {$init->bgInfoCell}>{$farm}</td>
+		<td {$init->bgInfoCell}>{$factory}</td>
+		<td {$init->bgInfoCell}>{$commerce}</td>
+		<td {$init->bgInfoCell}>{$mountain}</td>
+		<td {$init->bgInfoCell}>{$hatuden}</td>
+	</tr>
+	<tr>
+		<td {$init->bgCommentCell} colspan=9>{$init->tagTH_}<a href="{$this_file}?Allypact={$ally['id']}">{$ally['oName']}</a>：{$init->_tagTH}{$ally['comment']}</td>
+	</tr>
+<tbody>
+END;
+		}
+		echo <<<END
+</table>
+</div>
+<p>※ 同盟の名前をクリックすると「同盟の情報」欄へ、盟主島の名前だと「コメント変更」欄へ移動します。</p>
+END;
+
+	}
+
+	//--------------------------------------------------
+	// 同盟の情報
+	//--------------------------------------------------
+	function amityOfAlly($hako, $data) {
+		global $init;
+		$this_file  = $init->baseDir . "/hako-ally.php";
+
+		$num = $data['ALLYID'];
+		$ally = $hako->ally[$hako->idToAllyNumber[$num]];
+		$allyName = "<FONT COLOR=\"{$ally['color']}\"><B>{$ally['mark']}</B></FONT>{$ally['name']}";
+
+		echo <<<END
+<div class='text-center'>
+	{$init->tagBig_}{$init->tagName_}{$allyName}{$init->_tagName}の情報{$init->_tagBig}<br>
+</div>
+
+<div ID='campInfo'>
+END;
+		// 同盟状況の表示
+		if($ally['number']) {
+			$this->allyInfo($hako, $num);
+		}
+		// メッセージ・盟約の表示
+		if($ally['message'] != '') {
+			$allyTitle = $ally['title'];
+			if($allyTitle == '') {
+				$allyTitle = '盟主からのメッセージ';
+			}
+			$allyMessage = $ally['message'];
+			if($init->autoLink) {
+				//preg_replace("/(^|[^=\\\"'])(http:\/\/[[:alnum:]\+\$\;\?\.%,!#~*\/:@&=_-]+)/", "<a href='$2' target='_blank'>$2</a>", $allyMessage);
+				$allyMessage = Util::string_autolink($allyMessage);
+			}
+			echo <<<END
+<hr>
+
+<table class="table table-bordered" width="80%">
+	<TR><TH {$init->bgTitleCell}>{$init->tagTH_}$allyTitle{$init->_tagTH}</TH></TR>
+	<TR><TD {$init->bgCommentCell}><blockquote>$allyMessage</blockquote></TD></TR>
+</table>
+END;
+		}
+        // メンバー一覧の表示
+		echo <<<END
+<HR>
+<TABLE class="table table-bordered">
+	<TR>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</TH>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameCommercialScale}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
+		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePowerPlantScale}{$init->_tagTH}</th>
+	</TR>
+END;
+		if(!$ally['number']) {
+			echo "<TR><TH colspan=12>所属している島がありません！</TH></TR>";
+		}
+		foreach ($ally['memberId'] as $id) {
+			$number = $hako->idToNumber[$id];
+			if(!($number > -1)) continue;
+			$island = $hako->islands[$number];
+			$money = AllyUtil::aboutMoney($island['money']);
+			$farm = $island['farm'];
+			$factory = $island['factory'];
+			$commerce = $island['commerce'];
+			$mountain = $island['mountain'];
+			$hatuden = $island['hatuden'];
+            $ranking = $number + 1;
+			$name = AllyUtil::islandName($island, $hako->ally, $hako->idToAllyNumber);
+			if($island['absent']  == 0) {
+				$name = "{$init->tagName_}<a href=\"{$init->baseDir}/hako-main.php?Sight={$island['id']}\">{$name}{$init->_tagName}</a>";
+			} else {
+				$name = "{$init->tagName2_}<a href=\"{$init->baseDir}/hako-main.php?Sight={$island['id']}\">{$name}</a>({$island['absent']}){$init->_tagName2}";
+			}
+			$farm = ($farm == 0) ? $init->notHave : "{$farm}0$init->unitPop";
+			$factory = ($factory == 0) ? $init->notHave : "{$factory}0$init->unitPop";
+			$commerce  = ($commerce == 0) ? $init->notHave : "{$commerce}0$init->unitPop";
+			$mountain = ($mountain == 0) ? $init->notHave : "{$mountain}0$init->unitPop";
+			$hatuden  = ($hatuden == 0) ? "0kw" : "{$hatuden}000kw";
+
+			echo <<<END
+<TR>
+	<TH {$init->bgNumberCell}>{$init->tagNumber_}$ranking{$init->_tagNumber}</TH>
+	<TD {$init->bgNameCell}>$name</TD>
+	<TD {$init->bgInfoCell}>{$island['pop']}$init->unitPop</TD>
+	<TD {$init->bgInfoCell}>{$island['area']}$init->unitArea</TD>
+	<TD {$init->bgInfoCell}>$money</TD>
+	<TD {$init->bgInfoCell}>{$island['food']}$init->unitFood</TD>
+	<TD {$init->bgInfoCell}>$farm</TD>
+	<TD {$init->bgInfoCell}>$factory</TD>
+	<TD {$init->bgInfoCell}>$commerce</TD>
+	<TD {$init->bgInfoCell}>$mountain</TD>
+	<TD {$init->bgInfoCell}>$hatuden</TD>
+</TR>
+END;
+		}
+		echo "</TABLE>\n";
+    }
+
+	//--------------------------------------------------
+	// 同盟コメントの変更
+	//--------------------------------------------------
+	function tempAllyPactPage($hako, $data) {
+		global $init;
+		$this_file  = $init->baseDir . "/hako-ally.php";
+
+		$num = $data['ALLYID'];
+		$ally = $hako->ally[$hako->idToAllyNumber[$num]];
+		$allyMessage = $ally['message'];
+
+		$allyMessage = str_replace("<br>", "\n", $allyMessage);
+		$allyMessage = str_replace("&amp;", "&", $allyMessage);
+		$allyMessage = str_replace("&lt;", "<", $allyMessage);
+		$allyMessage = str_replace("&gt;", ">", $allyMessage);
+		$allyMessage = str_replace("&quot;", "\"", $allyMessage);
+		$allyMessage = str_replace("&#039;", "'", $allyMessage);
+
+		$data['defaultPassword'] = isset($data['defaultPassword']) ? $data['defaultPassword'] : "";
+		echo <<<END
+<div class='text-center'>
+	{$init->tagBig_}コメント変更（{$init->tagName_}{$ally['name']}{$init->_tagName}）{$init->_tagBig}<br>
+</div>
+
+<DIV ID='changeInfo'>
+<table border=0 width=50%>
+<tr>
+	<td class="M">
+		<FORM action="{$this_file}" method="POST">
+			<B>盟主パスワードは？</B><BR>
+			<INPUT TYPE="password" NAME="Allypact" VALUE="{$data['defaultPassword']}" SIZE=32 MAXLENGTH=32 class="f" class="form-control">
+			<INPUT TYPE="hidden"  NAME="ALLYID" VALUE="{$ally['id']}">
+			<INPUT TYPE="submit" VALUE="送信" NAME="AllypactButton"><BR>
+			<B>コメント</B><small>(全角{$init->lengthAllyComment}字まで：トップページの「各同盟の状況」欄に表示されます)</small><BR>
+			<INPUT TYPE="text" NAME="ALLYCOMMENT"  VALUE="{$ally['comment']}" SIZE=100 MAXLENGTH=50><BR>
+			<BR>
+			<B>メッセージ・盟約など</B><small>(「同盟の情報」欄の上に表示されます)</small><BR>
+			タイトル<small>(全角{$init->lengthAllyTitle}字まで)</small><BR>
+			<INPUT TYPE="text" NAME="ALLYTITLE"  VALUE="{$ally['title']}" SIZE=100 MAXLENGTH=50><BR>
+			メッセージ<small>(全角{$init->lengthAllyMessage}字まで)</small><BR>
+			<TEXTAREA COLS=50 ROWS=16 NAME="ALLYMESSAGE" WRAP="soft">{$allyMessage}</TEXTAREA>
+			<BR>
+			「タイトル」を空欄にすると『盟主からのメッセージ』というタイトルになります。<BR>
+			「メッセージ」を空欄にすると「同盟の情報」欄には何も表示されなくなります。
+		</FORM>
+	</td>
+	</tr>
+</table>
+</DIV>
+END;
+	}
+
+	//--------------------------------------------------
+	// 同盟の結成・変更・解散・加盟・脱退
+	//--------------------------------------------------
+	function newAllyTop($hako, $data) {
+		global $init;
+		$this_file  = $init->baseDir . "/hako-ally.php";
+
+		$adminMode = 0;
+
+		$jsAllyList      = "";
+		$jsAllyIdList    = "";
+		$jsAllyMarkList  = "";
+		$jsAllyColorList = "";
+
+		$data['defaultPassword'] = isset($data['defaultPassword']) ? $data['defaultPassword'] : "";
+		if(AllyUtil::checkPassword("", $data['defaultPassword'])) {
+			// 管理者の判定は、お菓子のパスワード、盟主の変更可
+			$adminMode = 1;
+		} elseif(!$init->allyUse) {
+			$this->allyTop($hako, $data);
+		}
+
+		$jsIslandList    = "";
+		$num = (int)$hako->islandNumber;
+		for($i=0; $i<$num; $i++) {
+			$name = $hako->islands[$i]['name'];
+			$name = preg_replace("/'/", "\'", $name);
+			$id = $hako->islands[$i]['id'];
+			$jsIslandList .= "island[$id] = '$name';\n";
+		}
+		$data['defaultID'] = isset($data['defaultID']) ? $data['defaultID'] : "";
+		$n = '';
+		$n = isset($hako->idToAllyNumber[$data['defaultID']]) ? $hako->idToAllyNumber[$data['defaultID']] : "";
+
+		if($n == '') {
+			$allyname = '';
+			$defaultMark = $hako->ally[0];
+			$defaultAllyId = '';
+		} else {
+			$allyname = $hako->ally[$n]['name'];
+			$allyname = preg_replace("/'/", "\'", $allyname);
+			$defaultMark = $hako->ally[$n]['mark'];
+			$defaultAllyId = $hako->ally[$n]['id'];
+		}
+		$defaultMark = '';
+		$markList = "";
+		foreach ($init->allyMark as $aMark) {
+			$s = '';
+			if($aMark == $defaultMark) {
+				$s = ' selected';
+			}
+			$markList .= "<option value=\"$aMark\"$s>$aMark</option>\n";
+		}
+
+		$hx = array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F');
+		$colorList = array('','','','','','','');
+		for($i=1; $i<7; $i++) {
+			if($n == '') {
+				$allycolor[$i] = '0';
+			} else {
+				$allycolor[$i] = substr($hako->ally[$n]['color'], $i, 1);
+			}
+			for($j=0; $j<count($hx); $j++) {
+				$s = '';
+				if($hx[$j] == $allycolor[$i]) {
+					$s = ' selected';
+				}
+				$colorList[$i] .= "<option value=\"{$hx[$j]}\"$s>{$hx[$j]}</option>\n";
+			}
+		}
+
+		$max = 201;
+		if($hako->allyNumber) {
+			$jsAllyList      = "var ally = [";
+			$jsAllyIdList    = "var allyID = [";
+			$jsAllyMarkList  = "var allyMark = [";
+			$jsAllyColorList = "var allyColor = [";
+			for($i=0; $i<count($hako->ally); $i++) {
+				$s = "";
+				if($hako->ally[$i]['id'] == $defaultAllyId) $s = ' selected';
+				$allyList = "";
+				$allyList .= "<option value=\"$i\"$s>{$hako->ally[$i]['name']}</option>\n";
+				$jsAllyList .= "'{$hako->ally[$i]['name']}'";
+				$jsAllyIdList .= "{$hako->ally[$i]['id']}";
+				$jsAllyMarkList .= "'{$hako->ally[$i]['mark']}'";
+				$jsAllyColorList .= "[";
+				for($j=0; $j<6; $j++) {
+					$jsAllyColorList .= '\'' . substr($hako->ally[$i]['color'], $j, 1) . '\'';
+					if($j < 5) $jsAllyColorList .= ',';
+				}
+				$jsAllyColorList .= "]";
+				if($i < count($hako->ally)) {
+					$jsAllyList .= ",\n";
+					$jsAllyIdList .= ",\n";
+					$jsAllyMarkList .= ",\n";
+					$jsAllyColorList .= ",\n";
+				}
+				if($max <= $hako->ally[$i]['id']) $max = $hako->ally[$i]['id'] + 1;
+			}
+			$jsAllyList .= "];\n";
+			$jsAllyIdList .= "];\n";
+			$jsAllyMarkList .= "];\n";
+			$jsAllyColorList .= "];\n";
+		}
+		$str1 = $adminMode ? '(メンテナンス)' : $init->allyJoinComUse ? '' : '・加盟・脱退';
+		$str2 = $adminMode ? '' : 'onChange="colorPack()" onClick="colorPack()"';
+		$makeCost = $init->costMakeAlly ? "{$init->costMakeAlly}{$init->unitMoney}" : '無料';
+		$keepCost = $init->costKeepAlly ? "{$init->costKeepAlly}{$init->unitMoney}" : '無料';
+		$joinCost = isset($init->comCost[$init->comAlly]) ? "{$init->comCost[$init->comAlly]}{$init->unitMoney}" : '無料';
+		$joinStr = $init->allyJoinComUse ? '' : "加盟・脱退の際の費用は、{$init->tagMoney_}$joinCost{$init->_tagMoney}です。<BR>";
+		$str3 = $adminMode ? "特殊パスワードは？（必須）<BR>
+<INPUT TYPE=\"password\" NAME=\"OLDPASS\" VALUE=\"{$data['defaultPassword']}\" SIZE=32 MAXLENGTH=32 class=f><BR>同盟" : "<div class='alert alert-info'><span class='attention'>(注意)</span><BR>
+同盟の結成・変更の費用は、{$init->tagMoney_}{$makeCost}{$init->_tagMoney}です。<BR>
+また、毎ターン必要とされる維持費は{$init->tagMoney_}$keepCost{$init->_tagMoney}です。<BR>
+（維持費は同盟に所属する島で均等に負担することになります）<BR>
+{$joinStr}
+</div>
+
+あなたの島は？（必須）<BR>
+<SELECT NAME=\"ISLANDID\" {$str2}>
+{$hako->islandList}
+</SELECT><BR>あなた";
+		$str0 = ($adminMode || ($init->allyUse == 1)) ? '結成・' : '';
+		echo <<<END
+<div class='text-center'>
+{$init->tagBig_}同盟の{$str0}変更・解散{$str1}{$init->_tagBig}<br>
+</div>
+
+<DIV ID='changeInfo'>
+<table border=0 width=50%><tr><td class="M"><P>
+<FORM name="AcForm" action="{$this_file}" method="POST">
+{$str3}のパスワードは？（必須）<BR>
+<INPUT TYPE="password" NAME="PASSWORD" SIZE="32" MAXLENGTH="32" class="f" class="form-control">
+END;
+		if($hako->allyNumber) {
+			$str4 = $adminMode ? '・結成・変更' : $init->allyJoinComUse ? '' : '・加盟・脱退';
+			$str5 = ($adminMode || $init->allyJoinComUse) ? '' : '<INPUT TYPE="submit" VALUE="加盟・脱退" NAME="JoinAllyButton" class="btn btn-default">';
+			echo <<<END
+<BR>
+<BR><B>［解散{$str4}］</B>
+<BR>どの同盟ですか？<BR>
+<SELECT NAME="ALLYNUMBER" onChange="allyPack()" onClick="allyPack()">
+{$allyList}
+</SELECT>
+<BR>
+<INPUT TYPE="submit" VALUE="解散" NAME="DeleteAllyButton" class="btn btn-danger">
+{$str5}
+<BR>
+END;
+		}
+		$str7 = $adminMode ? "盟主島の変更(上のメニューで同盟を選択)<BR> or 同盟の新規作成(上のメニューは無効)<BR><SELECT NAME=\"ALLYID\"><option value=\"$max\">新規作成\n{$hako->islandList}</option></SELECT><BR>" : "<BR><B>［{$str0}変更］</B><BR>";
+		echo <<<END
+<BR>
+{$str7}
+同盟の名前（変更）<small>(全角{$init->lengthAllyName}字まで)</small><BR>
+<INPUT TYPE="text" NAME="ALLYNAME" VALUE="$allyname" SIZE=32 MAXLENGTH=32 class="form-control"><BR>
+マーク（変更）<BR>
+<SELECT NAME="MARK" onChange="colorPack()" onClick="colorPack()">{$markList}</SELECT>
+<br>
+<ilayer name="PARENT_CTBL" width="100%" height="100%">
+   <layer name="CTBL" width="200"></layer>
+   <span id="CTBL"></span>
+</ilayer>
+マークの色コード（変更）<BR>
+<TABLE class="table table-bordered table-condensed">
+<TR>
+	<TD align='center'>RED</TD>
+	<TD align='center'>GREEN</TD>
+	<TD align='center'>BLUE</TD>
+</TR>
+<TR>
+	<TD>
+		<SELECT NAME="COLOR1" onChange="colorPack()" onClick="colorPack()">{$colorList[1]}</SELECT>
+		<SELECT NAME="COLOR2" onChange="colorPack()" onClick="colorPack()">{$colorList[2]}</SELECT>
+	</TD>
+	<TD>
+		<SELECT NAME="COLOR3" onChange="colorPack()" onClick="colorPack()">{$colorList[3]}</SELECT>
+		<SELECT NAME="COLOR4" onChange="colorPack()" onClick="colorPack()">{$colorList[4]}</SELECT>
+	</TD>
+	<TD>
+		<SELECT NAME="COLOR5" onChange="colorPack()" onClick="colorPack()">{$colorList[5]}</SELECT>
+		<SELECT NAME="COLOR6" onChange="colorPack()" onClick="colorPack()">{$colorList[6]}</SELECT>
+	</TD>
+</TR>
+</TABLE>
+
+<INPUT TYPE="submit" VALUE="結成 (変更)" NAME="NewAllyButton" class="btn btn-primary">
+END;
+		if(!$adminMode) {
+			echo <<<END
+<script>
+function colorPack() {
+	var island = new Array(128);
+	{$jsIslandList}
+	var a = document.AcForm.COLOR1.value;
+	var b = document.AcForm.COLOR2.value;
+	var c = document.AcForm.COLOR3.value;
+	var d = document.AcForm.COLOR4.value;
+	var e = document.AcForm.COLOR5.value;
+	var f = document.AcForm.COLOR6.value;
+	var mark = document.AcForm.MARK.value;
+	var number = document.AcForm.ISLANDID.value;
+
+	str = "#" + a + b + c + d + e + f;
+
+	str = '表示サンプル：『<B><span class="number"><FONT color="' + str +'">' + mark + '</FONT></B>'
+		+ island[number] + '島</span>』';
+
+	document.getElementById("CTBL").innerHTML = str;
+
+	return true;
+}
+function allyPack() {
+	{$jsAllyList}
+	{$jsAllyMarkList}
+	{$jsAllyColorList}
+	document.AcForm.ALLYNAME.value = ally[document.AcForm.ALLYNUMBER.value];
+	document.AcForm.MARK.value     = allyMark[document.AcForm.ALLYNUMBER.value];
+	document.AcForm.COLOR1.value   = allyColor[document.AcForm.ALLYNUMBER.value][0];
+	document.AcForm.COLOR2.value   = allyColor[document.AcForm.ALLYNUMBER.value][1];
+	document.AcForm.COLOR3.value   = allyColor[document.AcForm.ALLYNUMBER.value][2];
+	document.AcForm.COLOR4.value   = allyColor[document.AcForm.ALLYNUMBER.value][3];
+	document.AcForm.COLOR5.value   = allyColor[document.AcForm.ALLYNUMBER.value][4];
+	document.AcForm.COLOR6.value   = allyColor[document.AcForm.ALLYNUMBER.value][5];
+	colorPack();
+	return true;
+}
+END;
+		} else {
+			echo <<<END
+
+function colorPack() {
+	var island = new Array(128);
+	{$jsIslandList}
+	var a = document.AcForm.COLOR1.value;
+	var b = document.AcForm.COLOR2.value;
+	var c = document.AcForm.COLOR3.value;
+	var d = document.AcForm.COLOR4.value;
+	var e = document.AcForm.COLOR5.value;
+	var f = document.AcForm.COLOR6.value;
+	var mark = document.AcForm.MARK.value;
+
+	var str = "#" + a + b + c + d + e + f;
+
+	str = '表示サンプル：『<B><span class="number"><FONT color="' + str +'">' + mark + '</FONT></B>'
+		+ 'さんぷる島</span>』';
+
+	document.getElementById("CTBL").innerHTML = str;
+
+	return true;
+}
+
+function allyPack() {
+	{$jsAllyList}
+	{$jsAllyIdList}
+	{$jsAllyMarkList}
+	{$jsAllyColorList}
+	document.AcForm.ALLYID.value   = allyID[document.AcForm.ALLYNUMBER.value];
+	document.AcForm.ALLYNAME.value = ally[document.AcForm.ALLYNUMBER.value];
+	document.AcForm.MARK.value     = allyMark[document.AcForm.ALLYNUMBER.value];
+	document.AcForm.COLOR1.value   = allyColor[document.AcForm.ALLYNUMBER.value][0];
+	document.AcForm.COLOR2.value   = allyColor[document.AcForm.ALLYNUMBER.value][1];
+	document.AcForm.COLOR3.value   = allyColor[document.AcForm.ALLYNUMBER.value][2];
+	document.AcForm.COLOR4.value   = allyColor[document.AcForm.ALLYNUMBER.value][3];
+	document.AcForm.COLOR5.value   = allyColor[document.AcForm.ALLYNUMBER.value][4];
+	document.AcForm.COLOR6.value   = allyColor[document.AcForm.ALLYNUMBER.value][5];
+	colorPack();
+	return true;
+}
+END;
+		}
+		echo <<<END
+colorPack();
+</script>
+</form>
+
+</td>
+</tr>
+</table>
+</div>
+END;
+	}
+}
+
+class AllyHtmlSetted extends HTML {
+	// 盟主コメント変更完了
+	static function allyPactOK($name) {
+		Util::makeTagMessage("{$name}のコメントを変更しました。", "success");
+	}
+	// 同盟データの再構成
+	static function allyDataUp() {
+		Util::makeTagMessage("同盟データを再構成しました。(ターン更新後に再構成されます)", "info");
 	}
 }

@@ -1,26 +1,25 @@
 <?php
 /**
- * 箱庭諸島 S.E - プレゼント定義用ファイル -
+ * 箱庭諸島 S.E - BattleField管理用ファイル -
  * @copyright 箱庭諸島 ver2.30
  * @since 箱庭諸島 S.E ver23_r09 by SERA
  * @author hiro <@hiro0218>
  */
 
 require_once 'config.php';
-
 require_once APPPATH.'/model/hako-cgi.php';
 require_once APPPATH.'/model/hako-file.php';
 require_once APPPATH.'/view/hako-html.php';
 
 $init = new Init();
 
-class Present {
+class BF {
 	public $mode;
 	public $dataSet = array();
 
 	function execute() {
-		$html = new HtmlPresent();
-		$hako =& new HakoPresent();
+		$html = new HtmlBF();
+		$hako =& new HakoBF();
 		$cgi = new Cgi();
 		$this->parseInputData();
 		$hako->init($this);
@@ -28,28 +27,27 @@ class Present {
 		$html->header($cgi->dataSet);
 
 		switch($this->mode) {
-			case "PRESENT":
+			case "TOBF":
 				if($this->passCheck()) {
-					$this->presents($this->dataSet, $hako);
+					$this->toMode($this->dataSet['ISLANDID'], $hako);
+					$hako->init($this);
 				}
 				$html->main($this->dataSet, $hako);
 				break;
 
-			case "PUNISH":
+			case "FROMBF":
 				if($this->passCheck()) {
-					$this->punish($this->dataSet, $hako);
+					$this->fromMode($this->dataSet['ISLANDID'], $hako);
+					$hako->init($this);
 				}
 				$html->main($this->dataSet, $hako);
 				break;
 
 			case "enter":
+			default:
 				if($this->passCheck()) {
 					$html->main($this->dataSet, $hako);
 				}
-				break;
-
-			default:
-				$html->enter();
 				break;
 		}
 		$html->footer();
@@ -57,45 +55,48 @@ class Present {
 
 	function parseInputData() {
 		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
+
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
-				// 半角カナがあれば全角に変換して返す
-				// JcodeConvert($value, 0, 2);
 				$value = str_replace(",", "", $value);
 				$this->dataSet["{$name}"] = $value;
 			}
 		}
 	}
 
-	function presents($data, &$hako) {
+	function toMode($id, &$hako) {
 		global $init;
 
-		if ($data['ISLANDID']) {
-			$num = $hako->idToNumber[$data['ISLANDID']];
-			$hako->islands[$num]['present']['item'] = 0;
-			$hako->islands[$num]['present']['px'] = $data['MONEY'];
-			$hako->islands[$num]['present']['py'] = $data['FOOD'];
-			$hako->writePresentFile();
+		if ($id) {
+			$num = $hako->idToNumber[$id];
+			if (!$hako->islands[$num]['isBF']) {
+				$hako->islands[$num]['isBF'] = 1;
+				$hako->islandNumberBF++;
+				require_once APPPATH.'/model/hako-turn.php';
+				Turn::islandSort($hako);
+				$hako->writeIslandsFile();
+			}
 		}
 	}
 
-	function punish($data, &$hako) {
+	function fromMode($id, &$hako) {
 		global $init;
 
-		if ($data['ISLANDID']) {
-			$punish =& $data['PUNISH'];
-			if (( $punish >= 0) && ( $punish <= 8 )) {
-				$num = $hako->idToNumber[$data['ISLANDID']];
-				$hako->islands[$num]['present']['item'] = $punish;
-				$hako->islands[$num]['present']['px'] = ( $punish < 6 ) ? 0 : $data['POINTX'];
-				$hako->islands[$num]['present']['py'] = ( $punish < 6 ) ? 0 : $data['POINTY'];
-				$hako->writePresentFile();
+		if ($id) {
+			$num = $hako->idToNumber[$id];
+			if ($hako->islands[$num]['isBF']) {
+				$hako->islands[$num]['isBF'] = 0;
+				$hako->islandNumberBF--;
+				require_once APPPATH.'/model/hako-turn.php';
+				Turn::islandSort($hako);
+				$hako->writeIslandsFile();
 			}
 		}
 	}
 
 	function passCheck() {
 		global $init;
+
 		if(file_exists("{$init->passwordFile}")) {
 			$fp = fopen("{$init->passwordFile}", "r");
 			$masterPassword = chop(fgets($fp, READ_LINE));
@@ -110,5 +111,5 @@ class Present {
 	}
 }
 
-$start = new Present();
+$start = new BF();
 $start->execute();

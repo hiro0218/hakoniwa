@@ -1,10 +1,12 @@
 <?php
-require_once 'config.php';
-require_once ABSOLUTE_PATH.'hako-util.php';
+/**
+ * 箱庭諸島 S.E
+ * @copyright 箱庭諸島 ver2.30
+ * @since 箱庭諸島 S.E ver23_r09 by SERA
+ * @author hiro <@hiro0218>
+ */
 
-//--------------------------------------------------------------------
 class Init {
-
    //function __construct() {}
    //function __destruct() {}
 
@@ -17,18 +19,18 @@ class Init {
 	public $baseDir = "http://localhost/hakoniwa";
 
 	// 画像を置くディレクトリ
-	public $imgDir  = "img";
+	public $imgDir  = "public/assets/img";
 
 	// CSSファイルを置くディレクトリ
-	public $cssDir  = "css";
+	public $cssDir  = "public/assets/css";
 	// CSSリスト
-	public $cssList = array('SkyBlue.css');
+	public $css = 'SkyBlue.css';
 
-	public $jsDir = "js";
+	public $jsDir = "public/assets/js";
 	public $js = "hakojima.js";
 
 	// データディレクトリの名前（必ず変更してください）
-	public $dirName = "data";
+	public $dirName = "logs/data";
 	// ディレクトリ作成時のパーミション
 	public $dirMode = 0777;
 
@@ -149,11 +151,12 @@ class Init {
 	public $nameGin                        = "ジン";
 	public $nameItems                      = "アイテム";
 
-	public $notHave 	= "保有せず";
-
 	//---------------------------------------------------
 	// 各種単位の設定
 	//---------------------------------------------------
+	// ●●島
+	public $nameSuffix  = "島";
+
 	// 人口の単位
 	public $unitPop     = "00人";
 	// 食料の単位
@@ -166,6 +169,9 @@ class Init {
 	public $unitMoney   = "億円";
 	// 怪獣の単位
 	public $unitMonster = "匹";
+
+	// 保有せず
+	public $notHave 	= "保有せず";
 
 	// 木の単位当たりの売値
 	public $treeValue   = 10;

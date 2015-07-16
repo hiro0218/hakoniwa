@@ -1,70 +1,20 @@
 <?php
-
-/*******************************************************************
-
-	箱庭諸島 S.E
-
-	- 島預かり管理用ファイル -
-
-	hako-keep.php by SERA - 2012/07/23
-
-*******************************************************************/
+/**
+ * 箱庭諸島 S.E - 島預かり管理用ファイル -
+ * @copyright 箱庭諸島 ver2.30
+ * @since 箱庭諸島 S.E ver23_r09 by SERA
+ * @author hiro <@hiro0218>
+ */
 
 require_once 'config.php';
-require_once ABSOLUTE_PATH.'hako-init.php';
-require_once ABSOLUTE_PATH.'hako-cgi.php';
-require_once ABSOLUTE_PATH.'hako-file.php';
-require_once ABSOLUTE_PATH.'hako-html.php';
+require_once APPPATH.'/model/hako-cgi.php';
+require_once APPPATH.'/model/hako-file.php';
+require_once APPPATH.'/view/hako-html.php';
 
 $init = new Init();
-$THIS_FILE = $init->baseDir . "/hako-keep.php";
 $MAIN_FILE = $init->baseDir . "/hako-main.php";
 
-//--------------------------------------------------------------------
-class HTMLKP extends HTML {
-	function main($data, $hako) {
-		global $init;
 
-		echo <<<END
-<h1 class="title">島預かり管理ツール</h1>
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-	<h2>管理人預かりに変更</h2>
-	<select name="ISLANDID">$hako->islandListNoKP</select>
-	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-	<input type="hidden" name="mode" value="TOKP">
-	<input type="submit" value="管理人預かりに変更">
-</form>
-<form action="{$GLOBALS['THIS_FILE']}" method="post">
-	<h2>管理人預かりを解除</h2>
-	<select name="ISLANDID">$hako->islandListKP</select>
-	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-	<input type="hidden" name="mode" value="FROMKP">
-	<input type="submit" value="管理人預かりを解除">
-</form>
-END;
-	}
-}
-
-class HakoKP extends File {
-	public $islandListNoKP;	// 普通の島リスト
-	public $islandListKP;	// 管理人預かり島リスト
-
-	function init($cgi) {
-		$this->readIslandsFile($cgi);
-		$this->islandListNoKP = "<option value=\"0\"></option>\n";
-		$this->islandListKP = "<option value=\"0\"></option>\n";
-		for($i = 0; $i < $this->islandNumber; $i++) {
-			$name = $this->islands[$i]['name'];
-			$id = $this->islands[$i]['id'];
-			$keep = $this->islands[$i]['keep'];
-			if($keep == 1) {
-				$this->islandListKP .= "<option value=\"$id\">${name}島</option>\n";
-			} else {
-				$this->islandListNoKP .= "<option value=\"$id\">${name}島</option>\n";
-			}
-		}
-	}
-}
 
 class KP {
 	public $mode;
@@ -107,7 +57,7 @@ class KP {
 	}
 
 	function parseInputData() {
-		$this->mode = $_POST['mode'];
+		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
 				$value = str_replace(",", "", $value);
@@ -157,7 +107,7 @@ class KP {
 		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
 			return 1;
 		} else {
-			echo "<h2>パスワードが違います。</h2>\n";
+			Util::makeTagMessage("パスワードが違います。", "danger");
 			return 0;
 		}
 	}
