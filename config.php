@@ -31,6 +31,10 @@ define("READ_LINE", 1024);
 // PATHの定数
 define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);  // ドキュメントルート パス
 define('APPPATH', realpath(__DIR__.'/app/').DIRECTORY_SEPARATOR);  // アプリケーションディレクトリ パス
+define('CONTROLLERPATH', realpath(APPPATH.'/controller/').DIRECTORY_SEPARATOR);  // コントローラ パス
+define('HELPERPATH', realpath(APPPATH.'/helper/').DIRECTORY_SEPARATOR);  // ヘルパー パス
+define('MODELPATH', realpath(APPPATH.'/model/').DIRECTORY_SEPARATOR);  // モデル パス
+define('VIEWPATH', realpath(APPPATH.'/view/').DIRECTORY_SEPARATOR);  // ビュー パス
 
 
 // 共通
