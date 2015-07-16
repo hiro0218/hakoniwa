@@ -65,7 +65,7 @@ class HakoBF extends File {
 	}
 }
 
-class Main {
+class BF {
 	public $mode;
 	public $dataSet = array();
 
@@ -164,5 +164,5 @@ class Main {
 	}
 }
 
-$start = new Main();
+$start = new BF();
 $start->execute();

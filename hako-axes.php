@@ -84,7 +84,7 @@ END;
 	}
 }
 
-class Main {
+class Axes {
 	public $mode;
 	public $dataSet = array();
 
@@ -136,5 +136,5 @@ class Main {
 	}
 }
 
-$start = new Main();
+$start = new Axes();
 $start->execute();

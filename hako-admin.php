@@ -64,7 +64,7 @@ END;
 	}
 }
 
-class Main {
+class Admin {
 	private $urllist  = array();
 	private $menulist = array();
 
@@ -83,5 +83,5 @@ class Main {
 	}
 }
 
-$start = new Main();
+$start = new Admin();
 $start->execute();

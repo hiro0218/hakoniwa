@@ -1054,7 +1054,7 @@ END;
 }
 
 //----------------------------------------------------------------------
-class Main {
+class Edit {
 
 	function execute() {
 		$hako = new HakoEdit();
@@ -1109,5 +1109,5 @@ class Main {
 	}
 }
 
-$start = new Main();
+$start = new Edit();
 $start->execute();

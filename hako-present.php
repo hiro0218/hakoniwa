@@ -151,7 +151,7 @@ class HakoPresent extends File {
 	}
 }
 
-class Main {
+class Present {
 	public $mode;
 	public $dataSet = array();
 
@@ -247,5 +247,5 @@ class Main {
 	}
 }
 
-$start = new Main();
+$start = new Present();
 $start->execute();

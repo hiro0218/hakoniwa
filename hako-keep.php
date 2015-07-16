@@ -66,7 +66,7 @@ class HakoKP extends File {
 	}
 }
 
-class Main {
+class KP {
 	public $mode;
 	public $dataSet = array();
 
@@ -163,5 +163,5 @@ class Main {
 	}
 }
 
-$start = new Main();
+$start = new KP();
 $start->execute();

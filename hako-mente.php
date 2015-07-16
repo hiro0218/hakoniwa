@@ -144,7 +144,7 @@ END;
 
 
 
-class Main {
+class Mente {
 	public $mode = "";
 	public $dataSet = array();
 
@@ -201,7 +201,7 @@ class Main {
 	}
 
 	function parseInputData() {
-		$this->mode = $_POST['mode'];
+		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
 		if(!empty($_POST)) {
 			while(list($name, $value) = each($_POST)) {
 				$value = str_replace(",", "", $value);
@@ -328,5 +328,5 @@ class Main {
 	}
 }
 
-$start = new Main();
+$start = new Mente();
 $start->execute();
