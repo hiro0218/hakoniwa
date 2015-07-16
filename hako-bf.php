@@ -7,9 +7,9 @@
  */
 
 require_once 'config.php';
-require_once APPPATH.'/model/hako-cgi.php';
-require_once APPPATH.'/model/hako-file.php';
-require_once APPPATH.'/view/hako-html.php';
+require_once MODELPATH.'/hako-cgi.php';
+require_once MODELPATH.'/hako-file.php';
+require_once VIEWPATH.'/hako-html.php';
 
 $init = new Init();
 

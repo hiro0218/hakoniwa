@@ -7,8 +7,8 @@
  */
 
 require_once 'config.php';
-require_once APPPATH.'/model/hako-cgi.php';
-require_once APPPATH.'/view/hako-html.php';
+require_once MODELPATH.'/hako-cgi.php';
+require_once VIEWPATH.'/hako-html.php';
 
 $init = new Init();
 
@@ -520,7 +520,7 @@ class Ally extends AllyIO {
 			if($init->allyUse) {
 				$list .= "<option value=\"$id\" $s>{$name}</option>\n"; // 同盟マークを追加
 			} else {
-				$list .= "<option value=\"$id\" $s>{$name}島</option>\n";
+				$list .= "<option value=\"$id\" $s>{$name}{$init->nameSuffix}</option>\n";
 			}
 		}
 		return $list;

@@ -119,7 +119,7 @@ class Init {
 	public $historyMax = 10;
 
 	// お知らせ
-	public $infoFile   = "info.txt";
+	public $noticeFile   = "notice.txt";
 	// 記事表示部の最大の高さ。
 	public $divHeight  = 150;
 

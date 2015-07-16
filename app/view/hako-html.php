@@ -329,7 +329,7 @@ END;
 	<th {$init->bgNumberCell} rowspan="2">{$init->tagNumber_}$j{$init->_tagNumber}</th>
 	<td {$init->bgNameCell} rowspan="2">{$name}</td>
 	<td class="TenkiCell"><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
-	<td {$init->bgInfoCell}>{$ally['number']}島</td>
+	<td {$init->bgInfoCell}>{$ally['number']}{$init->nameSuffix}</td>
 	<td {$init->bgInfoCell}>{$pop}</td>
 	<td {$init->bgInfoCell}>{$ally['occupation']}%</td>
 	<td {$init->bgInfoCell}>{$farm}</td>
@@ -501,19 +501,19 @@ END;
 			$sora = "";
 			switch ($tenki) {
 				case 1:
-					$sora = "<IMG SRC=\"{$init->imgDir}/tenki1.gif\" ALT=\"晴れ\" title=\"晴れ\">";
+					$sora = "☀";//"<IMG SRC=\"{$init->imgDir}/tenki1.gif\" ALT=\"晴れ\" title=\"晴れ\">";
 					break;
 				case 2:
-					$sora = "<IMG SRC=\"{$init->imgDir}/tenki2.gif\" ALT=\"曇り\" title=\"曇り\">";
+					$sora = "☁";//"<IMG SRC=\"{$init->imgDir}/tenki2.gif\" ALT=\"曇り\" title=\"曇り\">";
 					break;
 				case 3:
-					$sora = "<IMG SRC=\"{$init->imgDir}/tenki3.gif\" ALT=\"雨\" title=\"雨\">";
+					$sora = "☂";//"<IMG SRC=\"{$init->imgDir}/tenki3.gif\" ALT=\"雨\" title=\"雨\">";
 					break;
 				case 4:
-					$sora = "<IMG SRC=\"{$init->imgDir}/tenki4.gif\" ALT=\"雷\" title=\"雷\">";
+					$sora = "☇";//"<IMG SRC=\"{$init->imgDir}/tenki4.gif\" ALT=\"雷\" title=\"雷\">";
 					break;
 				default :
-					$sora = "<IMG SRC=\"{$init->imgDir}/tenki5.gif\" ALT=\"雪\" title=\"雪\">";
+					$sora = "☃";//"<IMG SRC=\"{$init->imgDir}/tenki5.gif\" ALT=\"雪\" title=\"雪\">";
 			}
 
 
@@ -989,16 +989,21 @@ END;
 		}
 
 		$sora = "";
-		if($tenki == 1) {
-			$sora .= "<IMG SRC=\"{$init->imgDir}/tenki1.gif\" ALT=\"晴れ\" title=\"晴れ\">";
-		} elseif($tenki == 2) {
-			$sora .= "<IMG SRC=\"{$init->imgDir}/tenki2.gif\" ALT=\"曇り\" title=\"曇り\">";
-		} elseif($tenki == 3) {
-			$sora .= "<IMG SRC=\"{$init->imgDir}/tenki3.gif\" ALT=\"雨\" title=\"雨\">";
-		} elseif($tenki == 4) {
-			$sora .= "<IMG SRC=\"{$init->imgDir}/tenki4.gif\" ALT=\"雷\" title=\"雷\">";
-		} else {
-			$sora .= "<IMG SRC=\"{$init->imgDir}/tenki5.gif\" ALT=\"雪\" title=\"雪\">";
+		switch ($tenki) {
+			case 1:
+				$sora = "☀";//"<IMG SRC=\"{$init->imgDir}/tenki1.gif\" ALT=\"晴れ\" title=\"晴れ\">";
+				break;
+			case 2:
+				$sora = "☁";//"<IMG SRC=\"{$init->imgDir}/tenki2.gif\" ALT=\"曇り\" title=\"曇り\">";
+				break;
+			case 3:
+				$sora = "☂";//"<IMG SRC=\"{$init->imgDir}/tenki3.gif\" ALT=\"雨\" title=\"雨\">";
+				break;
+			case 4:
+				$sora = "☇";//"<IMG SRC=\"{$init->imgDir}/tenki4.gif\" ALT=\"雷\" title=\"雷\">";
+				break;
+			default :
+				$sora = "☃";//"<IMG SRC=\"{$init->imgDir}/tenki5.gif\" ALT=\"雪\" title=\"雪\">";
 		}
 
 		$eiseis = "";
@@ -1689,7 +1694,7 @@ END;
 		echo <<<END
 <div class="text-center">
 	{$init->tagBig_}島を発見しました！！{$init->_tagBig}<br>
-	{$init->tagBig_}{$init->tagName_}「{$name}島」{$init->_tagName}と命名します。{$init->_tagBig}
+	{$init->tagBig_}{$init->tagName_}「{$name}{$init->nameSuffix}」{$init->_tagName}と命名します。{$init->_tagBig}
 </div>
 END;
 	}
@@ -2804,7 +2809,7 @@ class HtmlSetted extends HTML {
 
 	// 島の強制削除
 	static function deleteIsland($name) {
-		Util::makeTagMessage("{$name}島を強制削除しました", "success");
+		Util::makeTagMessage("{$name}{$init->nameSuffix}を強制削除しました", "success");
 	}
 }
 
@@ -2950,18 +2955,18 @@ END;
 			if ( $present['item'] == 0 ) {
 				if ( $present['px'] != 0 ) {
 					$money = $present['px'] . $init->unitMoney;
-					echo "{$init->tagName_}{$name}島{$init->_tagName}に<strong>{$money}</strong>の資金<br>\n";
+					echo "{$init->tagName_}{$name}{$init->nameSuffix}{$init->_tagName}に<strong>{$money}</strong>の資金<br>\n";
 				}
 				if ( $present['py'] != 0 ) {
 					$food = $present['py'] . $init->unitFood;
-					echo "{$init->tagName_}{$name}島{$init->_tagName}に<strong>{$food}</strong>の食料<br>\n";
+					echo "{$init->tagName_}{$name}{$init->nameSuffix}{$init->_tagName}に<strong>{$food}</strong>の食料<br>\n";
 				}
 			} elseif ( $present['item'] > 0 ) {
 				$items = array ('地震','津波','怪獣','地盤沈下','台風','巨大隕石','隕石','噴火');
 				$item = $items[$present['item'] - 1];
 				if ( $present['item'] < 9 ) {
 					$point = ($present['item'] < 6) ? '' : '(' . $present['px'] . ',' . $present['py'] . ')';
-					echo "{$init->tagName_}{$name}島{$point}{$init->_tagName}に{$init->tagDisaster_}{$item}{$init->_tagDisaster}<br>\n";
+					echo "{$init->tagName_}{$name}{$init->nameSuffix}{$point}{$init->_tagName}に{$init->tagDisaster_}{$item}{$init->_tagDisaster}<br>\n";
 				}
 			}
 		}

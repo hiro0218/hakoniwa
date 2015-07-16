@@ -39,4 +39,4 @@ define('VIEWPATH', realpath(APPPATH.'/view/').DIRECTORY_SEPARATOR);  // ビュ�
 
 // 共通
 require_once DOCROOT.'hako-init.php';
-require_once APPPATH.'/helper/hako-util.php';
+require_once APPPATH.'/helper/util.php';

@@ -656,7 +656,7 @@ class Hako extends File {
 			if($init->allyUse) {
 				$list .= "<option value=\"$id\" $s>{$name}</option>\n"; // 同盟マークを追加
 			} else {
-				$list .= "<option value=\"$id\" $s>{$name}島</option>\n";
+				$list .= "<option value=\"$id\" $s>{$name}{$init->nameSuffix}</option>\n";
 			}
 		}
 		return $list;
