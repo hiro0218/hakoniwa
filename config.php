@@ -34,7 +34,8 @@ define('APPPATH', realpath(__DIR__.'/app/').DIRECTORY_SEPARATOR);  // アプリ�
 define('CONTROLLERPATH', realpath(APPPATH.'/controller/').DIRECTORY_SEPARATOR);  // コントローラ パス
 define('HELPERPATH', realpath(APPPATH.'/helper/').DIRECTORY_SEPARATOR);  // ヘルパー パス
 define('MODELPATH', realpath(APPPATH.'/model/').DIRECTORY_SEPARATOR);  // モデル パス
-define('VIEWPATH', realpath(APPPATH.'/view/').DIRECTORY_SEPARATOR);  // ビュー パス
+define('PRESENTER', realpath(APPPATH.'/presenter/').DIRECTORY_SEPARATOR);  // プレゼンター パス
+define('VIEWS', realpath(APPPATH.'/views/').DIRECTORY_SEPARATOR);  // 
 
 
 // 共通

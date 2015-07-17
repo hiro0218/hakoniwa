@@ -11,7 +11,6 @@ require_once HELPERPATH.'/message/success.php';
 require_once APPPATH.'/model/hako-log.php';
 
 class HTML {
-
 	/**
 	 * HTML <head>
 	 * @return [type] [description]
@@ -19,55 +18,8 @@ class HTML {
 	static function header() {
 		global $init;
 
-		echo <<<END
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>{$init->title}</title>
-	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
-	<link rel="stylesheet" type="text/css" href="{$init->cssDir}/{$init->css}">
-	<link rel="shortcut icon" href="{$init->imgDir}/monster1.gif">
-	<script type="text/javascript" src="{$init->jsDir}/{$init->js}"></script>
-</head>
-END;
-		self::body();
-	}
-
-	/**
-	 * HTML <body>
-	 * @return [type] [description]
-	 */
-	static function body() {
-		global $init;
-		echo <<<END
-<body>
-<div class="container-fluid">
-	<header>
-		<ul class="list-inline">
-			<li><a href="http://www.bekkoame.ne.jp/~tokuoka/hakoniwa.html" target="_blank">箱庭諸島スクリプト配布元</a> <a href="http://scrlab.g-7.ne.jp">[PHP]</a></li>
-			<li><a href="http://hakoniwa.symphonic-net.com" target="_blank">箱庭諸島S.E配布元</a></li>
-			<li><a href="http://snufkin.jp.land.to" target="_blank">沙布巾の箱庭</a></li>
-			<li><a href="http://www.s90259900.onlinehome.us/" target="_blank">箱庭の箱庭</a></li>
-			<li><a href="http://no-one.s53.xrea.com" target="_blank">The Return of Neptune</a></li>
-			<li><a href="http://minnano.min-ai.net/ocn/" target="_blank">みんなのあいらんど</a></li>
-		</ul>
-
-		<nav class="navbar navbar-default">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<a href="{$init->baseDir}/hako-main.php" class="navbar-brand">{$init->title}</a>
-				</div>
-				<ul class="nav navbar-nav">
-					<li><a href="{$init->baseDir}/hako-main.php?mode=conf">島の登録・設定変更</a></li>
-					<li><a href="{$init->baseDir}/hako-ally.php">同盟管理</a></li>
-					<li><a href="{$init->baseDir}/hako-main.php?mode=log">最近の出来事</a></li>
-				</ul>
-			</div>
-		</nav>
-	</header>
-END;
+		require_once(VIEWS.'/header.php');
+		require_once(VIEWS.'/body.php');
 	}
 
 	/**
@@ -76,61 +28,17 @@ END;
 	 */
 	static function footer() {
 		global $init;
-
-		echo <<<END
-<hr>
-			<script>
-				// JavaScriptモード関連
-			    if (document.addEventListener) {
-			        if (typeof(init) == "function") {
-			            document.addEventListener("DOMContentLoaded", init(), false);
-			        }
-			    } else {
-			        if (typeof(init) == "function") {
-			            window.onload = init;
-			        }
-			    }
-			</script>
-
-			<div class="row">
-				<div class="col-xs-12">
-					<footer>
-						<p>Produced by <a href="https://twitter.com/{$init->twitterID}">{$init->adminName}</a> (<a href="{$init->urlTopPage}">{$init->urlTopPage}</a>)
-END;
-		if($init->performance) {
-			echo '<small class="pull-right">';
-			list($tmp1, $tmp2) = array_pad( explode(" ", $init->CPU_start), 2, 0);
-			list($tmp3, $tmp4) = array_pad( explode(" ", microtime()), 2, 0);
-			printf("(CPU : %.6f秒)", $tmp4-$tmp2+$tmp3-$tmp1);
-			echo '</small>';
-		}
-		echo <<<END
-						</p>
-					</footer>
-				</div>
-			</div>
-
-		</div><!-- container -->
-	</body>
-</html>
-END;
+		require_once(VIEWS.'/footer.php');
 	}
 
-	//---------------------------------------------------
-	// 最終更新時刻 ＋ 次ターン更新時刻出力
-	//---------------------------------------------------
+	/**
+	 * 最終更新時刻 ＋ 次ターン更新時刻出力
+	 * @param  [type] $hako [description]
+	 * @return [type]       [description]
+	 */
 	function lastModified($hako) {
 		global $init;
-
-		$timeString = date("Y年m月d日 H時", $hako->islandLastTime);
-		echo <<<END
-<div class="lastModified">
-	<p>最終更新時間: $timeString<br>
-	(次のターンまで、あと
-	<script>remainTime($hako->islandLastTime + $init->unitTime);</script>
-	</p>
-</div>
-END;
+		require_once(VIEWS.'/lastModified.php');
 	}
 }
 
@@ -144,12 +52,7 @@ class HtmlTop extends HTML {
 		echo "<h1>{$init->title} トップ</h1>\n";
 
 		if(DEBUG === true) {
-			echo <<<END
-<form action="{$this_file}" method="post">
-	<input type="hidden" name="mode" value="debugTurn">
-	<input type="submit" class="btn btn-default" value="ターンを進める">
-</form>
-END;
+			require_once(VIEWS.'/debug.php');
 		}
 
 		echo "<div class='Turn'>ターン".$hako->islandTurn."</div>";
@@ -1715,18 +1618,16 @@ END;
 		}
 		$island = $hako->islands[$number];
 		echo <<<END
-<script type="text/javascript">
-<!--
+<script>
 function ps(x, y) {
 	window.opener.document.InputPlan.POINTX.options[x].selected = true;
 	window.opener.document.InputPlan.POINTY.options[y].selected = true;
 	return true;
 }
-//-->
 </script>
 
 <div class="text-center">
-{$init->tagBig_}{$init->tagName_}{$island['name']}島{$init->_tagName}{$init->_tagBig}<br>
+{$init->tagBig_}{$init->tagName_}{$island['name']}{$init->nameSuffix}{$init->_tagName}{$init->_tagBig}<br>
 </div>
 END;
 		//島の地図
@@ -2789,8 +2690,13 @@ END;
 
 
 class HtmlAdmin extends HTML {
-	function enter($urllist, $menulist) {
+
+	function enter() {
 		global $init;
+
+		$urllist  = array( ini_get('safe_mode') ? '/hako-mente-safemode.php' : '/hako-mente.php', '/hako-axes.php', '/hako-keep.php', '/hako-present.php', '/hako-edit.php', '/hako-bf.php');
+		$menulist = array('データ管理','アクセスログ閲覧','島預かり管理','プレゼント','マップエディタ','BattleField管理');
+
 		echo <<<END
 <script>
 function go(obj) {
@@ -2834,6 +2740,7 @@ END;
 }
 
 class HtmlPresent extends HTML {
+
 	function enter() {
 		global $init;
 		$this_file = $init->baseDir . "/hako-present.php";

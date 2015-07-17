@@ -11,7 +11,6 @@ require_once 'config.php';
 require_once APPPATH.'/model/hako-log.php';
 require_once APPPATH.'/model/hako-make.php';
 
-//--------------------------------------------------------------------
 class Turn {
 	public $log;
 	public $rpx;
