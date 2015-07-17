@@ -27,7 +27,10 @@ class Admin {
 			$masterPassword = chop(fgets($fp, READ_LINE));
 			fclose($fp);
 		}
-
+        if ( !isset($this->dataSet['PASSWORD']) ) {
+            Error::wrongPassword();
+            return 0;
+        }
 		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
 			return 1;
 		} else {

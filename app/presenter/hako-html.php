@@ -17,7 +17,6 @@ class HTML {
 	 */
 	static function header() {
 		global $init;
-
 		require_once(VIEWS.'/header.php');
 		require_once(VIEWS.'/body.php');
 	}
@@ -730,8 +729,9 @@ END;
 END;
 		echo "<div id=\"RecentlyLog\">\n";
 		echo "<h1>最近の出来事</h1>\n";
+		$log = new Log();
 		for($i = 0; $i < $init->logTopTurn; $i++) {
-			LogIO::logFilePrint($i, 0, 0);
+			$log->logFilePrint($i, 0, 0);
 		}
 		echo "</div>\n";
 
@@ -747,7 +747,8 @@ END;
 	function historyPrint() {
 		echo "<div id=\"HistoryLog\">\n";
 		echo "<h2>歴史</h2>";
-		LogIO::historyPrint();
+		$log = new Log();
+		$log->historyPrint();
 		echo "</div>\n";
 	}
 
@@ -760,7 +761,8 @@ END;
 		echo "<div id=\"HistoryLog\">\n";
 		echo "<h2>お知らせ</h2>\n";
 		echo "<DIV style=\"overflow:auto; height:{$init->divHeight}px;\">\n";
-		LogIO::infoPrint();
+		$log = new Log();
+		$log->infoPrint();
 		echo "</div></div>\n";
 	}
 
@@ -1140,8 +1142,9 @@ END;
 
 		echo "<div id=\"RecentlyLog\">\n";
 		echo "<h2>{$island['name']}島の近況</h2>\n";
+		$log = new Log();
 		for($i = 0; $i < $init->logMax; $i++) {
-			LogIO::logFilePrint($i, $island['id'], $mode);
+			$log->logFilePrint($i, $island['id'], $mode);
 		}
 		echo "</div>\n";
 	}
@@ -2764,7 +2767,8 @@ END;
 
 		$width = $init->islandSize * 32 + 50;
 		$height = $init->islandSize * 32 + 100;
-		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
+		//$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
+		$defaultTarget = "";
 
 		echo <<<END
 <script>
@@ -3041,7 +3045,8 @@ END;
 		// バックアップデータ
 		$dir = opendir("./");
 		while($dn = readdir($dir)) {
-			if(preg_match("/{$init->dirName}\.bak(.*)$/", $dn, $suf)) {
+			$_dirName = preg_quote($init->dirName, "/");
+			if(preg_match("/{$_dirName}\.bak(.*)$/", $dn, $suf)) {
 				if (is_file("{$init->dirName}.bak{$suf[1]}/hakojima.dat")) {
 					$this->dataPrint($data, $suf[1]);
 				}
@@ -3496,17 +3501,19 @@ END;
 	<td class="M">
 		<FORM action="{$this_file}" method="POST">
 			<B>盟主パスワードは？</B><BR>
-			<INPUT TYPE="password" NAME="Allypact" VALUE="{$data['defaultPassword']}" SIZE=32 MAXLENGTH=32 class="f" class="form-control">
+			<INPUT TYPE="password" NAME="Allypact" VALUE="{$data['defaultPassword']}" SIZE=32 MAXLENGTH=32 class="f form-control">
 			<INPUT TYPE="hidden"  NAME="ALLYID" VALUE="{$ally['id']}">
 			<INPUT TYPE="submit" VALUE="送信" NAME="AllypactButton"><BR>
-			<B>コメント</B><small>(全角{$init->lengthAllyComment}字まで：トップページの「各同盟の状況」欄に表示されます)</small><BR>
-			<INPUT TYPE="text" NAME="ALLYCOMMENT"  VALUE="{$ally['comment']}" SIZE=100 MAXLENGTH=50><BR>
-			<BR>
+
+			<B>コメント</B><small>(全角{$init->lengthAllyComment}字まで：トップページの「各同盟の状況」欄に表示されます)</small>
+			<INPUT TYPE="text" NAME="ALLYCOMMENT" VALUE="{$ally['comment']}" MAXLENGTH="50" class="form-control">
+
 			<B>メッセージ・盟約など</B><small>(「同盟の情報」欄の上に表示されます)</small><BR>
-			タイトル<small>(全角{$init->lengthAllyTitle}字まで)</small><BR>
-			<INPUT TYPE="text" NAME="ALLYTITLE"  VALUE="{$ally['title']}" SIZE=100 MAXLENGTH=50><BR>
-			メッセージ<small>(全角{$init->lengthAllyMessage}字まで)</small><BR>
-			<TEXTAREA COLS=50 ROWS=16 NAME="ALLYMESSAGE" WRAP="soft">{$allyMessage}</TEXTAREA>
+			タイトル<small>(全角{$init->lengthAllyTitle}字まで)</small>
+			<INPUT TYPE="text" NAME="ALLYTITLE"  VALUE="{$ally['title']}" MAXLENGTH="50" class="form-control">
+
+			メッセージ<small>(全角{$init->lengthAllyMessage}字まで)</small>
+			<TEXTAREA COLS=50 ROWS=16 NAME="ALLYMESSAGE" WRAP="soft" class="form-control">{$allyMessage}</TEXTAREA>
 			<BR>
 			「タイトル」を空欄にすると『盟主からのメッセージ』というタイトルになります。<BR>
 			「メッセージ」を空欄にすると「同盟の情報」欄には何も表示されなくなります。

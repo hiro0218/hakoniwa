@@ -9,7 +9,7 @@
 require_once 'config.php';
 require_once MODELPATH.'/hako-cgi.php';
 require_once PRESENTER.'/hako-html.php';
-require_once CONTROLLERPATH.'/admin.php';
+require_once CONTROLLERPATH.'/admin/index.php';
 
 $init  = new Init();
 $start = new Admin();

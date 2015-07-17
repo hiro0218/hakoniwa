@@ -5,7 +5,7 @@
  */
 
 class Admin {
-	
+
 	function execute() {
 		$html = new HtmlAdmin();
 		$cgi  = new Cgi();

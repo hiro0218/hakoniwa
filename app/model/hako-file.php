@@ -1689,6 +1689,7 @@ class HakoPresent extends File {
 	public $islandList;  // 島リスト
 
 	function init($cgi) {
+		global $init;
 		$this->readIslandsFile($cgi);
 		$this->readPresentFile();
 
@@ -1706,9 +1707,11 @@ class HakoKP extends File {
 	public $islandListKP;	// 管理人預かり島リスト
 
 	function init($cgi) {
+		global $init;
 		$this->readIslandsFile($cgi);
 		$this->islandListNoKP = "<option value=\"0\"></option>\n";
 		$this->islandListKP = "<option value=\"0\"></option>\n";
+
 		for($i = 0; $i < $this->islandNumber; $i++) {
 			$name = $this->islands[$i]['name'];
 			$id = $this->islands[$i]['id'];
