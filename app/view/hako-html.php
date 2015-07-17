@@ -6,12 +6,14 @@
  * @author hiro <@hiro0218>
  */
 
-require_once APPPATH.'/model/hako-error.php';
+require_once HELPERPATH.'/message/error.php';
+require_once HELPERPATH.'/message/success.php';
+require_once APPPATH.'/model/hako-log.php';
 
 class HTML {
 
 	/**
-	* HTML <head>
+	 * HTML <head>
 	 * @return [type] [description]
 	 */
 	static function header() {
@@ -26,7 +28,7 @@ class HTML {
 	<title>{$init->title}</title>
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="{$init->cssDir}/{$init->css}">
-	<!-- <link rel="shortcut icon" href="{$init->baseDir}/favicon.ico"> -->
+	<link rel="shortcut icon" href="{$init->imgDir}/monster1.gif">
 	<script type="text/javascript" src="{$init->jsDir}/{$init->js}"></script>
 </head>
 END;
@@ -125,9 +127,7 @@ END;
 <div class="lastModified">
 	<p>最終更新時間: $timeString<br>
 	(次のターンまで、あと
-	<script type="text/javascript">
-		remainTime($hako->islandLastTime + $init->unitTime);
-	</script>
+	<script>remainTime($hako->islandLastTime + $init->unitTime);</script>
 	</p>
 </div>
 END;
@@ -524,7 +524,7 @@ END;
 					if($eisei[$e] > 0) {
 						$eiseis .= "<img src=\"{$init->imgDir}/eisei{$e}.gif\" alt=\"{$init->EiseiName[$e]} {$eisei[$e]}%\" title=\"{$init->EiseiName[$e]} {$eisei[$e]}%\"> ";
 					} else {
-						$eiseis .= "　";
+						$eiseis .= "";
 					}
 				}
 			}
@@ -648,7 +648,7 @@ END;
 	</tr>
 	<tr>
 		<th {$init->bgTitleCell}>{$init->tagTH_}取得アイテム{$init->_tagTH}</th>
-		<td class="ItemCell" colspan="6">　$items</td>
+		<td class="ItemCell" colspan="6">$items</td>
 	</tr>
 	<tr>
 		<td {$init->bgCommentCell} colspan="7">{$init->tagTH_}{$owner}：{$init->_tagTH}$comment</td>
@@ -1113,13 +1113,13 @@ END;
 			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMonsterExterminationNumber}{$init->_tagTH}</th>
 			<td {$init->bgInfoCell}>$taiji</td>
 			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameSatellite}{$init->_tagTH}</th>
-			<td class="ItemCell" colspan="4">　$eiseis</td>
+			<td class="ItemCell" colspan="4">$eiseis</td>
 		</tr>
 		<tr>
 			<th {$init->bgTitleCell}>{$init->tagTH_}ジン{$init->_tagTH}</th>
-			<td class="ItemCell" colspan="5">　$zins</td>
+			<td class="ItemCell" colspan="5">$zins</td>
 			<th {$init->bgTitleCell}>{$init->tagTH_}アイテム{$init->_tagTH}</th>
-			<td class="ItemCell" colspan="4">　$items</td>
+			<td class="ItemCell" colspan="4">$items</td>
 		</tr>
 		<tr>
 			<td colspan="11" {$init->bgCommentCell}>$comment</td>
@@ -2787,31 +2787,6 @@ END;
 	}
 }
 
-class HtmlSetted extends HTML {
-
-	static function comment() {
-		Util::makeTagMessage("コメントを更新しました", "success");
-	}
-
-	static function change() {
-		Util::makeTagMessage("変更完了しました", "success");
-	}
-
-	// コマンド削除
-	static function commandDelete() {
-		Util::makeTagMessage("コマンドを削除しました", "success");
-	}
-
-	// コマンド登録
-	static function commandAdd() {
-		Util::makeTagMessage("コマンドを登録しました", "success");
-	}
-
-	// 島の強制削除
-	static function deleteIsland($name) {
-		Util::makeTagMessage("{$name}{$init->nameSuffix}を強制削除しました", "success");
-	}
-}
 
 class HtmlAdmin extends HTML {
 	function enter($urllist, $menulist) {
@@ -2885,8 +2860,7 @@ END;
 		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
 
 		echo <<<END
-<script type="text/javascript">
-<!--
+<script>
 var w;
 var p = 0;
 
@@ -2897,7 +2871,6 @@ function settarget(part){
 function targetopen() {
 	w = window.open("{$main_file}?target=" + p, "","width={$width},height={$height},scrollbars=1,resizable=1,toolbar=1,menubar=1,location=1,directories=0,status=1");
 }
-//-->
 </script>
 
 <h1 class="title">プレゼントツール</h1>
@@ -3024,7 +2997,8 @@ END;
 		// バックアップデータ
 		$dir = opendir("./");
 		while($dn = readdir($dir)) {
-			if(preg_match("/{$init->dirName}\.bak(.*)$/", $dn, $suf)) {
+			$_dirName = preg_quote($init->dirName, "/");
+			if(preg_match("/{$_dirName}\.bak(.*)$/", $dn, $suf)) {
 				if (is_file("{$init->dirName}.bak{$suf[1]}/hakojima.dat")) {
 					$this->dataPrint($data, $suf[1]);
 				}
@@ -3918,16 +3892,5 @@ colorPack();
 </table>
 </div>
 END;
-	}
-}
-
-class AllyHtmlSetted extends HTML {
-	// 盟主コメント変更完了
-	static function allyPactOK($name) {
-		Util::makeTagMessage("{$name}のコメントを変更しました。", "success");
-	}
-	// 同盟データの再構成
-	static function allyDataUp() {
-		Util::makeTagMessage("同盟データを再構成しました。(ターン更新後に再構成されます)", "info");
 	}
 }

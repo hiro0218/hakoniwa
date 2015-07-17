@@ -103,10 +103,6 @@ class Cgi {
 						$this->dataSet['defaultDevelopeMode'] = $value;
 						break;
 
-					// case "SKIN":
-					// 	$this->dataSet['defaultSkin'] = $value;
-					// 	break;
-
 					case "IMG":
 						$this->dataSet['defaultImg'] = $value;
 						break;
@@ -151,10 +147,6 @@ class Cgi {
 			setcookie("DEVELOPEMODE",$this->dataSet['DEVELOPEMODE'], $time);
 			$this->dataSet['defaultDevelopeMode'] = $this->dataSet['DEVELOPEMODE'];
 		}
-		// if( isset($this->dataSet['SKIN']) ) {
-		// 	setcookie("SKIN",$this->dataSet['SKIN'], $time);
-		// 	$this->dataSet['defaultSkin'] = $this->dataSet['SKIN'];
-		// }
 		if( isset($this->dataSet['IMG']) ) {
 			setcookie("IMG",$this->dataSet['IMG'], $time);
 			$this->dataSet['defaultImg'] = $this->dataSet['IMG'];

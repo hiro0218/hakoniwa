@@ -7,6 +7,7 @@
  */
 
 require_once 'config.php';
+require_once MODELPATH.'/admin.php';
 require_once MODELPATH.'/hako-cgi.php';
 require_once MODELPATH.'/hako-file.php';
 require_once VIEWPATH.'/hako-html.php';
@@ -14,11 +15,7 @@ require_once VIEWPATH.'/hako-html.php';
 $init = new Init();
 $MAIN_FILE = $init->baseDir . "/hako-main.php";
 
-
-
-class KP {
-	public $mode;
-	public $dataSet = array();
+class KP extends Admin {
 
 	function execute() {
 		$html = new HTMLKP();
@@ -27,7 +24,7 @@ class KP {
 		$this->parseInputData();
 		$hako->init($this);
 		$cgi->getCookies();
-		$html->header($cgi->dataSet);
+		$html->header();
 
 		switch($this->mode) {
 			case "TOKP":
@@ -54,16 +51,6 @@ class KP {
 				break;
 		}
 		$html->footer();
-	}
-
-	function parseInputData() {
-		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
-		if(!empty($_POST)) {
-			while(list($name, $value) = each($_POST)) {
-				$value = str_replace(",", "", $value);
-				$this->dataSet["{$name}"] = $value;
-			}
-		}
 	}
 
 	function toMode($id, &$hako) {
@@ -96,21 +83,6 @@ class KP {
 		}
 	}
 
-	function passCheck() {
-		global $init;
-
-		if(file_exists("{$init->passwordFile}")) {
-			$fp = fopen("{$init->passwordFile}", "r");
-			$masterPassword = chop(fgets($fp, READ_LINE));
-			fclose($fp);
-		}
-		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
-			return 1;
-		} else {
-			Util::makeTagMessage("パスワードが違います。", "danger");
-			return 0;
-		}
-	}
 }
 
 $start = new KP();

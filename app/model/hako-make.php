@@ -365,7 +365,7 @@ class Make {
 		$hako->writeIslandsFile();
 
 		// コメント更新メッセージ
-		HtmlSetted::Comment();
+		Success::Comment();
 
 		// owner modeへ
 		if($data['DEVELOPEMODE'] == "cgi") {
@@ -395,7 +395,7 @@ class Make {
 			if(preg_match("/^無人$/", $data['ISLANDNAME'])) {
 				// 島の強制削除
 				$this->deleteIsland($hako, $data);
-				HtmlSetted::deleteIsland($name);
+				Success::deleteIsland($name);
 				return;
 			} else {
 				$island['money'] = $init->maxMoney;
@@ -454,7 +454,7 @@ class Make {
 		$hako->writeIslandsFile($id);
 
 		// 変更成功
-		HtmlSetted::change();
+		Success::change();
 	}
 
 	//---------------------------------------------------
@@ -483,7 +483,7 @@ class Make {
 		$hako->writeIslandsFile($id);
 
 		// 変更成功
-		HtmlSetted::change();
+		Success::change();
 	}
 
 	//---------------------------------------------------
@@ -509,7 +509,7 @@ class Make {
 
 		if(strcmp($data['COMMANDMODE'], 'delete') == 0) {
 			Util::slideFront($command, $data['NUMBER']);
-			HtmlSetted::commandDelete();
+			Success::commandDelete();
 
 		} else if(($data['COMMAND'] == $init->comAutoPrepare) ||
 				  ($data['COMMAND'] == $init->comAutoPrepare2)) {
@@ -550,7 +550,7 @@ class Make {
 				}
 				$j++;
 			}
-			HtmlSetted::commandAdd();
+			Success::commandAdd();
 
 		} else if ($data['COMMAND'] == $init->comAutoReclaim) {
 			$r = Util::makeRandomPointArray();
@@ -681,12 +681,12 @@ class Make {
 			for($i = 0; $i < $init->commandMax; $i++) {
 				Util::slideFront($command, 0);
 			}
-			HtmlSetted::commandDelete();
+			Success::commandDelete();
 		} else {
 			if(strcmp($data['COMMANDMODE'], 'insert') == 0) {
 				Util::slideBack($command, $data['NUMBER']);
 			}
-			HtmlSetted::commandAdd();
+			Success::commandAdd();
 			// コマンドを登録
 			$command[$data['NUMBER']] = array (
 				'kind'   => $data['COMMAND'],
@@ -781,7 +781,7 @@ class MakeJS extends Make {
 				'target' => $target
 			);
 		}
-		HtmlSetted::commandAdd();
+		Success::commandAdd();
 
 		// データの書き出し
 		$island['command'] = $command;

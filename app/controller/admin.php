@@ -1,4 +1,8 @@
 <?php
+/**
+ * 箱庭諸島 S.E
+ * @author hiro <@hiro0218>
+ */
 
 class Admin {
 	private $urllist  = array();
@@ -14,7 +18,7 @@ class Admin {
 		$cgi  = new Cgi();
 
 		$cgi->getCookies();
-		$html->header($cgi->dataSet);
+		$html->header();
 		$html->enter($this->urllist, $this->menulist);
 		$html->footer();
 	}

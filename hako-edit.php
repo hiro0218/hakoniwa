@@ -154,7 +154,7 @@ END;
 <table class="table table-bordered table-condensed">
 <tr>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
-	<th {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameSuffix}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</th>
@@ -184,9 +184,9 @@ END;
 			}
 			$name = "";
 			if($island['absent'] == 0) {
-				$name = "{$init->tagName_}{$island['name']}島{$init->_tagName}";
+				$name = "{$init->tagName_}{$island['name']}{$init->nameSuffix}{$init->_tagName}";
 			} else {
-				$name = "{$init->tagName2_}{$island['name']}島({$island['absent']}){$init->_tagName2}";
+				$name = "{$init->tagName2_}{$island['name']}{$init->nameSuffix}({$island['absent']}){$init->_tagName2}";
 			}
 			if(!empty($island['owner'])) {
 				$owner = $island['owner'];
@@ -206,15 +206,15 @@ END;
 				echo <<<END
 <table class="table table-bordered">
 <tr>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
-<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameSuffix}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFarmSize}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFactoryScale}{$init->_tagTH}</th>
+	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameMineScale}{$init->_tagTH}</th>
 </tr>
 END;
 			}
@@ -374,7 +374,7 @@ function ps(x, y, ld, lv) {
 </script>
 
 <div class="text-center">
-	{$init->tagBig_}{$init->tagName_}{$island['name']}島{$init->_tagName}マップ・エディタ{$init->_tagBig}<br>
+	{$init->tagBig_}{$init->tagName_}{$island['name']}{$init->nameSuffix}{$init->_tagName} マップ・エディタ{$init->_tagBig}<br>
 </div>
 
 <form name="TOP" action="{$GLOBALS['THIS_FILE']}" method="post">
@@ -493,7 +493,7 @@ END;
 	<li>データを破壊する場合があります。
 	<li>バックアップを行ってから<br>行う様にしましょう。
 	<li>地形データを変更するのみで、<br>他のデータは変更されません。<br>
-	ターン更新で他のデータへ<br>反映されます。
+	ターン更新で他のデータへ反映されます。
 </ul>
 
 </td>
@@ -561,7 +561,7 @@ END;
 }
 
 //----------------------------------------------------------------------
-class Edit {
+class EditMain {
 
 	function execute() {
 		$hako = new HakoEdit();
@@ -580,35 +580,35 @@ class Edit {
 		switch($cgi->mode) {
 			case "enter":
 				$html = new HtmlTop();
-				$html->header($cgi->dataSet);
+				$html->header();
 				$edit->main($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "list":
 				$html = new HtmlTop();
-				$html->header($cgi->dataSet);
+				$html->header();
 				$edit->main($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "map":
 				$html = new HtmlTop();
-				$html->header($cgi->dataSet);
+				$html->header();
 				$edit->editMap($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "regist":
 				$html = new HtmlTop();
-				$html->header($cgi->dataSet);
+				$html->header();
 				$edit->register($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			default:
 				$html = new HtmlTop();
-				$html->header($cgi->dataSet);
+				$html->header();
 				$edit->enter();
 				$html->footer();
 		}
@@ -616,5 +616,5 @@ class Edit {
 	}
 }
 
-$start = new Edit();
+$start = new EditMain();
 $start->execute();

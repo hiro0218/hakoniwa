@@ -7,21 +7,20 @@
  */
 
 require_once 'config.php';
+require_once MODELPATH.'/admin.php';
 require_once MODELPATH.'/hako-cgi.php';
 require_once VIEWPATH.'/hako-html.php';
 
 $init = new Init();
 
-class Mente {
-	public $mode = "";
-	public $dataSet = array();
+class Mente extends Admin {
 
 	function execute() {
 		$html = new HtmlMente();
 		$cgi = new Cgi();
 		$this->parseInputData();
 		$cgi->getCookies();
-		$html->header($cgi->dataSet);
+		$html->header();
 		switch($this->mode) {
 			case "NEW":
 				if($this->passCheck()) {
@@ -66,16 +65,6 @@ class Mente {
 				break;
 		}
 		$html->footer();
-	}
-
-	function parseInputData() {
-		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
-		if(!empty($_POST)) {
-			while(list($name, $value) = each($_POST)) {
-				$value = str_replace(",", "", $value);
-				$this->dataSet["{$name}"] = $value;
-			}
-		}
 	}
 
 	function newMode() {
@@ -166,13 +155,13 @@ class Mente {
 		global $init;
 
 		if(empty($this->dataSet['MPASS1']) || empty($this->dataSet['MPASS2']) || strcmp($this->dataSet['MPASS1'], $this->dataSet['MPASS2'])) {
-			Util::makeTagMessage("マスタパスワードが入力されていないか間違っています。", "danger");
+			Error::wrongMasterPassword();
 			return 0;
 		} else if(empty($this->dataSet['SPASS1']) || empty($this->dataSet['SPASS2']) || strcmp($this->dataSet['SPASS1'], $this->dataSet['SPASS2'])) {
-			Util::makeTagMessage("特殊パスワードが入力されていないか間違っています。", "danger");
+			Error::wrongSpecialPassword();
 			return 0;
 		}
-		$masterPassword = crypt($this->dataSet['MPASS1'], 'ma');
+		$masterPassword  = crypt($this->dataSet['MPASS1'], 'ma');
 		$specialPassword = crypt($this->dataSet['SPASS1'], 'sp');
 		$fp = fopen("{$init->passwordFile}", "w");
 		fputs($fp, "$masterPassword\n");
@@ -180,20 +169,6 @@ class Mente {
 		fclose($fp);
 	}
 
-	function passCheck() {
-		global $init;
-		if(file_exists("{$init->passwordFile}")) {
-			$fp = fopen("{$init->passwordFile}", "r");
-			$masterPassword = chop(fgets($fp, READ_LINE));
-			fclose($fp);
-		}
-		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
-			return 1;
-		} else {
-			Util::makeTagMessage("パスワードが違います。", "danger");
-			return 0;
-		}
-	}
 }
 
 $start = new Mente();

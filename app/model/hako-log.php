@@ -253,8 +253,8 @@ class Log extends LogIO {
 	// 死滅
 	function dead($id, $name) {
 		global $init;
-		$this->out("{$init->tagName_}${name}島{$init->_tagName}から人がいなくなり、<strong>滅亡</strong>しました。", $id);
-		$this->history("{$init->tagName_}${name}島{$init->_tagName}、人がいなくなり<strong>滅亡</strong>する。");
+		$this->out("{$init->tagName_}${name}{$init->nameSuffix}{$init->_tagName}から人がいなくなり、<strong>滅亡</strong>しました。", $id);
+		$this->history("{$init->tagName_}${name}{$init->nameSuffix}{$init->_tagName}、人がいなくなり<strong>滅亡</strong>する。");
 	}
 	// 島の強制削除
 	function deleteIsland($id, $name) {

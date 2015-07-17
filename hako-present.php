@@ -7,15 +7,14 @@
  */
 
 require_once 'config.php';
+require_once MODELPATH.'/admin.php';
 require_once MODELPATH.'/hako-cgi.php';
 require_once MODELPATH.'/hako-file.php';
 require_once VIEWPATH.'/hako-html.php';
 
 $init = new Init();
 
-class Present {
-	public $mode;
-	public $dataSet = array();
+class Present extends Admin {
 
 	function execute() {
 		$html = new HtmlPresent();
@@ -24,7 +23,7 @@ class Present {
 		$this->parseInputData();
 		$hako->init($this);
 		$cgi->getCookies();
-		$html->header($cgi->dataSet);
+		$html->header();
 
 		switch($this->mode) {
 			case "PRESENT":
@@ -54,20 +53,7 @@ class Present {
 		$html->footer();
 	}
 
-	function parseInputData() {
-		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
-		if(!empty($_POST)) {
-			while(list($name, $value) = each($_POST)) {
-				// 半角カナがあれば全角に変換して返す
-				// JcodeConvert($value, 0, 2);
-				$value = str_replace(",", "", $value);
-				$this->dataSet["{$name}"] = $value;
-			}
-		}
-	}
-
 	function presents($data, &$hako) {
-		global $init;
 
 		if ($data['ISLANDID']) {
 			$num = $hako->idToNumber[$data['ISLANDID']];
@@ -79,7 +65,6 @@ class Present {
 	}
 
 	function punish($data, &$hako) {
-		global $init;
 
 		if ($data['ISLANDID']) {
 			$punish =& $data['PUNISH'];
@@ -93,20 +78,6 @@ class Present {
 		}
 	}
 
-	function passCheck() {
-		global $init;
-		if(file_exists("{$init->passwordFile}")) {
-			$fp = fopen("{$init->passwordFile}", "r");
-			$masterPassword = chop(fgets($fp, READ_LINE));
-			fclose($fp);
-		}
-		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
-			return 1;
-		} else {
-			Util::makeTagMessage("パスワードが違います。", "danger");
-			return 0;
-		}
-	}
 }
 
 $start = new Present();

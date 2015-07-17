@@ -1197,13 +1197,13 @@ class HakoBF extends File {
 		for($i = 0; $i < ( $this->islandNumberNoBF ); $i++) {
 			$name = $this->islands[$i]['name'];
 			$id = $this->islands[$i]['id'];
-			$this->islandListNoBF .= "<option value=\"$id\">${name}島</option>\n";
+			$this->islandListNoBF .= "<option value=\"$id\">${name}{$init->nameSuffix}</option>\n";
 		}
 		$this->islandListBF = "<option value=\"0\"></option>\n";
 		for($i = $this->islandNumberNoBF; $i < $this->islandNumber; $i++) {
 			$name = $this->islands[$i]['name'];
 			$id = $this->islands[$i]['id'];
-			$this->islandListBF .= "<option value=\"$id\">${name}島</option>\n";
+			$this->islandListBF .= "<option value=\"$id\">${name}{$init->nameSuffix}</option>\n";
 		}
 	}
 }
@@ -1696,7 +1696,7 @@ class HakoPresent extends File {
 		for($i = 0; $i < ( $this->islandNumber ); $i++) {
 			$name = $this->islands[$i]['name'];
 			$id = $this->islands[$i]['id'];
-			$this->islandList .= "<option value=\"$id\">${name}島</option>\n";
+			$this->islandList .= "<option value=\"$id\">${name}{$init->nameSuffix}</option>\n";
 		}
 	}
 }
@@ -1714,9 +1714,9 @@ class HakoKP extends File {
 			$id = $this->islands[$i]['id'];
 			$keep = $this->islands[$i]['keep'];
 			if($keep == 1) {
-				$this->islandListKP .= "<option value=\"$id\">${name}島</option>\n";
+				$this->islandListKP .= "<option value=\"$id\">${name}{$init->nameSuffix}</option>\n";
 			} else {
-				$this->islandListNoKP .= "<option value=\"$id\">${name}島</option>\n";
+				$this->islandListNoKP .= "<option value=\"$id\">${name}{$init->nameSuffix}</option>\n";
 			}
 		}
 	}

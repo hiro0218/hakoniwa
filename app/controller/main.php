@@ -1,4 +1,8 @@
 <?php
+/**
+ * 箱庭諸島 S.E
+ * @author hiro <@hiro0218>
+ */
 
 class Main {
 
@@ -35,77 +39,77 @@ class Main {
 			case "turn":
 				$turn = new Turn();
 				$html = new HtmlTop();
-				$html->header($cgi->dataSet);
+				$html->header();
 				$turn->turnMain($hako, $cgi->dataSet);
 				$html->main($hako, $cgi->dataSet); // ターン処理後、TOPページopen
 				$html->footer();
 				break;
 
 			case "owner":
-				$html->header($cgi->dataSet);
+				$html->header();
 				$html->owner($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "command":
-				$html->header($cgi->dataSet);
+				$html->header();
 				$com->commandMain($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "new":
-				$html->header($cgi->dataSet);
+				$html->header();
 				$com->newIsland($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "comment":
-				$html->header($cgi->dataSet);
+				$html->header();
 				$com->commentMain($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "print":
-				$html->header($cgi->dataSet);
+				$html->header();
 				$html->visitor($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "targetView":
-				$html->header($cgi->dataSet);
+				$html->header();
 				$html->printTarget($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "change":
-				$html->header($cgi->dataSet);
+				$html->header();
 				$com->changeMain($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "ChangeOwnerName":
-				$html->header($cgi->dataSet);
+				$html->header();
 				$com->changeOwnerName($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "conf":
 				$html = new HtmlTop();
-				$html->header($cgi->dataSet);
+				$html->header();
 				$html->register($hako, $cgi->dataSet);
 				$html->footer();
 				break;
 
 			case "log":
 				$html = new HtmlTop();
-				$html->header($cgi->dataSet);
+				$html->header();
 				$html->log();
 				$html->footer();
 				break;
 
 			default:
 				$html = new HtmlTop();
-				$html->header($cgi->dataSet);
+				$html->header();
 				$html->main($hako, $cgi->dataSet);
 				$html->footer();
 		}

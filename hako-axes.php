@@ -7,15 +7,14 @@
  */
 
 require_once 'config.php';
+require_once MODELPATH.'/admin.php';
 require_once MODELPATH.'/hako-cgi.php';
 require_once VIEWPATH.'/hako-html.php';
 
 $init = new Init();
 
-class Axes {
+class Axes extends Admin {
 	public $init;
-	public $mode;
-	public $dataSet = array();
 
 	function __construct() {
 		global $init;
@@ -27,7 +26,7 @@ class Axes {
 		$cgi  = new Cgi();
 		$this->parseInputData();
 		$cgi->getCookies();
-		$html->header($cgi->dataSet);
+		$html->header();
 
 		switch($this->mode) {
 			case "enter":
@@ -42,30 +41,6 @@ class Axes {
 		$html->footer();
 	}
 
-	function parseInputData() {
-		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
-		if(!empty($_POST)) {
-			while(list($name, $value) = each($_POST)) {
-				$value = str_replace(",", "", $value);
-				$this->dataSet["{$name}"] = $value;
-			}
-		}
-	}
-
-	function passCheck() {
-
-		if(file_exists("{$this->init->passwordFile}")) {
-			$fp = fopen("{$this->init->passwordFile}", "r");
-			$masterPassword = chop(fgets($fp, READ_LINE));
-			fclose($fp);
-		}
-		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
-			return 1;
-		} else {
-			Util::makeTagMessage("パスワードが違います。", "danger");
-			return 0;
-		}
-	}
 }
 
 $start = new Axes();

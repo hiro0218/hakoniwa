@@ -49,18 +49,18 @@ class MakeAlly {
 			}
 		}
 		if(!$init->allyUse && !$adminMode) {
-			AllyError::newAllyForbbiden();
+			Error::newAllyForbbiden();
 			return;
 		}
 		// 同盟名があるかチェック
 		if($allyName == '') {
-			AllyError::newAllyNoName();
+			Error::newAllyNoName();
 			return;
 		}
 		// 同盟名が正当かチェック
 		if(preg_match("/[,\?\(\)\<\>\$]|^無人|^沈没$/", $allyName)) {
 			// 使えない名前
-			AllyError::newIslandBadName();
+			Error::newIslandBadName();
 			return;
 		}
 		// 名前の重複チェック
@@ -69,14 +69,14 @@ class MakeAlly {
 			((AllyUtil::nameToNumber($hako, $allyName) != -1) ||
 			((AllyUtil::aNameToId($hako, $allyName) != -1) && (AllyUtil::aNameToId($hako, $allyName) != $currentID)))) {
 			// すでに結成ずみ
-			AllyError::newAllyAlready();
+			Error::newAllyAlready();
 			return;
 		}
 		// マークの重複チェック
 		if(!($adminMode && ($allyID == '') && ($allyID < 200)) &&
 			((AllyUtil::aMarkToId($hako, $allyMark) != -1) && (AllyUtil::aMarkToId($hako, $allyMark) != $currentID))) {
 			// すでに使用ずみ
-			AllyError::markAllyAlready();
+			Error::markAllyAlready();
 			return;
 		}
 		// passwordの判定
@@ -87,7 +87,7 @@ class MakeAlly {
 			return;
 		}
 		if(!$adminMode && $island['money'] < $init->costMakeAlly) {
-			AllyError::noMoney();
+			Error::noMoney();
 			return;
 		}
 		$n = $hako->idToAllyNumber[$currentID];
@@ -139,11 +139,11 @@ class MakeAlly {
 				}
 			}
 			if($flag) {
-				AllyError::otherAlready();
+				Error::otherAlready();
 				return;
 			}
 			if(($init->allyUse == 2) && !$adminMode && !AllyUtil::checkPassword("", $data['PASSWORD'])) {
-				AllyError::newAllyForbbiden();
+				Error::newAllyForbbiden();
 				return;
 			}
 			// 新規
@@ -226,7 +226,7 @@ class MakeAlly {
 			}
 			// 念のためIDもチェック
 			if($hako->ally[$n]['id'] != $currentID) {
-				AllyError::wrongAlly();
+				Error::wrongAlly();
 				return;
 			}
 		}
@@ -283,13 +283,13 @@ class MakeAlly {
 
 		// 盟主チェック
 		if($hako->idToAllyNumber[$currentID]) {
-			AllyError::leaderAlready();
+			Error::leaderAlready();
 			return;
 		}
 		// 複数加盟チェック
 		$ally = $hako->ally[$currentAnumber];
 		if($init->allyJoinOne && ($island['allyId'][0] != '') && ($island['allyId'][0] != $ally['id'])) {
-			AllyError::otherAlready();
+			Error::otherAlready();
 			return;
 		}
 
@@ -357,7 +357,7 @@ class MakeAlly {
 			$hako->writeAllyFile();
 
 			// 変更成功
-			AllyHtmlSetted::allyPactOK($ally['name']);
+			Success::allyPactOK($ally['name']);
 		} else {
 			// password間違い
 			Error::wrongPassword();
@@ -380,7 +380,7 @@ class MakeAlly {
 			$hako->writeAllyFile();
 
 			// メッセージ出力
-			AllyHtmlSetted::allyDataUp();
+			Success::allyDataUp();
 			return 1;
 		}
 		return 0;
@@ -997,7 +997,7 @@ class Main {
 
 		$html = new HtmlAlly();
 		$com = new MakeAlly();
-		$html->header($cgi->dataSet);
+		$html->header();
 		switch($this->mode) {
 			case "JoinA":
 				// 同盟の結成・変更・解散・加盟・脱退

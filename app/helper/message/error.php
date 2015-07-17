@@ -57,16 +57,22 @@ class Error {
 		Util::makeTagMessage("同時アクセスエラーです。\nブラウザの「戻る」ボタンを押し、しばらく待ってから再度お試し下さい。", "danger");
 	}
 
+	static function wrongMasterPassword(){
+		Util::makeTagMessage("マスタパスワードが入力されていないか間違っています。", "danger");
+	}
+
+	static function wrongSpecialPassword(){
+		Util::makeTagMessage("特殊パスワードが入力されていないか間違っています。", "danger");
+	}
+
 	function __destruct() {
 		HTML::footer();
 		exit();
 	}
 
-}
-
-
-class AllyError extends Error {
-
+	/**
+	 * 同盟
+	 */
 	// すでにその名前の同盟がある場合
 	static function newAllyAlready() {
 		Util::makeTagMessage("その同盟ならすでに結成されています。", "danger");
@@ -98,10 +104,6 @@ class AllyError extends Error {
 	// 管理者以外結成不可
 	static function newAllyForbbiden() {
 		Util::makeTagMessage("申し訳ありません、受付を中止しています。", "danger");
-	}
-	//
-	static function newIslandBadName() {
-		Util::makeTagMessage(",?()&lt;&gt;\$とか入ってたり、変な名前はやめましょう。", "danger");
 	}
 
 }
