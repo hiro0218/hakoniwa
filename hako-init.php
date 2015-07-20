@@ -82,7 +82,7 @@ class Init {
 	public $maxWood      = 10000;
 
 	// 新規島の登録モード (0:通常、1:管理人)
-	public $registMode   = 0;
+	public $registerMode   = 0;
 	// 管理人モード
 	public $adminMode;
 
@@ -915,10 +915,9 @@ class Init {
 		$this->setpubliciable();
 		mt_srand($_SERVER['REQUEST_TIME']);
 		// 日本時間にあわせる
-		// 海外のサーバに設置する場合は次の行にある//をはずす。
-		// putenv("TZ=JST-9");
-		// 予\定のように\が勝手に追加される
 		$this->stripslashes = get_magic_quotes_gpc();
 	}
 
 }
+
+

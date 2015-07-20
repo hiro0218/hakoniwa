@@ -7,7 +7,7 @@
  class Keep extends Admin {
 
  	function execute() {
- 		$html = new HTMLKP();
+ 		$html = new HTMLKeep();
  		$cgi = new Cgi();
  		$hako = new HakoKP();
  		$this->parseInputData();

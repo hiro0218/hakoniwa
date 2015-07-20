@@ -513,34 +513,6 @@ classSortTable.prototype._Sort_Table = function(strId_table, arrayColumn) {
 }; // classSortTable.prototype._Sort_Table //
 
 
-//======================================================================
-// トップページ用
-// 次のターンまでの時間
-function remainTime(nextTime) {
-    var now = new Date();
-    var remain = nextTime - Math.floor(now / 1000);
-    var hour;
-    var min;
-    var sec;
-
-    if (remain < 0) {
-        hour = "00";
-        min = "00";
-        sec = "00";
-    } else {
-        hour = Math.floor(remain / 3600);
-        min  = Math.floor(remain % 3600 / 60);
-        sec  = Math.floor(remain % 3600 % 60);
-
-        if (min < 10) {
-            min = "0" + min;
-        }
-        if (sec < 10) {
-            sec = "0" + sec;
-        }
-    }
-    document.write(hour + ' 時間 ' + min + ' 分 ' + sec + ' 秒)');
-}
 
 //======================================================================
 // 開発画面用

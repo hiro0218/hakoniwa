@@ -128,7 +128,7 @@ class File {
 			}
 
 			if ($fp_i === false) {
-				Html::header();
+				HTML::header();
 				Error::problem();
 			}
 
@@ -1192,6 +1192,8 @@ class HakoBF extends File {
 	public $islandListBF;	// BFな島リスト
 
 	function init($cgi) {
+		global $init;
+
 		$this->readIslandsFile($cgi);
 		$this->islandListNoBF = "<option value=\"0\"></option>\n";
 		for($i = 0; $i < ( $this->islandNumberNoBF ); $i++) {

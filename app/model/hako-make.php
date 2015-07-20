@@ -388,6 +388,7 @@ class Make {
 		$num = $hako->idToNumber[$id];
 		$island = $hako->islands[$num];
 		$name = $island['name'];
+		$flag = 0;
 
 		// パスワードチェック
 		if(Util::checkSpecialPassword($data['OLDPASS'])) {
@@ -412,7 +413,7 @@ class Make {
 			Error::wrongPassword();
 			return;
 		}
-		if(!empty($data['ISLANDNAME'])) {
+		if(!empty($data['ISLANDNAME']) && (strlen($data['ISLANDNAME']) != 0) ) {
 			// 名前変更の場合
 			// 名前が正当かチェック
 			if(preg_match("/[,?()<>$]/", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "無人") == 0) {
@@ -444,7 +445,8 @@ class Make {
 			$island['password'] = Util::encode($data['PASSWORD']);
 			$flag = 1;
 		}
-		if(($flag == 0) && (strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0)) {
+		//if(($flag == 0) && (strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0)) {
+		if( $flag == 0 ) {
 			// どちらも変更されていない
 			Error::changeNothing();
 			return;

@@ -39,6 +39,13 @@ class HTML {
 		global $init;
 		require_once(VIEWS.'/lastModified.php');
 	}
+
+	function timeToString($t) {
+		$time = localtime($t, TRUE);
+		$time['tm_year'] += 1900;
+		$time['tm_mon']++;
+		return "{$time['tm_year']}年 {$time['tm_mon']}月 {$time['tm_mday']}日 {$time['tm_hour']}時 {$time['tm_min']}分 {$time['tm_sec']}秒";
+	}
 }
 
 
@@ -47,80 +54,22 @@ class HtmlTop extends HTML {
 	function main($hako, $data) {
 		global $init;
 		$this_file = $init->baseDir . "/hako-main.php";
-
-		echo "<h1>{$init->title} トップ</h1>\n";
-
-		if(DEBUG === true) {
-			require_once(VIEWS.'/debug.php');
-		}
-
-		echo "<div class='Turn'>ターン".$hako->islandTurn."</div>";
-
-		// 最終更新時刻 ＋ 次ターン更新時刻出力
-		$this->lastModified($hako);
-
 		$allyfile = $init->baseDir . "/hako-ally.php";
-		if(empty($data['defaultDevelopeMode']) || $data['defaultDevelopeMode'] == "cgi") {
-			$radio = "checked";
-			$radio2 = "";
-		} else {
-			$radio = "";
+		
+		$radio  = "checked";
+		$radio2 = "";
+		if( !empty($data['defaultDevelopeMode']) && $data['defaultDevelopeMode'] == "javascript") {
+			$radio  = "";
 			$radio2 = "checked";
 		}
+		
+		// セットするパスワードのチェック
+		$defaultPassword = isset($data['defaultPassword']) ? $data['defaultPassword'] : "";
 
-		$_defaultPassword = isset($data['defaultPassword']) ? $data['defaultPassword'] : "";
-		echo <<<END
+		// 読み込み
+		require_once(VIEWS.'/top/main.php');
 
-<hr>
-
-<div class="row">
-<div class="col-xs-6">
-END;
-
-		if ( count($hako->islandList) != 0 ) {
-			echo <<<END
-<h2>自分の島へ</h2>
-<form action="{$this_file}" method="post">
-	<div class="form-group">
-		<label>あなたの島の名前は？</label>
-		<select name="ISLANDID" class="form-control">
-			$hako->islandList
-		</select>
-	</div>
-	<div class="form-group">
-		<label>パスワード</label>
-		<input type="password" name="PASSWORD" class="form-control" value="{$_defaultPassword}" size="32" maxlength="32" required>
-	</div>
-
-	<input type="hidden" name="mode" value="owner">
-
-	<div class="form-group">
-		<label class="radio-inline">
-		  <input type="radio" name="DEVELOPEMODE" value="cgi" id="cgi" $radio>
-			<label for="cgi">通常モード</label>
-		</label>
-		<label class="radio-inline">
-		  <input type="radio" name="DEVELOPEMODE" value="javascript" id="javascript" $radio2>
-			<label for="javascript">JavaScript高機能モード</label>
-		</label>
-	</div>
-
-	<div class="form-group">
-	<input type="submit" class="btn btn-primary" value="開発しに行く">
-	</div>
-</form>
-END;
-		}
-
-		echo <<<END
-</div>
-<div class="col-xs-6">
-END;
-		$this->infoPrint(); // 「お知らせ」を表示
-		echo <<<END
-</div>
-</div>
-
+echo <<<END
 <hr>
 
 <h2>各部門ランキング</h2>
@@ -201,9 +150,9 @@ END;
 </tr>
 END;
 			for($i=0; $i<$hako->allyNumber; $i++) {
-//				if($num && ($i != $hako->idToAllyNumber[$num])) {
-//					continue;
-//				}
+				//if($num && ($i != $hako->idToAllyNumber[$num])) {
+				//	continue;
+				//}
 				$ally = $hako->ally[$i];
 				$j = $i + 1;
 
@@ -302,7 +251,7 @@ END;
 
 		$this->historyPrint();
 
-		if($init->registMode) {
+		if($init->registerMode) {
 			echo <<<END
 <FORM action="{$this_file}?mode=conf" method="POST">
 	<div class="text-right">
@@ -366,7 +315,7 @@ END;
 			$shitten      = $island['shitten'];
 			$comment      = $island['comment'];
 			$comment_turn = $island['comment_turn'];
-			$starturn     = $island['starturn'];
+			//$starturn     = $island['starturn'];
 			$monster      = '';
 
 			if($island['monster'] > 0) {
@@ -496,24 +445,21 @@ END;
 					$ene = "{$ene}%";
 				}
 			}
-			echo <<<END
-<thead>
-	<tr>
-		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}得点{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameWeather}{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameUnemploymentRate}{$init->_tagTH}</th>
-	</tr>
-</thead>
-END;
 			$keep = isset($keep) ? $keep : "";
-
 			echo <<<END
+	<thead>
+		<tr>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}得点{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameWeather}{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}{$lots}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFood}{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameUnemploymentRate}{$init->_tagTH}</th>
+		</tr>
+	</thead>
 	<tr>
 		<th {$init->bgNumberCell} rowspan="5">{$init->tagNumber_}$j{$init->_tagNumber}</th>
 		<td {$init->bgNameCell} rowspan="5" valign="top">
@@ -563,207 +509,66 @@ END;
 		echo "</div>";
 	}
 
-	//---------------------------------------------------
-	// 島の登録と設定
-	//---------------------------------------------------
+	/**
+	 * 島の登録と設定
+	 * @param type $hako
+	 * @param type $data
+	 */
 	function register(&$hako, $data = "") {
-		global $init;
-
-		echo <<<END
-<div class="row">
-	<div class="col-lg-4 col-md-6 col-sm-8 col-xs-12">
-		<h1>島の登録・設定変更</h1>
-END;
-		$this->newDiscovery($hako->islandNumber);
-		$this->changeIslandInfo($hako->islandList);
-		$this->changeOwnerName($hako->islandList);
-
-		echo <<<END
-	</div>
-</div>
-
-END;
-
+		require_once(VIEWS.'/conf/register.php');
 	}
 
-	//---------------------------------------------------
-	// 新しい島を探す
-	//---------------------------------------------------
-	function newDiscovery($number) {
+	/**
+	 * 新しい島を探す
+	 */
+	function discovery($number) {
 		global $init;
 		$this_file = $init->baseDir . "/hako-main.php";
 
-		echo "<div id=\"NewIsland\">\n";
-		echo "<h2>新しい島を探す</h2>\n";
-
-		if($number < $init->maxIsland) {
-			if($init->registMode == 1 && $init->adminMode == 0) {
-				echo "当箱庭では不適当な島名などの事前チェックを行っています。<BR>\n";
-				echo "参加希望の方は、管理者に「島名」と「パスワード」を送信してください。<BR>\n";
-			} else {
-				echo <<<END
-<form action="{$this_file}" method="post">
-	<div class="form-group">
-		<label>どんな名前をつける予定？</label>
-		<div class="input-group">
-			<input type="text" class="form-control" name="ISLANDNAME" size="32" maxlength="32" required>
-			<span class="input-group-addon">島</span>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label>あなたのお名前は？(省略可)</label>
-		<input type="text" class="form-control" name="OWNERNAME" size="32" maxlength="32">
-	</div>
-	<div class="form-group">
-		<label>パスワードは？</label>
-		<input type="password" class="form-control" name="PASSWORD" size="32" maxlength="32" required>
-	</div>
-	<div class="form-group">
-		<label>念のためパスワードをもう一回</label>
-		<input type="password" class="form-control" name="PASSWORD2" size="32" maxlength="32" required>
-	</div>
-	<div class="form-group">
-		<input type="submit" class="btn btn-primary" value="探しに行く">
-	</div>
-	<input type="hidden" name="mode" value="new">
-</form>
-END;
-			}
-		} else {
-			echo "島の数が最大数です。現在登録できません。\n";
-		}
-		echo "</div>\n";
+		require_once(VIEWS.'/conf/discovery.php');
 	}
 
-	//---------------------------------------------------
-	// 島の名前とパスワードの変更
-	//---------------------------------------------------
+	/**
+	 * 島の名前とパスワードの変更
+	 */
 	function changeIslandInfo($islandList = "") {
 		global $init;
 		$this_file = $init->baseDir . "/hako-main.php";
 
-		echo <<<END
-<div id="ChangeInfo">
-	<h2>島の名前とパスワードの変更</h2>
-
-	<p class="alert alert-info" role="alert">(注意) 名前の変更には{$init->costChangeName}{$init->unitMoney}かかります。</p>
-
-	<form action="{$this_file}" method="post">
-		<div class="form-group">
-			<label>どの島ですか？</label>
-			<select NAME="ISLANDID" class="form-control">$islandList</select>
-		</div>
-
-		<div class="form-group">
-			<label>どんな名前に変えますか？(変更する場合のみ)</label>
-			<div class="input-group">
-				<input type="text" class="form-control" name="ISLANDNAME" size="32" maxlength="32">
-				<span class="input-group-addon">島</span>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<label>パスワードは？(必須)</label>
-			<input type="password" class="form-control" name="OLDPASS" size="32" maxlength="32" required>
-		</div>
-		<div class="form-group">
-			<label>新しいパスワードは？(変更する時のみ)</label>
-			<input type="password" class="form-control" name="PASSWORD" size="32" maxlength="32">
-		</div>
-		<div class="form-group">
-			<label>念のためパスワードをもう一回(変更する時のみ)</label>
-			<input type="password" class="form-control" name="PASSWORD2" size="32" maxlength="32">
-		</div>
-		<div class="form-group">
-			<input type="submit" class="btn btn-primary" value="変更する">
-		</div>
-		<input type="hidden" name="mode" value="change">
-	</form>
-</div>
-END;
+		require_once(VIEWS.'/conf/change/island-info.php');
 	}
 
-	//---------------------------------------------------
-	// オーナー名の変更
-	//---------------------------------------------------
+	/**
+	 * オーナー名の変更
+	 */
 	function changeOwnerName($islandList = "") {
 		global $init;
 		$this_file = $init->baseDir . "/hako-main.php";
 
-		echo <<<END
-<div id="ChangeOwnerName">
-	<h2>オーナー名の変更</h2>
-	<form action="{$this_file}" method="post">
-		<div class="form-group">
-			<label>どの島ですか？</label>
-			<select name="ISLANDID" class="form-control">{$islandList}</select>
-		</div>
-		<div class="form-group">
-			<label>新しいオーナー名は？</label>
-			<input type="text" name="OWNERNAME" class="form-control" size="32" maxlength="32">
-		</div>
-		<div class="form-group">
-			<label>パスワードは？</label>
-			<input type="password" name="OLDPASS" class="form-control" size="32" maxlength="32" required>
-		</div>
-		<div class="form-group">
-			<input type="submit" class="btn btn-primary" value="変更する">
-		</div>
-		<input type="hidden" name="mode" value="ChangeOwnerName">
-	</form>
-</div>
-END;
+		require_once(VIEWS.'/conf/change/owner-name.php');
 	}
 
-
-	//---------------------------------------------------
-	// 最近の出来事
-	//---------------------------------------------------
+	/**
+	 * 最近の出来事
+	 */
 	function log() {
 		global $init;
-
-		echo <<<END
-<div class="row">
-	<div class="col-xs-12">
-END;
-		echo "<div id=\"RecentlyLog\">\n";
-		echo "<h1>最近の出来事</h1>\n";
-		$log = new Log();
-		for($i = 0; $i < $init->logTopTurn; $i++) {
-			$log->logFilePrint($i, 0, 0);
-		}
-		echo "</div>\n";
-
-		echo <<<END
-	</div>
-</div>
-END;
+		require_once(VIEWS.'/log/recent.php');
 	}
 
-	//---------------------------------------------------
-	// 発見の記録
-	//---------------------------------------------------
+	/**
+	 * 発見の記録
+	 */
 	function historyPrint() {
-		echo "<div id=\"HistoryLog\">\n";
-		echo "<h2>歴史</h2>";
-		$log = new Log();
-		$log->historyPrint();
-		echo "</div>\n";
+		require_once(VIEWS.'/log/history.php');
 	}
 
-	//---------------------------------------------------
-	// お知らせ
-	//---------------------------------------------------
+	/**
+	 * お知らせ
+	 */
 	function infoPrint() {
 		global $init;
-
-		echo "<div id=\"HistoryLog\">\n";
-		echo "<h2>お知らせ</h2>\n";
-		echo "<DIV style=\"overflow:auto; height:{$init->divHeight}px;\">\n";
-		$log = new Log();
-		$log->infoPrint();
-		echo "</div></div>\n";
+		require_once(VIEWS.'/log/info.php');
 	}
 
 }
@@ -1638,7 +1443,7 @@ END;
 	}
 }
 
-//------------------------------------------------------------------
+
 class HtmlMapJS extends HtmlMap {
 
 	//---------------------------------------------------
@@ -2680,15 +2485,6 @@ END;
 END;
 	}
 
-	// 関数ダミー【追加】
-	static function funcJavaDM() {
-		echo <<<END
-<script>
-function init(){}
-function SelectList(theForm){}
-</script>
-END;
-	}
 }
 
 
@@ -2938,7 +2734,7 @@ END;
 		echo <<<END
 <strong>ターン$lastTurn</strong><br>
 <strong>最終更新時間</strong>:$timeString<br>
-<strong>最終更新時間(秒数表\示)</strong>:1970年1月1日から$lastTime 秒<br>
+<strong>最終更新時間(秒数表示)</strong>:1970年1月1日から$lastTime 秒<br>
 <form action="{$this_file}" method="post">
 <input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
 <input type="hidden" name="mode" value="DELETE">
@@ -2975,12 +2771,6 @@ END;
 		}
 	}
 
-	function timeToString($t) {
-		$time = localtime($t, TRUE);
-		$time['tm_year'] += 1900;
-		$time['tm_mon']++;
-		return "{$time['tm_year']}年 {$time['tm_mon']}月 {$time['tm_mday']}日 {$time['tm_hour']}時 {$time['tm_min']}分 {$time['tm_sec']}秒";
-	}
 }
 
 class HtmlMenteSafe extends HTML {
@@ -3076,7 +2866,7 @@ END;
 		echo <<<END
 <strong>ターン$lastTurn</strong><br>
 <strong>最終更新時間</strong>:$timeString<br>
-<strong>最終更新時間(秒数表\示)</strong>:1970年1月1日から$lastTime 秒<br>
+<strong>最終更新時間(秒数表示)</strong>:1970年1月1日から$lastTime 秒<br>
 <form action="{$this_file}" method="post">
 	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
 	<input type="hidden" name="mode" value="DELETE">
@@ -3122,12 +2912,7 @@ END;
 		}
 	}
 
-	static function timeToString($t) {
-		$time = localtime($t, TRUE);
-		$time['tm_year'] += 1900;
-		$time['tm_mon']++;
-		return "{$time['tm_year']}年 {$time['tm_mon']}月 {$time['tm_mday']}日 {$time['tm_hour']}時 {$time['tm_min']}分 {$time['tm_sec']}秒";
-	}
+
 }
 
 class HtmlAxes extends HTML {
@@ -3200,51 +2985,20 @@ class HtmlBF extends HTML {
 	function main($data, $hako) {
 		global $init;
 		$this_file = $init->baseDir . "/hako-bf.php";
-
-		echo <<<END
-<h1 class="title">BattleFields管理ツール</h1>
-<form action="{$this_file}" method="post">
-	<h2>通常の島からBattleFieldに変更</h2>
-	<select name="ISLANDID">$hako->islandListNoBF</select>
-	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-	<input type="hidden" name="mode" value="TOBF">
-	<input type="submit" value="BattleFieldに変更">
-</form>
-<form action="{$this_file}" method="post">
-	<h2>BattleFieldから通常の島に変更</h2>
-	<select name="ISLANDID">$hako->islandListBF</select>
-	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-	<input type="hidden" name="mode" value="FROMBF">
-	<input type="submit" value="通常の島に変更">
-</form>
-END;
+		require_once(VIEWS.'/admin/bf.php');
 	}
 }
 
-class HTMLKP extends HTML {
+class HTMLKeep extends HTML {
 	function main($data, $hako) {
 		global $init;
 		$this_file = $init->baseDir . "/hako-keep.php";
-
-		echo <<<END
-<h1 class="title">島預かり管理ツール</h1>
-<form action="{$this_file}" method="post">
-	<h2>管理人預かりに変更</h2>
-	<select name="ISLANDID">$hako->islandListNoKP</select>
-	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-	<input type="hidden" name="mode" value="TOKP">
-	<input type="submit" value="管理人預かりに変更">
-</form>
-<form action="{$this_file}" method="post">
-	<h2>管理人預かりを解除</h2>
-	<select name="ISLANDID">$hako->islandListKP</select>
-	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-	<input type="hidden" name="mode" value="FROMKP">
-	<input type="submit" value="管理人預かりを解除">
-</form>
-END;
+		require_once(VIEWS.'/admin/keep.php');
 	}
 }
+
+///
+
 
 class HtmlAlly extends HTML {
 	//--------------------------------------------------

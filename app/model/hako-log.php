@@ -97,12 +97,10 @@ class LogIO {
 			$k++;
 		}
 
-		echo "<ul>";
 		for($i = 0; $i < $k; $i++) {
 			list($turn, $his) = explode(",", array_pop($history), 2);
 			echo "<li>{$this->init->tagNumber_}ターン{$turn}{$this->init->_tagNumber}：$his</li>\n";
 		}
-		echo "</ul>";
 
 	}
 	//---------------------------------------------------
