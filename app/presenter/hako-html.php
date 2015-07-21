@@ -21,6 +21,12 @@ class HTML {
 		require_once(VIEWS.'/body.php');
 	}
 
+	static function head() {
+		global $init;
+		require_once(VIEWS.'/header.php');
+	}
+	
+	
 	/**
 	 * HTML <footer>
 	 * @return [type] [description]

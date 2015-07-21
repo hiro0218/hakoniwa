@@ -767,7 +767,7 @@ class Hako extends File {
 			case $init->landShip:
 				// 船舶
 				$ship = Util::navyUnpack($lv);
-				$owner = $this->idToName[$ship[0]]; // 所属
+				$owner = isset($this->idToName[$ship[0]]) ? $this->idToName[$ship[0]] : ""; // 所属
 				$naviTitle = "{$init->shipName[$ship[1]]}"; // 船舶の種類
 				$hp = round(100 - $ship[2] / $init->shipHP[$ship[1]] * 100); // 破損率
 				if($ship[1] <= 1) {

@@ -4313,7 +4313,8 @@ class Turn {
 
 				case $init->landShip:
 					// 船舶
-					if($shipMove[$x][$y] != 1){
+					if ( isset($shipMove[$x][$y]) ) {
+						if($shipMove[$x][$y] != 1){
 						//船がまだ動いていない時
 						$ship = Util::navyUnpack($landValue[$x][$y]);
 						$lName = $init->shipName[$ship[1]];
@@ -4605,6 +4606,7 @@ class Turn {
 								}
 							}
 						}
+					}
 					}
 					break;
 			}

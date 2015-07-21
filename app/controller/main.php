@@ -76,9 +76,9 @@ class Main {
 				break;
 
 			case "targetView":
-				$html->header();
+				$html->head();
 				$html->printTarget($hako, $cgi->dataSet);
-				$html->footer();
+				//$html->footer();
 				break;
 
 			case "change":
