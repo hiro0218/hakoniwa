@@ -146,6 +146,7 @@
         <td <?= $init->bgMapCell ?>>
             <?php $this->islandMap($hako, $island, 1); // 島の地図、所有者モード ?>
         </td>
+        
         <td <?= $init->bgCommandCell ?>>
         <?php
             $command = $island['command'];

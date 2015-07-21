@@ -200,7 +200,7 @@ class HtmlTop extends HTML {
 					$sora = "☂";//"<IMG SRC=\"{$init->imgDir}/tenki3.gif\" ALT=\"雨\" title=\"雨\">";
 					break;
 				case 4:
-					$sora = "☇";//"<IMG SRC=\"{$init->imgDir}/tenki4.gif\" ALT=\"雷\" title=\"雷\">";
+					$sora = "⛈";//"<IMG SRC=\"{$init->imgDir}/tenki4.gif\" ALT=\"雷\" title=\"雷\">";
 					break;
 				default :
 					$sora = "☃";//"<IMG SRC=\"{$init->imgDir}/tenki5.gif\" ALT=\"雪\" title=\"雪\">";
@@ -259,12 +259,13 @@ class HtmlTop extends HTML {
 
 			$start = "";
 			if(($hako->islandTurn - $island['starturn']) < $init->noAssist) {
-				$start .= " <IMG SRC=\"{$init->imgDir}/start.gif\" width=\"16\" height=\"16\" ALT=\"初心者マーク\" title=\"初心者マーク\">";
+				$start .= " 🔰";//" <IMG SRC=\"{$init->imgDir}/start.gif\" width=\"16\" height=\"16\" ALT=\"初心者マーク\" title=\"初心者マーク\">";
 			}
 
 			$soccer = "";
 			if($island['soccer'] > 0) {
-				$soccer .= " <IMG SRC=\"{$init->imgDir}/soccer.gif\" width=\"16\" height=\"16\" ALT=\"総合ポイント：{$team}　{$shiai}戦{$kachi}勝{$make}敗{$hikiwake}分　攻撃力：{$kougeki}　守備力：{$bougyo}　得点：{$tokuten}　失点：{$shitten}\" title=\"総合ポイント：{$team}　{$shiai}戦{$kachi}勝{$make}敗{$hikiwake}分　攻撃力：{$kougeki}　守備力：{$bougyo}　得点：{$tokuten}　失点：{$shitten}\">";
+				//$soccer .= " <IMG SRC=\"{$init->imgDir}/soccer.gif\" width=\"16\" height=\"16\" ALT=\"総合ポイント：{$team}　{$shiai}戦{$kachi}勝{$make}敗{$hikiwake}分　攻撃力：{$kougeki}　守備力：{$bougyo}　得点：{$tokuten}　失点：{$shitten}\" title=\"総合ポイント：{$team}　{$shiai}戦{$kachi}勝{$make}敗{$hikiwake}分　攻撃力：{$kougeki}　守備力：{$bougyo}　得点：{$tokuten}　失点：{$shitten}\">";
+				$soccer .= " <span title=\"総合ポイント：{$team}　{$shiai}戦{$kachi}勝{$make}敗{$hikiwake}分　攻撃力：{$kougeki}　守備力：{$bougyo}　得点：{$tokuten}　失点：{$shitten}\">⚽</span>";
 			}
 
 			// 電力消費量
@@ -341,7 +342,6 @@ class HtmlTop extends HTML {
 		<td {$init->bgCommentCell} colspan="7">{$init->tagTH_}{$owner}：{$init->_tagTH}$comment</td>
 	</tr>
 END;
-
 		}
 		echo "</table>";
 		echo "</div>";
@@ -528,7 +528,7 @@ class HtmlMap extends HTML {
 				$sora = "☂";//"<IMG SRC=\"{$init->imgDir}/tenki3.gif\" ALT=\"雨\" title=\"雨\">";
 				break;
 			case 4:
-				$sora = "☇";//"<IMG SRC=\"{$init->imgDir}/tenki4.gif\" ALT=\"雷\" title=\"雷\">";
+				$sora = "⛈";//"<IMG SRC=\"{$init->imgDir}/tenki4.gif\" ALT=\"雷\" title=\"雷\">";
 				break;
 			default :
 				$sora = "☃";//"<IMG SRC=\"{$init->imgDir}/tenki5.gif\" ALT=\"雪\" title=\"雪\">";
@@ -601,7 +601,7 @@ class HtmlMap extends HTML {
 			}
 		}
 
-		// 情報
+		// 島の情報
 		require_once(VIEWS.'/map/island-info.php');
 	}
 
@@ -648,52 +648,34 @@ class HtmlMap extends HTML {
 			}
 		}
 
-		echo "<div id=\"islandMap\" class=\"text-center\">";
-		echo '<div class="table-responsive">';
-		echo "<table border=\"1\"><tr><td>\n";
-
-		for($y = 0; $y < $init->islandSize; $y++) {
-			if($y % 2 == 0) {
-				echo "<img src=\"{$init->imgDir}/land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
-			}
-			for($x = 0; $x < $init->islandSize; $x++) {
-				//$hako->landString($land[$x][$y], $landValue[$x][$y], $x, $y, $mode, $comStr[$x][$y]);
-				$hako->landString($land[$x][$y], $landValue[$x][$y], $x, $y, $mode, $comStr);
-			}
-			if($y % 2 == 1) {
-				echo "<img src=\"{$init->imgDir}/land0.gif\" width=\"16\" height=\"32\" alt=\"{$y}\" title=\"{$y}\">";
-			}
-			echo "<br>";
-		}
-
-		echo "<div id=\"NaviView\"></div>";
-
-		echo "</div>";
-
-		echo "</td></tr></table></div>\n";
+		require_once(VIEWS.'/map/development/map.php');
 
 		echo "<p>開始ターン：{$island['starturn']}</p>\n";
 
-	if (isset($island['soccer'])){
+		if (isset($island['soccer'])){
 			if($island['soccer'] > 0) {
 				echo <<<END
 <table class="table table-bordered">
-	<tr>
-		<th {$init->bgTitleCell}>{$init->tagTH_}総合得点{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}成績{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}攻撃力{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}守備力{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}得点{$init->_tagTH}</th>
-		<th {$init->bgTitleCell}>{$init->tagTH_}失点{$init->_tagTH}</th>
-	</tr>
-	<tr>
-		<td {$init->bgInfoCell}>{$island['team']}</td>
-		<td {$init->bgInfoCell}>{$island['shiai']}戦{$island['kachi']}勝{$island['make']}敗{$island['hikiwake']}分</td>
-		<td {$init->bgInfoCell}>{$island['kougeki']}</td>
-		<td {$init->bgInfoCell}>{$island['bougyo']}</td>
-		<td {$init->bgInfoCell}>{$island['tokuten']}</td>
-		<td {$init->bgInfoCell}>{$island['shitten']}</td>
-	</tr>
+	<thead>
+		<tr>
+			<th {$init->bgTitleCell}>{$init->tagTH_}総合得点{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}成績{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}攻撃力{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}守備力{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}得点{$init->_tagTH}</th>
+			<th {$init->bgTitleCell}>{$init->tagTH_}失点{$init->_tagTH}</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td {$init->bgInfoCell}>{$island['team']}</td>
+			<td {$init->bgInfoCell}>{$island['shiai']}戦{$island['kachi']}勝{$island['make']}敗{$island['hikiwake']}分</td>
+			<td {$init->bgInfoCell}>{$island['kougeki']}</td>
+			<td {$init->bgInfoCell}>{$island['bougyo']}</td>
+			<td {$init->bgInfoCell}>{$island['tokuten']}</td>
+			<td {$init->bgInfoCell}>{$island['shitten']}</td>
+		</tr>
+	</tbody>
 </table>
 END;
 			}
@@ -735,7 +717,7 @@ END;
 		$height = $init->islandSize * 32 + 100;
 		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
 
-		require_once(VIEWS.'/map/development.php');
+		require_once(VIEWS.'/map/development/basic.php');
 	}
 
 	//---------------------------------------------------
@@ -973,10 +955,9 @@ END;
 		global $init;
 
 		echo <<<END
-<div class="text-center">
-	{$init->tagBig_}島を発見しました！！{$init->_tagBig}<br>
-	{$init->tagBig_}{$init->tagName_}「{$name}{$init->nameSuffix}」{$init->_tagName}と命名します。{$init->_tagBig}
-</div>
+	<h1 class="text-center">{$init->tagBig_}{$init->nameSuffix}を発見しました！！{$init->_tagBig}
+		<small>{$init->tagBig_}{$init->tagName_}「{$name}{$init->nameSuffix}」{$init->_tagName}と命名します。{$init->_tagBig}</small>
+	</h1>
 END;
 	}
 
@@ -1125,11 +1106,10 @@ class HtmlMapJS extends HtmlMap {
 
 
 		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
-		echo <<<END
-<div class="text-center">
-	<h2>{$init->tagName_}{$name}{$init->_tagName}開発計画</h2>
-</div>
 
+		require_once(VIEWS.'/map/development/js.php');
+
+		echo <<<END
 <script type="text/javascript">
 var w;
 var p = $defaultTarget;
@@ -1794,6 +1774,7 @@ function targetopen() {
 </script>
 END;
 		$this->islandInfo($island, $number, 1);
+
 		echo <<<END
 <div id="menu" style="position:absolute; top:-500px;left:-500px; overflow:auto;width:360px;height:350px;">
 	<table border=0 class="PopupCell" onClick="menuclose()">
@@ -2066,45 +2047,7 @@ class HtmlAdmin extends HTML {
 		$urllist  = array( ini_get('safe_mode') ? '/hako-mente-safemode.php' : '/hako-mente.php', '/hako-axes.php', '/hako-keep.php', '/hako-present.php', '/hako-edit.php', '/hako-bf.php');
 		$menulist = array('データ管理','アクセスログ閲覧','島預かり管理','プレゼント','マップエディタ','BattleField管理');
 
-		echo <<<END
-<script>
-function go(obj) {
-	if(obj.menulist.value) {
-		obj.action = obj.menulist.value;
-	}
-}
-</script>
-
-<h1 class="title">管理室入り口</h1>
-<hr>
-<TABLE BORDER=0 width="100%">
-<TR valign="top">
-<TD class="M">
-<div id="AdminEnter">
-<h2>管理室へ</h2>
-<form method="post" onSubmit="go(this)">
-<strong>パスワード：</strong>
-<input type="password" size="32" maxlength="32" name="PASSWORD">
-<input type="hidden" name="mode" value="enter">
-<select name="menulist">
-END;
-		$urllistCnt = (int)count($urllist);
-		for ( $i = 0; $i < $urllistCnt; $i++ ) {
-			if ($i === 0) {
-				echo "<option value=\"{$init->baseDir}{$urllist[$i]}\" selected=\"selected\">{$menulist[$i]}</option>\n";
-			} else {
-				echo "<option value=\"{$init->baseDir}{$urllist[$i]}\">{$menulist[$i]}</option>\n";
-			}
-		}
-		echo "</select>\n";
-		echo "<input type=\"submit\" value=\"管理室へ\">\n";
-		echo "</form>\n";
-		echo <<<END
-</TD>
-</TR>
-</TABLE>
-<BR>
-END;
+		require_once(VIEWS.'/admin/top.php');
 	}
 }
 
@@ -2115,15 +2058,7 @@ class HtmlPresent extends HTML {
 		$this_file = $init->baseDir . "/hako-present.php";
 		$main_file = $init->baseDir . "/hako-main.php";
 
-		echo <<<END
-<h1 class="title">プレゼントツール</h1>
-<form action="{$this_file}" method="post">
-<strong>パスワード：</strong>
-<input type="password" size="32" maxlength="32" name="PASSWORD">
-<input type="hidden" name="mode" value="enter">
-<input type="submit" value="メンテナンス">
-</form>
-END;
+		require_once(VIEWS.'/admin/present/top.php');
 	}
 
 	function main($data, $hako) {
@@ -2131,95 +2066,12 @@ END;
 		$this_file = $init->baseDir . "/hako-present.php";
 		$main_file = $init->baseDir . "/hako-main.php";
 
-		$width = $init->islandSize * 32 + 50;
+		$width  = $init->islandSize * 32 + 50;
 		$height = $init->islandSize * 32 + 100;
 		//$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
 		$defaultTarget = "";
 
-		echo <<<END
-<script>
-var w;
-var p = 0;
-
-function settarget(part){
-	p = part.options[part.selectedIndex].value;
-}
-
-function targetopen() {
-	w = window.open("{$main_file}?target=" + p, "","width={$width},height={$height},scrollbars=1,resizable=1,toolbar=1,menubar=1,location=1,directories=0,status=1");
-}
-</script>
-
-<h1 class="title">プレゼントツール</h1>
-
-<h2>管理人からのプレゼント</h2>
-<form action="{$this_file}" method="post">
-	<select name="ISLANDID">$hako->islandList</select>に、
-	資金：<input type="text" size="10" name="MONEY" value="0">{$init->unitMoney}、
-	食料：<input type="text" size="10" name="FOOD" value="0">{$init->unitFood}を
-	<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-	<input type="hidden" name="mode" value="PRESENT">
-	<input type="submit" value="プレゼントする">
-</form>
-
-<h2>管理人からの災害プレゼント&hearts;</h2>
-<form action="{$this_file}" method="post" name="InputPlan">
-<select name="ISLANDID" onchange="settarget(this);">
-$hako->islandList
-</select>の、(
-<select name="POINTX">
-END;
-		echo "<option value=\"0\" selected>0</option>\n";
-		for($i = 1; $i < $init->islandSize; $i++) {
-			echo "<option value=\"{$i}\">{$i}</option>\n";
-		}
-		echo "</select>, <select name=\"POINTY\">";
-		echo "<option value=\"0\" selected>0</option>\n";
-		for($i = 1; $i < $init->islandSize; $i++) {
-			echo "<option value=\"{$i}\">{$i}</option>\n";
-		}
-		echo <<<END
-</select> )に、
-<select name="PUNISH">
-	<option VALUE="0">キャンセル</option>
-	<option VALUE="1">地震</option>
-	<option VALUE="2">津波</option>
-	<option VALUE="3">怪獣</option>
-	<option VALUE="4">地盤沈下</option>
-	<option VALUE="5">台風</option>
-	<option VALUE="6">巨大隕石○</option>
-	<option VALUE="7">隕石○</option>
-	<option VALUE="8">噴火○</option>
-</select>を
-<input type="hidden" name="PASSWORD" value="{$data['PASSWORD']}">
-<input type="hidden" name="mode" value="PUNISH">
-<input type="submit" value="プレゼントしちゃう"><br>
-<input type="button" value="目標捕捉" onClick="javascript: targetopen();">
-</form>
-
-<h2>現在のプレゼントリスト</h2>
-END;
-		for ($i=0; $i < $hako->islandNumber; $i++) {
-			$present =&$hako->islands[$i]['present'];
-			$name =&$hako->islands[$i]['name'];
-			if ( $present['item'] == 0 ) {
-				if ( $present['px'] != 0 ) {
-					$money = $present['px'] . $init->unitMoney;
-					echo "{$init->tagName_}{$name}{$init->nameSuffix}{$init->_tagName}に<strong>{$money}</strong>の資金<br>\n";
-				}
-				if ( $present['py'] != 0 ) {
-					$food = $present['py'] . $init->unitFood;
-					echo "{$init->tagName_}{$name}{$init->nameSuffix}{$init->_tagName}に<strong>{$food}</strong>の食料<br>\n";
-				}
-			} elseif ( $present['item'] > 0 ) {
-				$items = array ('地震','津波','怪獣','地盤沈下','台風','巨大隕石','隕石','噴火');
-				$item = $items[$present['item'] - 1];
-				if ( $present['item'] < 9 ) {
-					$point = ($present['item'] < 6) ? '' : '(' . $present['px'] . ',' . $present['py'] . ')';
-					echo "{$init->tagName_}{$name}{$init->nameSuffix}{$point}{$init->_tagName}に{$init->tagDisaster_}{$item}{$init->_tagDisaster}<br>\n";
-				}
-			}
-		}
+		require_once(VIEWS.'/admin/present/main.php');
 	}
 }
 
