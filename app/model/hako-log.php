@@ -222,7 +222,7 @@ class LogIO {
 class Log extends LogIO {
 
 	function discover($id, $name) {
-		$this->history("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が発見される。");
+		$this->history("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}{$this->init->_tagName}</A>が発見される。");
 	}
 	function changeName($name1, $name2) {
 		//$this->history("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name1}島</A>{$this->init->_tagName}、名称を<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name2}島</A>{$this->init->_tagName}に変更する。");

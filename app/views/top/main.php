@@ -12,15 +12,14 @@ if (DEBUG === true) {
 
 <div class="row">
 	<div class="col-xs-6">
-	<?php 
-	if (count($hako->islandList) != 0) {
-		require_once(VIEWS . '/top/my_island.php');
-	}
+	<?php
+		if (count($hako->islandList) != 0) {
+			require_once(VIEWS . '/top/my_island.php');
+		}
 	?>
 	</div>
-	
+
 	<div class="col-xs-6">
 	<?php $this->infoPrint(); // 「お知らせ」を表示 ?>
 	</div>
 </div>
-

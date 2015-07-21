@@ -3,7 +3,7 @@
 	<div class="form-group">
 		<label>あなたの島の名前は？</label>
 		<select name="ISLANDID" class="form-control">
-			<?= $hako->islandList ?>
+			<?= strip_tags($hako->islandList, '<option>') ?>
 		</select>
 	</div>
 	<div class="form-group">

@@ -8,7 +8,7 @@
 
  	function execute() {
  		$html = new HtmlBF();
- 		$hako =& new HakoBF();
+ 		$hako = new HakoBF();
  		$cgi = new Cgi();
  		$this->parseInputData();
  		$hako->init($this);
