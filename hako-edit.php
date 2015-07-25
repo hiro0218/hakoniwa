@@ -554,7 +554,7 @@ END;
 		// 設定した値を戻す
 		$hako->islands[$number] = $island;
 
-		echo "{$init->tagBig_}地形を変更しました{$init->_tagBig}<hr>\n";
+ 		Util::makeTagMessage("地形を変更しました", "success");
 
 		// マップエディタの表示へ
 		$this->editMap($hako, $data);

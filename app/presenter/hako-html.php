@@ -164,7 +164,7 @@ class HtmlTop extends HTML {
 			$monster      = '';
 
 			if($island['monster'] > 0) {
-				$monster = "<strong class=\"monster\">[怪獣{$island['monster']}体]</strong>";
+				$monster = "<strong class=\"monster\">[怪獣{$island['monster']}体 出現中]</strong>";
 			}
 
 			if($island['keep'] == 1) {
@@ -656,7 +656,7 @@ class HtmlMap extends HTML {
 
 		require_once(VIEWS.'/map/development/map.php');
 
-		echo "<p>開始ターン：{$island['starturn']}</p>\n";
+		echo "<p class='text-center'>開始ターン：{$island['starturn']}</p>\n";
 
 		if (isset($island['soccer'])){
 			if($island['soccer'] > 0) {
@@ -1941,7 +1941,7 @@ END;
 
 	<hr>
 
-	<h3>数量</h3>
+	<b>数量</b>
 	<select name="AMOUNT">
 END;
 		// 数量

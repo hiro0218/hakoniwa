@@ -24,7 +24,7 @@ class Init {
 	// CSSファイルを置くディレクトリ
 	public $cssDir  = "public/assets/css";
 	// CSSリスト
-	public $css = 'SkyBlue.css';
+	public $css = 'style.css';
 
 	public $jsDir = "public/assets/js";
 	public $js = "hakojima.js";

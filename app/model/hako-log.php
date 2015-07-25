@@ -68,7 +68,7 @@ class LogIO {
 				}
 			}
 			if($row == 1) {
-				echo "<h2>{$init->tagNumber_}【ターン{$turn}の出来事】{$init->_tagNumber}</h2>\n";
+				echo "<h2>{$init->tagNumber_}ターン{$turn}の出来事{$init->_tagNumber}</h2>\n";
 				$row++;
 			}
 			echo "<ul class='list-unstyled'>";
@@ -324,7 +324,7 @@ class Log extends LogIO {
 	}
 	// お土産
 	function Miyage($id, $name, $lName, $point, $str) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<strong>{$lName}側のお土産屋さん</strong>から<strong>{$value}{$str}</strong>もの収入がありました。",$id);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<strong>{$lName}側のお土産屋さん</strong>から<strong>{$str}</strong>もの収入がありました。",$id);
 	}
 	// 収穫
 	function Syukaku($id, $name, $lName, $point, $str) {

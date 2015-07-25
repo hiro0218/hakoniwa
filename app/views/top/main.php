@@ -4,7 +4,7 @@ if (DEBUG === true) {
 	require_once(VIEWS . '/debug.php');
 }
 ?>
-<div class='Turn'>ターン<?= $hako->islandTurn ?></div>
+<h2 class='Turn'>ターン<?= $hako->islandTurn ?></h2>
 
 <?php $this->lastModified($hako);  // 最終更新時刻 ＋ 次ターン更新時刻出力 ?>
 
@@ -23,3 +23,5 @@ if (DEBUG === true) {
 	<?php $this->infoPrint(); // 「お知らせ」を表示 ?>
 	</div>
 </div>
+
+<hr>

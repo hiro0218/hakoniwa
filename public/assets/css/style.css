@@ -12,13 +12,13 @@
 body {
     font-family: "游ゴシック体", "Yu Gothic", YuGothic, sans-serif;
     color: #333;
-    background-color: #F0F8FF;
+    background-color: #f6fbfd;
 }
 
 /* 区切り線 */
 
 hr {
-    border: solid #4169E1 1px;
+    border-bottom: 1px solid #5FAFD7;
 }
 
 /* テーブル */
@@ -31,7 +31,7 @@ th, td {
     white-space: nowrap;
 }
 th {
-    border-color: #1E90FF;
+/*    border-color: #1E90FF;*/
 }
 td.M {
     border: none;
@@ -43,7 +43,7 @@ img {
 /* 更新時間 */
 
 #lastModified {
-    font-size: 90%;
+/*    font-size: 90%;*/
 }
 
 /* フッタ */
@@ -57,24 +57,22 @@ img {
 
 h1 {
     color: #C0C0C0;
-    letter-spacing: 5px;
-    text-transform: uppercase;
+/*    letter-spacing: 5px;
+    text-transform: uppercase;*/
 }
 .title:first-letter {
     color: #4169E1;
-    font-size: 48pt;
+    font-size: 48px;
 }
 .Turn {
     display: block;
     text-align: left;
     font-weight: bold;
-    font-size: 14pt;
-    color: #6495ED;
-    text-transform: uppercase;
+    color: #6BBED5;
 }
 h2 {
     font-weight: bold;
-    color: #6495ED;
+    color: #6BBED5;
     text-transform: uppercase;
 }
 
@@ -87,13 +85,13 @@ h2 {
 /* 大きい文字 */
 
 .big {
-    font-size: 24pt;
+    font-size: 24px;
 }
 
 /* リアルタイマー */
 
 .timer {
-    color: #6495ED;
+    color: #6BBED5;
     font-weight: bold;
     border-style: none;
     margin: 1px 0px;
@@ -106,29 +104,24 @@ h2 {
     z-index: 1;
     position: absolute;
     background-color: #000000;
-    border: solid #000000;
-    border-width: 1px;
     min-width: 120px;
     max-width: 180px;
     margin-top: -224px;
-    padding: 3px;
+    padding: 4px;
     white-space: normal;
-    filter: Alpha(opacity=120);
     opacity: 0.8;
-    /* Mozzila系 */
 }
 .NaviTitle {
-    font-size: 9pt;
+    font-size: 9px;
     padding: 5px 0;
     color: #ffffff;
-    border: dotted #f0ffff;
-    border-width: 0 0 1 0;
+    border: none;
 }
 .NaviImg {
-    margin: 5px;
+    margin: 6px;
 }
 .NaviText {
-    margin: 5px 0 5px 0;
+    margin: 6px 0;
     font-size: 11px;
     color: #ffffff;
 }
@@ -164,7 +157,7 @@ h2 {
 /* 薄くなった島の名前 */
 
 .number {
-    color: #6495ED;
+    color: #6BBED5;
 }
 
 /* 順位の番号など */
@@ -197,11 +190,6 @@ h2 {
     color: gray;
 }
 
-/* 観光者通信（極秘） */
-
-.money {
-    color: goldenrod;
-}
 
 /* お金 */
 
@@ -287,46 +275,46 @@ h2 {
 /* 背景色 */
 
 .TitleCell {
-    background-color: #87CEFA;
+    background-color: #97D3E3;
 }
 
 /* 順位表見出し */
 
 .NumberCell {
-    background-color: #87CEFA;
+    background-color: #97D3E3;
 }
 
 /* 順位表順位 */
 
 .NameCell {
-    background-color: #F5FFFA;
+    background-color: #e9f6f9;
 }
 
 /* 順位表島の名前 */
 
 .InfoCell {
-    background-color: #E0FFFF;
+    background-color: #DBF0F6;
     text-align: right;
 }
 
 /* 順位表島の情報 */
 
 .MarkCell {
-    background-color: #E0FFFF;
+    background-color: #DBF0F6;
     text-align: center;
 }
 
 /* 順位表島の情報 */
 
 .TenkiCell {
-    background-color: #E0FFFF;
+    background-color: #DBF0F6;
     text-align: center;
 }
 
 /* 順位表島の情報 */
 
 .ItemCell {
-    background-color: #E0FFFF;
+    background-color: #DBF0F6;
     text-align: left;
 }
 
@@ -383,7 +371,7 @@ h2 {
 /* ランキング欄 */
 
 .PopupCell {
-    background-color: #E0FFFF;
+    background-color: #DBF0F6;
 }
 
 /* Popup コマンド入力欄 */

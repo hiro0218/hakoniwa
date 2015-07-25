@@ -1,5 +1,3 @@
-<hr>
-
 <h2>各部門ランキング</h2>
     <div class="table-responsive">
         <table class="table table-condensed">
@@ -22,11 +20,14 @@
 					echo "<tr>\n";
 				}
 				echo "<td width=\"15%\" class=\"M\">";
+				
 				echo "<table class=\"table table-bordered\" style=\"border:0\">\n";
 				echo "<thead><tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr></thead>\n";
 				echo "<tr><td class=\"TenkiCell\">{$init->tagName_}-{$init->_tagName}</td></tr>\n";
 				echo "<tr><td class=\"TenkiCell\">-</td></tr>\n";
-				echo "</table></td>\n";
+				echo "</table>";
+				
+				echo "</td>";
 
 				if(($r % 6) == 5) {
 					echo "</tr>\n";
@@ -39,14 +40,18 @@
 				if(($r % 6) == 0) {
 					echo "<tr>\n";
 				}
+				
 				$island = $hako->islands[$rankid[$r]];
 				$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
 				echo "<td width=\"15%\" class=\"M\">";
+				
 				echo "<table class=\"table table-bordered\">\n";
 				echo "<thead><tr><th {$init->bgTitleCell}>{$init->tagTH_}{$bumonName[$r]}{$init->_tagTH}</th></tr></thead>\n";
 				echo "<tr><td class=\"TenkiCell\"><a href=\"{$this_file}?Sight={$island['id']}\">{$init->tagName_}{$name}{$init->_tagName}</a></td></tr>\n";
 				echo "<tr><td class=\"TenkiCell\">{$max}{$bumonUnit[$r]}</td></tr>\n";
-				echo "</table></td>\n";
+				echo "</table>";
+				echo "</td>";
+				
 				if(($r % 6) == 5) {
 					echo "</tr>\n";
 				}
@@ -55,3 +60,4 @@
 ?>
         </table>
     </div>
+<hr>
