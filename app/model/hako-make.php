@@ -16,30 +16,30 @@ class Make {
 
 		$log = new Log();
 		if($hako->islandNumber >= $init->maxIsland) {
-			Error::newIslandFull();
+			HakoError::newIslandFull();
 			return;
 		}
 		if(empty($data['ISLANDNAME'])) {
-			Error::newIslandNoName();
+			HakoError::newIslandNoName();
 			return;
 		}
 		// 名前が正当化チェック
 		if(preg_match("/[,?()<>$]/", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "無人") == 0) {
-			Error::newIslandBadName();
+			HakoError::newIslandBadName();
 			return;
 		}
 		// 名前の重複チェック
 		if(Util::nameToNumber($hako, $data['ISLANDNAME']) != -1) {
-			Error::newIslandAlready();
+			HakoError::newIslandAlready();
 			return;
 		}
 		// パスワードの存在判定
 		if(empty($data['PASSWORD'])) {
-			Error::newIslandNoPassword();
+			HakoError::newIslandNoPassword();
 			return;
 		}
 		if(strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0) {
-			Error::wrongPassword();
+			HakoError::wrongPassword();
 			return;
 		}
 		// 新しい島の番号を決める
@@ -353,7 +353,7 @@ class Make {
 		// パスワード
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
 			// password間違い
-			Error::wrongPassword();
+			HakoError::wrongPassword();
 			return;
 		}
 		// メッセージを更新
@@ -404,30 +404,30 @@ class Make {
 			}
 		} elseif(!Util::checkPassword($island['password'], $data['OLDPASS'])) {
 			// password間違い
-			Error::wrongPassword();
+			HakoError::wrongPassword();
 			return;
 		}
 		// 確認用パスワード
 		if(strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0) {
 			// password間違い
-			Error::wrongPassword();
+			HakoError::wrongPassword();
 			return;
 		}
 		if(!empty($data['ISLANDNAME']) && (strlen($data['ISLANDNAME']) != 0) ) {
 			// 名前変更の場合
 			// 名前が正当かチェック
 			if(preg_match("/[,?()<>$]/", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "無人") == 0) {
-				Error::newIslandBadName();
+				HakoError::newIslandBadName();
 				return;
 			}
 			// 名前の重複チェック
 			if(Util::nameToNumber($hako, $data['ISLANDNAME']) != -1) {
-				Error::newIslandAlready();
+				HakoError::newIslandAlready();
 				return;
 			}
 			if($island['money'] < $init->costChangeName) {
 				// 金が足りない
-				Error::changeNoMoney();
+				HakoError::changeNoMoney();
 				return;
 			}
 			// 代金
@@ -448,7 +448,7 @@ class Make {
 		//if(($flag == 0) && (strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0)) {
 		if( $flag == 0 ) {
 			// どちらも変更されていない
-			Error::changeNothing();
+			HakoError::changeNothing();
 			return;
 		}
 		$hako->islands[$num] = $island;
@@ -476,7 +476,7 @@ class Make {
 			$island['food'] = $init->maxFood;
 		} elseif(!Util::checkPassword($island['password'], $data['OLDPASS'])) {
 			// password間違い
-			Error::wrongPassword();
+			HakoError::wrongPassword();
 			return;
 		}
 		$island['owner'] = htmlspecialchars($data['OWNERNAME']);
@@ -502,7 +502,7 @@ class Make {
 		// パスワード
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
 			// password間違い
-			Error::wrongPassword();
+			HakoError::wrongPassword();
 			return;
 		}
 		// モードで分岐
@@ -756,7 +756,7 @@ class MakeJS extends Make {
 		// パスワード
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
 			// password間違い
-			Error::wrongPassword();
+			HakoError::wrongPassword();
 			return;
 		}
 		// モードで分岐

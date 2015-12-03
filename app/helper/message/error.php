@@ -6,7 +6,7 @@
  * @author hiro <@hiro0218>
  */
 
-class Error {
+class HakoError {
 
 	static function wrongPassword() {
 		Util::makeTagMessage("パスワードが違います。", "danger");

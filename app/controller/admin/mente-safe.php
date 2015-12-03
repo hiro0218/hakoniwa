@@ -168,10 +168,10 @@
  		global $init;
 
  		if(empty($this->dataSet['MPASS1']) || empty($this->dataSet['MPASS2']) || strcmp($this->dataSet['MPASS1'], $this->dataSet['MPASS2'])) {
- 			Error::wrongMasterPassword();
+ 			HakoError::wrongMasterPassword();
  			return 0;
  		} else if(empty($this->dataSet['SPASS1']) || empty($this->dataSet['SPASS2']) || strcmp($this->dataSet['SPASS1'], $this->dataSet['SPASS2'])) {
- 			Error::wrongSpecialPassword();
+ 			HakoError::wrongSpecialPassword();
  			return 0;
  		}
  		$masterPassword  = crypt($this->dataSet['MPASS1'], 'ma');

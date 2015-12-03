@@ -129,7 +129,7 @@ class File {
 
 			if ($fp_i === false) {
 				HTML::header();
-				Error::problem();
+				HakoError::problem();
 			}
 
 
