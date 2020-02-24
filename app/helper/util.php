@@ -336,6 +336,7 @@ class Util {
 	// ファイルをアンロックする
 	//---------------------------------------------------
 	static function unlock($fp) {
+        fflush($fp);
 		flock($fp, LOCK_UN);
 		fclose($fp);
 	}
