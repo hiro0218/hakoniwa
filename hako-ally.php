@@ -480,16 +480,20 @@ class Ally extends AllyIO {
 	function readIslands(&$cgi) {
 		global $init;
 
-		$m = $this->readIslandsFile();
-		$this->islandList = $this->getIslandList($cgi->dataSet['defaultID']);
+        $m = $this->readIslandsFile();
 
-		if($init->targetIsland == 1) {
-			// 目標の島 所有の島が選択されたリスト
-			$this->targetList = $this->islandList;
-		} else {
-			// 順位がTOPの島が選択された状態のリスト
-			$this->targetList = $this->getIslandList($cgi->dataSet['defaultTarget']);
-		}
+        if (!empty($cgi->dataSet)) {
+            $this->islandList = $this->getIslandList($cgi->dataSet['defaultID']);
+
+            if($init->targetIsland == 1) {
+                // 目標の島 所有の島が選択されたリスト
+                $this->targetList = $this->islandList;
+            } else {
+                // 順位がTOPの島が選択された状態のリスト
+                $this->targetList = $this->getIslandList($cgi->dataSet['defaultTarget']);
+            }
+        }
+
 		return $m;
 	}
 
@@ -1054,7 +1058,7 @@ class Main {
 			$this->mode = $_POST['mode'];
 		}
 		if(!empty($_POST)) {
-			foreach ($_POST as $name => $value) { 
+			foreach ($_POST as $name => $value) {
 				$value = str_replace(",", "", $value);
 				// JcodeConvert($value, 0, 2);
 				// $value = HANtoZEN_UTF8($value);
