@@ -20,7 +20,7 @@
 		</label>
 		<label class="radio-inline">
 		  <input type="radio" name="DEVELOPEMODE" value="javascript" id="javascript" <?= $radio2 ?>>
-			<label for="javascript">JavaScript高機能モード</label>
+			<label for="javascript">高機能モード</label>
 		</label>
 	</div>
 
