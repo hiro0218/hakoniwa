@@ -13,7 +13,7 @@ if (DEBUG === true) {
 <div class="row">
 	<div class="col-xs-6">
 	<?php
-		if (count($hako->islandList) != 0) {
+		if (!empty($hako->islandList)) {
 			require_once(VIEWS . '/top/my_island.php');
 		}
 	?>
