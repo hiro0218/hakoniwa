@@ -1059,11 +1059,7 @@ class Main {
 				// JcodeConvert($value, 0, 2);
 				// $value = HANtoZEN_UTF8($value);
 
-				if($init->stripslashes == true) {
-					$this->dataSet["{$name}"] = stripslashes($value);
-				} else {
-					$this->dataSet["{$name}"] = $value;
-				}
+				$this->dataSet["{$name}"] = $value;
 			}
 			if( isset($this->dataSet['Allypact']) ) {
 				$this->mode = "AllypactUp";

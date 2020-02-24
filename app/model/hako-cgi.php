@@ -21,11 +21,7 @@ class Cgi {
 		if(!empty($_POST)) {
 			foreach ($_POST as $name => $value) { 
 				$value = str_replace(",", "", $value);
-				if($init->stripslashes == true) {
-					$this->dataSet["{$name}"] = stripslashes($value);
-				} else {
-					$this->dataSet["{$name}"] = $value;
-				}
+				$this->dataSet["{$name}"] = $value;
 			}
 		}
 
