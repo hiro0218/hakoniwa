@@ -27,7 +27,7 @@ class CgiImitation {
 		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
 
 		if(!empty($_POST)) {
-			while(list($name, $value) = each($_POST)) {
+			foreach ($_POST as $name => $value) { 
 				$value = str_replace(",", "", $value);
 				if($init->stripslashes == true) {
 					$this->dataSet["{$name}"] = stripslashes($value);
@@ -46,7 +46,7 @@ class CgiImitation {
 	//---------------------------------------------------
 	function getCookies() {
 		if(!empty($_COOKIE)) {
-			while(list($name, $value) = each($_COOKIE)) {
+			foreach ($_COOKIE as $name => $value) { 
 				switch($name) {
 					case "POINTX":
 						$this->dataSet['defaultX'] = $value;

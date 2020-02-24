@@ -1054,7 +1054,7 @@ class Main {
 			$this->mode = $_POST['mode'];
 		}
 		if(!empty($_POST)) {
-			while(list($name, $value) = each($_POST)) {
+			foreach ($_POST as $name => $value) { 
 				$value = str_replace(",", "", $value);
 				// JcodeConvert($value, 0, 2);
 				// $value = HANtoZEN_UTF8($value);
