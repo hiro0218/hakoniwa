@@ -19,7 +19,7 @@ class Cgi {
 		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
 
 		if(!empty($_POST)) {
-			foreach ($_POST as $name => $value) { 
+			foreach ($_POST as $name => $value) {
 				$value = str_replace(",", "", $value);
 				$this->dataSet["{$name}"] = $value;
 			}
@@ -69,42 +69,44 @@ class Cgi {
 	//---------------------------------------------------
 	function getCookies() {
 		if(!empty($_COOKIE)) {
-			foreach ($_COOKIE as $name => $value) { 
-				switch($name) {
-					case "OWNISLANDID":
-						$this->dataSet['defaultID'] = $value;
-						break;
+            return;
+        }
 
-					case "OWNISLANDPASSWORD":
-						$this->dataSet['defaultPassword'] = $value;
-						break;
+        foreach ($_COOKIE as $name => $value) {
+            switch($name) {
+                case "OWNISLANDID":
+                    $this->dataSet['defaultID'] = $value;
+                    break;
 
-					case "TARGETISLANDID":
-						$this->dataSet['defaultTarget'] = $value;
-						break;
+                case "OWNISLANDPASSWORD":
+                    $this->dataSet['defaultPassword'] = $value;
+                    break;
 
-					case "POINTX":
-						$this->dataSet['defaultX'] = $value;
-						break;
+                case "TARGETISLANDID":
+                    $this->dataSet['defaultTarget'] = $value;
+                    break;
 
-					case "POINTY":
-						$this->dataSet['defaultY'] = $value;
-						break;
+                case "POINTX":
+                    $this->dataSet['defaultX'] = $value;
+                    break;
 
-					case "COMMAND":
-						$this->dataSet['defaultKind'] = $value;
-						break;
+                case "POINTY":
+                    $this->dataSet['defaultY'] = $value;
+                    break;
 
-					case "DEVELOPEMODE":
-						$this->dataSet['defaultDevelopeMode'] = $value;
-						break;
+                case "COMMAND":
+                    $this->dataSet['defaultKind'] = $value;
+                    break;
 
-					case "IMG":
-						$this->dataSet['defaultImg'] = $value;
-						break;
-				}
-			}
-		}
+                case "DEVELOPEMODE":
+                    $this->dataSet['defaultDevelopeMode'] = $value;
+                    break;
+
+                case "IMG":
+                    $this->dataSet['defaultImg'] = $value;
+                    break;
+            }
+        }
 	}
 
 	//---------------------------------------------------

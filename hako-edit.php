@@ -24,50 +24,55 @@ class CgiImitation {
 	function parseInputData() {
 		global $init;
 
+		if(empty($_POST)) {
+            return;
+        }
+
 		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
 
-		if(!empty($_POST)) {
-			foreach ($_POST as $name => $value) { 
-				$value = str_replace(",", "", $value);
-				$this->dataSet["{$name}"] = $value;
-			}
-			if(!empty($_POST['Sight'])) {
-				$this->dataSet['ISLANDID'] = $_POST['Sight'];
-			}
-		}
+        foreach ($_POST as $name => $value) {
+            $value = str_replace(",", "", $value);
+            $this->dataSet["{$name}"] = $value;
+        }
+
+        if(!empty($_POST['Sight'])) {
+            $this->dataSet['ISLANDID'] = $_POST['Sight'];
+        }
 	}
 
 	//---------------------------------------------------
 	// COOKIEを取得
 	//---------------------------------------------------
 	function getCookies() {
-		if(!empty($_COOKIE)) {
-			foreach ($_COOKIE as $name => $value) { 
-				switch($name) {
-					case "POINTX":
-						$this->dataSet['defaultX'] = $value;
-						break;
-					case "POINTY":
-						$this->dataSet['defaultY'] = $value;
-						break;
-					case "LAND":
-						$this->dataSet['defaultLAND'] = $value;
-						break;
-					case "MONSTER":
-						$this->dataSet['defaultMONSTER'] = $value;
-						break;
-					case "SHIP":
-						$this->dataSet['defaultSHIP'] = $value;
-						break;
-					case "LEVEL":
-						$this->dataSet['defaultLEVEL'] = $value;
-						break;
-					case "IMG":
-						$this->dataSet['defaultImg'] = $value;
-						break;
-				}
-			}
-		}
+		if(empty($_COOKIE)) {
+            return;
+        }
+
+        foreach ($_COOKIE as $name => $value) {
+            switch($name) {
+                case "POINTX":
+                    $this->dataSet['defaultX'] = $value;
+                    break;
+                case "POINTY":
+                    $this->dataSet['defaultY'] = $value;
+                    break;
+                case "LAND":
+                    $this->dataSet['defaultLAND'] = $value;
+                    break;
+                case "MONSTER":
+                    $this->dataSet['defaultMONSTER'] = $value;
+                    break;
+                case "SHIP":
+                    $this->dataSet['defaultSHIP'] = $value;
+                    break;
+                case "LEVEL":
+                    $this->dataSet['defaultLEVEL'] = $value;
+                    break;
+                case "IMG":
+                    $this->dataSet['defaultImg'] = $value;
+                    break;
+            }
+        }
 	}
 
 	//---------------------------------------------------

@@ -11,11 +11,13 @@ class Admin {
     function parseInputData() {
         $this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
 
-        if(!empty($_POST)) {
-			foreach ($_POST as $name => $value) { 
-                $value = str_replace(",", "", $value);
-                $this->dataSet["{$name}"] = $value;
-            }
+        if(empty($_POST)) {
+            return;
+        }
+
+        foreach ($_POST as $name => $value) {
+            $value = str_replace(",", "", $value);
+            $this->dataSet["{$name}"] = $value;
         }
     }
 
