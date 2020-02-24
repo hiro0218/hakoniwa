@@ -16,7 +16,7 @@ class Init {
 	// プログラムファイルに関する設定
 	//---------------------------------------------------
 	// プログラムを置くディレクトリ
-	public $baseDir = "http://localhost/hakoniwa";
+	public $baseDir = "http://localhost:8888/hakoniwa";
 
 	// 画像を置くディレクトリ
 	public $imgDir  = "public/assets/img";
