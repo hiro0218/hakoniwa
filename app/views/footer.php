@@ -1,15 +1,6 @@
 <hr>
 		<script>
-			// JavaScriptモード関連
-		    if (document.addEventListener) {
-		        if (typeof(init) == "function") {
-		            document.addEventListener("DOMContentLoaded", init(), false);
-		        }
-		    } else {
-		        if (typeof(init) == "function") {
-		            window.onload = init;
-		        }
-		    }
+			document.addEventListener("DOMContentLoaded", init(), false);
 		</script>
 
 		<div class="row">
