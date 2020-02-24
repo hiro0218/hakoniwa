@@ -2251,7 +2251,7 @@ class Turn {
 								switch($tL) {
 									case $init->landMountain:
 										// 山
-										continue;
+										continue 2;
 
 									case $init->landSbase:
 									case $init->landSdefence:
@@ -2264,7 +2264,7 @@ class Turn {
 										$this->log->msLUSbase($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 										$tLand[$tx][$ty] = $init->landSea;
 										$tLandValue[$tx][$ty] = 1;
-										continue;
+										continue 2;
 
 									case $init->landSea:
 										// 海の場合
@@ -2296,7 +2296,7 @@ class Turn {
 											$this->log->msLUSea0($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
 											$tLandValue[$tx][$ty] = 1;
 										}
-										continue;
+										continue 2;
 
 									case $init->landMonster:
 									case $init->landSleeper:
@@ -2306,7 +2306,7 @@ class Turn {
 										$tLand[$tx][$ty] = $init->landMountain;
 										$tLandValue[$tx][$ty] = 0;
 										$this->log->msLUMonster($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
-										continue;
+										continue 2;
 
 									default:
 										// その他
@@ -3431,11 +3431,11 @@ class Turn {
 							// 海に戻す
 							$land[$x][$y] = $init->landSea;
 							$landValue[$x][$y] = 0;
-							continue;
+							continue 2;
 						} elseif(($lv <= 0) && ($landKind == $init->landTown)) {
 							$land[$x][$y] = $init->landPlains;
 							$landValue[$x][$y] = 0;
-							continue;
+							continue 2;
 						}
 					} else {
 						// 成長
@@ -3474,7 +3474,7 @@ class Turn {
 							// 平地に戻す
 							$land[$x][$y] = $init->landPlains;
 							$landValue[$x][$y] = 0;
-							continue;
+							continue 2;
 						}
 					} else {
 						// 成長
@@ -3505,7 +3505,7 @@ class Turn {
 							// 平地に戻す
 							$land[$x][$y] = $init->landPlains;
 							$landValue[$x][$y] = 0;
-							continue;
+							continue 2;
 						}
 					} else {
 						// 成長
@@ -3567,7 +3567,7 @@ class Turn {
 							// 平地に戻す
 							$land[$x][$y] = $init->landPlains;
 							$landValue[$x][$y] = 0;
-							continue;
+							continue 2;
 						}
 					} else {
 						// 成長

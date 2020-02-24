@@ -2811,7 +2811,7 @@ END;
 			$jsAllyMarkList .= "];\n";
 			$jsAllyColorList .= "];\n";
 		}
-		$str1 = $adminMode ? '(メンテナンス)' : $init->allyJoinComUse ? '' : '・加盟・脱退';
+		$str1 = ($adminMode ? '(メンテナンス)' : $init->allyJoinComUse) ? '' : '・加盟・脱退';
 		$str2 = $adminMode ? '' : 'onChange="colorPack()" onClick="colorPack()"';
 		$makeCost = $init->costMakeAlly ? "{$init->costMakeAlly}{$init->unitMoney}" : '無料';
 		$keepCost = $init->costKeepAlly ? "{$init->costKeepAlly}{$init->unitMoney}" : '無料';
@@ -2842,7 +2842,7 @@ END;
 <INPUT TYPE="password" NAME="PASSWORD" SIZE="32" MAXLENGTH="32" class="f" class="form-control">
 END;
 		if($hako->allyNumber) {
-			$str4 = $adminMode ? '・結成・変更' : $init->allyJoinComUse ? '' : '・加盟・脱退';
+			$str4 = ($adminMode ? '・結成・変更' : $init->allyJoinComUse) ? '' : '・加盟・脱退';
 			$str5 = ($adminMode || $init->allyJoinComUse) ? '' : '<INPUT TYPE="submit" VALUE="加盟・脱退" NAME="JoinAllyButton" class="btn btn-default">';
 			echo <<<END
 <BR>
