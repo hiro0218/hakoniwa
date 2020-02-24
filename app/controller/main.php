@@ -12,16 +12,14 @@ class Main {
 
 		$cgi->parseInputData();
 		$cgi->getCookies();
-		$fp = "";
 
 		if(!$hako->readIslands($cgi)) {
 			HTML::header();
 			HakoError::noDataFile();
 			HTML::footer();
-			Util::unlock($lock);
 			exit();
 		}
-		$lock = Util::lock($fp);
+		$lock = Util::lock();
 		if(FALSE == $lock) {
 			exit();
 		}
