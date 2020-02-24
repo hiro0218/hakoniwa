@@ -1,0 +1,22 @@
+{
+  "name": "hakoniwa",
+  "version": "1.0.0",
+  "description": "箱庭諸島 S.E の改造版",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hiro0218/hakoniwa.git"
+  },
+  "keywords": [
+    "hakoniwa"
+  ],
+  "author": "hiro0218",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hiro0218/hakoniwa/issues"
+  },
+  "homepage": "https://github.com/hiro0218/hakoniwa#readme"
+}
