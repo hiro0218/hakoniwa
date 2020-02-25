@@ -29,17 +29,17 @@ define("READ_LINE", 1024);
 
 
 // PATHの定数
-define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);  // ドキュメントルート パス
-define('APPPATH', realpath(__DIR__.'/app/').DIRECTORY_SEPARATOR);  // アプリケーションディレクトリ パス
-define('CONTROLLERPATH', realpath(APPPATH.'/controller/').DIRECTORY_SEPARATOR);  // コントローラ パス
-define('HELPERPATH', realpath(APPPATH.'/helper/').DIRECTORY_SEPARATOR);  // ヘルパー パス
-define('MODELPATH', realpath(APPPATH.'/model/').DIRECTORY_SEPARATOR);  // モデル パス
-define('PRESENTER', realpath(APPPATH.'/presenter/').DIRECTORY_SEPARATOR);  // プレゼンター パス
-define('VIEWS', realpath(APPPATH.'/views/').DIRECTORY_SEPARATOR);  //
+define('DOC_ROOT', __DIR__.DIRECTORY_SEPARATOR);  // ドキュメントルート パス
+define('APP_PATH', realpath(__DIR__.'/app/').DIRECTORY_SEPARATOR);  // アプリケーションディレクトリ パス
+define('CONTROLLER_PATH', realpath(APP_PATH.'/controller/').DIRECTORY_SEPARATOR);  // コントローラ パス
+define('HELPER_PATH', realpath(APP_PATH.'/helper/').DIRECTORY_SEPARATOR);  // ヘルパー パス
+define('MODEL_PATH', realpath(APP_PATH.'/model/').DIRECTORY_SEPARATOR);  // モデル パス
+define('PRESENTER_PATH', realpath(APP_PATH.'/presenter/').DIRECTORY_SEPARATOR);  // プレゼンター パス
+define('VIEWS_PATH', realpath(APP_PATH.'/views/').DIRECTORY_SEPARATOR);  //
 
 
 // 共通
-require_once DOCROOT.'hako-init.php';
-require_once APPPATH.'/helper/util.php';
+require_once DOC_ROOT.'hako-init.php';
+require_once APP_PATH.'/helper/util.php';
 
 $init  = new Init();

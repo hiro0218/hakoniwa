@@ -7,11 +7,11 @@
  */
 
 require_once 'config.php';
-require_once MODELPATH.'/admin.php';
-require_once MODELPATH.'/hako-cgi.php';
-require_once MODELPATH.'/hako-file.php';
-require_once PRESENTER.'/hako-html.php';
-require_once CONTROLLERPATH.'/admin/keep.php';
+require_once MODEL_PATH.'/admin.php';
+require_once MODEL_PATH.'/hako-cgi.php';
+require_once MODEL_PATH.'/hako-file.php';
+require_once PRESENTER_PATH.'/hako-html.php';
+require_once CONTROLLER_PATH.'/admin/keep.php';
 
 $start = new Keep();
 $start->execute();

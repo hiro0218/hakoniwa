@@ -8,8 +8,8 @@
 
 require_once 'config.php';
 
-require_once APPPATH.'/model/hako-log.php';
-require_once APPPATH.'/model/hako-make.php';
+require_once APP_PATH.'/model/hako-log.php';
+require_once APP_PATH.'/model/hako-make.php';
 
 class Turn {
 	public $log;
@@ -5875,7 +5875,7 @@ class Turn {
 		$sy = 0;
 		reset($kind);
 
-		foreach ($kind as $value) { 
+		foreach ($kind as $value) {
 			$list[$value] = 1;
 		}
 		for($i = 0; $i < $range; $i++) {

@@ -1,7 +1,7 @@
 <h1><?= $init->title ?> トップ</h1>
 <?php
 if (DEBUG === true) {
-	require_once(VIEWS . '/debug.php');
+	require_once(VIEWS_PATH . '/debug.php');
 }
 ?>
 <h2 class='Turn'>ターン<?= $hako->islandTurn ?></h2>
@@ -14,7 +14,7 @@ if (DEBUG === true) {
 	<div class="col-xs-6">
 	<?php
 		if (!empty($hako->islandList)) {
-			require_once(VIEWS . '/top/my_island.php');
+			require_once(VIEWS_PATH . '/top/my_island.php');
 		}
 	?>
 	</div>

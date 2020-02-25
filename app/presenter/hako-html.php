@@ -6,9 +6,9 @@
  * @author hiro <@hiro0218>
  */
 
-require_once HELPERPATH.'/message/error.php';
-require_once HELPERPATH.'/message/success.php';
-require_once APPPATH.'/model/hako-log.php';
+require_once HELPER_PATH.'/message/error.php';
+require_once HELPER_PATH.'/message/success.php';
+require_once APP_PATH.'/model/hako-log.php';
 
 class HTML {
 	/**
@@ -17,23 +17,23 @@ class HTML {
 	 */
 	static function header() {
 		global $init;
-		require_once(VIEWS.'/header.php');
-		require_once(VIEWS.'/body.php');
+		require_once(VIEWS_PATH.'/header.php');
+		require_once(VIEWS_PATH.'/body.php');
 	}
 
 	static function head() {
 		global $init;
-		require_once(VIEWS.'/header.php');
+		require_once(VIEWS_PATH.'/header.php');
 	}
-	
-	
+
+
 	/**
 	 * HTML <footer>
 	 * @return [type] [description]
 	 */
 	static function footer() {
 		global $init;
-		require_once(VIEWS.'/footer.php');
+		require_once(VIEWS_PATH.'/footer.php');
 	}
 
 	/**
@@ -43,7 +43,7 @@ class HTML {
 	 */
 	function lastModified($hako) {
 		global $init;
-		require_once(VIEWS.'/lastModified.php');
+		require_once(VIEWS_PATH.'/lastModified.php');
 	}
 
 	/**
@@ -78,28 +78,28 @@ class HtmlTop extends HTML {
 		$defaultPassword = isset($data['defaultPassword']) ? $data['defaultPassword'] : "";
 
 		// 読み込み
-		require_once(VIEWS.'/top/main.php');
+		require_once(VIEWS_PATH.'/top/main.php');
 
 		// 各部門ランキング
-		require_once(VIEWS.'/top/category-rank.php');
+		require_once(VIEWS_PATH.'/top/category-rank.php');
 
 		// 同盟の状況
 		if($hako->allyNumber) {
-			require_once(VIEWS.'/top/ally-list.php');
+			require_once(VIEWS_PATH.'/top/ally-list.php');
 		}
 
 		// 各諸島の状況
-		require_once(VIEWS.'/top/island-list.php');
+		require_once(VIEWS_PATH.'/top/island-list.php');
 
 		// Battle Fieldの状況
-		require_once(VIEWS.'/top/bf-list.php');
+		require_once(VIEWS_PATH.'/top/bf-list.php');
 
 		// 歴史
-		require_once(VIEWS.'/log/history.php');
+		require_once(VIEWS_PATH.'/log/history.php');
 
 		// 管理者登録モード
 		if($init->registerMode) {
-			require_once(VIEWS.'/top/register-mode.php');
+			require_once(VIEWS_PATH.'/top/register-mode.php');
 		}
 	}
 
@@ -359,7 +359,7 @@ END;
 	 * @param type $data
 	 */
 	function register(&$hako, $data = "") {
-		require_once(VIEWS.'/conf/register.php');
+		require_once(VIEWS_PATH.'/conf/register.php');
 	}
 
 	/**
@@ -371,7 +371,7 @@ END;
 		global $init;
 		$this_file = $init->baseDir . "/hako-main.php";
 
-		require_once(VIEWS.'/conf/discovery.php');
+		require_once(VIEWS_PATH.'/conf/discovery.php');
 	}
 
 	/**
@@ -381,7 +381,7 @@ END;
 		global $init;
 		$this_file = $init->baseDir . "/hako-main.php";
 
-		require_once(VIEWS.'/conf/change/island-info.php');
+		require_once(VIEWS_PATH.'/conf/change/island-info.php');
 	}
 
 	/**
@@ -391,7 +391,7 @@ END;
 		global $init;
 		$this_file = $init->baseDir . "/hako-main.php";
 
-		require_once(VIEWS.'/conf/change/owner-name.php');
+		require_once(VIEWS_PATH.'/conf/change/owner-name.php');
 	}
 
 	/**
@@ -399,7 +399,7 @@ END;
 	 */
 	function log() {
 		global $init;
-		require_once(VIEWS.'/log/recent.php');
+		require_once(VIEWS_PATH.'/log/recent.php');
 	}
 
 	/**
@@ -407,7 +407,7 @@ END;
 	 */
 	function infoPrint() {
 		global $init;
-		require_once(VIEWS.'/log/info.php');
+		require_once(VIEWS_PATH.'/log/info.php');
 	}
 
 }
@@ -479,7 +479,7 @@ class HtmlMap extends HTML {
 		$name = Util::islandName($island, $hako->ally, $hako->idToAllyNumber);
 
 		// 読み込み
-		require_once(VIEWS.'/map/main.php');
+		require_once(VIEWS_PATH.'/map/main.php');
 	}
 
 	//---------------------------------------------------
@@ -608,7 +608,7 @@ class HtmlMap extends HTML {
 		}
 
 		// 島の情報
-		require_once(VIEWS.'/map/island-info.php');
+		require_once(VIEWS_PATH.'/map/island-info.php');
 	}
 
 	//---------------------------------------------------
@@ -654,7 +654,7 @@ class HtmlMap extends HTML {
 			}
 		}
 
-		require_once(VIEWS.'/map/development/map.php');
+		require_once(VIEWS_PATH.'/map/development/map.php');
 
 		echo "<p class='text-center'>開始ターン：{$island['starturn']}</p>\n";
 
@@ -723,7 +723,7 @@ END;
 		$height = $init->islandSize * 32 + 100;
 		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
 
-		require_once(VIEWS.'/map/development/basic.php');
+		require_once(VIEWS_PATH.'/map/development/basic.php');
 	}
 
 	//---------------------------------------------------
@@ -1113,7 +1113,7 @@ class HtmlMapJS extends HtmlMap {
 
 		$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
 
-		require_once(VIEWS.'/map/development/js.php');
+		require_once(VIEWS_PATH.'/map/development/js.php');
 
 		echo <<<END
 <script type="text/javascript">
@@ -2053,7 +2053,7 @@ class HtmlAdmin extends HTML {
 		$urllist  = array( ini_get('safe_mode') ? '/hako-mente-safemode.php' : '/hako-mente.php', '/hako-axes.php', '/hako-keep.php', '/hako-present.php', '/hako-edit.php', '/hako-bf.php');
 		$menulist = array('データ管理','アクセスログ閲覧','島預かり管理','プレゼント','マップエディタ','BattleField管理');
 
-		require_once(VIEWS.'/admin/top.php');
+		require_once(VIEWS_PATH.'/admin/top.php');
 	}
 }
 
@@ -2064,7 +2064,7 @@ class HtmlPresent extends HTML {
 		$this_file = $init->baseDir . "/hako-present.php";
 		$main_file = $init->baseDir . "/hako-main.php";
 
-		require_once(VIEWS.'/admin/present/top.php');
+		require_once(VIEWS_PATH.'/admin/present/top.php');
 	}
 
 	function main($data, $hako) {
@@ -2077,7 +2077,7 @@ class HtmlPresent extends HTML {
 		//$defaultTarget = ($init->targetIsland == 1) ? $island['id'] : $hako->defaultTarget;
 		$defaultTarget = "";
 
-		require_once(VIEWS.'/admin/present/main.php');
+		require_once(VIEWS_PATH.'/admin/present/main.php');
 	}
 }
 
@@ -2413,7 +2413,7 @@ class HtmlBF extends HTML {
 	function main($data, $hako) {
 		global $init;
 		$this_file = $init->baseDir . "/hako-bf.php";
-		require_once(VIEWS.'/admin/bf.php');
+		require_once(VIEWS_PATH.'/admin/bf.php');
 	}
 }
 
@@ -2421,7 +2421,7 @@ class HTMLKeep extends HTML {
 	function main($data, $hako) {
 		global $init;
 		$this_file = $init->baseDir . "/hako-keep.php";
-		require_once(VIEWS.'/admin/keep.php');
+		require_once(VIEWS_PATH.'/admin/keep.php');
 	}
 }
 
