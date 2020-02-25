@@ -6,7 +6,14 @@
  * @author hiro <@hiro0218>
  */
 
+require_once CONSTANT_PATH.'Monster.php';
+require_once CONSTANT_PATH.'Name.php';
+require_once CONSTANT_PATH.'Ship.php';
+require_once CONSTANT_PATH.'Unit.php';
+
 class Init {
+    use Monster, Name, Ship, Unit;
+
 	function __construct() {
 		$this->CPU_start = microtime();
 		$this->setpubliciable();
@@ -133,70 +140,7 @@ class Init {
 	// コマンド入力限界数
 	public $commandMax = 30;
 
-	//---------------------------------------------------
-	// 名称の定義
-	//---------------------------------------------------
-	public $nameRank                       = "順位";
-	public $namePopulation                 = "人口";
-	public $nameArea                       = "面積";
-	public $nameFunds                      = "資金";
-	public $nameFood                       = "食料";
-	public $nameUnemploymentRate           = "失業率";
-	public $nameFarmSize                   = "農場規模";
-	public $nameFactoryScale               = "工場規模";
-	public $nameCommercialScale            = "商業規模";
-	public $nameMineScale                  = "採掘場規模";
-	public $namePowerPlantScale            = "発電所規模";
-	public $namePowerSupplyRate            = "電力供給率";
-	public $nameWeather                    = "天気";
-	public $nameMilitaryTechnology         = "軍事技術";
-	public $nameMonsterExterminationNumber = "怪獣退治数";
-	public $nameSatellite                  = "人工衛星";
-	public $nameGin                        = "ジン";
-	public $nameItems                      = "アイテム";
-
-	//---------------------------------------------------
-	// 各種単位の設定
-	//---------------------------------------------------
-	// ●●島
-	public $nameSuffix  = "島";
-
-	// 人口の単位
-	public $unitPop     = "00人";
-	// 食料の単位
-	public $unitFood    = "00トン";
-	// 広さの単位
-	public $unitArea    = "00万坪";
-	// 木の数の単位
-	public $unitTree    = "00本";
-	// お金の単位
-	public $unitMoney   = "億円";
-	// 怪獣の単位
-	public $unitMonster = "匹";
-
-	// 保有せず
-	public $notHave 	= "保有せず";
-
-	// 木の単位当たりの売値
-	public $treeValue   = 10;
-
-	// 名前変更のコスト
-	public $costChangeName = 500;
-
-	// 人口1単位あたりの食料消費料
-	public $eatenFood   = 0.2;
-
-	// 油田の収入
-	public $oilMoney    = 1000;
-	// 油田の枯渇確率
-	public $oilRatio    = 40;
-
-	// 何ターン毎に宝くじの抽選が行われるか？
-	public $lottery     = 50;
-	// 当選金
-	public $lotmoney    = 30000;
-
-	//---------------------------------------------------
+    //---------------------------------------------------
 	// 同盟に関する設定
 	//---------------------------------------------------
 	public $comAlly;
@@ -283,63 +227,6 @@ class Init {
 	public $targetIsland  = 1;
 
 	//---------------------------------------------------
-	// 船舶に関する設定
-	//---------------------------------------------------
-	// 船の最大所有数
-	public $shipMax  = 5;
-
-	// 船舶の種類（造船対象の船舶）
-	public $shipKind = 4; // 最大15
-
-	// 船舶の名前（10以降は災害船舶と定義）
-	public $shipName = array (
-		'輸送船',         # 0
-		'漁船',           # 1
-		'海底探索船',     # 2
-		'戦艦',           # 3
-		'',               # 4
-		'',               # 5
-		'',               # 6
-		'',               # 7
-		'',               # 8
-		'',               # 9
-		'海賊船',         # 10
-		'',               # 11
-		'',               # 12
-		'',               # 13
-		''                # 14
-		);
-
-	// 船舶維持費
-	public $shipCost = array(100, 200, 300, 500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
-
-	// 船舶体力（最大15）
-	public $shipHP   = array(1, 2, 3, 10, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 1);
-
-	// 船舶経験値の最大値（最大でも255まで）
-	public $shipEX   = 100;
-
-	// レベルの最大値
-	public $shipLv   = 5;
-
-	// 経験値がいくつでレベルアップか
-	public $shipLevelUp   = array(10, 30, 60, 100);
-
-	// 船舶設定値（確率：設定値 x 0.1%）
-	public $shipIncom          =  200; // 輸送船収入
-	public $shipFood           =  100; // 漁船の食料収入
-	public $shipIntercept      =  200; // 戦艦がミサイルを迎撃する確率
-	public $disRunAground1     =   10; // 座礁確率  座礁処理に入るための確率
-	public $disRunAground2     =   10; // 座礁確率  船 個別の判定
-	public $disZorasu          =   30; // ぞらす 出現確率
-	public $disViking          =   10; // 海賊船 出現確率 船１つあたり（たくさん船を持てばその分確率UP）
-	public $disVikingAway      =   30; // 海賊船 去る確率
-	public $disVikingRob       =   50; // 海賊船強奪
-	public $disVikingAttack    =  500; // 海賊が攻撃してくる確率
-	public $disVikingMinAtc    =    1; // 海賊船が与える最低ダメージ
-	public $disVikingMaxAtc    =    3; // 海賊船が与える最大ダメージ
-
-	//---------------------------------------------------
 	// 災害に関する設定（確率：設定値 x 0.1%）
 	//---------------------------------------------------
 	public $disEarthquake =   5;  // 地震
@@ -359,79 +246,6 @@ class Init {
 	// 地盤沈下
 	public $disFallBorder = 290;//100; // 安全限界の広さ(Hex数)
 	public $disFalldown   = 10;//30;  // その広さを超えた場合の確率
-
-	//---------------------------------------------------
-	// 怪獣に関する設定
-	//---------------------------------------------------
-	public $disMonsBorder1 = 2000;  // 人口基準1(怪獣レベル1)
-	public $disMonsBorder2 = 4000;  // 人口基準2(怪獣レベル2)
-	public $disMonsBorder3 = 6000;  // 人口基準3(怪獣レベル3)
-	public $disMonsBorder4 = 8000;  // 人口基準4(怪獣レベル4)
-	public $disMonsBorder5 = 10000; // 人口基準5(怪獣レベル5)
-	public $disMonster     = 2.5;   // 単位面積あたりの出現率(0.01%単位)
-
-	public $monsterLevel1  = 4;     // サンジラまで
-	public $monsterLevel2  = 9;     // いのらゴーストまで
-	public $monsterLevel3  = 15;    // かおくと（♀）まで
-	public $monsterLevel4  = 23;    // 迎撃いのらまで
-	public $monsterLevel5  = 26;    // インベーダーまで
-
-	public $monsterNumber  = 27;    // 怪獣の種類
-	// 怪獣の名前
-	public $monsterName = array (
-		'メカいのら',         # 0
-		'いのら（♂）',       # 1
-		'いのら（♀）',       # 2
-		'サンジラ（♂）',     # 3
-		'サンジラ（♀）',     # 4
-		'レッドいのら（♂）', # 5
-		'レッドいのら（♀）', # 6
-		'ダークいのら（♂）', # 7
-		'ダークいのら（♀）', # 8
-		'いのらゴースト',     # 9
-		'クジラ（♂）',       # 10
-		'クジラ（♀）',       # 11
-		'ワープいのら',       # 12
-		'おじー',             # 13
-		'イナッシュ（♀）',   # 14
-		'かおくと（♀）',     # 15
-		'かおくと（♂）',     # 16
-		'グレーターおじー',   # 17
-		'イナッシュ（♂）',   # 18
-		'キングいのら（♂）', # 19
-		'キングいのら（♀）', # 20
-		'うおが（♂）',       # 21
-		'うおが（♀）',       # 22
-		'迎撃いのら',         # 23
-		'ハートいのら',       # 24
-		'姫いのら',           # 25
-		'インベーダー',       # 26
-	);
-	// 怪獣の画像(硬化中)
-	public $monsterImage   = array ('', '', '', 'kouka.gif', 'kouka.gif', '', '', '', '', '', 'kouka.gif', 'kouka.gif', '', 'kouka1.gif', '', 'kouka3.gif', 'kouka3.gif', 'kouka2.gif', '', '', '', '', '', '', '', '');
-
-	// 最低体力、体力の幅、特殊能力、経験値、死体の値段
-	public $monsterBHP     = array(10, 1, 1, 1, 1, 2, 3, 2, 2, 2, 3, 3, 9, 5, 4, 4, 3, 5, 9, 4, 5, 6, 6, 7, 8, 5, 99);
-	public $monsterDHP     = array( 0, 2, 1, 2, 1, 2, 2, 2, 1, 1, 2, 2, 0, 1, 2, 1, 2, 2, 0, 3, 2, 2, 2, 2, 1, 0, 0);
-	public $monsterSpecial = array(0x0, 0x0, 0x0, 0x4, 0x4, 0x1, 0x1, 0x120, 0x20, 0x2, 0x11, 0x10, 0x40, 0x4, 0x200, 0x20000, 0x410, 0x5, 0x240, 0x1020, 0x2020, 0x4400, 0x10100, 0x101, 0x21, 0x2121, 0x42);
-	public $monsterExp     = array(20, 6, 5, 7, 6, 9, 8, 17, 12, 10, 10, 9, 30, 13, 15, 20, 25, 22, 40, 45, 43, 50, 50, 48, 60, 100, 200);
-	public $monsterValue   = array(1000, 300, 200, 400, 300, 600, 500, 900, 700, 600, 800, 700, 2000, 900, 1000, 500, 1800, 1200, 2500, 3000, 2700, 5000, 4000, 3500, 7000, 10000, 50000);
-	// 特殊能力の内容は、(各能力は 1bit に割り当てる)
-	// 0x0 特になし
-	// 0x1 足が速い(最大2歩あるく)
-	// 0x2 足がとても速い(最大何歩あるくか不明)
-	// 0x4 奇数ターンは硬化
-	// 0x10 偶数ターンは硬化
-	// 0x20 仲間を呼ぶ
-	// 0x40 ワープする
-	// 0x100 ミサイル叩き落とす
-	// 0x200 飛行移動能力
-	// 0x400 瀕死になると大爆発
-	// 0x1000 金増やす
-	// 0x2000 食料増やす
-	// 0x4000 金減らす
-	// 0x10000 食料減らす
-	// 0x20000 分裂する
 
 	//---------------------------------------------------
 	// 賞に関する設定

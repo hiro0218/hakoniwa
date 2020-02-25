@@ -30,6 +30,7 @@ define("READ_LINE", 1024);
 
 // PATHの定数
 define('DOC_ROOT', __DIR__.DIRECTORY_SEPARATOR);  // ドキュメントルート パス
+define('CONSTANT_PATH', realpath(__DIR__.'/constant/').DIRECTORY_SEPARATOR);
 define('APP_PATH', realpath(__DIR__.'/app/').DIRECTORY_SEPARATOR);  // アプリケーションディレクトリ パス
 define('CONTROLLER_PATH', realpath(APP_PATH.'/controller/').DIRECTORY_SEPARATOR);  // コントローラ パス
 define('HELPER_PATH', realpath(APP_PATH.'/helper/').DIRECTORY_SEPARATOR);  // ヘルパー パス
