@@ -162,14 +162,11 @@ class Turn {
 			$this->estimate($hako, $hako->islands[$order[$i]]);
 		}
 
-		// バックアップターンであれば、書く前にrename
-		if(!($init->safemode) && (($hako->islandTurn % $init->backupTurn) == 0)) {
-			$hako->backUp();
+		// バックアップ
+		if(($hako->islandTurn % $init->backupTurn) == 0) {
+            $hako->safemode_backup();
 		}
-		// バックアップターンであれば、セーフモードバックアップ取得
-		if(($init->safemode) && (($hako->islandTurn % $init->backupTurn) == 0)) {
-			$hako->safemode_backup();
-		}
+
 		// ファイルに書き出し
 		$hako->writeIslandsFile(-1);
 
