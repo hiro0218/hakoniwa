@@ -459,38 +459,7 @@ class File {
 			// chmod($fileName, 0666);
 		}
 	}
-	//---------------------------------------------------
-	// データのバックアップ
-	//---------------------------------------------------
-	function backUp() {
-		global $init;
 
-		if($init->backupTimes <= 0) {
-			return;
-		}
-		$tmp = $init->backupTimes - 1;
-		$this->rmTree("{$init->dirName}.bak{$tmp}");
-		for($i = ($init->backupTimes - 1); $i > 0; $i--) {
-			$j = $i - 1;
-			if(is_dir("{$init->dirName}.bak{$j}")) {
-				rename("{$init->dirName}.bak{$j}", "{$init->dirName}.bak{$i}");
-			}
-		}
-		if(is_dir("{$init->dirName}")) {
-			rename("{$init->dirName}", "{$init->dirName}.bak0");
-		}
-		mkdir("{$init->dirName}", $init->dirMode);
-
-		// ログファイルだけ戻す
-		for($i = 0; $i <= $init->logMax; $i++) {
-			if(is_file("{$init->dirName}.bak0/hakojima.log{$i}")){
-				rename("{$init->dirName}.bak0/hakojima.log{$i}", "{$init->dirName}/hakojima.log{$i}");
-			}
-		}
-		if(is_file("{$init->dirName}.bak0/hakojima.his")) {
-			rename("{$init->dirName}.bak0/hakojima.his", "{$init->dirName}/hakojima.his");
-		}
-	}
 	//---------------------------------------------------
 	// セーフモードバックアップ
 	//---------------------------------------------------
@@ -551,22 +520,6 @@ class File {
 			}
 		} catch (Exception $ex) {
 			return;
-		}
-	}
-
-	//---------------------------------------------------
-	// 不要なディレクトリとファイルを削除
-	//---------------------------------------------------
-	function rmTree($dirName) {
-		if(is_dir("{$dirName}")) {
-			$dir = opendir("{$dirName}/");
-			while($fileName = readdir($dir)) {
-				if(!(strcmp($fileName, ".") == 0 || strcmp($fileName, "..") == 0)) {
-					unlink("{$dirName}/{$fileName}");
-				}
-			}
-			closedir($dir);
-			rmdir($dirName);
 		}
 	}
 
