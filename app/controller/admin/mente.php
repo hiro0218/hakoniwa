@@ -61,7 +61,7 @@ class Mente extends Admin {
 	function newMode() {
 		global $init;
 
-		mkdir($init->dirName, $init->dirMode);
+		mkdir($init->dirName, $init->dirMode, true);
 
 		// 現在の時間を取得
 		$now = $_SERVER['REQUEST_TIME'];
