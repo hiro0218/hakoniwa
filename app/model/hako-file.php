@@ -504,42 +504,46 @@ class File {
 			for ($i = ($init->backupTimes - 1); $i >= 0; $i--) {
 				$from = $i - 1;
 				$dir;
-				$dir2;
+                $from_dir;
+                $to_dir = "./{$init->dirName}.bak{$i}"; // コピー先
+
 				if ($from >= 0) {
-					$dir2 = "./{$init->dirName}.bak{$from}";
+					$from_dir = "./{$init->dirName}.bak{$from}";
 				} else {
-					$dir2 = "./{$init->dirName}";
+					$from_dir = "./{$init->dirName}";
 				}
 				// データディレクトリの中身を空にする
-				$to_del = "{$init->dirName}.bak{$i}";
+				$to_del = $to_dir;
 				if ( file_exists("{$to_del}/") ) {
 					$dir = opendir("{$to_del}/");
 				} else {
 					$dir = false;
 				}
 
-				if ( $dir != false ) {
+				if ( $dir !== false ) {
 					while ($fileName = readdir($dir)) {
-						if (!(strcmp($fileName, ".") == 0 || strcmp($fileName, "..") == 0))
-							unlink("{$to_del}/{$fileName}");
+						if (!(strcmp($fileName, ".") == 0 || strcmp($fileName, "..") == 0)) {
+                            unlink("{$to_del}/{$fileName}");
+                        }
 					}
 					closedir($dir);
 				}
 
 				// データディレクトリを開く
-				if ( file_exists($dir2) ) {
-					$dir = opendir($dir2);
-				} else {
-					mkdir($dir2);
-				}
-				$dir = opendir($dir2);
+				if (!file_exists($from_dir) ) {
+					mkdir($from_dir, 0775, true);
+                }
+                if (!file_exists($to_dir)) {
+                    mkdir($to_dir, 0775, true);
+                }
 
+				$dir = opendir($from_dir);
 				while ($copyFile = readdir($dir)) {
-					if (is_file("{$dir2}/{$copyFile}")) {
+					if (is_file("{$from_dir}/{$copyFile}")) {
 						// コピー元
-						$from_copy = "{$dir2}/{$copyFile}";
+						$from_copy = "{$from_dir}/{$copyFile}";
 						// コピー先
-						$to_copy = "{$init->dirName}.bak{$i}/{$copyFile}";
+						$to_copy = "{$to_dir}/{$copyFile}";
 						// コピー実行
 						copy($from_copy, $to_copy);
 					}
