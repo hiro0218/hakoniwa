@@ -18,5 +18,21 @@
   "bugs": {
     "url": "https://github.com/hiro0218/hakoniwa/issues"
   },
-  "homepage": "https://github.com/hiro0218/hakoniwa#readme"
+  "homepage": "https://github.com/hiro0218/hakoniwa#readme",
+  "devDependencies": {
+    "@prettier/plugin-php": "^0.13.0",
+    "husky": "^4.2.3",
+    "lint-staged": "^10.0.7",
+    "prettier": "^1.19.1"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*.php": [
+      "prettier --write"
+    ]
+  }
 }
