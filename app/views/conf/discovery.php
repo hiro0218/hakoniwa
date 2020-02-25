@@ -12,7 +12,7 @@
 				<label>どんな名前をつける予定？</label>
 				<div class="input-group">
 					<input type="text" class="form-control" name="ISLANDNAME" size="32" maxlength="32" required>
-					<span class="input-group-addon">島</span>
+					<span class="input-group-addon"><?= $init->nameSuffix; ?></span>
 				</div>
 			</div>
 

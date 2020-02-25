@@ -772,17 +772,17 @@ class Hako extends File {
 				$hp = round(100 - $ship[2] / $init->shipHP[$ship[1]] * 100); // 破損率
 				if($ship[1] <= 1) {
 					// 輸送船、漁船
-					$naviText = "{$owner}島所属";
+					$naviText = "{$owner}{$init->nameSuffix}所属";
 				} elseif($ship[1] == 2) {
 					// 海底探索船
 					$treasure = $ship[3] * 1000 + $ship[4] * 100;
 					if($treasure > 0) {
-						$naviText = "{$owner}島所属<br>破損率：{$hp}%<br>{$treasure}億円相当の財宝積載";
+						$naviText = "{$owner}{$init->nameSuffix}所属<br>破損率：{$hp}%<br>{$treasure}億円相当の財宝積載";
 					} else {
-						$naviText = "{$owner}島所属";
+						$naviText = "{$owner}{$init->nameSuffix}所属";
 					}
 				} elseif($ship[1] < 10) {
-					$naviText = "{$owner}島所属<br>破損率：{$hp}%";
+					$naviText = "{$owner}{$init->nameSuffix}所属<br>破損率：{$hp}%";
 				} else {
 					// 海賊船
 					$treasure = $ship[3] * 1000 + $ship[4] * 100;
@@ -1278,17 +1278,17 @@ class HakoEdit extends File {
 				$hp = round(100 - $ship[2] / $init->shipHP[$ship[1]] * 100); // 破損率
 				if($ship[1] <= 1) {
 					// 輸送船、漁船
-					$naviText = "{$owner}島所属";
+					$naviText = "{$owner}{$init->nameSuffix}所属";
 				} elseif($ship[1] == 2) {
 					// 海底探索船
 					$treasure = $ship[3] * 1000 + $ship[4] * 100;
 					if($treasure > 0) {
-						$naviText = "{$owner}島所属<br>破損率：{$hp}%<br>{$treasure}億円相当の財宝積載";
+						$naviText = "{$owner}{$init->nameSuffix}所属<br>破損率：{$hp}%<br>{$treasure}億円相当の財宝積載";
 					} else {
-						$naviText = "{$owner}島所属";
+						$naviText = "{$owner}{$init->nameSuffix}所属";
 					}
 				} elseif($ship[1] < 10) {
-					$naviText = "{$owner}島所属<br>破損率：{$hp}%";
+					$naviText = "{$owner}{$init->nameSuffix}所属<br>破損率：{$hp}%";
 				} else {
 					// 海賊船
 					$naviText = "破損率：{$hp}%";

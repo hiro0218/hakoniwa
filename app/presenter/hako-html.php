@@ -747,7 +747,7 @@ END;
 		if(empty($target)) {
 			$target = "無人";
 		}
-		$target = "{$init->tagName_}{$target}島{$init->_tagName}";
+		$target = "{$init->tagName_}{$target}{$init->nameSuffix}{$init->_tagName}";
 		$value = $arg * $init->comCost[$kind];
 		if($value == 0) {
 			$value = $init->comCost[$kind];
@@ -2525,7 +2525,7 @@ END;
 		<th {$init->bgNumberCell} rowspan=2>{$init->tagNumber_}$j{$init->_tagNumber}</th>
 		<td {$init->bgNameCell} rowspan=2>{$name}</td>
 		<td {$init->bgMarkCell}><b><font color="{$ally['color']}">{$ally['mark']}</font></b></td>
-		<td {$init->bgInfoCell}>{$ally['number']}島</td>
+		<td {$init->bgInfoCell}>{$ally['number']}{$init->nameSuffix}</td>
 		<td {$init->bgInfoCell}>{$pop}</td>
 		<td {$init->bgInfoCell}>{$ally['occupation']}%</td>
 		<td {$init->bgInfoCell}>{$farm}</td>
@@ -2596,7 +2596,7 @@ END;
 <TABLE class="table table-bordered">
 	<TR>
 		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</TH>
-		<TH {$init->bgTitleCell}>{$init->tagTH_}島{$init->_tagTH}</TH>
+		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameSuffix}{$init->_tagTH}</TH>
 		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->namePopulation}{$init->_tagTH}</TH>
 		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameArea}{$init->_tagTH}</TH>
 		<TH {$init->bgTitleCell}>{$init->tagTH_}{$init->nameFunds}{$init->_tagTH}</TH>
