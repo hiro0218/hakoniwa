@@ -11,8 +11,7 @@ require_once MODELPATH.'/hako-file.php';
 require_once PRESENTER.'/hako-html.php';
 ini_set('display_errors', 0);
 
-$init = new Init();
-
+global $init;
 $THIS_FILE = $init->baseDir . "/hako-edit.php";
 
 class CgiImitation {

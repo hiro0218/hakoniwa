@@ -13,6 +13,5 @@ require_once MODELPATH.'/hako-turn.php';
 require_once PRESENTER.'/hako-html.php';
 require_once CONTROLLERPATH.'/main.php';
 
-$init  = new Init();
 $start = new Main();
 $start->execute();

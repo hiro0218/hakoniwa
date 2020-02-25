@@ -13,6 +13,5 @@ require_once MODELPATH.'/hako-file.php';
 require_once PRESENTER.'/hako-html.php';
 require_once CONTROLLERPATH.'/admin/bf.php';
 
-$init  = new Init();
 $start = new BF();
 $start->execute();

@@ -35,9 +35,11 @@ define('CONTROLLERPATH', realpath(APPPATH.'/controller/').DIRECTORY_SEPARATOR); 
 define('HELPERPATH', realpath(APPPATH.'/helper/').DIRECTORY_SEPARATOR);  // ヘルパー パス
 define('MODELPATH', realpath(APPPATH.'/model/').DIRECTORY_SEPARATOR);  // モデル パス
 define('PRESENTER', realpath(APPPATH.'/presenter/').DIRECTORY_SEPARATOR);  // プレゼンター パス
-define('VIEWS', realpath(APPPATH.'/views/').DIRECTORY_SEPARATOR);  // 
+define('VIEWS', realpath(APPPATH.'/views/').DIRECTORY_SEPARATOR);  //
 
 
 // 共通
 require_once DOCROOT.'hako-init.php';
 require_once APPPATH.'/helper/util.php';
+
+$init  = new Init();

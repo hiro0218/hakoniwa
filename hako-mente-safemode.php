@@ -12,6 +12,5 @@ require_once MODELPATH.'/hako-cgi.php';
 require_once PRESENTER.'/hako-html.php';
 require_once CONTROLLERPATH.'/admin/mente-safe.php';
 
-$init  = new Init();
 $start = new MenteSafe();
 $start->execute();

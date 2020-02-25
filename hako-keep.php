@@ -13,6 +13,5 @@ require_once MODELPATH.'/hako-file.php';
 require_once PRESENTER.'/hako-html.php';
 require_once CONTROLLERPATH.'/admin/keep.php';
 
-$init  = new Init();
 $start = new Keep();
 $start->execute();
