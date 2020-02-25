@@ -7,8 +7,12 @@
  */
 
 class Init {
-   //function __construct() {}
-   //function __destruct() {}
+	function __construct() {
+		$this->CPU_start = microtime();
+		$this->setpubliciable();
+		mt_srand($_SERVER['REQUEST_TIME']);
+		// 日本時間にあわせる
+	}
 
 	// 各種設定値
 
@@ -905,14 +909,4 @@ class Init {
 		$this->comName[$this->comAutoDelete]   = '全計画を白紙撤回';
 		$this->comCost[$this->comAutoDelete]   = 0;
 	}
-
-	function __construct() {
-		$this->CPU_start = microtime();
-		$this->setpubliciable();
-		mt_srand($_SERVER['REQUEST_TIME']);
-		// 日本時間にあわせる
-	}
-
 }
-
-
