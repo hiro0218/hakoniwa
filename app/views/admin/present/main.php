@@ -55,7 +55,12 @@ END;
 <?php
 for ($i=0; $i < $hako->islandNumber; $i++) {
 	$present =&$hako->islands[$i]['present'];
-	$name =&$hako->islands[$i]['name'];
+    $name =&$hako->islands[$i]['name'];
+
+    if (!isset($present['item'])) {
+        continue;
+    }
+
 	if ( $present['item'] == 0 ) {
 		if ( $present['px'] != 0 ) {
 			$money = $present['px'] . $init->unitMoney;
