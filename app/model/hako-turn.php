@@ -164,7 +164,7 @@ class Turn {
 
 		// バックアップ
 		if(($hako->islandTurn % $init->backupTurn) == 0) {
-            $hako->safemode_backup();
+            $hako->backup();
 		}
 
 		// ファイルに書き出し
