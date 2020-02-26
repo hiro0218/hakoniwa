@@ -4,6 +4,10 @@
  * @author hiro <@hiro0218>
  */
 
+require_once MODEL_PATH.'/Admin.php';
+require_once MODEL_PATH.'/Cgi.php';
+require_once MODEL_PATH.'/File/HakoBF.php';
+
  class BF extends Admin {
 
  	function execute() {

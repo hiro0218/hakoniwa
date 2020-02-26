@@ -4,6 +4,10 @@
  * @author hiro <@hiro0218>
  */
 
+require_once MODEL_PATH.'/Admin.php';
+require_once MODEL_PATH.'/Cgi.php';
+require_once MODEL_PATH.'/File/HakoPresent.php';
+
  class Present extends Admin {
 
  	function execute() {

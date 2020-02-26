@@ -5,219 +5,7 @@
  * @since 箱庭諸島 S.E ver23_r09 by SERA
  * @author hiro <@hiro0218>
  */
-//hako-turn.php
-
-class LogIO {
-    public $this_file = '';
-    public $init;
-
-	private $logPool       = array();
-	private $secretLogPool = array();
-	private $lateLogPool   = array();
-
-
-	public function __construct() {
-		global $init;
-        $this->init = $init;
-		$this->this_file = $init->baseDir . "/hako-main.php";
-	}
-
-	/**
-	 * ログファイルを後ろにずらす
-	 * @return [type] [description]
-	 */
-	function slideBackLogFile() {
-		for($i = $this->init->logMax - 1; $i >= 0; $i--) {
-			$j = $i + 1;
-			$s = "{$this->init->dirName}/hakojima.log{$i}";
-			$d = "{$this->init->dirName}/hakojima.log{$j}";
-			if(is_file($s)) {
-				if(is_file($d)) {
-					unlink($d);
-				}
-				rename($s, $d);
-			}
-		}
-	}
-	//---------------------------------------------------
-	// 最近の出来事を出力
-	//---------------------------------------------------
-	function logFilePrint($num = 0, $id = 0, $mode = 0) {
-		global $init;
-		$fileName = $init->dirName . "/hakojima.log" . $num;
-		if(!is_file($fileName)) {
-			return;
-		}
-		$fp = fopen($fileName, "r");
-		$row = 1;
-
-		echo "<div>";
-		while($line = chop(fgets($fp, READ_LINE))) {
-			list($m, $turn, $id1, $id2, $message) = explode(",", $line, 5);
-			if($m == 1) {
-				if(($mode == 0) || ($id1 != $id)) {
-					continue;
-				}
-				$m = "<strong>(機密)</strong>";
-			} else {
-				$m = "";
-			}
-			if($id != 0) {
-				if(($id != $id1) && ($id != $id2)) {
-					continue;
-				}
-			}
-			if($row == 1) {
-				echo "<h2>{$init->tagNumber_}ターン{$turn}の出来事{$init->_tagNumber}</h2>\n";
-				$row++;
-			}
-			echo "<ul class='list-unstyled'>";
-			echo "<li>{$message}</li>\n";
-			echo "</ul>";
-		}
-		echo "</div>";
-
-		fclose($fp);
-	}
-	//---------------------------------------------------
-	// 発見の記録を出力
-	//---------------------------------------------------
-	function historyPrint() {
-		$fileName = $this->init->dirName . "/hakojima.his";
-
-		if(!is_file($fileName)) {
-			return;
-		}
-
-		$fp = fopen($fileName, "r");
-		$history = array();
-		$k = 0;
-		while($line = chop(fgets($fp, READ_LINE))) {
-			array_push($history, $line);
-			$k++;
-		}
-
-		for($i = 0; $i < $k; $i++) {
-			list($turn, $his) = explode(",", array_pop($history), 2);
-			echo "<li>{$this->init->tagNumber_}ターン{$turn}{$this->init->_tagNumber}：$his</li>\n";
-		}
-
-	}
-	//---------------------------------------------------
-	// 発見の記録を保存
-	//---------------------------------------------------
-	function history($str) {
-		$fileName = "{$this->init->dirName}/hakojima.his";
-
-		if(!is_file($fileName)) {
-			touch($fileName);
-		}
-		$fp = fopen($fileName, "a");
-		fputs($fp, "{$GLOBALS['ISLAND_TURN']},{$str}\n");
-		fclose($fp);
-		// chmod($fileName, 0666);
-	}
-	//---------------------------------------------------
-	// 発見の記録ログ調整
-	//---------------------------------------------------
-	function historyTrim() {
-		$count = 0;
-		$fileName = "{$this->init->dirName}/hakojima.his";
-
-		if(is_file($fileName)) {
-			$fp = fopen($fileName, "r");
-
-			$line = array();
-			while($l = chop(fgets($fp, READ_LINE))) {
-				array_push($line, $l);
-				$count++;
-			}
-			fclose($fp);
-			if($count > $this->init->historyMax) {
-				if(!is_file($fileName)) {
-					touch($fileName);
-				}
-				$fp = fopen($fileName, "w");
-				for($i = ($count - $this->init->historyMax); $i < $count; $i++) {
-					fputs($fp, "{$line[$i]}\n");
-				}
-				fclose($fp);
-				// chmod($fileName, 0666);
-			}
-		}
-	}
-	//---------------------------------------------------
-	// ログ
-	//---------------------------------------------------
-	function out($str, $id = "", $tid = "") {
-		array_push($this->logPool, "0,{$GLOBALS['ISLAND_TURN']},{$id},{$tid},{$str}");
-	}
-	//---------------------------------------------------
-	// 機密ログ
-	//---------------------------------------------------
-	function secret($str, $id = "", $tid = "") {
-		array_push($this->secretLogPool,"1,{$GLOBALS['ISLAND_TURN']},{$id},{$tid},{$str}");
-	}
-	//---------------------------------------------------
-	// 遅延ログ
-	//---------------------------------------------------
-	function late($str, $id = "", $tid = "") {
-		array_push($this->lateLogPool,"0,{$GLOBALS['ISLAND_TURN']},{$id},{$tid},{$str}");
-	}
-	//---------------------------------------------------
-	// ログ書き出し
-	//---------------------------------------------------
-	function flush() {
-		$fileName = "{$this->init->dirName}/hakojima.log0";
-
-		if(!is_file($fileName)) {
-			touch($fileName);
-		}
-		$fp = fopen($fileName, "w");
-
-		// 全部逆順にして書き出す
-		if(!empty($this->secretLogPool)) {
-			for($i = count($this->secretLogPool) - 1; $i >= 0; $i--) {
-				fputs($fp, "{$this->secretLogPool[$i]}\n");
-			}
-		}
-		if(!empty($this->lateLogPool)) {
-			for($i = count($this->lateLogPool) - 1; $i >= 0; $i--) {
-				fputs($fp, "{$this->lateLogPool[$i]}\n");
-			}
-		}
-		if(!empty($this->logPool)) {
-			for($i = count($this->logPool) - 1; $i >= 0; $i--) {
-				fputs($fp, "{$this->logPool[$i]}\n");
-			}
-		}
-		fclose($fp);
-		// chmod($fileName, 0666);
-	}
-
-	/**
-	 * お知らせを出力
-	 * @return [type] [description]
-	 */
-	function infoPrint() {
-		if($this->init->noticeFile == "") {
-			return;
-		}
-
-		$fileName = "{$this->init->noticeFile}";
-		if(!is_file($fileName)) {
-			return;
-		}
-
-		$fp = fopen($fileName, "r");
-		while($line = fgets($fp, READ_LINE)) {
-			$line = chop($line);
-			echo "{$line}<br>\n";
-		}
-		fclose($fp);
-
-	}
-}
+require_once MODEL_PATH. '/Log/LogIO.php';
 
 class Log extends LogIO {
 
@@ -225,8 +13,7 @@ class Log extends LogIO {
 		$this->history("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}{$this->init->_tagName}</A>が発見される。");
 	}
 	function changeName($name1, $name2) {
-		//$this->history("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name1}島</A>{$this->init->_tagName}、名称を<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name2}島</A>{$this->init->_tagName}に変更する。");
-		$this->history("{$this->init->tagName_}{$name1}島{$this->init->_tagName}、名称を{$this->init->tagName_}{$name2}島{$this->init->_tagName}に変更する。");
+        $this->history("{$this->init->tagName_}{$name1}{$init->nameSuffix}{$this->init->_tagName}、名称を{$this->init->tagName_}{$name2}{$init->nameSuffix}{$this->init->_tagName}に変更する。");
 	}
 	// 資金をプレゼント
 	function presentMoney($id, $name, $value) {
@@ -344,15 +131,15 @@ class Log extends LogIO {
 	}
 	// 衛星破壊成功
 	function EiseiAtts($id, $tId, $name, $tName, $comName, $tEiseiname) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}{$this->init->_tagName}</A>が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}に向けて{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行い、<strong>{$tEiseiname}</strong>に命中。<strong>$tEiseiname</strong>は跡形もなく消し飛びました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}{$this->init->_tagName}</A>が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}に向けて{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行い、<strong>{$tEiseiname}</strong>に命中。<strong>$tEiseiname</strong>は跡形もなく消し飛びました。",$id, $tId);
 	}
 	// 衛星破壊失敗
 	function EiseiAttf($id, $tId, $name, $tName, $comName, $tEiseiname) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}の<strong>{$tEiseiname}</strong>に向けて{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行いましたが、何にも命中せず宇宙の彼方へと飛び去ってしまいました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}の<strong>{$tEiseiname}</strong>に向けて{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行いましたが、何にも命中せず宇宙の彼方へと飛び去ってしまいました。",$id, $tId);
 	}
 	// 衛星レーザー
 	function EiseiLzr($id, $tId, $name, $tName, $comName, $tLname, $point, $str) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}{$this->init->_tagName}</A>が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$point}{$this->init->_tagName}に向けて{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行い、<strong>{$tLname}</strong>に命中。一帯が{$str}",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}{$this->init->_tagName}</A>が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$point}{$this->init->_tagName}に向けて{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行い、<strong>{$tLname}</strong>に命中。一帯が{$str}",$id, $tId);
 	}
 	// 油田発見
 	function oilFound($id, $name, $point, $comName, $str) {
@@ -432,14 +219,14 @@ class Log extends LogIO {
 	function mslogS($id, $tId, $name, $tName, $comName, $point, $missiles, $missileA, $missileB, $missileC, $missileD, $missileE) {
 		$missileBE = $missileB + $missileE;
 		$missileH = $missiles - $missileA - $missileC - $missileBE;
-		$this->secret("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$point}{$this->init->_tagName}地点に向けて{$this->init->tagComName_}{$missiles}発{$this->init->_tagComName}の{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行いました。(有効{$missileH}発/怪獣命中{$missileD}発/怪獣無効{$missileC}発/防衛{$missileBE}発/無効{$missileA}発)",$id, $tId);
-		$this->late("<strong>何者か</strong>が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$point}{$this->init->_tagName}地点に向けて{$this->init->tagComName_}{$missiles}発{$this->init->_tagComName}の{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行いました。(有効{$missileH}発/怪獣命中{$missileD}発/怪獣無効{$missileC}発/防衛{$missileBE}発/無効{$missileA}発)",$tId);
+		$this->secret("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$point}{$this->init->_tagName}地点に向けて{$this->init->tagComName_}{$missiles}発{$this->init->_tagComName}の{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行いました。(有効{$missileH}発/怪獣命中{$missileD}発/怪獣無効{$missileC}発/防衛{$missileBE}発/無効{$missileA}発)",$id, $tId);
+		$this->late("<strong>何者か</strong>が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$point}{$this->init->_tagName}地点に向けて{$this->init->tagComName_}{$missiles}発{$this->init->_tagComName}の{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行いました。(有効{$missileH}発/怪獣命中{$missileD}発/怪獣無効{$missileC}発/防衛{$missileBE}発/無効{$missileA}発)",$tId);
 	}
 	// その他ミサイルログ
 	function mslog($id, $tId, $name, $tName, $comName, $point, $missiles, $missileA, $missileB, $missileC, $missileD, $missileE) {
 		$missileBE = $missileB + $missileE;
 		$missileH = $missiles - $missileA - $missileC - $missileBE;
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$point}{$this->init->_tagName}地点に向けて{$this->init->tagComName_}{$missiles}発{$this->init->_tagComName}の{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行いました。(有効{$missileH}発/怪獣命中{$missileD}発/怪獣無効{$missileC}発/防衛{$missileBE}発/無効{$missileA}発)",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$point}{$this->init->_tagName}地点に向けて{$this->init->tagComName_}{$missiles}発{$this->init->_tagComName}の{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行いました。(有効{$missileH}発/怪獣命中{$missileD}発/怪獣無効{$missileC}発/防衛{$missileBE}発/無効{$missileA}発)",$id, $tId);
 	}
 	// 陸地破壊弾、山に命中
 	function msLDMountain($id, $tId, $name, $tName, $comName, $tLname, $point, $tPoint) {
@@ -579,7 +366,7 @@ class Log extends LogIO {
 	}
 	// 怪獣派遣
 	function monsSend($id, $tId, $name, $tName) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<strong>人造怪獣</strong>を建造。<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}へ送りこみました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<strong>人造怪獣</strong>を建造。<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}へ送りこみました。",$id, $tId);
 	}
 	// 衛星消滅？！
 	function EiseiEnd($id, $name, $tEiseiname) {
@@ -587,7 +374,7 @@ class Log extends LogIO {
 	}
 	// 戦艦、怪獣に攻撃
 	function SenkanMissile($id, $tId, $name, $tName, $lName, $point, $tPoint, $tmonsName) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}<strong>{$lName}</strong>が多弾頭ミサイルを発射し、{$tPoint}の<strong>{$tmonsName}</strong>に命中しました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}<strong>{$lName}</strong>が多弾頭ミサイルを発射し、{$tPoint}の<strong>{$tmonsName}</strong>に命中しました。",$id, $tId);
 	}
 	// 怪獣あうち
 	function BariaAttack($id, $name, $lName, $point, $mName) {
@@ -599,7 +386,7 @@ class Log extends LogIO {
 	}
 	// 怪獣輸送
 	function monsSendSleeper($id, $tId, $name, $tName, $lName) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}で眠っていた<strong>怪獣{$lName}</strong>が、<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}へ送りこまれました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}で眠っていた<strong>怪獣{$lName}</strong>が、<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}へ送りこまれました。",$id, $tId);
 	}
 	// 輸出
 	function sell($id, $name, $comName, $value, $unit) {
@@ -607,7 +394,7 @@ class Log extends LogIO {
 	}
 	// 援助
 	function aid($id, $tId, $name, $tName, $comName, $str) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}へ<strong>{$str}</strong>の{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行いました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}へ<strong>{$str}</strong>の{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行いました。",$id, $tId);
 	}
 	// 誘致活動
 	function propaganda($id, $name, $comName) {
@@ -752,11 +539,11 @@ class Log extends LogIO {
 	}
 	// 船派遣した
 	function shipSend($id, $tId, $name, $sName, $point, $tName) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>が{$point}{$this->init->_tagName}の<strong>{$sName}</strong>を<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}に{$this->init->tagComName_}派遣{$this->init->_tagComName}しました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>が{$point}{$this->init->_tagName}の<strong>{$sName}</strong>を<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}に{$this->init->tagComName_}派遣{$this->init->_tagComName}しました。",$id, $tId);
 	}
 	// 船帰還した
 	function shipReturn($id, $tId, $name, $sName, $point, $tName) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}{$point}の<strong>{$sName}</strong>を{$this->init->tagComName_}帰還{$this->init->_tagComName}させました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}{$point}の<strong>{$sName}</strong>を{$this->init->tagComName_}帰還{$this->init->_tagComName}させました。",$id, $tId);
 	}
 	// 財宝回収
 	function RecoveryTreasure($id, $name, $sName, $value) {
@@ -776,7 +563,7 @@ class Log extends LogIO {
 	}
 	// 怪獣ワープ
 	function monsWarp($id, $tId, $name, $mName, $point, $tName) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<strong>怪獣{$mName}</strong>が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}にワープしました！",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<strong>怪獣{$mName}</strong>が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}にワープしました！",$id, $tId);
 	}
 	// 怪獣による資金増加
 	function MonsMoney($id, $name, $mName, $point, $str) {
@@ -900,7 +687,7 @@ class Log extends LogIO {
 	}
 	// 資金不足のため船舶放棄
 	function shipRelease($id, $tId, $name, $tName, $point, $tshipName) {
-		$this->late("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島所属</A>{$this->init->_tagName}<b>{$tshipName}</b>は、資金不足のため破棄されました。",$id, $tId);
+		$this->late("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}所属</A>{$this->init->_tagName}<b>{$tshipName}</b>は、資金不足のため破棄されました。",$id, $tId);
 	}
 	// 海賊船現る
 	function VikingCome($id, $name, $point) {
@@ -912,11 +699,11 @@ class Log extends LogIO {
 	}
 	// 海賊船攻撃
 	function VikingAttack($id, $tId, $name, $tName, $lName, $point, $tPoint, $tshipName) {
-		$this->late("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<b>{$lName}</b>が{$tPoint}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}<B>{$tshipName}</B>を攻撃しました。",$id, $tId);
+		$this->late("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<b>{$lName}</b>が{$tPoint}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}<B>{$tshipName}</B>を攻撃しました。",$id, $tId);
 	}
 	// 戦艦攻撃
 	function SenkanAttack($id, $tId, $name, $tName, $lName, $point, $tpoint, $tshipName) {
-		$this->late("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}<b>{$lName}</b>が{$tpoint}の<B>{$tshipName}</B>を攻撃しました。",$id, $tId);
+		$this->late("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}<b>{$lName}</b>が{$tpoint}の<B>{$tshipName}</B>を攻撃しました。",$id, $tId);
 	}
 	// 海戦沈没
 	function BattleSinking($id, $tId, $name, $lName, $point) {
@@ -924,7 +711,7 @@ class Log extends LogIO {
 	}
 	// 船舶沈没
 	function ShipSinking($id, $tId, $name, $tName, $lName, $point) {
-		$this->late("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}<b>{$lName}</b>は沈没しました。",$id, $tId);
+		$this->late("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}<b>{$lName}</b>は沈没しました。",$id, $tId);
 	}
 	// 海賊船の財宝
 	function VikingTreasure($id, $name, $point) {
@@ -932,7 +719,7 @@ class Log extends LogIO {
 	}
 	// 財宝発見
 	function FindTreasure($id, $tId, $name, $tName, $point, $tshipName, $value) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}<B>{$tshipName}</B>が<b>{$value}億円相当</b>の{$this->init->tagDisaster_}財宝{$this->init->_tagDisaster}を発見しました。",$id);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$point}{$this->init->_tagName}の<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}<B>{$tshipName}</B>が<b>{$value}億円相当</b>の{$this->init->tagDisaster_}財宝{$this->init->_tagDisaster}を発見しました。",$id);
 	}
 	// 海賊船、強奪
 	function RobViking($id, $name, $point, $tshipName, $money, $food) {
@@ -1002,14 +789,14 @@ class Log extends LogIO {
 	}
 	// 試合勝利
 	function GameWin($id, $tId, $name, $tName, $comName, $it, $tt) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}と{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行い、<strong>{$it}点対{$tt}点</strong>で勝利しました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}と{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行い、<strong>{$it}点対{$tt}点</strong>で勝利しました。",$id, $tId);
 	}
 	// 試合敗退
 	function GameLose($id, $tId, $name, $tName, $comName, $it, $tt) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}と{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行い、<strong>{$it}点対{$tt}点</strong>で敗退しました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}と{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行い、<strong>{$it}点対{$tt}点</strong>で敗退しました。",$id, $tId);
 	}
 	// 試合引き分け
 	function GameDraw($id, $tId, $name, $tName, $comName, $it, $tt) {
-		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}島</A>{$this->init->_tagName}と{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行い、<strong>{$it}点対{$tt}点</strong>で引き分けました。",$id, $tId);
+		$this->out("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}が<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$tName}{$init->nameSuffix}</A>{$this->init->_tagName}と{$this->init->tagComName_}{$comName}{$this->init->_tagComName}を行い、<strong>{$it}点対{$tt}点</strong>で引き分けました。",$id, $tId);
 	}
 }

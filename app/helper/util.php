@@ -85,6 +85,8 @@ class Util {
 	 * @return [type]                 [description]
 	 */
 	static function islandName($island, $ally, $idToAllyNumber) {
+        global $init;
+
 		$name = '';
 		foreach ($island['allyId'] as $id) {
 			$i = $idToAllyNumber[$id];
@@ -92,7 +94,7 @@ class Util {
 			$color = $ally[$i]['color'];
 			$name .= '<FONT COLOR="' . $color . '"><B>' . $mark . '</B></FONT> ';
 		}
-		$name .= $island['name'] . "島";
+		$name .= $island['name'] . $init->nameSuffix;
 
 		return ($name);
 	}

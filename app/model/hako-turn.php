@@ -8,7 +8,7 @@
 
 require_once 'config.php';
 
-require_once APP_PATH.'/model/hako-log.php';
+require_once MODEL_PATH. '/Log/Core.php';
 require_once APP_PATH.'/model/hako-make.php';
 
 class Turn {
@@ -162,14 +162,11 @@ class Turn {
 			$this->estimate($hako, $hako->islands[$order[$i]]);
 		}
 
-		// バックアップターンであれば、書く前にrename
-		if(!($init->safemode) && (($hako->islandTurn % $init->backupTurn) == 0)) {
-			$hako->backUp();
+		// バックアップ
+		if(($hako->islandTurn % $init->backupTurn) == 0) {
+            $hako->backup();
 		}
-		// バックアップターンであれば、セーフモードバックアップ取得
-		if(($init->safemode) && (($hako->islandTurn % $init->backupTurn) == 0)) {
-			$hako->safemode_backup();
-		}
+
 		// ファイルに書き出し
 		$hako->writeIslandsFile(-1);
 
@@ -2470,7 +2467,7 @@ class Turn {
 									if(($ship[1] == 2 || $ship[1] == 3) && ($ship[2] > 20)) {
 										// 海底探索船または戦艦の場合
 										$tLname = $init->shipName[$ship[1]];
-										$tLname .= "（{$this->islands[$ship[0]]['name']}島所属）";
+										$tLname .= "（{$this->islands[$ship[0]]['name']}{$init->nameSuffix}所属）";
 										if($kind == $init->comMissileST) {
 											// ステルス
 											$this->log->msGensyoS($id, $target, $name, $tName, $comName, $tLname, $point, $tPoint);
@@ -4318,7 +4315,7 @@ class Turn {
 						//船がまだ動いていない時
 						$ship = Util::navyUnpack($landValue[$x][$y]);
 						$lName = $init->shipName[$ship[1]];
-						$tLname .= "（{$this->islands[$ship[0]]['name']}島所属）";
+						$tLname .= "（{$this->islands[$ship[0]]['name']}{$init->nameSuffix}所属）";
 
 						$tn = $hako->idToNumber[$ship[0]];
 						$tIsland = &$hako->islands[$tn];
