@@ -5,8 +5,8 @@
  */
 
 require_once MODEL_PATH.'/hako-cgi.php';
-require_once MODEL_PATH.'/hako-file.php';
 require_once MODEL_PATH.'/hako-turn.php';
+require_once MODEL_PATH.'/File/Hako.php';
 
 class Main {
 

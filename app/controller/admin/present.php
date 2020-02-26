@@ -6,7 +6,7 @@
 
 require_once MODEL_PATH.'/admin.php';
 require_once MODEL_PATH.'/hako-cgi.php';
-require_once MODEL_PATH.'/hako-file.php';
+require_once MODEL_PATH.'/File/HakoPresent.php';
 
  class Present extends Admin {
 

@@ -7,7 +7,7 @@
  */
 
 require_once 'config.php';
-require_once MODEL_PATH.'/hako-file.php';
+require_once MODEL_PATH.'/File/HakoEdit.php';
 ini_set('display_errors', 0);
 
 global $init;
