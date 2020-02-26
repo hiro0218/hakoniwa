@@ -8,7 +8,7 @@
 
 require_once HELPER_PATH.'/message/error.php';
 require_once HELPER_PATH.'/message/success.php';
-require_once APP_PATH.'/model/hako-log.php';
+require_once MODEL_PATH. '/Log/Core.php';
 
 class HTML {
 	/**

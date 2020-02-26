@@ -8,7 +8,7 @@
 
 require_once 'config.php';
 
-require_once APP_PATH.'/model/hako-log.php';
+require_once MODEL_PATH. '/Log/Core.php';
 require_once APP_PATH.'/model/hako-make.php';
 
 class Turn {
