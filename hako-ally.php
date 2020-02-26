@@ -8,7 +8,6 @@
 
 require_once 'config.php';
 require_once MODEL_PATH.'/hako-cgi.php';
-require_once PRESENTER_PATH.'/hako-html.php';
 
 class MakeAlly {
 	/**
