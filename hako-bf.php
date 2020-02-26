@@ -7,9 +7,6 @@
  */
 
 require_once 'config.php';
-require_once MODEL_PATH.'/admin.php';
-require_once MODEL_PATH.'/hako-cgi.php';
-require_once MODEL_PATH.'/hako-file.php';
 require_once CONTROLLER_PATH.'/admin/bf.php';
 
 $start = new BF();

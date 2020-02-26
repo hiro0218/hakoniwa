@@ -7,7 +7,6 @@
  */
 
 require_once 'config.php';
-require_once MODEL_PATH.'/hako-cgi.php';
 require_once CONTROLLER_PATH.'/admin/index.php';
 
 $start = new Admin();

@@ -4,6 +4,9 @@
  * @author hiro <@hiro0218>
  */
 
+require_once MODEL_PATH.'/admin.php';
+require_once MODEL_PATH.'/hako-cgi.php';
+
  class Axes extends Admin {
  	public $init;
 

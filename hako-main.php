@@ -7,9 +7,6 @@
  */
 
 require_once 'config.php';
-require_once MODEL_PATH.'/hako-cgi.php';
-require_once MODEL_PATH.'/hako-file.php';
-require_once MODEL_PATH.'/hako-turn.php';
 require_once CONTROLLER_PATH.'/main.php';
 
 $start = new Main();
