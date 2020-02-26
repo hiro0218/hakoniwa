@@ -7,7 +7,7 @@
  */
 
 require_once 'config.php';
-require_once MODEL_PATH.'/hako-cgi.php';
+require_once MODEL_PATH.'/Cgi.php';
 
 class MakeAlly {
 	/**
