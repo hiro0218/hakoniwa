@@ -5,6 +5,7 @@
  */
 
 require_once MODEL_PATH.'/Cgi.php';
+require_once PRESENTER_PATH.'/HtmlAdmin.php';
 
 class Admin {
 

@@ -42,6 +42,5 @@ define('VIEWS_PATH', realpath(APP_PATH.'/views/').DIRECTORY_SEPARATOR);  //
 // 共通
 require_once DOC_ROOT.'Init.php';
 require_once APP_PATH.'/helper/util.php';
-require_once PRESENTER_PATH.'/hako-html.php';
 
 $init  = new Init();

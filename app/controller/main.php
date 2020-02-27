@@ -7,6 +7,9 @@
 require_once MODEL_PATH.'/Cgi.php';
 require_once MODEL_PATH.'/hako-turn.php';
 require_once MODEL_PATH.'/File/Hako.php';
+require_once PRESENTER_PATH.'/HtmlTop.php';
+require_once PRESENTER_PATH.'/HtmlMap.php';
+require_once PRESENTER_PATH.'/HtmlMapJS.php';
 
 class Main {
 

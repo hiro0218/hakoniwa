@@ -7,6 +7,7 @@
 require_once MODEL_PATH.'/Admin.php';
 require_once MODEL_PATH.'/Cgi.php';
 require_once MODEL_PATH.'/File/HakoBF.php';
+require_once PRESENTER_PATH.'/HtmlBF.php';
 
  class BF extends Admin {
 

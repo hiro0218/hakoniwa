@@ -8,6 +8,8 @@
 
 require_once 'config.php';
 require_once MODEL_PATH.'/File/HakoEdit.php';
+require_once PRESENTER_PATH.'/HtmlTop.php';
+require_once PRESENTER_PATH.'/HtmlMap.php';
 ini_set('display_errors', 0);
 
 global $init;
