@@ -6,7 +6,6 @@
  * @author hiro <@hiro0218>
  */
 
-require_once 'config.php';
 require_once MODEL_PATH. '/Log/Core.php';
 
 class Turn {
