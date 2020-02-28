@@ -6,6 +6,7 @@
 
 require_once MODEL_PATH.'/Admin.php';
 require_once MODEL_PATH.'/Cgi.php';
+require_once PRESENTER_PATH.'/HtmlAxes.php';
 
  class Axes extends Admin {
  	public $init;

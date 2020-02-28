@@ -7,11 +7,12 @@
 require_once MODEL_PATH.'/Admin.php';
 require_once MODEL_PATH.'/Cgi.php';
 require_once MODEL_PATH.'/File/HakoKP.php';
+require_once PRESENTER_PATH.'/HtmlKeep.php';
 
  class Keep extends Admin {
 
  	function execute() {
- 		$html = new HTMLKeep();
+ 		$html = new HtmlKeep();
  		$cgi = new Cgi();
  		$hako = new HakoKP();
  		$this->parseInputData();
