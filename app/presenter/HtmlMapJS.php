@@ -416,19 +416,19 @@ function plchg() {
 		} else if(c[0] == $init->comReturnShip){ // 船帰還
 			strn2 = tgt + point + "の" + kind;
 		} else if(c[0] == $init->comEisei){ // 人工衛星打ち上げ
-			if(c[3] >= $init->EiseiNumber) {
+			if(c[3] >= count($init->EiseiName)) {
 				c[3] = 0;
 			}
 			arg = c[3];
 			strn2 = '{$init->tagComName_}' + eiseilist[arg] + "打ち上げ" + '{$init->_tagComName}';
 		} else if(c[0] == $init->comEiseimente){ // 人工衛星修復
-			if(c[3] >= $init->EiseiNumber) {
+			if(c[3] >= count($init->EiseiName)) {
 				c[3] = 0;
 			}
 			arg = c[3];
 			strn2 = '{$init->tagComName_}' + eiseilist[arg] + "修復" + '{$init->_tagComName}';
 		} else if(c[0] == $init->comEiseiAtt){ // 人工衛星破壊
-			if(c[3] >= $init->EiseiNumber) {
+			if(c[3] >= count($init->EiseiName)) {
 				c[3] = 0;
 			}
 			arg = c[3];

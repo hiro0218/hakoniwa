@@ -156,7 +156,7 @@ class HtmlTop extends HTML {
 
 
 			$eiseis = "";
-			for($e = 0; $e < $init->EiseiNumber; $e++) {
+			for($e = 0; $e < count($init->EiseiName); $e++) {
 				if (isset($eisei[$e])) {
 					if($eisei[$e] > 0) {
 						$eiseis .= "<img src=\"{$init->imgDir}/eisei{$e}.gif\" alt=\"{$init->EiseiName[$e]} {$eisei[$e]}%\" title=\"{$init->EiseiName[$e]} {$eisei[$e]}%\"> ";
@@ -167,7 +167,7 @@ class HtmlTop extends HTML {
 			}
 
 			$zins = "";
-			for($z = 0; $z < $init->ZinNumber; $z++) {
+			for($z = 0; $z < count($init->ZinName); $z++) {
 				if (isset($zin[$z])) {
 					if($zin[$z] > 0) {
 						$zins .= "<img src=\"{$init->imgDir}/zin{$z}.gif\" alt=\"{$init->ZinName[$z]}\" title=\"{$init->ZinName[$z]}\"> ";
@@ -178,7 +178,7 @@ class HtmlTop extends HTML {
 			}
 
 			$items = "";
-			for($t = 0; $t < $init->ItemNumber; $t++) {
+			for($t = 0; $t < count($init->ItemName); $t++) {
 				if (isset($item[$t])) {
 					if($item[$t] > 0) {
 						if($t == 20) {

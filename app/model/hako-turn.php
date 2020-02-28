@@ -1393,7 +1393,7 @@ class Turn {
 						} else {
 							// 目的の場所を記念碑に
 							$land[$x][$y] = $init->landMonument;
-							if($arg >= $init->monumentNumber) {
+							if($arg >= count($init->monumentNumber)) {
 								$arg = 0;
 							}
 							$landValue[$x][$y] = $arg;

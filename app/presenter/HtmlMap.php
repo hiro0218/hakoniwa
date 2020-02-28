@@ -131,7 +131,7 @@ class HtmlMap extends HTML {
 		}
 
 		$eiseis = "";
-		for($e = 0; $e < $init->EiseiNumber; $e++) {
+		for($e = 0; $e < count($init->EiseiName); $e++) {
 			$eiseip = "";
 			if ( isset($eisei[$e]) ) {
 				if($eisei[$e] > 0) {
@@ -144,7 +144,7 @@ class HtmlMap extends HTML {
 		}
 
 		$zins = "";
-		for($z = 0; $z < $init->ZinNumber; $z++) {
+		for($z = 0; $z < count($init->ZinName); $z++) {
 			if ( isset($zin[$z]) ) {
 				if($zin[$z] > 0) {
 					$zins .= "<img src=\"{$init->imgDir}/zin{$z}.gif\" alt=\"{$init->ZinName[$z]}\" title=\"{$init->ZinName[$z]}\"> ";
@@ -155,7 +155,7 @@ class HtmlMap extends HTML {
 		}
 
 		$items = "";
-		for($t = 0; $t < $init->ItemNumber; $t++) {
+		for($t = 0; $t < count($init->ItemName); $t++) {
 			if ( isset($item[$t]) ) {
 				if($item[$t] > 0) {
 					if($t == 20) {
@@ -379,7 +379,7 @@ END;
 
 			case $init->comEisei:
 				// 人工衛星発射
-				if($arg >= $init->EiseiNumber) {
+				if($arg >= count($init->EiseiName)) {
 					$arg = 0;
 				}
 				$str = "{$init->tagComName_}{$init->EiseiName[$arg]}打ち上げ{$init->_tagComName}";
@@ -387,7 +387,7 @@ END;
 
 			case $init->comEiseimente:
 				// 人工衛星修復
-				if($arg >= $init->EiseiNumber) {
+				if($arg >= count($init->EiseiName)) {
 					$arg = 0;
 				}
 				$str = "{$init->tagComName_}{$init->EiseiName[$arg]}修復{$init->_tagComName}";
@@ -395,7 +395,7 @@ END;
 
 			case $init->comEiseiAtt:
 				// 人工衛星破壊砲
-				if($arg >= $init->EiseiNumber) {
+				if($arg >= count($init->EiseiName)) {
 					$arg = 0;
 				}
 				$str = "{$target}へ{$init->tagComName_}{$init->EiseiName[$arg]}破壊砲発射{$init->_tagComName}";
