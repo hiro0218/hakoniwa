@@ -5522,7 +5522,7 @@ class Turn {
 	//---------------------------------------------------
 	static function islandSort(&$hako) {
 		global $init;
-		usort($hako->islands, 'popComp');
+		usort($hako->islands, ['Turn', 'popComp']);
 	}
 
 	//---------------------------------------------------
@@ -6089,31 +6089,31 @@ class Turn {
 				return '海底消防署';
 
 		}
-	}
-}
+    }
 
-//---------------------------------------------------
-// ポイントを比較
-//---------------------------------------------------
-function popComp($x, $y) {
-	if ($x['point'] == 0) {
-		return 1;
-	}
-	if ($y['point'] == 0) {
-		return -1;
-	}
-	if ($x['isBF']) {
-		if (!($y['isBF'])) {
-			return 1;
-		}
-	}
-	if ($y['isBF']) {
-		if (!($x['isBF'])) {
-			return -1;
-		}
-	}
-	if($x['point'] == $y['point']) {
-		return 0;
-	}
-	return ($x['point'] > $y['point']) ? -1 : 1;
+    //---------------------------------------------------
+    // ポイントを比較
+    //---------------------------------------------------
+    static function popComp($x, $y) {
+        if ($x['point'] == 0) {
+            return 1;
+        }
+        if ($y['point'] == 0) {
+            return -1;
+        }
+        if ($x['isBF']) {
+            if (!($y['isBF'])) {
+                return 1;
+            }
+        }
+        if ($y['isBF']) {
+            if (!($x['isBF'])) {
+                return -1;
+            }
+        }
+        if($x['point'] == $y['point']) {
+            return 0;
+        }
+        return ($x['point'] > $y['point']) ? -1 : 1;
+    }
 }
