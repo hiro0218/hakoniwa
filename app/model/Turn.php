@@ -4628,7 +4628,7 @@ class Turn {
 						($landKind == $init->landTown && ($lv <= 30))) {
 						break;
 					}
-					if(Util::random(1000) < $init->disFire - (int)($island['eisei'][0] / 20)) {
+					if(Util::random(1000) < $init->disFire - ((int)$island['eisei'][0] / 20)) {
 						// 周囲の森と記念碑を数える
 						if(Turn::countAround($land, $x, $y, 7, array($init->landForest, $init->landProcity, $init->landFusya, $init->landMonument)) == 0) {
 							// 無かった場合、火災で壊滅
@@ -4807,7 +4807,7 @@ class Turn {
 
 		// 地震判定
 		$prepare2     = isset($island['prepare2']) ? (int)$island['prepare2'] : 0;
-		if ((Util::random(1000) < (($prepare2 + 1) * $init->disEarthquake) - (int)($island['eisei'][1] / 15))
+		if ((Util::random(1000) < (($prepare2 + 1) * $init->disEarthquake) - ((int)$island['eisei'][1] / 15))
 			|| ($presentItem == 1) )
 		{
 			// 地震発生
@@ -4970,7 +4970,7 @@ class Turn {
 		}
 
 		// 津波判定
-		if ((Util::random(1000) < $init->disTsunami - (int)($island['eisei'][1] / 15))
+		if ((Util::random(1000) < $init->disTsunami - ((int)$island['eisei'][1] / 15))
 			|| ($presentItem == 2)) {
 			// 津波発生
 			$this->log->tsunami($id, $name);
@@ -5124,7 +5124,7 @@ class Turn {
 		}
 
 		// 台風判定
-		if ((Util::random(1000) < ($init->disTyphoon - (int)($island['eisei'][0] / 10)))
+		if ((Util::random(1000) < ($init->disTyphoon - ((int)$island['eisei'][0] / 10)))
 				&& (($island['tenki'] == 2) || ($island['tenki'] == 3))
 				|| ($presentItem == 5))
 		{
@@ -5162,7 +5162,7 @@ class Turn {
 		}
 
 		// 巨大隕石判定
-		if (((Util::random(1000) < ($init->disHugeMeteo - (int)($island['eisei'][2] / 50))) && ($island['id'] != 1))
+		if (((Util::random(1000) < ($init->disHugeMeteo - ((int)$island['eisei'][2] / 50))) && ($island['id'] != 1))
 			|| ($presentItem == 6)) {
 			// 落下
 			if ( $presentItem == 6 ) {
@@ -5226,7 +5226,7 @@ class Turn {
 		}
 
 		// 隕石判定
-		if ((Util::random(1000) < ($init->disMeteo - (int)($island['eisei'][2] / 40)))
+		if ((Util::random(1000) < ($init->disMeteo - ((int)$island['eisei'][2] / 40)))
 			|| ($presentItem == 7)) {
 			$first = 1;
 			while((Util::random(2) == 0) || ($first == 1)) {
@@ -5272,7 +5272,7 @@ class Turn {
 		}
 
 		// 噴火判定
-		if ((Util::random(1000) < ($init->disEruption - (int)($island['eisei'][1] / 40)))
+		if ((Util::random(1000) < ($init->disEruption - ((int)$island['eisei'][1] / 40)))
 			|| ($presentItem == 8)) {
 			if ( $presentItem == 8 ) {
 				$x = $island['present']['px'];
