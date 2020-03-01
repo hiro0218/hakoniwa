@@ -9,12 +9,13 @@ class Admin {
     public $dataSet = array();
 
     function parseInputData() {
-        $this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
+        // POSTがない場合は終了
+        if (empty($_POST))  return;
 
-        if(empty($_POST)) {
-            return;
-        }
+        // mode
+        $this->mode = $_POST['mode'] ?? "";
 
+        // POST内容をdataSetへ
         foreach ($_POST as $name => $value) {
             $value = str_replace(",", "", $value);
             $this->dataSet["{$name}"] = $value;
