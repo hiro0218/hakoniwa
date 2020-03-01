@@ -6,8 +6,7 @@
  * @author hiro <@hiro0218>
  */
 
- class Success {
-
+ class SuccessHandler {
  	static function comment() {
  		Util::makeTagMessage("コメントを更新しました", "success");
  	}

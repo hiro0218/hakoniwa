@@ -19,7 +19,7 @@ class MakeJS extends Make {
 		// パスワード
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		// モードで分岐
@@ -46,7 +46,7 @@ class MakeJS extends Make {
 				'target' => $target
 			);
 		}
-		Success::commandAdd();
+		SuccessHandler::commandAdd();
 
 		// データの書き出し
 		$island['command'] = $command;

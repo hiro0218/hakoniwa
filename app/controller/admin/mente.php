@@ -150,10 +150,10 @@ class Mente extends Admin {
 		global $init;
 
 		if(empty($this->dataSet['MPASS1']) || empty($this->dataSet['MPASS2']) || strcmp($this->dataSet['MPASS1'], $this->dataSet['MPASS2'])) {
-			HakoError::wrongMasterPassword();
+			ErrorHandler::wrongMasterPassword();
 			return 0;
 		} else if(empty($this->dataSet['SPASS1']) || empty($this->dataSet['SPASS2']) || strcmp($this->dataSet['SPASS1'], $this->dataSet['SPASS2'])) {
-			HakoError::wrongSpecialPassword();
+			ErrorHandler::wrongSpecialPassword();
 			return 0;
 		}
 		$masterPassword  = crypt($this->dataSet['MPASS1'], 'ma');

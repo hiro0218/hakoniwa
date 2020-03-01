@@ -19,30 +19,30 @@ class Make {
 
 		$log = new Log();
 		if($hako->islandNumber >= $init->maxIsland) {
-			HakoError::newIslandFull();
+			ErrorHandler::newIslandFull();
 			return;
 		}
 		if(empty($data['ISLANDNAME'])) {
-			HakoError::newIslandNoName();
+			ErrorHandler::newIslandNoName();
 			return;
 		}
 		// 名前が正当化チェック
 		if(preg_match("/[,?()<>$]/", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "無人") == 0) {
-			HakoError::newIslandBadName();
+			ErrorHandler::newIslandBadName();
 			return;
 		}
 		// 名前の重複チェック
 		if(Util::nameToNumber($hako, $data['ISLANDNAME']) != -1) {
-			HakoError::newIslandAlready();
+			ErrorHandler::newIslandAlready();
 			return;
 		}
 		// パスワードの存在判定
 		if(empty($data['PASSWORD'])) {
-			HakoError::newIslandNoPassword();
+			ErrorHandler::newIslandNoPassword();
 			return;
 		}
 		if(strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0) {
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		// 新しい島の番号を決める
@@ -356,7 +356,7 @@ class Make {
 		// パスワード
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		// メッセージを更新
@@ -368,7 +368,7 @@ class Make {
 		$hako->writeIslandsFile();
 
 		// コメント更新メッセージ
-		Success::Comment();
+		SuccessHandler::Comment();
 
 		// owner modeへ
 		if($data['DEVELOPEMODE'] == "cgi") {
@@ -399,7 +399,7 @@ class Make {
 			if(preg_match("/^無人$/", $data['ISLANDNAME'])) {
 				// 島の強制削除
 				$this->deleteIsland($hako, $data);
-				Success::deleteIsland($name);
+				SuccessHandler::deleteIsland($name);
 				return;
 			} else {
 				$island['money'] = $init->maxMoney;
@@ -407,30 +407,30 @@ class Make {
 			}
 		} elseif(!Util::checkPassword($island['password'], $data['OLDPASS'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		// 確認用パスワード
 		if(strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		if(!empty($data['ISLANDNAME']) && (strlen($data['ISLANDNAME']) != 0) ) {
 			// 名前変更の場合
 			// 名前が正当かチェック
 			if(preg_match("/[,?()<>$]/", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "無人") == 0) {
-				HakoError::newIslandBadName();
+				ErrorHandler::newIslandBadName();
 				return;
 			}
 			// 名前の重複チェック
 			if(Util::nameToNumber($hako, $data['ISLANDNAME']) != -1) {
-				HakoError::newIslandAlready();
+				ErrorHandler::newIslandAlready();
 				return;
 			}
 			if($island['money'] < $init->costChangeName) {
 				// 金が足りない
-				HakoError::changeNoMoney();
+				ErrorHandler::changeNoMoney();
 				return;
 			}
 			// 代金
@@ -451,7 +451,7 @@ class Make {
 		//if(($flag == 0) && (strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0)) {
 		if( $flag == 0 ) {
 			// どちらも変更されていない
-			HakoError::changeNothing();
+			ErrorHandler::changeNothing();
 			return;
 		}
 		$hako->islands[$num] = $island;
@@ -459,7 +459,7 @@ class Make {
 		$hako->writeIslandsFile($id);
 
 		// 変更成功
-		Success::change();
+		SuccessHandler::change();
 	}
 
 	//---------------------------------------------------
@@ -479,7 +479,7 @@ class Make {
 			$island['food'] = $init->maxFood;
 		} elseif(!Util::checkPassword($island['password'], $data['OLDPASS'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		$island['owner'] = htmlspecialchars($data['OWNERNAME']);
@@ -488,7 +488,7 @@ class Make {
 		$hako->writeIslandsFile($id);
 
 		// 変更成功
-		Success::change();
+		SuccessHandler::change();
 	}
 
 	//---------------------------------------------------
@@ -505,7 +505,7 @@ class Make {
 		// パスワード
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		// モードで分岐
@@ -514,7 +514,7 @@ class Make {
 
 		if(strcmp($data['COMMANDMODE'], 'delete') == 0) {
 			Util::slideFront($command, $data['NUMBER']);
-			Success::commandDelete();
+			SuccessHandler::commandDelete();
 
 		} else if(($data['COMMAND'] == $init->comAutoPrepare) ||
 				  ($data['COMMAND'] == $init->comAutoPrepare2)) {
@@ -555,7 +555,7 @@ class Make {
 				}
 				$j++;
 			}
-			Success::commandAdd();
+			SuccessHandler::commandAdd();
 
 		} else if ($data['COMMAND'] == $init->comAutoReclaim) {
 			$r = Util::makeRandomPointArray();
@@ -686,12 +686,12 @@ class Make {
 			for($i = 0; $i < $init->commandMax; $i++) {
 				Util::slideFront($command, 0);
 			}
-			Success::commandDelete();
+			SuccessHandler::commandDelete();
 		} else {
 			if(strcmp($data['COMMANDMODE'], 'insert') == 0) {
 				Util::slideBack($command, $data['NUMBER']);
 			}
-			Success::commandAdd();
+			SuccessHandler::commandAdd();
 			// コマンドを登録
 			$command[$data['NUMBER']] = array (
 				'kind'   => $data['COMMAND'],

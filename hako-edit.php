@@ -138,7 +138,7 @@ END;
 		// パスワード
 		if(!Util::checkPassword("", $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 
@@ -250,7 +250,7 @@ END;
 		// パスワード
 		if(!Util::checkPassword("", $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		$html = new HtmlMap();
@@ -511,7 +511,7 @@ END;
 		// パスワード
 		if(!Util::checkPassword("", $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 
@@ -568,7 +568,7 @@ class EditMain {
 		$cgi->getCookies();
 		if(!$hako->readIslands($cgi)) {
 			HTML::header();
-			HakoError::noDataFile();
+			ErrorHandler::noDataFile();
 			HTML::footer();
 			exit();
 		}

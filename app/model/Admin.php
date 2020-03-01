@@ -25,13 +25,13 @@ class Admin {
 			fclose($fp);
 		}
         if ( !isset($this->dataSet['PASSWORD']) ) {
-            HakoError::wrongPassword();
+            ErrorHandler::wrongPassword();
             return 0;
         }
 		if(strcmp(crypt($this->dataSet['PASSWORD'], 'ma'), $masterPassword) == 0) {
 			return 1;
 		} else {
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return 0;
 		}
 

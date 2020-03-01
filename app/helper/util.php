@@ -352,7 +352,7 @@ class Util {
 		}
 		// ロック失敗
 		fclose($fp);
-		HakoError::lockFail();
+		ErrorHandler::lockFail();
 		return FALSE;
 	}
 

@@ -17,7 +17,7 @@ class HtmlMap extends HTML {
 
 		// パスワードチェック
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])){
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 
@@ -61,7 +61,7 @@ class HtmlMap extends HTML {
 
 		// なぜかその島がない場合
 		if($number < 0 || $number > $hako->islandNumber) {
-			HakoError::problem();
+			ErrorHandler::problem();
 			return;
 		}
 		// 島の名前を取得
@@ -568,7 +568,7 @@ END;
 		$number = $hako->idToNumber[$id];
 		// なぜかその島がない場合
 		if($number < 0 || $number > $hako->islandNumber) {
-			HakoError::problem();
+			ErrorHandler::problem();
 			return;
 		}
 		$island = $hako->islands[$number];

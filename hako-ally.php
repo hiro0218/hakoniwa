@@ -47,18 +47,18 @@ class MakeAlly {
 			}
 		}
 		if(!$init->allyUse && !$adminMode) {
-			HakoError::newAllyForbbiden();
+			ErrorHandler::newAllyForbbiden();
 			return;
 		}
 		// 同盟名があるかチェック
 		if($allyName == '') {
-			HakoError::newAllyNoName();
+			ErrorHandler::newAllyNoName();
 			return;
 		}
 		// 同盟名が正当かチェック
 		if(preg_match("/[,\?\(\)\<\>\$]|^無人|^沈没$/", $allyName)) {
 			// 使えない名前
-			HakoError::newIslandBadName();
+			ErrorHandler::newIslandBadName();
 			return;
 		}
 		// 名前の重複チェック
@@ -67,25 +67,25 @@ class MakeAlly {
 			((AllyUtil::nameToNumber($hako, $allyName) != -1) ||
 			((AllyUtil::aNameToId($hako, $allyName) != -1) && (AllyUtil::aNameToId($hako, $allyName) != $currentID)))) {
 			// すでに結成ずみ
-			HakoError::newAllyAlready();
+			ErrorHandler::newAllyAlready();
 			return;
 		}
 		// マークの重複チェック
 		if(!($adminMode && ($allyID == '') && ($allyID < 200)) &&
 			((AllyUtil::aMarkToId($hako, $allyMark) != -1) && (AllyUtil::aMarkToId($hako, $allyMark) != $currentID))) {
 			// すでに使用ずみ
-			HakoError::markAllyAlready();
+			ErrorHandler::markAllyAlready();
 			return;
 		}
 		// passwordの判定
 		$island = $hako->islands[$currentNumber];
 		if(!$adminMode && !AllyUtil::checkPassword($island['password'], $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		if(!$adminMode && $island['money'] < $init->costMakeAlly) {
-			HakoError::noMoney();
+			ErrorHandler::noMoney();
 			return;
 		}
 		$n = $hako->idToAllyNumber[$currentID];
@@ -137,11 +137,11 @@ class MakeAlly {
 				}
 			}
 			if($flag) {
-				HakoError::otherAlready();
+				ErrorHandler::otherAlready();
 				return;
 			}
 			if(($init->allyUse == 2) && !$adminMode && !AllyUtil::checkPassword("", $data['PASSWORD'])) {
-				HakoError::newAllyForbbiden();
+				ErrorHandler::newAllyForbbiden();
 				return;
 			}
 			// 新規
@@ -214,17 +214,17 @@ class MakeAlly {
 			// passwordの判定
 			if(!(AllyUtil::checkPassword($island['password'], $data['PASSWORD']))) {
 				// 島 Password 間違い
-				HakoError::wrongPassword();
+				ErrorHandler::wrongPassword();
 				return;
 			}
 			if(!(AllyUtil::checkPassword($hako->ally[$n]['password'], $data['PASSWORD']))) {
 				// 同盟 Password 間違い
-				HakoError::wrongPassword();
+				ErrorHandler::wrongPassword();
 				return;
 			}
 			// 念のためIDもチェック
 			if($hako->ally[$n]['id'] != $currentID) {
-				HakoError::wrongAlly();
+				ErrorHandler::wrongAlly();
 				return;
 			}
 		}
@@ -275,19 +275,19 @@ class MakeAlly {
 		// パスワードチェック
 		if(!(AllyUtil::checkPassword($island['password'], $data['PASSWORD']))) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 
 		// 盟主チェック
 		if($hako->idToAllyNumber[$currentID]) {
-			HakoError::leaderAlready();
+			ErrorHandler::leaderAlready();
 			return;
 		}
 		// 複数加盟チェック
 		$ally = $hako->ally[$currentAnumber];
 		if($init->allyJoinOne && ($island['allyId'][0] != '') && ($island['allyId'][0] != $ally['id'])) {
-			HakoError::otherAlready();
+			ErrorHandler::otherAlready();
 			return;
 		}
 
@@ -355,10 +355,10 @@ class MakeAlly {
 			$hako->writeAllyFile();
 
 			// 変更成功
-			Success::allyPactOK($ally['name']);
+			SuccessHandler::allyPactOK($ally['name']);
 		} else {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 	}
@@ -378,7 +378,7 @@ class MakeAlly {
 			$hako->writeAllyFile();
 
 			// メッセージ出力
-			Success::allyDataUp();
+			SuccessHandler::allyDataUp();
 			return 1;
 		}
 		return 0;
@@ -946,7 +946,7 @@ class AllyUtil {
 	static function lockw($fp) {
 		set_file_buffer($fp, 0);
 		if(!flock($fp, LOCK_EX)) {
-			HakoError::lockFail();
+			ErrorHandler::lockFail();
 		}
 		rewind($fp);
 	}
@@ -957,7 +957,7 @@ class AllyUtil {
 	static function lockr($fp) {
 		set_file_buffer($fp, 0);
 		if(!flock($fp, LOCK_SH)) {
-			HakoError::lockFail();
+			ErrorHandler::lockFail();
 		}
 		rewind($fp);
 	}
@@ -991,7 +991,7 @@ class Main {
 
 		if(!$ally->readIslands($cgi)) {
 			HTML::header();
-			HakoError::noDataFile();
+			ErrorHandler::noDataFile();
 			HTML::footer();
 			exit();
 		}

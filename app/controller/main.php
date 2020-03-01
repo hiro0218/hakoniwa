@@ -24,7 +24,7 @@ class Main {
 
 		if(!$hako->readIslands($cgi)) {
 			HTML::header();
-			HakoError::noDataFile();
+			ErrorHandler::noDataFile();
 			HTML::footer();
 			exit();
 		}
