@@ -4,6 +4,8 @@
  * @author hiro <@hiro0218>
  */
 
+require_once HELPER_PATH.'/message/error.php';
+
 class Admin {
     public $mode;
     public $dataSet = array();
