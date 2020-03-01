@@ -7,6 +7,28 @@
  */
 
 class Util {
+
+    /**
+     * getParsePostData
+     * @return array
+     */
+    static function getParsePostData() {
+        $data = [];
+
+        // POSTではない場合は終了
+        if (empty($_POST)) {
+            return $data;
+        }
+
+        // POSTのkeyとvalueを配列にセット
+        foreach ($_POST as $key => $value) {
+            $value = str_replace(",", "", $value);
+            $data["{$key}"] = $value;
+        }
+
+        return $data;
+    }
+
 	//---------------------------------------------------
 	// 資金の表示
 	//---------------------------------------------------
