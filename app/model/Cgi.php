@@ -18,12 +18,7 @@ class Cgi {
 
 		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
 
-		if(!empty($_POST)) {
-			foreach ($_POST as $name => $value) {
-				$value = str_replace(",", "", $value);
-				$this->dataSet["{$name}"] = $value;
-			}
-		}
+        $this->dataSet = Util::getParsePostData();
 
 		if(!empty($_GET['Sight'])) {
 			$this->mode = "print";

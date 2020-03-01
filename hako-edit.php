@@ -30,10 +30,7 @@ class CgiImitation {
 
 		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
 
-        foreach ($_POST as $name => $value) {
-            $value = str_replace(",", "", $value);
-            $this->dataSet["{$name}"] = $value;
-        }
+        $this->dataSet = Util::getParsePostData();
 
         if(!empty($_POST['Sight'])) {
             $this->dataSet['ISLANDID'] = $_POST['Sight'];

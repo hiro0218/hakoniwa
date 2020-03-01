@@ -1056,13 +1056,8 @@ class Main {
 			$this->mode = $_POST['mode'];
 		}
 		if(!empty($_POST)) {
-			foreach ($_POST as $name => $value) {
-				$value = str_replace(",", "", $value);
-				// JcodeConvert($value, 0, 2);
-				// $value = HANtoZEN_UTF8($value);
+            $this->dataSet = Util::getParsePostData();
 
-				$this->dataSet["{$name}"] = $value;
-			}
 			if( isset($this->dataSet['Allypact']) ) {
 				$this->mode = "AllypactUp";
 			}
