@@ -55,7 +55,7 @@ require_once PRESENTER_PATH.'/HtmlBF.php';
  			if (!$hako->islands[$num]['isBF']) {
  				$hako->islands[$num]['isBF'] = 1;
  				$hako->islandNumberBF++;
- 				require_once APP_PATH.'/model/hako-turn.php';
+ 				require_once MODEL_PATH.'/Turn.php';
  				Turn::islandSort($hako);
  				$hako->writeIslandsFile();
  			}
@@ -70,7 +70,7 @@ require_once PRESENTER_PATH.'/HtmlBF.php';
  			if ($hako->islands[$num]['isBF']) {
  				$hako->islands[$num]['isBF'] = 0;
  				$hako->islandNumberBF--;
- 				require_once APP_PATH.'/model/hako-turn.php';
+ 				require_once MODEL_PATH.'/Turn.php';
  				Turn::islandSort($hako);
  				$hako->writeIslandsFile();
  			}
