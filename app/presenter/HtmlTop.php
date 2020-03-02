@@ -59,7 +59,6 @@ class HtmlTop extends HTML {
 			return;
 		}
 
-		echo '<div class="table-responsive">';
 		echo '<table class="table table-bordered table-condensed">';
 
 		for($i = $start; $i < $sentinel ; $i++) {
@@ -291,7 +290,6 @@ class HtmlTop extends HTML {
 END;
 		}
 		echo "</table>";
-		echo "</div>";
 	}
 
 	/**
