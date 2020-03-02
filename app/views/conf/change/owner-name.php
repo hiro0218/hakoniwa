@@ -1,6 +1,6 @@
 <div id="ChangeOwnerName">
 	<h2>オーナー名の変更</h2>
-	<form action="<?= $this_file ?>" method="post">
+	<form action="<?= $this->this_file ?>" method="post">
 		<div class="form-group">
 			<label>どの島ですか？</label>
 			<select name="ISLANDID" class="form-control">

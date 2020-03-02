@@ -3,9 +3,14 @@ require_once PRESENTER_PATH.'/HTML.php';
 
 class HtmlTop extends HTML {
 
+    function __construct() {
+		global $init;
+
+		$this->this_file = $init->baseDir . "/hako-main.php";
+    }
+
 	function main($hako, $data) {
 		global $init;
-		$this_file = $init->baseDir . "/hako-main.php";
 		$allyfile = $init->baseDir . "/hako-ally.php";
 
 		$radio  = "checked";
@@ -53,7 +58,6 @@ class HtmlTop extends HTML {
 	 */
 	function islandTable(&$hako, $start, $sentinel) {
 		global $init;
-		$this_file = $init->baseDir . "/hako-main.php";
 
 		if ($sentinel == 0) {
 			return;
@@ -65,7 +69,7 @@ class HtmlTop extends HTML {
 			$island        = $hako->islands[$i];
 			$island['pop'] = ($island['pop'] <= 0) ? 1 : $island['pop'];
 
-			$j            = isset($island['isBF']) ? '★' : $i + 1;
+			$j            = $island['isBF'] ? '★' : $i + 1;
 			$id           = $island['id'];
 			$pop          = $island['pop'] . $init->unitPop;
 			$area         = $island['area'] . $init->unitArea;
@@ -249,7 +253,7 @@ class HtmlTop extends HTML {
 	<tr>
 		<th {$init->bgNumberCell} rowspan="5">{$init->tagNumber_}$j{$init->_tagNumber}</th>
 		<td {$init->bgNameCell} rowspan="5" valign="top">
-			<h3><a href="{$this_file}?Sight={$id}">{$name}</a> <small>{$start}{$monster}{$soccer}</small></h3>
+			<h3><a href="{$this->this_file}?Sight={$id}">{$name}</a> <small>{$start}{$monster}{$soccer}</small></h3>
 			{$prize}{$viking}<br>
 			{$zins}<br>
 			<small>({$peop} {$okane} {$gohan} {$poin})</small>
@@ -308,7 +312,6 @@ END;
 	 */
 	function discovery($number) {
 		global $init;
-		$this_file = $init->baseDir . "/hako-main.php";
 
 		require_once(VIEWS_PATH.'/conf/discovery.php');
 	}
@@ -318,7 +321,6 @@ END;
 	 */
 	function changeIslandInfo($islandList = "") {
 		global $init;
-		$this_file = $init->baseDir . "/hako-main.php";
 
 		require_once(VIEWS_PATH.'/conf/change/island-info.php');
 	}
@@ -327,9 +329,6 @@ END;
 	 * オーナー名の変更
 	 */
 	function changeOwnerName($islandList = "") {
-		global $init;
-		$this_file = $init->baseDir . "/hako-main.php";
-
 		require_once(VIEWS_PATH.'/conf/change/owner-name.php');
 	}
 
@@ -337,7 +336,8 @@ END;
 	 * 最近の出来事
 	 */
 	function log() {
-		global $init;
+        global $init;
+
 		require_once(VIEWS_PATH.'/log/recent.php');
 	}
 
@@ -345,7 +345,8 @@ END;
 	 * お知らせ
 	 */
 	function infoPrint() {
-		global $init;
+        global $init;
+
 		require_once(VIEWS_PATH.'/log/info.php');
 	}
 

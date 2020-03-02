@@ -5,7 +5,7 @@
 		(注意) 名前の変更には<?= $init->costChangeName ?><?= $init->unitMoney ?>かかります。
 	</p>
 
-	<form action="<?= $this_file ?>" method="post">
+	<form action="<?= $this->this_file ?>" method="post">
 		<div class="form-group">
 			<label>どの島ですか？</label>
 			<select NAME="ISLANDID" class="form-control">
