@@ -1,4 +1,15 @@
 {
+  "scripts": {
+    "phpstan": [
+      "phpstan analyse **/*php"
+    ],
+    "php7cc": [
+      "php7cc app"
+    ],
+    "phpcpd": [
+      "phpcpd app"
+    ]
+  },
   "require": {
     "php": "^7.1.19"
   },
