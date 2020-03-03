@@ -82,11 +82,11 @@ class HtmlMap extends HTML {
 		$rank       = ($island['isBF']) ? '★' : $number + 1;
 		$pop        = $island['pop'] . $init->unitPop;
 		$area       = $island['area'] . $init->unitArea;
-		$eisei      = isset($island['eisei']) ? $island['eisei'] : "";
-		$zin        = isset($island['zin'])   ? $island['zin']   : "";
-		$item       = isset($island['item'])  ? $island['item']  : "";
+		$eisei      = $island['eisei'] ?? "";
+		$zin        = $island['zin'] ?? "";
+		$item       = $island['item'] ?? "";
 		$money      = ($mode == 0) ? Util::aboutMoney($island['money']) : "{$island['money']}{$init->unitMoney}";
-		$lot        = isset($island['lot'])  ? $island['lot']  : "";
+		$lot        = $island['lot'] ?? "";
 		$food       = $island['food'] . $init->unitFood;
 		$unemployed = ($island['pop'] - ($island['farm'] + $island['factory'] + $island['commerce'] + $island['mountain'] + $island['hatuden']) * 10) / $island['pop'] * 100;
 		$unemployed = '<font color="' . ($unemployed < 0 ? 'black' : '#C7243A') . '">' . sprintf("%-3d%%", $unemployed) . '</font>';

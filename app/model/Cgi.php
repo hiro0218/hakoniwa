@@ -16,7 +16,7 @@ class Cgi {
 	function parseInputData() {
 		global $init;
 
-		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
+		$this->mode = $_POST['mode'] ?? "";
 
         $this->dataSet = Util::getParsePostData();
 
@@ -38,7 +38,7 @@ class Cgi {
 		}
 		$init->adminMode = 0;
 		if(empty($_GET['AdminButton'])) {
-			$_password = (isset( $this->dataSet['PASSWORD'] )) ? $this->dataSet['PASSWORD'] : "";
+			$_password = $this->dataSet['PASSWORD'] ?? "";
 
 			if(Util::checkPassword("", $_password)) {
 				$init->adminMode = 1;

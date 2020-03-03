@@ -29,7 +29,7 @@ class File {
 	function readIslandsFile(&$cgi) {
 		global $init;
 
-		$num = (isset( $cgi->dataSet['ISLANDID'] )) ? $cgi->dataSet['ISLANDID'] : "";
+		$num = $cgi->dataSet['ISLANDID'] ?? "";
 		$fileName = "{$init->dirName}/hakojima.dat";
 		if(!is_file($fileName)) {
 			return false;
@@ -46,7 +46,7 @@ class File {
 
 		// ターン処理判定
 		$now = $_SERVER['REQUEST_TIME'];
-		$_mode = isset($cgi->dataSet['mode']) ? $cgi->dataSet['mode'] : "";
+		$_mode = $cgi->dataSet['mode'] ?? "";
 		if((DEBUG && (strcmp($_mode, 'debugTurn') == 0)) ||
 			 (($now - $this->islandLastTime) >= $init->unitTime)) {
 			$cgi->mode = $data['mode'] = 'turn';
@@ -203,10 +203,10 @@ class File {
 			'bougyo'       => $bougyo,
 			'tokuten'      => $tokuten,
 			'shitten'      => $shitten,
-			'land'         => isset($land)      ? $land      : "",
-			'landValue'    => isset($landValue) ? $landValue : "",
-			'command'      => isset($command)   ? $command   : "",
-			'lbbs'         => isset($lbbs)      ? $lbbs      : "",
+			'land'         => $land      ??  "",
+			'landValue'    => $landValue ??  "",
+			'command'      => $command   ??  "",
+			'lbbs'         => $lbbs      ??  "",
 			'port'         => $port,
 			'ship'         => [0 => $ship0, 1 => $ship1, 2 => $ship2, 3 => $ship3, 4 => $ship4, 5 => $ship5, 6 => $ship6, 7 => $ship7, 8 => $ship8, 9 => $ship9, 10 => $ship10, 11 => $ship11, 12 => $ship12, 13 => $ship13, 14 => $ship14],
 			'eisei'        => [0 => $eisei0, 1 => $eisei1, 2 => $eisei2, 3 => $eisei3, 4 => $eisei4, 5 => $eisei5],

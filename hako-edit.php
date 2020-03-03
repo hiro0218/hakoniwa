@@ -28,7 +28,7 @@ class CgiImitation {
             return;
         }
 
-		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
+		$this->mode = $_POST['mode'] ?? "";
 
         $this->dataSet = Util::getParsePostData();
 

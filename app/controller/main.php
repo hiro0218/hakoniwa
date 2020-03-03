@@ -34,7 +34,7 @@ class Main {
 		}
 		$cgi->setCookies();
 
-		$_developmode = (isset( $cgi->dataSet['DEVELOPEMODE'] )) ? $cgi->dataSet['DEVELOPEMODE'] : "";
+		$_developmode = $cgi->dataSet['DEVELOPEMODE'] ?? "";
 		if( mb_strtolower($_developmode) == "javascript") {
 			$html = new HtmlMapJS();
 			$com  = new MakeJS();
