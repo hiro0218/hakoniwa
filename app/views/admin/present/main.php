@@ -71,7 +71,7 @@ for ($i=0; $i < $hako->islandNumber; $i++) {
 			echo "{$init->tagName_}{$name}{$init->nameSuffix}{$init->_tagName}に<strong>{$food}</strong>の食料<br>\n";
 		}
 	} elseif ( $present['item'] > 0 ) {
-		$items = array ('地震','津波','怪獣','地盤沈下','台風','巨大隕石','隕石','噴火');
+		$items = ['地震','津波','怪獣','地盤沈下','台風','巨大隕石','隕石','噴火'];
 		$item = $items[$present['item'] - 1];
 		if ( $present['item'] < 9 ) {
 			$point = ($present['item'] < 6) ? '' : '(' . $present['px'] . ',' . $present['py'] . ')';

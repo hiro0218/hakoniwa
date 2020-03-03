@@ -8,7 +8,7 @@ require_once HELPER_PATH.'/message/error.php';
 
 class Admin {
     public $mode;
-    public $dataSet = array();
+    public $dataSet = [];
 
     function parseInputData() {
         // mode

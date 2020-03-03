@@ -251,13 +251,13 @@ class Turn {
 
 				// 自動放棄
 				if($island['absent'] >= $init->giveupTurn) {
-					$comArray[0] = array (
+					$comArray[0] = [
 						'kind'   => $init->comGiveup,
 						'target' => 0,
 						'x'      => 0,
 						'y'      => 0,
 						'arg'    => 0
-					);
+					];
 					$island['command'] = $comArray;
 				}
 				return 1;
@@ -428,7 +428,7 @@ class Turn {
 					break;
 				}
 				// 周りに陸があるかチェック
-				$seaCount = Turn::countAround($land, $x, $y, 7, array($init->landSea, $init->landSeaSide, $init->landSeaCity, $init->landFroCity,$init->landOil, $init->landNursery, $init->landSfarm, $init->landPort, $init->landSdefence, $init->landSbase));
+				$seaCount = Turn::countAround($land, $x, $y, 7, [$init->landSea, $init->landSeaSide, $init->landSeaCity, $init->landFroCity,$init->landOil, $init->landNursery, $init->landSfarm, $init->landPort, $init->landSdefence, $init->landSbase]);
 
 				if($seaCount == 7) {
 					// 全部海だから埋め立て不能
@@ -604,8 +604,8 @@ class Turn {
 				}
 				if((($landKind == $init->landSea) && ($lv == 1)) || ($landKind == $init->landSeaSide)) {
 					// 周りに陸があるかチェック
-					$seaCount = Turn::countAround($land, $x, $y, 7, array($init->landSea, $init->landSeaSide, $init->landPort,
-					$init->landOil, $init->landNursery, $init->landSbase));
+					$seaCount = Turn::countAround($land, $x, $y, 7, [$init->landSea, $init->landSeaSide, $init->landPort,
+					$init->landOil, $init->landNursery, $init->landSbase]);
 					if($seaCount == 7) {
 						$this->log->noLandAround($id, $name, $comName, $point);
 						$returnMode = 0;
@@ -631,7 +631,7 @@ class Turn {
 					$returnMode = 0;
 					break;
 				}
-				$seaCount = Turn::countAround($land, $x, $y, 7, array($init->landSea));
+				$seaCount = Turn::countAround($land, $x, $y, 7, [$init->landSea]);
 
 				if($seaCount <= 1){
 					// 周囲に最低1Hexの海も無い場合も建設不可
@@ -659,7 +659,7 @@ class Turn {
 
 			case $init->comMakeShip:
 				// 造船
-				$countPort = Turn::countAround($land, $x, $y, 7, array($init->landPort));
+				$countPort = Turn::countAround($land, $x, $y, 7, [$init->landPort]);
 				if($countPort < 1){
 					// 周囲1ヘックスに港がないと失敗
 					$this->log->NoPort($id, $name, $comName, $point);
@@ -1161,7 +1161,7 @@ class Turn {
 
 					case $init->comSeaResort:
 						// 海の家
-						if (Turn::countAround($land, $x, $y, 19, array($init->landSeaResort))) {
+						if (Turn::countAround($land, $x, $y, 19, [$init->landSeaResort])) {
 							// 周囲２ヘックスに海の家がある
 							$this->log->LandFail($id, $name, $comName, '海の家の近く', $point);
 
@@ -1414,13 +1414,13 @@ class Turn {
 					if($arg > 1) {
 						$arg--;
 						Util::slideBack($comArray, 0);
-						$comArray[0] = array (
+						$comArray[0] = [
 							'kind'   => $kind,
 							'target' => $target,
 							'x'      => $x,
 							'y'      => $y,
 							'arg'    => $arg
-						);
+						];
 					}
 				}
 				$returnMode = 1;
@@ -1452,13 +1452,13 @@ class Turn {
 				if($arg > 1) {
 					$arg--;
 					Util::slideBack($comArray, 0);
-					$comArray[0] = array (
+					$comArray[0] = [
 						'kind'   => $kind,
 						'target' => $target,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => $arg,
-					);
+					];
 				}
 				$returnMode = 1;
 				break;
@@ -1488,13 +1488,13 @@ class Turn {
 				if($arg > 1) {
 					$arg--;
 					Util::slideBack($comArray, 0);
-					$comArray[0] = array (
+					$comArray[0] = [
 						'kind'   => $kind,
 						'target' => $target,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => $arg,
-					);
+					];
 				}
 				$returnMode = 1;
 				break;
@@ -1507,7 +1507,7 @@ class Turn {
 					$returnMode = 0;
 					break;
 				}
-				$cntL = Turn::countAround($land, $x, $y, 7, array($init->landSea));
+				$cntL = Turn::countAround($land, $x, $y, 7, [$init->landSea]);
 				$cntS = Turn::countAroundValue($island, $x, $y, $init->landSea, 1, 7);
 
 				if($cntL == 0 && $cntS == 0) {
@@ -1636,7 +1636,7 @@ class Turn {
 					$returnMode = 0;
 					break;
 				}
-				$townCount = Turn::countAround($land, $x, $y, 19, array($init->landTown));
+				$townCount = Turn::countAround($land, $x, $y, 19, [$init->landTown]);
 
 				if($townCount == 0) {
 					$this->log->noTownAround($id, $name, $comName, $point);
@@ -1668,13 +1668,13 @@ class Turn {
 				if($arg > 1) {
 					$arg--;
 					Util::slideBack($comArray, 0);
-					$comArray[0] = array (
+					$comArray[0] = [
 						'kind'   => $kind,
 						'target' => $target,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => $arg,
-					);
+					];
 				}
 				$returnMode = 1;
 				break;
@@ -1687,7 +1687,7 @@ class Turn {
 					$returnMode = 0;
 					break;
 				}
-				$townCount = Turn::countAround($land, $x, $y, 19, array($init->landTown, $init->landNewtown, $init->landBigtown));
+				$townCount = Turn::countAround($land, $x, $y, 19, [$init->landTown, $init->landNewtown, $init->landBigtown]);
 
 				if($townCount < 16) {
 					// 全部海だから埋め立て不能
@@ -1711,10 +1711,10 @@ class Turn {
 				}
 				$value = ($arg + 1) * $cost;
 				// 気象, 観測, 迎撃, 軍事, 防衛, イレ
-				$rocket = array(1, 1, 2, 2, 3, 4);
-				$tech   = array(10, 40, 100, 250, 300, 500);
-				$failp  = array(700, 500, 600, 400, 200, 3000);
-				$failq  = array(100, 100, 10, 10, 10, 1);
+				$rocket = [1, 1, 2, 2, 3, 4];
+				$tech   = [10, 40, 100, 250, 300, 500];
+				$failp  = [700, 500, 600, 400, 200, 3000];
+				$failq  = [100, 100, 10, 10, 10, 1];
 
 				if($island['m23'] < $rocket[$arg]) {
 					// ロケットが$rocket以上ないとダメ
@@ -2071,8 +2071,8 @@ class Turn {
 											}
 										}
 									}
-								} elseif(Turn::countAround($tLand, $tx, $ty, 19, array($init->landDefence, $init->landSdefence)) +
-									Turn::countAround($tLand, $tx, $ty, 7, array($init->landProcity))) {
+								} elseif(Turn::countAround($tLand, $tx, $ty, 19, [$init->landDefence, $init->landSdefence]) +
+									Turn::countAround($tLand, $tx, $ty, 7, [$init->landProcity])) {
 									$defenceHex[$id][$tx][$ty] = 1;
 									$defence = 1;
 								} else {
@@ -2149,7 +2149,7 @@ class Turn {
 								(($tL == $init->landPoll) && ($kind != $init->comMissileBT)) || // 汚染土壌または・・・
 								($tL == $init->landSbase) || // 海底基地または・・・
 								(($tL == $init->landProcity) &&
-								(Turn::countAround($tLand, $tx, $ty, 19, array($init->landDefence, $init->landSdefence)))) || // 防災都市または・・・
+								(Turn::countAround($tLand, $tx, $ty, 19, [$init->landDefence, $init->landSdefence]))) || // 防災都市または・・・
 								($tL == $init->landSeaCity) || // 海底都市または・・・
 								($tL == $init->landMountain)) // 山で・・・
 								&& ($kind != $init->comMissileLD)))) { // 陸破弾以外
@@ -2836,13 +2836,13 @@ class Turn {
 				if($arg > 1) {
 					$arg--;
 					Util::slideBack($comArray, 0);
-					$comArray[0] = array (
+					$comArray[0] = [
 						'kind'   => $kind,
 						'target' => $target,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => $arg,
-					);
+					];
 				}
 				// 金を差し引く
 				$island['money'] -= $cost;
@@ -2865,13 +2865,13 @@ class Turn {
 				if($arg > 1) {
 					$arg--;
 					Util::slideBack($comArray, 0);
-					$comArray[0] = array (
+					$comArray[0] = [
 						'kind'   => $kind,
 						'target' => $target,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => $arg,
-					);
+					];
 				}
 				// 金を差し引く
 				$island['money'] -= $cost;
@@ -2895,13 +2895,13 @@ class Turn {
 				if($arg > 1) {
 					$arg--;
 					Util::slideBack($comArray, 0);
-					$comArray[0] = array (
+					$comArray[0] = [
 						'kind'   => $kind,
 						'target' => $target,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => $arg,
-					);
+					];
 				}
 				// 金を差し引く
 				$island['money'] -= $cost;
@@ -3317,13 +3317,13 @@ class Turn {
 				if($arg > 1) {
 					$arg--;
 					Util::slideBack($comArray, 0);
-					$comArray[0] = array (
+					$comArray[0] = [
 						'kind'   => $kind,
 						'target' => $target,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => $arg,
-					);
+					];
 				}
 				$returnMode = 1;
 				break;
@@ -3395,7 +3395,7 @@ class Turn {
 		} else {
 
 		}
-		$monsterMove = array();
+		$monsterMove = [];
 		$bx = 0;
 		$by = 0;
 
@@ -3453,7 +3453,7 @@ class Turn {
 
 				case $init->landNewtown:
 					// ニュータウン系
-					$townCount = Turn::countAround($land, $x, $y, 19, array($init->landTown, $init->landNewtown, $init->landBigtown));
+					$townCount = Turn::countAround($land, $x, $y, 19, [$init->landTown, $init->landNewtown, $init->landBigtown]);
 					if($townCount > 17) {
 						if(Util::random(1000) < 3) {
 							if($lv > 200) {
@@ -3724,8 +3724,8 @@ class Turn {
 
 				case $init->landSeaResort:
 					// 海の家
-					$nt = Turn::countAround($land, $x, $y, 19, array($init->landTown)); // 周囲2ヘックスの人口
-					$ns = Turn::countAround($land, $x, $y, 19, array($init->landSeaSide)); // 周囲2ヘックスの砂浜収容人数
+					$nt = Turn::countAround($land, $x, $y, 19, [$init->landTown]); // 周囲2ヘックスの人口
+					$ns = Turn::countAround($land, $x, $y, 19, [$init->landSeaSide]); // 周囲2ヘックスの砂浜収容人数
 					// 収益の計算
 					if ($nt > 0) {
 						$value = $ns / $nt;
@@ -3888,7 +3888,7 @@ class Turn {
 				case $init->landPort:
 					// 港
 					$lName = $this->landName($landKind, $lv);
-					$seaCount = Turn::countAround($land, $x, $y, 7, array($init->landSea));
+					$seaCount = Turn::countAround($land, $x, $y, 7, [$init->landSea]);
 					if($seaCount == 0 || $seaCount == 6){
 						// 周囲に最低1Hexの海も無い場合、閉鎖
 						// 周囲に最低1Hexの陸地が無い場合、閉鎖
@@ -4409,7 +4409,7 @@ class Turn {
 							} else {
 							}
 							// 海賊船が出現していた場合攻撃する
-							$cntViking = Turn::countAround($land, $x, $y, 19, array($init->landShip));
+							$cntViking = Turn::countAround($land, $x, $y, 19, [$init->landShip]);
 							if($cntViking && $ship[4] != intval($hako->islandTurn) % 10) {
 								//周囲2ヘックス以内に船舶あり
 								for($s3 = 0; $s3 < 19; $s3++) {
@@ -4477,7 +4477,7 @@ class Turn {
 								$landValue[$x][$y] = Util::navyPack($ship[0], $ship[1], $ship[2], $ship[3], $ship[4]);
 							}
 							// 攻撃
-							$cntShip = Turn::countAround($land, $x, $y, 19, array($init->landPort, $init->landShip, $init->landFroCity));
+							$cntShip = Turn::countAround($land, $x, $y, 19, [$init->landPort, $init->landShip, $init->landFroCity]);
 							if($cntShip) {
 								//周囲2ヘックス以内に港または船舶または海上都市あり
 								if(Util::random(1000) < $init->disVikingAttack) {
@@ -4619,7 +4619,7 @@ class Turn {
 				case $init->landNewtown:
 				case $init->landBigtown:
 					// 火災判定
-					if (Turn::countAround($land, $x, $y, 19, array($init->landSyoubou, $init->landSsyoubou)) > 0) {
+					if (Turn::countAround($land, $x, $y, 19, [$init->landSyoubou, $init->landSsyoubou]) > 0) {
 						break;
 					}
 					if ((($landKind == $init->landSeaResort) && ($lv <= 30)) ||
@@ -4630,7 +4630,7 @@ class Turn {
 					}
 					if(Util::random(1000) < $init->disFire - ((int)$island['eisei'][0] / 20)) {
 						// 周囲の森と記念碑を数える
-						if(Turn::countAround($land, $x, $y, 7, array($init->landForest, $init->landProcity, $init->landFusya, $init->landMonument)) == 0) {
+						if(Turn::countAround($land, $x, $y, 7, [$init->landForest, $init->landProcity, $init->landFusya, $init->landMonument]) == 0) {
 							// 無かった場合、火災で壊滅
 							$l = $land[$x][$y];
 							$lv = $landValue[$x][$y];
@@ -4997,7 +4997,7 @@ class Turn {
 					($landKind == $init->landHaribote)) {
 					// 1d12 <= (周囲の海 - 1) で崩壊
 					if(Util::random(12) <
-						(Turn::countAround($land, $x, $y, 7, array($init->landOil, $init->landSbase, $init->landSea)) - 1)) {
+						(Turn::countAround($land, $x, $y, 7, [$init->landOil, $init->landSbase, $init->landSea]) - 1)) {
 						$this->log->tsunamiDamage($id, $name, $this->landName($landKind, $lv), "({$x}, {$y})");
 						if (($landKind == $init->landSeaSide)||
 							($landKind == $init->landNursery)||
@@ -5100,7 +5100,7 @@ class Turn {
 					($landKind != $init->landOil) &&
 					($landKind != $init->landMountain)) {
 					// 周囲に海があれば、値を-1に
-					if(Turn::countAround($land, $x, $y, 7, array($init->landSea, $init->landSbase))) {
+					if(Turn::countAround($land, $x, $y, 7, [$init->landSea, $init->landSbase])) {
 						$land[$x][$y] = -1;
 						$landValue[$x][$y] = 0;
 						$this->log->falldownLand($id, $name, $this->landName($landKind, $lv), "({$x}, {$y})");
@@ -5142,7 +5142,7 @@ class Turn {
 					($landKind == $init->landHaribote)) {
 					// 1d12 <= (6 - 周囲の森) で崩壊
 					if(Util::random(12) <
-						(6 - Turn::countAround($land, $x, $y, 7, array($init->landForest, $init->landFusy, $init->landMonument)))) {
+						(6 - Turn::countAround($land, $x, $y, 7, [$init->landForest, $init->landFusy, $init->landMonument]))) {
 						$this->log->typhoonDamage($id, $name, $this->landName($landKind, $lv), "({$x}, {$y})");
 						if (($landKind == $init->landSeaSide)||($landKind == $init->landNursery)){
 							//砂浜か養殖場ならは浅瀬
@@ -5703,7 +5703,7 @@ class Turn {
 
 						case $init->landFarm:
 							// 農場
-							if(Turn::countAround($land, $x, $y, 19, array($init->landFusya))){
+							if(Turn::countAround($land, $x, $y, 19, [$init->landFusya])){
 								// 周囲2へクスに風車があれば2倍の規模に
 								$farm += $value * 2;
 							}else{
@@ -5864,7 +5864,7 @@ class Turn {
 		// 範囲内の地形を数える
 		$count = 0;
 		$sea = 0;
-		$list = array();
+		$list = [];
 		$sx = 0;
 		$sy = 0;
 		reset($kind);

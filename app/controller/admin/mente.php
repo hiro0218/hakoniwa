@@ -122,7 +122,7 @@ class Mente extends Admin {
 
 		$fileName = "{$init->dirName}/hakojima.dat";
 		$fp = fopen($fileName, "r+");
-		$buffer = array();
+		$buffer = [];
 		while($line = fgets($fp, READ_LINE)) {
 			array_push($buffer, $line);
 		}

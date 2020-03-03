@@ -8,7 +8,7 @@
 
 class Cgi {
 	public $mode = "";
-	public $dataSet = array();
+	public $dataSet = [];
 
 	//---------------------------------------------------
 	// POST、GETのデータを取得

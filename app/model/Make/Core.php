@@ -98,20 +98,20 @@ class Make {
 	function makeNewIsland() {
 		global $init;
 
-		$command = array();
+		$command = [];
 		// 初期コマンド生成
 		for($i = 0; $i < $init->commandMax; $i++) {
-			$command[$i] = array (
+			$command[$i] = [
 				'kind'   => $init->comDoNothing,
 				'target' => 0,
 				'x'      => 0,
 				'y'      => 0,
 				'arg'    => 0,
-			);
+			];
 		}
 
-		$land = array();
-		$landValue = array();
+		$land = [];
+		$landValue = [];
 
 		if ($init->initialLand) {
 			// 初期島データファイル使用モード
@@ -152,7 +152,7 @@ class Make {
 			while($size < $init->initialSize) {
 				$x = Util::random(8) + $center - 3;
 				$y = Util::random(8) + $center - 3;
-				if(Turn::countAround($land, $x, $y, 7, array($init->landSea)) != 7) {
+				if(Turn::countAround($land, $x, $y, 7, [$init->landSea]) != 7) {
 					// 周りに陸地がある場合、浅瀬にする
 					// 浅瀬は荒地にする
 					// 荒地は平地にする
@@ -256,7 +256,7 @@ class Make {
 			for($i = 0; $i < 120; $i++) {
 				$x = Util::random(8) + $center - 3;
 				$y = Util::random(8) + $center - 3;
-				if(Turn::countAround($land, $x, $y, 7, array($init->landSea)) != 7) {
+				if(Turn::countAround($land, $x, $y, 7, [$init->landSea]) != 7) {
 					// 周りに陸地がある場合、浅瀬にする
 					// 浅瀬は荒地にする
 					// 荒地は平地にする
@@ -333,7 +333,7 @@ class Make {
 				}
 			}
 		}
-		return array (
+		return [
 			'money'     => $init->initialMoney,
 			'food'      => $init->initialFood,
 			'land'      => $land,
@@ -341,7 +341,7 @@ class Make {
 			'command'   => $command,
 			'prize'     => '0,0,',
 			'taiji'     => 0,
-		);
+		];
 	}
 
 	//---------------------------------------------------
@@ -544,13 +544,13 @@ class Make {
 				$y = $rpy[$j];
 				if($land[$x][$y] == $init->landWaste) {
 					Util::slideBack($command, $i);
-					$command[$i] = array (
+					$command[$i] = [
 						'kind'   => $kind,
 						'target' => 0,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => 0,
-					);
+					];
 					$i++;
 				}
 				$j++;
@@ -574,13 +574,13 @@ class Make {
 
 				if (($kind == $init->landSea) && ($lv == 1)) {
 					Util::slideBack($command, $i);
-					$command[$i] = array (
+					$command[$i] = [
 						'kind'   => $init->comReclaim,
 						'target' => 0,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => 0,
-					);
+					];
 					$i++;
 				}
 				$j++;
@@ -693,13 +693,13 @@ class Make {
 			}
 			SuccessHandler::commandAdd();
 			// コマンドを登録
-			$command[$data['NUMBER']] = array (
+			$command[$data['NUMBER']] = [
 				'kind'   => $data['COMMAND'],
 				'target' => $data['TARGETID'],
 				'x'      => $data['POINTX'],
 				'y'      => $data['POINTY'],
 				'arg'    => $data['AMOUNT'],
-			);
+			];
 		}
 
 		// データの書き出し

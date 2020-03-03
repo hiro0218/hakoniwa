@@ -211,7 +211,7 @@ class HtmlMap extends HTML {
 		$land = $island['land'];
 		$landValue = $island['landValue'];
 		$command = $island['command'];
-		$comStr = array();
+		$comStr = [];
 
 		// 増減情報
 		$peop  = "";

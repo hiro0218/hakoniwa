@@ -10,9 +10,9 @@ class LogIO {
     public $this_file = '';
     public $init;
 
-	private $logPool       = array();
-	private $secretLogPool = array();
-	private $lateLogPool   = array();
+	private $logPool       = [];
+	private $secretLogPool = [];
+	private $lateLogPool   = [];
 
 
 	public function __construct() {
@@ -89,7 +89,7 @@ class LogIO {
 		}
 
 		$fp = fopen($fileName, "r");
-		$history = array();
+		$history = [];
 		$k = 0;
 		while($line = chop(fgets($fp, READ_LINE))) {
 			array_push($history, $line);
@@ -126,7 +126,7 @@ class LogIO {
 		if(is_file($fileName)) {
 			$fp = fopen($fileName, "r");
 
-			$line = array();
+			$line = [];
 			while($l = chop(fgets($fp, READ_LINE))) {
 				array_push($line, $l);
 				$count++;

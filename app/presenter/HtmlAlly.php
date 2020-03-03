@@ -334,8 +334,8 @@ END;
 			$markList .= "<option value=\"$aMark\"$s>$aMark</option>\n";
 		}
 
-		$hx = array(0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F');
-		$colorList = array('','','','','','','');
+		$hx = [0,1,2,3,4,5,6,7,8,9,'A','B','C','D','E','F'];
+		$colorList = ['','','','','','',''];
 		for($i=1; $i<7; $i++) {
 			if($n == '') {
 				$allycolor[$i] = '0';

@@ -38,13 +38,13 @@ class MakeJS extends Make {
 			if($kind == 0) {
 				$kind = $init->comDoNothing;
 			}
-			$command[$i] = array (
+			$command[$i] = [
 				'kind'   => $kind,
 				'x'      => $x,
 				'y'      => $y,
 				'arg'    => $arg,
 				'target' => $target
-			);
+			];
 		}
 		SuccessHandler::commandAdd();
 

@@ -40,7 +40,7 @@ class HtmlMapJS extends HtmlMap {
 		//コマンドリストセット
 		$l_kind;
 		$set_listcom = "";
-		$click_com = array("", "", "", "", "", "", "", "");
+		$click_com = ["", "", "", "", "", "", "", ""];
 		$All_listCom = 0;
 		$com_count = count($init->commandDivido);
 		for($m = 0; $m < $com_count; $m++) {

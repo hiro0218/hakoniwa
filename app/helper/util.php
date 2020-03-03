@@ -83,7 +83,7 @@ class Util {
 		$name = $init->monsterName[$kind];
 		// 体力
 		$hp = $lv - ($kind * 100);
-		return array( 'kind' => $kind, 'name' => $name, 'hp' => $hp );
+		return [ 'kind' => $kind, 'name' => $name, 'hp' => $hp ];
 	}
 	//---------------------------------------------------
 	// 島の名前から番号を算出
@@ -205,7 +205,7 @@ class Util {
 	static function makeRandomPointArray() {
 		global $init;
 
-		$rx = $ry = array();
+		$rx = $ry = [];
 		for($i = 0; $i < $init->islandSize; $i++)
 		for($j = 0; $j < $init->islandSize; $j++)
 		$rx[$i * $init->islandSize + $j] = $j;
@@ -225,7 +225,7 @@ class Util {
 				$ry[$j] = $tmp;
 			}
 		}
-		return array($rx, $ry);
+		return [$rx, $ry];
 	}
 
 	//---------------------------------------------------
@@ -258,13 +258,13 @@ class Util {
 		array_splice($command, $number, 1);
 
 		// 最後に資金繰り
-		$command[$init->commandMax - 1] = array (
+		$command[$init->commandMax - 1] = [
 			'kind'   => $init->comDoNothing,
 			'target' => 0,
 			'x'      => 0,
 			'y'      => 0,
 			'arg'    => 0
-		);
+		];
 	}
 
 	//---------------------------------------------------
@@ -305,7 +305,7 @@ class Util {
 		$kind = $lv & 0x0f; $lv >>= 4;
 		$id   = $lv;
 
-		return array($id, $kind, $hp, $exp, $flag);
+		return [$id, $kind, $hp, $exp, $flag];
 	}
 
 	//---------------------------------------------------
