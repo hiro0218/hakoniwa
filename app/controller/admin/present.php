@@ -5,18 +5,19 @@
  */
 
 require_once MODEL_PATH.'/Admin.php';
-require_once MODEL_PATH.'/Cgi.php';
 require_once MODEL_PATH.'/File/HakoPresent.php';
+require_once PRESENTER_PATH.'/HtmlPresent.php';
 
  class Present extends Admin {
+
+    function __construct() {
+        parent::__construct();
+    }
 
  	function execute() {
  		$html = new HtmlPresent();
  		$hako = new HakoPresent();
- 		$cgi = new Cgi();
- 		$this->parseInputData();
  		$hako->init($this);
- 		$cgi->getCookies();
  		$html->header();
 
  		switch($this->mode) {

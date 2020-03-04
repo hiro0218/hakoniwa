@@ -1,0 +1,21 @@
+{
+  "scripts": {
+    "phpstan": [
+      "phpstan analyse **/*php"
+    ],
+    "php7cc": [
+      "php7cc app"
+    ],
+    "phpcpd": [
+      "phpcpd app"
+    ]
+  },
+  "require": {
+    "php": "^7.1.19"
+  },
+  "require-dev": {
+    "phpstan/phpstan": "^0.12.11",
+    "sstalle/php7cc": "^1.2",
+    "sebastian/phpcpd": "*"
+  }
+}

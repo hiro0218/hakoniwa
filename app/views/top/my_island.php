@@ -1,5 +1,5 @@
 <h2>自分の島へ</h2>
-<form action="<?= $this_file ?>" method="post">
+<form action="<?= $this->this_file ?>" method="post">
 	<div class="form-group">
 		<label>あなたの島の名前は？</label>
 		<select name="ISLANDID" class="form-control">

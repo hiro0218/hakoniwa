@@ -7,7 +7,7 @@
 		参加希望の方は、管理者に「島名」と「パスワード」を送信してください。
 		</div>
 		<?php else: ?>
-		<form action="<?= $this_file ?>" method="post">
+		<form action="<?= $this->this_file ?>" method="post">
 			<div class="form-group">
 				<label>どんな名前をつける予定？</label>
 				<div class="input-group">

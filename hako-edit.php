@@ -8,6 +8,8 @@
 
 require_once 'config.php';
 require_once MODEL_PATH.'/File/HakoEdit.php';
+require_once PRESENTER_PATH.'/HtmlTop.php';
+require_once PRESENTER_PATH.'/HtmlMap.php';
 ini_set('display_errors', 0);
 
 global $init;
@@ -26,12 +28,9 @@ class CgiImitation {
             return;
         }
 
-		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
+		$this->mode = $_POST['mode'] ?? "";
 
-        foreach ($_POST as $name => $value) {
-            $value = str_replace(",", "", $value);
-            $this->dataSet["{$name}"] = $value;
-        }
+        $this->dataSet = Util::getParsePostData();
 
         if(!empty($_POST['Sight'])) {
             $this->dataSet['ISLANDID'] = $_POST['Sight'];
@@ -139,7 +138,7 @@ END;
 		// パスワード
 		if(!Util::checkPassword("", $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 
@@ -251,7 +250,7 @@ END;
 		// パスワード
 		if(!Util::checkPassword("", $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		$html = new HtmlMap();
@@ -512,7 +511,7 @@ END;
 		// パスワード
 		if(!Util::checkPassword("", $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 
@@ -569,48 +568,38 @@ class EditMain {
 		$cgi->getCookies();
 		if(!$hako->readIslands($cgi)) {
 			HTML::header();
-			HakoError::noDataFile();
+			ErrorHandler::noDataFile();
 			HTML::footer();
 			exit();
 		}
 		$cgi->setCookies();
 		$edit = new Edit;
+        $html = new HtmlTop();
+        $html->header();
 
 		switch($cgi->mode) {
 			case "enter":
-				$html = new HtmlTop();
-				$html->header();
 				$edit->main($hako, $cgi->dataSet);
-				$html->footer();
 				break;
 
 			case "list":
-				$html = new HtmlTop();
-				$html->header();
 				$edit->main($hako, $cgi->dataSet);
-				$html->footer();
 				break;
 
 			case "map":
-				$html = new HtmlTop();
-				$html->header();
 				$edit->editMap($hako, $cgi->dataSet);
-				$html->footer();
 				break;
 
 			case "regist":
-				$html = new HtmlTop();
-				$html->header();
 				$edit->register($hako, $cgi->dataSet);
-				$html->footer();
 				break;
 
 			default:
-				$html = new HtmlTop();
-				$html->header();
 				$edit->enter();
-				$html->footer();
 		}
+
+        $html->footer();
+
 		exit();
 	}
 }

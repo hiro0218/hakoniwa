@@ -5,8 +5,13 @@
  */
 
 require_once MODEL_PATH.'/Cgi.php';
-require_once MODEL_PATH.'/hako-turn.php';
+require_once MODEL_PATH.'/Turn.php';
 require_once MODEL_PATH.'/File/Hako.php';
+require_once MODEL_PATH.'/Make/Core.php';
+require_once MODEL_PATH.'/Make/MakeJS.php';
+require_once PRESENTER_PATH.'/HtmlTop.php';
+require_once PRESENTER_PATH.'/HtmlMap.php';
+require_once PRESENTER_PATH.'/HtmlMapJS.php';
 
 class Main {
 
@@ -19,7 +24,7 @@ class Main {
 
 		if(!$hako->readIslands($cgi)) {
 			HTML::header();
-			HakoError::noDataFile();
+			ErrorHandler::noDataFile();
 			HTML::footer();
 			exit();
 		}
@@ -29,7 +34,7 @@ class Main {
 		}
 		$cgi->setCookies();
 
-		$_developmode = (isset( $cgi->dataSet['DEVELOPEMODE'] )) ? $cgi->dataSet['DEVELOPEMODE'] : "";
+		$_developmode = $cgi->dataSet['DEVELOPEMODE'] ?? "";
 		if( mb_strtolower($_developmode) == "javascript") {
 			$html = new HtmlMapJS();
 			$com  = new MakeJS();

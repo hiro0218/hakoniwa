@@ -1,10 +1,14 @@
 <?php
 // Battle Fieldに設定された島がある場合のみ表示
-if ($hako->islandNumberNoBF < $hako->islandNumber) {
-    echo "<div ID=\"IslandView\">\n";
-    echo "<h2>Battle Fieldの状況</h2>\n";
+if ($hako->islandNumberNoBF < $hako->islandNumber): ?>
 
-    $this->islandTable($hako, $hako->islandNumberNoBF, $hako->islandNumber);
+<div ID="IslandView">
+    <h2>Battle Fieldの状況</h2>
 
-    echo "<hr>\n";
-}
+    <div class="table-responsive">
+        <?php $this->islandTable($hako, $hako->islandNumberNoBF, $hako->islandNumber); ?>
+    </div>
+
+    <hr>
+</div>
+<?php endif; ?>

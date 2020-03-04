@@ -5,7 +5,10 @@
  * @since 箱庭諸島 S.E ver23_r09 by SERA
  * @author hiro <@hiro0218>
  */
-// turn.php
+
+require_once HELPER_PATH.'/message/success.php';
+require_once PRESENTER_PATH.'/HtmlMap.php';
+require_once PRESENTER_PATH.'/HtmlMapJS.php';
 
 class Make {
 	//---------------------------------------------------
@@ -16,30 +19,30 @@ class Make {
 
 		$log = new Log();
 		if($hako->islandNumber >= $init->maxIsland) {
-			HakoError::newIslandFull();
+			ErrorHandler::newIslandFull();
 			return;
 		}
 		if(empty($data['ISLANDNAME'])) {
-			HakoError::newIslandNoName();
+			ErrorHandler::newIslandNoName();
 			return;
 		}
 		// 名前が正当化チェック
 		if(preg_match("/[,?()<>$]/", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "無人") == 0) {
-			HakoError::newIslandBadName();
+			ErrorHandler::newIslandBadName();
 			return;
 		}
 		// 名前の重複チェック
 		if(Util::nameToNumber($hako, $data['ISLANDNAME']) != -1) {
-			HakoError::newIslandAlready();
+			ErrorHandler::newIslandAlready();
 			return;
 		}
 		// パスワードの存在判定
 		if(empty($data['PASSWORD'])) {
-			HakoError::newIslandNoPassword();
+			ErrorHandler::newIslandNoPassword();
 			return;
 		}
 		if(strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0) {
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		// 新しい島の番号を決める
@@ -95,20 +98,20 @@ class Make {
 	function makeNewIsland() {
 		global $init;
 
-		$command = array();
+		$command = [];
 		// 初期コマンド生成
 		for($i = 0; $i < $init->commandMax; $i++) {
-			$command[$i] = array (
+			$command[$i] = [
 				'kind'   => $init->comDoNothing,
 				'target' => 0,
 				'x'      => 0,
 				'y'      => 0,
 				'arg'    => 0,
-			);
+			];
 		}
 
-		$land = array();
-		$landValue = array();
+		$land = [];
+		$landValue = [];
 
 		if ($init->initialLand) {
 			// 初期島データファイル使用モード
@@ -149,7 +152,7 @@ class Make {
 			while($size < $init->initialSize) {
 				$x = Util::random(8) + $center - 3;
 				$y = Util::random(8) + $center - 3;
-				if(Turn::countAround($land, $x, $y, 7, array($init->landSea)) != 7) {
+				if(Turn::countAround($land, $x, $y, 7, [$init->landSea]) != 7) {
 					// 周りに陸地がある場合、浅瀬にする
 					// 浅瀬は荒地にする
 					// 荒地は平地にする
@@ -253,7 +256,7 @@ class Make {
 			for($i = 0; $i < 120; $i++) {
 				$x = Util::random(8) + $center - 3;
 				$y = Util::random(8) + $center - 3;
-				if(Turn::countAround($land, $x, $y, 7, array($init->landSea)) != 7) {
+				if(Turn::countAround($land, $x, $y, 7, [$init->landSea]) != 7) {
 					// 周りに陸地がある場合、浅瀬にする
 					// 浅瀬は荒地にする
 					// 荒地は平地にする
@@ -330,7 +333,7 @@ class Make {
 				}
 			}
 		}
-		return array (
+		return [
 			'money'     => $init->initialMoney,
 			'food'      => $init->initialFood,
 			'land'      => $land,
@@ -338,7 +341,7 @@ class Make {
 			'command'   => $command,
 			'prize'     => '0,0,',
 			'taiji'     => 0,
-		);
+		];
 	}
 
 	//---------------------------------------------------
@@ -353,7 +356,7 @@ class Make {
 		// パスワード
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		// メッセージを更新
@@ -365,7 +368,7 @@ class Make {
 		$hako->writeIslandsFile();
 
 		// コメント更新メッセージ
-		Success::Comment();
+		SuccessHandler::Comment();
 
 		// owner modeへ
 		if($data['DEVELOPEMODE'] == "cgi") {
@@ -396,7 +399,7 @@ class Make {
 			if(preg_match("/^無人$/", $data['ISLANDNAME'])) {
 				// 島の強制削除
 				$this->deleteIsland($hako, $data);
-				Success::deleteIsland($name);
+				SuccessHandler::deleteIsland($name);
 				return;
 			} else {
 				$island['money'] = $init->maxMoney;
@@ -404,30 +407,30 @@ class Make {
 			}
 		} elseif(!Util::checkPassword($island['password'], $data['OLDPASS'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		// 確認用パスワード
 		if(strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		if(!empty($data['ISLANDNAME']) && (strlen($data['ISLANDNAME']) != 0) ) {
 			// 名前変更の場合
 			// 名前が正当かチェック
 			if(preg_match("/[,?()<>$]/", $data['ISLANDNAME']) || strcmp($data['ISLANDNAME'], "無人") == 0) {
-				HakoError::newIslandBadName();
+				ErrorHandler::newIslandBadName();
 				return;
 			}
 			// 名前の重複チェック
 			if(Util::nameToNumber($hako, $data['ISLANDNAME']) != -1) {
-				HakoError::newIslandAlready();
+				ErrorHandler::newIslandAlready();
 				return;
 			}
 			if($island['money'] < $init->costChangeName) {
 				// 金が足りない
-				HakoError::changeNoMoney();
+				ErrorHandler::changeNoMoney();
 				return;
 			}
 			// 代金
@@ -448,7 +451,7 @@ class Make {
 		//if(($flag == 0) && (strcmp($data['PASSWORD'], $data['PASSWORD2']) != 0)) {
 		if( $flag == 0 ) {
 			// どちらも変更されていない
-			HakoError::changeNothing();
+			ErrorHandler::changeNothing();
 			return;
 		}
 		$hako->islands[$num] = $island;
@@ -456,7 +459,7 @@ class Make {
 		$hako->writeIslandsFile($id);
 
 		// 変更成功
-		Success::change();
+		SuccessHandler::change();
 	}
 
 	//---------------------------------------------------
@@ -476,7 +479,7 @@ class Make {
 			$island['food'] = $init->maxFood;
 		} elseif(!Util::checkPassword($island['password'], $data['OLDPASS'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		$island['owner'] = htmlspecialchars($data['OWNERNAME']);
@@ -485,7 +488,7 @@ class Make {
 		$hako->writeIslandsFile($id);
 
 		// 変更成功
-		Success::change();
+		SuccessHandler::change();
 	}
 
 	//---------------------------------------------------
@@ -502,7 +505,7 @@ class Make {
 		// パスワード
 		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
 			// password間違い
-			HakoError::wrongPassword();
+			ErrorHandler::wrongPassword();
 			return;
 		}
 		// モードで分岐
@@ -511,7 +514,7 @@ class Make {
 
 		if(strcmp($data['COMMANDMODE'], 'delete') == 0) {
 			Util::slideFront($command, $data['NUMBER']);
-			Success::commandDelete();
+			SuccessHandler::commandDelete();
 
 		} else if(($data['COMMAND'] == $init->comAutoPrepare) ||
 				  ($data['COMMAND'] == $init->comAutoPrepare2)) {
@@ -541,18 +544,18 @@ class Make {
 				$y = $rpy[$j];
 				if($land[$x][$y] == $init->landWaste) {
 					Util::slideBack($command, $i);
-					$command[$i] = array (
+					$command[$i] = [
 						'kind'   => $kind,
 						'target' => 0,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => 0,
-					);
+					];
 					$i++;
 				}
 				$j++;
 			}
-			Success::commandAdd();
+			SuccessHandler::commandAdd();
 
 		} else if ($data['COMMAND'] == $init->comAutoReclaim) {
 			$r = Util::makeRandomPointArray();
@@ -571,13 +574,13 @@ class Make {
 
 				if (($kind == $init->landSea) && ($lv == 1)) {
 					Util::slideBack($command, $i);
-					$command[$i] = array (
+					$command[$i] = [
 						'kind'   => $init->comReclaim,
 						'target' => 0,
 						'x'      => $x,
 						'y'      => $y,
 						'arg'    => 0,
-					);
+					];
 					$i++;
 				}
 				$j++;
@@ -683,20 +686,20 @@ class Make {
 			for($i = 0; $i < $init->commandMax; $i++) {
 				Util::slideFront($command, 0);
 			}
-			Success::commandDelete();
+			SuccessHandler::commandDelete();
 		} else {
 			if(strcmp($data['COMMANDMODE'], 'insert') == 0) {
 				Util::slideBack($command, $data['NUMBER']);
 			}
-			Success::commandAdd();
+			SuccessHandler::commandAdd();
 			// コマンドを登録
-			$command[$data['NUMBER']] = array (
+			$command[$data['NUMBER']] = [
 				'kind'   => $data['COMMAND'],
 				'target' => $data['TARGETID'],
 				'x'      => $data['POINTX'],
 				'y'      => $data['POINTY'],
 				'arg'    => $data['AMOUNT'],
-			);
+			];
 		}
 
 		// データの書き出し
@@ -736,62 +739,5 @@ class Make {
 
 		// データ書き出し
 		$hako->writeIslandsFile($id);
-	}
-}
-
-//--------------------------------------------------------------------
-class MakeJS extends Make {
-
-	//---------------------------------------------------
-	// コマンドモード
-	//---------------------------------------------------
-	function commandMain($hako, $data) {
-		global $init;
-
-		$id = $data['ISLANDID'];
-		$num = $hako->idToNumber[$id];
-		$island = $hako->islands[$num];
-		$name = $island['name'];
-
-		// パスワード
-		if(!Util::checkPassword($island['password'], $data['PASSWORD'])) {
-			// password間違い
-			HakoError::wrongPassword();
-			return;
-		}
-		// モードで分岐
-		$command = $island['command'];
-		$comary = explode(" " , $data['COMARY']);
-
-		for($i = 0; $i < $init->commandMax; $i++) {
-			$pos = $i * 5;
-			$kind   = $comary[$pos];
-			$x      = $comary[$pos + 1];
-			$y      = $comary[$pos + 2];
-			$arg    = $comary[$pos + 3];
-			$target = $comary[$pos + 4];
-
-			// コマンド登録
-			if($kind == 0) {
-				$kind = $init->comDoNothing;
-			}
-			$command[$i] = array (
-				'kind'   => $kind,
-				'x'      => $x,
-				'y'      => $y,
-				'arg'    => $arg,
-				'target' => $target
-			);
-		}
-		Success::commandAdd();
-
-		// データの書き出し
-		$island['command'] = $command;
-		$hako->islands[$num] = $island;
-		$hako->writeIslandsFile($island['id']);
-
-		// owner modeへ
-		$html = new HtmlMapJS();
-		$html->owner($hako, $data);
 	}
 }

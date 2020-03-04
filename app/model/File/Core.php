@@ -29,7 +29,7 @@ class File {
 	function readIslandsFile(&$cgi) {
 		global $init;
 
-		$num = (isset( $cgi->dataSet['ISLANDID'] )) ? $cgi->dataSet['ISLANDID'] : "";
+		$num = $cgi->dataSet['ISLANDID'] ?? "";
 		$fileName = "{$init->dirName}/hakojima.dat";
 		if(!is_file($fileName)) {
 			return false;
@@ -46,7 +46,7 @@ class File {
 
 		// ターン処理判定
 		$now = $_SERVER['REQUEST_TIME'];
-		$_mode = isset($cgi->dataSet['mode']) ? $cgi->dataSet['mode'] : "";
+		$_mode = $cgi->dataSet['mode'] ?? "";
 		if((DEBUG && (strcmp($_mode, 'debugTurn') == 0)) ||
 			 (($now - $this->islandLastTime) >= $init->unitTime)) {
 			$cgi->mode = $data['mode'] = 'turn';
@@ -58,7 +58,7 @@ class File {
 			if ( $this->islands[$i]['isBF'] ) { $islandNumberBF++; }
 			if ( $this->islands[$i]['keep'] ) { $islandNumberKP++; }
 			$this->idToNumber[$this->islands[$i]['id']] = $i;
-			$this->islands[$i]['allyId'] = array();
+			$this->islands[$i]['allyId'] = [];
 		}
 		$this->islandNumberBF = $islandNumberBF;
 		$this->islandNumberKP = $islandNumberKP;
@@ -129,7 +129,7 @@ class File {
 
 			if ($fp_i === false) {
 				HTML::header();
-				HakoError::problem();
+				ErrorHandler::problem();
 			}
 
 
@@ -149,19 +149,19 @@ class File {
 			for($i = 0; $i < $init->commandMax; $i++) {
 				$line = chop(fgets($fp_i, READ_LINE));
 				list($kind, $target, $x, $y, $arg) = explode(",", $line);
-				$command[$i] = array (
+				$command[$i] = [
 					'kind' => $kind,
 					'target' => $target,
 					'x' => $x,
 					'y' => $y,
 					'arg' => $arg,
-				);
+				];
 			}
 
 			fclose($fp_i);
 		}
 
-		return array(
+		return [
 			'name'         => $name,
 			'owner'        => $owner,
 			'id'           => $id,
@@ -203,16 +203,16 @@ class File {
 			'bougyo'       => $bougyo,
 			'tokuten'      => $tokuten,
 			'shitten'      => $shitten,
-			'land'         => isset($land)      ? $land      : "",
-			'landValue'    => isset($landValue) ? $landValue : "",
-			'command'      => isset($command)   ? $command   : "",
-			'lbbs'         => isset($lbbs)      ? $lbbs      : "",
+			'land'         => $land      ??  "",
+			'landValue'    => $landValue ??  "",
+			'command'      => $command   ??  "",
+			'lbbs'         => $lbbs      ??  "",
 			'port'         => $port,
-			'ship'         => array(0 => $ship0, 1 => $ship1, 2 => $ship2, 3 => $ship3, 4 => $ship4, 5 => $ship5, 6 => $ship6, 7 => $ship7, 8 => $ship8, 9 => $ship9, 10 => $ship10, 11 => $ship11, 12 => $ship12, 13 => $ship13, 14 => $ship14),
-			'eisei'        => array(0 => $eisei0, 1 => $eisei1, 2 => $eisei2, 3 => $eisei3, 4 => $eisei4, 5 => $eisei5),
-			'zin'          => array(0 => $zin0, 1 => $zin1, 2 => $zin2, 3 => $zin3, 4 => $zin4, 5 => $zin5, 6 => $zin6),
-			'item'         => array(0 => $item0, 1 => $item1, 2 => $item2, 3 => $item3, 4 => $item4, 5 => $item5, 6 => $item6, 7 => $item7, 8 => $item8, 9 => $item9, 10 => $item10, 11 => $item11, 12 => $item12, 13 => $item13, 14 => $item14, 15 => $item15, 16 => $item16, 17 => $item17, 18 => $item18, 19 => $item19, 20 => $item20),
-		);
+			'ship'         => [0 => $ship0, 1 => $ship1, 2 => $ship2, 3 => $ship3, 4 => $ship4, 5 => $ship5, 6 => $ship6, 7 => $ship7, 8 => $ship8, 9 => $ship9, 10 => $ship10, 11 => $ship11, 12 => $ship12, 13 => $ship13, 14 => $ship14],
+			'eisei'        => [0 => $eisei0, 1 => $eisei1, 2 => $eisei2, 3 => $eisei3, 4 => $eisei4, 5 => $eisei5],
+			'zin'          => [0 => $zin0, 1 => $zin1, 2 => $zin2, 3 => $zin3, 4 => $zin4, 5 => $zin5, 6 => $zin6],
+			'item'         => [0 => $item0, 1 => $item1, 2 => $item2, 3 => $item3, 4 => $item4, 5 => $item5, 6 => $item6, 7 => $item7, 8 => $item8, 9 => $item9, 10 => $item10, 11 => $item11, 12 => $item12, 13 => $item13, 14 => $item14, 15 => $item15, 16 => $item16, 17 => $item17, 18 => $item18, 19 => $item19, 20 => $item20],
+		];
 	}
 	//---------------------------------------------------
 	// 地形を書き込む
@@ -308,7 +308,7 @@ class File {
 		$title = chop(fgets($fp, READ_LINE));
 		list($title, $message) = array_pad(explode("<>", $title), 2, 0);
 
-		return array(
+		return [
 			'name'       => $name,
 			'mark'       => $mark,
 			'color'      => $color,
@@ -323,7 +323,7 @@ class File {
 			'comment'    => $comment,
 			'title'      => $title,
 			'message'    => $message,
-		);
+		];
 	}
 	//---------------------------------------------------
 	// 全島データを書き込む
@@ -545,7 +545,7 @@ class File {
 	function writePresentFile() {
 		global $init;
 
-		$presents = array();
+		$presents = [];
 		$fileName = "{$init->dirName}/present.dat";
 		for($i = 0; $i < $this->islandNumber; $i++) {
 			$present =& $this->islands[$i]['present'];

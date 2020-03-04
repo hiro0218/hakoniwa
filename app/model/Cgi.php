@@ -8,7 +8,7 @@
 
 class Cgi {
 	public $mode = "";
-	public $dataSet = array();
+	public $dataSet = [];
 
 	//---------------------------------------------------
 	// POST、GETのデータを取得
@@ -16,14 +16,9 @@ class Cgi {
 	function parseInputData() {
 		global $init;
 
-		$this->mode = isset($_POST['mode']) ? $_POST['mode'] : "";
+		$this->mode = $_POST['mode'] ?? "";
 
-		if(!empty($_POST)) {
-			foreach ($_POST as $name => $value) {
-				$value = str_replace(",", "", $value);
-				$this->dataSet["{$name}"] = $value;
-			}
-		}
+        $this->dataSet = Util::getParsePostData();
 
 		if(!empty($_GET['Sight'])) {
 			$this->mode = "print";
@@ -43,7 +38,7 @@ class Cgi {
 		}
 		$init->adminMode = 0;
 		if(empty($_GET['AdminButton'])) {
-			$_password = (isset( $this->dataSet['PASSWORD'] )) ? $this->dataSet['PASSWORD'] : "";
+			$_password = $this->dataSet['PASSWORD'] ?? "";
 
 			if(Util::checkPassword("", $_password)) {
 				$init->adminMode = 1;

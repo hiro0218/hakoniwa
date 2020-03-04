@@ -5,15 +5,16 @@
  */
 
 require_once MODEL_PATH.'/Admin.php';
-require_once MODEL_PATH.'/Cgi.php';
+require_once PRESENTER_PATH.'/HtmlMente.php';
 
 class Mente extends Admin {
 
+    function __construct() {
+        parent::__construct();
+    }
+
 	function execute() {
 		$html = new HtmlMente();
-		$cgi = new Cgi();
-		$this->parseInputData();
-		$cgi->getCookies();
 		$html->header();
 		switch($this->mode) {
 			case "NEW":
@@ -121,7 +122,7 @@ class Mente extends Admin {
 
 		$fileName = "{$init->dirName}/hakojima.dat";
 		$fp = fopen($fileName, "r+");
-		$buffer = array();
+		$buffer = [];
 		while($line = fgets($fp, READ_LINE)) {
 			array_push($buffer, $line);
 		}
@@ -149,10 +150,10 @@ class Mente extends Admin {
 		global $init;
 
 		if(empty($this->dataSet['MPASS1']) || empty($this->dataSet['MPASS2']) || strcmp($this->dataSet['MPASS1'], $this->dataSet['MPASS2'])) {
-			HakoError::wrongMasterPassword();
+			ErrorHandler::wrongMasterPassword();
 			return 0;
 		} else if(empty($this->dataSet['SPASS1']) || empty($this->dataSet['SPASS2']) || strcmp($this->dataSet['SPASS1'], $this->dataSet['SPASS2'])) {
-			HakoError::wrongSpecialPassword();
+			ErrorHandler::wrongSpecialPassword();
 			return 0;
 		}
 		$masterPassword  = crypt($this->dataSet['MPASS1'], 'ma');
