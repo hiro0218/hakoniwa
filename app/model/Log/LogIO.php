@@ -43,7 +43,7 @@ class LogIO {
 	//---------------------------------------------------
 	function logFilePrint($num = 0, $id = 0, $mode = 0) {
 		global $init;
-		$fileName = $init->dirName . "/hakojima.log" . $num;
+        $fileName = "{$this->init->dirName}/hakojima.log{$num}";
 		if(!is_file($fileName)) {
 			return;
 		}
@@ -82,7 +82,7 @@ class LogIO {
 	// 発見の記録を出力
 	//---------------------------------------------------
 	function historyPrint() {
-		$fileName = $this->init->dirName . "/hakojima.his";
+		$fileName = "{$this->init->dirName}/hakojima.his";
 
 		if(!is_file($fileName)) {
 			return;
