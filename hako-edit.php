@@ -574,42 +574,32 @@ class EditMain {
 		}
 		$cgi->setCookies();
 		$edit = new Edit;
+        $html = new HtmlTop();
+        $html->header();
 
 		switch($cgi->mode) {
 			case "enter":
-				$html = new HtmlTop();
-				$html->header();
 				$edit->main($hako, $cgi->dataSet);
-				$html->footer();
 				break;
 
 			case "list":
-				$html = new HtmlTop();
-				$html->header();
 				$edit->main($hako, $cgi->dataSet);
-				$html->footer();
 				break;
 
 			case "map":
-				$html = new HtmlTop();
-				$html->header();
 				$edit->editMap($hako, $cgi->dataSet);
-				$html->footer();
 				break;
 
 			case "regist":
-				$html = new HtmlTop();
-				$html->header();
 				$edit->register($hako, $cgi->dataSet);
-				$html->footer();
 				break;
 
 			default:
-				$html = new HtmlTop();
-				$html->header();
 				$edit->enter();
-				$html->footer();
 		}
+
+        $html->footer();
+
 		exit();
 	}
 }
