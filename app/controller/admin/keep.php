@@ -5,19 +5,19 @@
  */
 
 require_once MODEL_PATH.'/Admin.php';
-require_once MODEL_PATH.'/Cgi.php';
 require_once MODEL_PATH.'/File/HakoKP.php';
 require_once PRESENTER_PATH.'/HtmlKeep.php';
 
  class Keep extends Admin {
 
+    function __construct() {
+        parent::__construct();
+    }
+
  	function execute() {
  		$html = new HtmlKeep();
- 		$cgi = new Cgi();
  		$hako = new HakoKP();
- 		$this->parseInputData();
  		$hako->init($this);
- 		$cgi->getCookies();
  		$html->header();
 
  		switch($this->mode) {

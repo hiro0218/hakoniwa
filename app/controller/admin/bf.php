@@ -5,19 +5,20 @@
  */
 
 require_once MODEL_PATH.'/Admin.php';
-require_once MODEL_PATH.'/Cgi.php';
 require_once MODEL_PATH.'/File/HakoBF.php';
 require_once PRESENTER_PATH.'/HtmlBF.php';
 
  class BF extends Admin {
 
+    function __construct() {
+        parent::__construct();
+    }
+
  	function execute() {
  		$html = new HtmlBF();
  		$hako = new HakoBF();
- 		$cgi = new Cgi();
- 		$this->parseInputData();
  		$hako->init($this);
- 		$cgi->getCookies();
+
  		$html->header();
 
  		switch($this->mode) {

@@ -5,22 +5,16 @@
  */
 
 require_once MODEL_PATH.'/Admin.php';
-require_once MODEL_PATH.'/Cgi.php';
 require_once PRESENTER_PATH.'/HtmlAxes.php';
 
  class Axes extends Admin {
- 	public $init;
 
  	function __construct() {
- 		global $init;
- 		$this->init = $init;
+        parent::__construct();
  	}
 
  	function execute() {
  		$html = new HtmlAxes();
- 		$cgi  = new Cgi();
- 		$this->parseInputData();
- 		$cgi->getCookies();
  		$html->header();
 
  		switch($this->mode) {

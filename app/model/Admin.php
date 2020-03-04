@@ -4,11 +4,29 @@
  * @author hiro <@hiro0218>
  */
 
+require_once MODEL_PATH.'/Cgi.php';
 require_once HELPER_PATH.'/message/error.php';
 
 class Admin {
+ 	public $init;
+
     public $mode;
     public $dataSet = [];
+
+    function __construct() {
+        $this->initAdmin();
+    }
+
+    function initAdmin() {
+ 		global $init;
+
+ 		$this->init = $init;
+
+ 		$cgi = new Cgi();
+ 		$cgi->getCookies();
+
+ 		$this->parseInputData();
+    }
 
     function parseInputData() {
         // mode

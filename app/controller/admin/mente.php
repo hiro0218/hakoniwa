@@ -5,16 +5,16 @@
  */
 
 require_once MODEL_PATH.'/Admin.php';
-require_once MODEL_PATH.'/Cgi.php';
 require_once PRESENTER_PATH.'/HtmlMente.php';
 
 class Mente extends Admin {
 
+    function __construct() {
+        parent::__construct();
+    }
+
 	function execute() {
 		$html = new HtmlMente();
-		$cgi = new Cgi();
-		$this->parseInputData();
-		$cgi->getCookies();
 		$html->header();
 		switch($this->mode) {
 			case "NEW":
