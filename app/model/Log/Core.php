@@ -326,7 +326,7 @@ class Log extends LogIO {
 		$this->out("<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}で眠っていた<strong>怪獣{$tLname}</strong>にミサイルが命中、<strong>怪獣{$tLname}</strong>は目を覚ましました。",$id, $tId);
 	}
 	// 睡眠中の怪獣が目覚める
-	function MonsWakeup($id, $name, $lName, $point, $mName) {
+	function MonsWakeup($id, $name, $lName, $point, $mName, $tId) {
 		$this->out("<A href=\"{$this->this_file}?Sight={$tId}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}</A>{$this->init->_tagName}で眠っていた<strong>怪獣{$mName}</strong>は目を覚ましました。",$id);
 	}
 	// 通常ミサイル、怪獣に命中、ダメージ

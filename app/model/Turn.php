@@ -3944,7 +3944,7 @@ class Turn {
 
 				case $init->landZorasu:
 					// 海怪獣
-					if($ZorasuMove[$x][$y] == 1) {
+					if(isset($ZorasuMove) && $ZorasuMove[$x][$y] == 1) {
 						// すでに動いた後
 						break;
 					}
@@ -4301,7 +4301,7 @@ class Turn {
 						// (怪獣の体力 * 10)% の確率で捕獲解除
 						$point = "({$x}, {$y})";
 						$land[$x][$y] = $init->landMonster; // 捕獲解除
-						$this->log->MonsWakeup($id, $name, $lName, $point, $mName);
+						$this->log->MonsWakeup($id, $name, $lName, $point, $mName, $target);
 					}
 					break;
 
