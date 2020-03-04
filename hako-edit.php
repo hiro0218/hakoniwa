@@ -17,7 +17,7 @@ $THIS_FILE = $init->baseDir . "/hako-edit.php";
 
 class CgiImitation {
 	public $mode = "";
-	public $dataSet = array();
+	public $dataSet = [];
 	//---------------------------------------------------
 	// POST、GETのデータを取得
 	//---------------------------------------------------
@@ -259,7 +259,7 @@ END;
 		$island = $hako->islands[$number];
 
 		// 地形リストを生成
-		$landList = array (
+		$landList = [
 			"$init->landSea",
 			"$init->landSeaSide",
 			"$init->landWaste",
@@ -304,10 +304,10 @@ END;
 			"$init->landMonster",
 			"$init->landSleeper",
 			"$init->landZorasu"
-		);
+		];
 
 		// 地形リスト名称を生成
-		$landName = array (
+		$landName = [
 			"海、浅瀬",
 			"砂浜",
 			"荒地",
@@ -352,7 +352,7 @@ END;
 			"怪獣",
 			"怪獣（睡眠中）",
 			"ぞらす"
-		);
+		];
 		echo <<<END
 <script type="text/javascript">
 function ps(x, y, ld, lv) {

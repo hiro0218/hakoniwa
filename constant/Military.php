@@ -21,8 +21,8 @@ trait Military {
 	public $maxSBaseLevel = 3; // 海底基地
 
 	// 経験値がいくつでレベルアップか
-	public $baseLevelUp   = array(20, 60, 120, 200); // ミサイル基地
-	public $sBaseLevelUp  = array(50, 200); // 海底基地
+	public $baseLevelUp   = [20, 60, 120, 200]; // ミサイル基地
+	public $sBaseLevelUp  = [50, 200]; // 海底基地
 
 	// 防衛施設の最大耐久力
 	public $dBaseHP       = 5;

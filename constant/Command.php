@@ -7,7 +7,7 @@ trait Command {
 	// コマンド分割
 	// このコマンド分割だけは、自動入力系のコマンドは設定しないで下さい。
 	public $commandDivido =
-		array(
+		[
 			'開発,0,10',      // 計画番号00～10
 			'建設,11,25',     // 計画番号11～20
 			'建設2,26,50',    // 計画番号21～30
@@ -15,7 +15,7 @@ trait Command {
 			'攻撃1,61,70',    // 計画番号61～80
 			'攻撃2,71,80',    // 計画番号61～80
 			'運営,81,90'      // 計画番号81～90
-		);
+		];
 	// 注意：スペースは入れないように
 	// ○→ '開発,0,10',   # 計画番号00～10
 	// ×→ '開発, 0,10', # 計画番号00～10
@@ -116,14 +116,14 @@ trait Command {
 	public $pointNumber;
 
 	// 周囲2ヘックスの座標
-	public $ax = array(0, 1, 1, 1, 0,-1, 0, 1, 2, 2, 2, 1, 0,-1,-1,-2,-1,-1, 0);
-	public $ay = array(0,-1, 0, 1, 1, 0,-1,-2,-1, 0, 1, 2, 2, 2, 1, 0,-1,-2,-2);
+	public $ax = [0, 1, 1, 1, 0,-1, 0, 1, 2, 2, 2, 1, 0,-1,-1,-2,-1,-1, 0];
+	public $ay = [0,-1, 0, 1, 1, 0,-1,-2,-1, 0, 1, 2, 2, 2, 1, 0,-1,-2,-2];
 
 	//////////////////////////////////////////////////
 
 	private function setpubliciable() {
 		$this->pointNumber = $this->islandSize * $this->islandSize;
-		$this->comList = array(
+		$this->comList = [
 			$this->comPrepare,
 			$this->comPrepare2,
 			$this->comReclaim,
@@ -196,7 +196,7 @@ trait Command {
 			$this->comAutoPrepare2,
 			$this->comAutoReclaim,
 			$this->comAutoDelete,
-		);
+		];
 
 		// 計画の名前と値段
 		$this->comName[$this->comPrepare]      = '整地';

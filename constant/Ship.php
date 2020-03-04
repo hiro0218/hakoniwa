@@ -11,7 +11,7 @@ trait Ship {
 	public $shipKind = 4; // 最大15
 
 	// 船舶の名前（10以降は災害船舶と定義）
-	public $shipName = array (
+	public $shipName = [
 		'輸送船',         # 0
 		'漁船',           # 1
 		'海底探索船',     # 2
@@ -27,13 +27,13 @@ trait Ship {
 		'',               # 12
 		'',               # 13
 		''                # 14
-		);
+		];
 
 	// 船舶維持費
-	public $shipCost = array(100, 200, 300, 500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	public $shipCost = [100, 200, 300, 500, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
 	// 船舶体力（最大15）
-	public $shipHP   = array(1, 2, 3, 10, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 1);
+	public $shipHP   = [1, 2, 3, 10, 1, 1, 1, 1, 1, 1, 10, 1, 1, 1, 1];
 
 	// 船舶経験値の最大値（最大でも255まで）
 	public $shipEX   = 100;
@@ -42,7 +42,7 @@ trait Ship {
 	public $shipLv   = 5;
 
 	// 経験値がいくつでレベルアップか
-	public $shipLevelUp   = array(10, 30, 60, 100);
+	public $shipLevelUp   = [10, 30, 60, 100];
 
 	// 船舶設定値（確率：設定値 x 0.1%）
 	public $shipIncom          =  200; // 輸送船収入

@@ -147,7 +147,7 @@ class MakeAlly {
 			// 新規
 			$n = $hako->allyNumber;
 			$hako->ally[$n]['id'] = $currentID;
-			$memberId = array();
+			$memberId = [];
 			if($allyID < 200) {
 				$hako->ally[$n]['oName']    = $island['name'] . "島";
 				$hako->ally[$n]['password'] = $island['password'];
@@ -163,7 +163,7 @@ class MakeAlly {
 			$hako->ally[$n]['occupation']   = 0;
 			$hako->ally[$n]['memberId']     = $memberId;
 			$island['allyId']               = $memberId;
-			$ext = array(0,);
+			$ext = [0,];
 			$hako->ally[$n]['ext']          = $ext;
 			$hako->idToAllyNumber[$currentID] = $n;
 			$hako->allyNumber++;
@@ -236,7 +236,7 @@ class MakeAlly {
 		}
 		foreach ($allyMember as $id) {
 			$island = $hako->islands[$hako->idToNumber[$id]];
-			$newId = array();
+			$newId = [];
 			foreach ($island['allyId'] as $aId) {
 				if($aId != $currentID) {
 					array_push($newId, $aId);
@@ -292,7 +292,7 @@ class MakeAlly {
 		}
 
 		$allyMember = $ally['memberId'];
-		$newAllyMember = array();
+		$newAllyMember = [];
 		$flag = 0;
 
 		foreach ($allyMember as $id) {
@@ -306,7 +306,7 @@ class MakeAlly {
 
 		if($flag) {
 			// 脱退
-			$newAlly = array();
+			$newAlly = [];
 			foreach ($island['allyId'] as $id) {
 				if($id != $ally['id']) {
 					array_push($newAlly, $id);
@@ -419,7 +419,7 @@ class MakeAlly {
 		for($i=0; $i<$hako->allyNumber; $i++) {
 			$count = 0;
 			$allyMember = $hako->ally[$i]['memberId'];
-			$newAllyMember = array();
+			$newAllyMember = [];
 			foreach ($allyMember as $id) {
 				if($hako->idToNumber[$id] > -1) {
 					array_push($newAllyMember, $id);
@@ -600,7 +600,7 @@ class AllyIO {
 		$title      = chop(fgets($fp, READ_LINE));
 		list($title, $message) = array_pad(explode("<>", $title), 2, NULL);
 
-		return array(
+		return [
 			'name'       => $name,
 			'mark'       => $mark,
 			'color'      => $color,
@@ -615,7 +615,7 @@ class AllyIO {
 			'comment'    => $comment,
 			'title'      => $title,
 			'message'    => $message,
-		);
+		];
 	}
 	//--------------------------------------------------
 	// 同盟データ書き込み
@@ -684,7 +684,7 @@ class AllyIO {
 		for($i = 0; $i < $this->islandNumber; $i++) {
 			$this->islands[$i] = $this->readIsland($fp);
 			$this->idToNumber[$this->islands[$i]['id']] = $i;
-			$this->islands[$i]['allyId'] = array();
+			$this->islands[$i]['allyId'] = [];
 		}
 		AllyUtil::unlock($fp);
 		fclose($fp);
@@ -732,7 +732,7 @@ class AllyIO {
 		$soccer   = chop(fgets($fp, READ_LINE));
 		list($soccer, $team, $shiai, $kachi, $make, $hikiwake, $kougeki, $bougyo, $tokuten, $shitten) = array_pad(explode(",", $soccer), 10, NULL);
 
-		return array(
+		return [
 			'name'         => $name,
 			'owner'        => $owner,
 			'id'           => $id,
@@ -776,11 +776,11 @@ class AllyIO {
 			'landValue'    => (isset($landValue)) ? $landValue : "",
 			'command'      => (isset($command)) ? $command : "",
 			'port'         => (isset($port)) ? $port : "",
-			'ship'         => array('passenger' => $passenger, 'fishingboat' => $fishingboat, 'tansaku' => $tansaku, 'senkan' => $senkan, 'viking' => $viking),
-			'eisei'        => array(0 => $eisei0, 1 => $eisei1, 2 => $eisei2, 3 => $eisei3, 4 => $eisei4, 5 => $eisei5),
-			'zin'          => array(0 => $zin0, 1 => $zin1, 2 => $zin2, 3 => $zin3, 4 => $zin4, 5 => $zin5, 6 => $zin6),
-			'item'         => array(0 => $item0, 1 => $item1, 2 => $item2, 3 => $item3, 4 => $item4, 5 => $item5, 6 => $item6, 7 => $item7, 8 => $item8, 9 => $item9, 10 => $item10, 11 => $item11, 12 => $item12, 13 => $item13, 14 => $item14, 15 => $item15, 16 => $item16, 17 => $item17, 18 => $item18, 19 => $item19),
-		);
+			'ship'         => ['passenger' => $passenger, 'fishingboat' => $fishingboat, 'tansaku' => $tansaku, 'senkan' => $senkan, 'viking' => $viking],
+			'eisei'        => [0 => $eisei0, 1 => $eisei1, 2 => $eisei2, 3 => $eisei3, 4 => $eisei4, 5 => $eisei5],
+			'zin'          => [0 => $zin0, 1 => $zin1, 2 => $zin2, 3 => $zin3, 4 => $zin4, 5 => $zin5, 6 => $zin6],
+			'item'         => [0 => $item0, 1 => $item1, 2 => $item2, 3 => $item3, 4 => $item4, 5 => $item5, 6 => $item6, 7 => $item7, 8 => $item8, 9 => $item9, 10 => $item10, 11 => $item11, 12 => $item12, 13 => $item13, 14 => $item14, 15 => $item15, 16 => $item16, 17 => $item17, 18 => $item18, 19 => $item19],
+		];
 	}
 }
 
@@ -976,7 +976,7 @@ class AllyUtil {
 //------------------------------------------------------------
 class Main {
 	public $mode;
-	public $dataSet = array();
+	public $dataSet = [];
 	//--------------------------------------------------
 	// モード分岐
 	//--------------------------------------------------
