@@ -150,6 +150,7 @@ END;
 <h2>諸島の状況</h2>
 <p>島の名前をクリックすると、<strong>マップ</strong>が表示されます。</p>
 
+<div class="table-responsive">
 <table class="table table-bordered table-condensed">
 <tr>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
@@ -196,13 +197,16 @@ END;
 				$comment .= " <span class=\"new\">New</span>";
 			}
 			if($hako->islandNumber - $i == $hako->islandNumberBF) {
-				echo "</table>\n</div>\n";
+                echo "</table>\n</div>\n";
+                echo "</div>";
+
 				echo "<BR>\n";
 				echo "<hr>\n\n";
 				echo "<div ID=\"IslandView\">\n";
 				echo "<h2>Battle Fieldの状況</h2>\n";
 
 				echo <<<END
+<div class="table-responsive">
 <table class="table table-bordered">
 <tr>
 	<th {$init->bgTitleCell}>{$init->tagTH_}{$init->nameRank}{$init->_tagTH}</th>
@@ -240,6 +244,7 @@ END;
 			echo "</tr>\n";
 		}
 		echo "</table>\n</div>\n";
+		echo "</div>";
 	}
 	//---------------------------------------------------
 	// マップエディタの表示

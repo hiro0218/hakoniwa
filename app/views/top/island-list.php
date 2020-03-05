@@ -1,6 +1,7 @@
 <div class="IslandView">
     <h2>諸島の状況</h2>
     <p>島の名前をクリックすると、<strong>観光</strong>することができます。</p>
+    <div class="table-responsive">
 <?php
 		$islandListStart = 0;
 		$islandListSentinel = 0;
@@ -37,6 +38,7 @@
 		$islandListStart--;
 		$this->islandTable($hako, $islandListStart, $islandListSentinel);
 ?>
+</div>
 </div>
 
 <hr>
