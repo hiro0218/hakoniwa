@@ -9,6 +9,10 @@ require_once MODEL_PATH. '/Log/LogIO.php';
 
 class Log extends LogIO {
 
+    function __construct() {
+        parent::__construct();
+    }
+
 	function discover($id, $name) {
 		$this->history("<A href=\"{$this->this_file}?Sight={$id}\">{$this->init->tagName_}{$name}{$this->init->nameSuffix}{$this->init->_tagName}</A>が発見される。");
 	}
