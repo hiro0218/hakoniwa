@@ -294,7 +294,7 @@ END;
 		echo "<h2>{$island['name']}{$init->nameSuffix}の近況</h2>\n";
 		$log = new Log();
 		for($i = 0; $i < $init->logMax; $i++) {
-			$log->logFilePrint($i, $island['id'], $mode);
+			echo $log->logFilePrint($i, $island['id'], $mode);
 		}
 		echo "</div>\n";
 	}

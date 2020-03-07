@@ -48,9 +48,10 @@ class LogIO {
 			return;
 		}
 		$fp = fopen($fileName, "r");
-		$row = 1;
+        $row = 1;
+        $render = '';
 
-		echo "<div>";
+		$render .= "<div>";
 		while($line = chop(fgets($fp, READ_LINE))) {
 			list($m, $turn, $id1, $id2, $message) = explode(",", $line, 5);
 			if($m == 1) {
@@ -67,16 +68,18 @@ class LogIO {
 				}
 			}
 			if($row == 1) {
-				echo "<h2>{$init->tagNumber_}ターン{$turn}の出来事{$init->_tagNumber}</h2>\n";
+				$render .= "<h2>{$init->tagNumber_}ターン{$turn}の出来事{$init->_tagNumber}</h2>\n";
 				$row++;
 			}
-			echo "<ul class='list-unstyled'>";
-			echo "<li>{$message}</li>\n";
-			echo "</ul>";
+			$render .= "<ul class='list-unstyled'>";
+			$render .= "<li>{$message}</li>\n";
+			$render .= "</ul>";
 		}
-		echo "</div>";
+		$render .= "</div>";
 
-		fclose($fp);
+        fclose($fp);
+
+        return $render;
 	}
 	//---------------------------------------------------
 	// 発見の記録を出力
