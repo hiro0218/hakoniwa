@@ -5,7 +5,6 @@
  */
 
 require_once MODEL_PATH.'/Cgi.php';
-require_once HELPER_PATH.'/message/error.php';
 
 class Admin {
  	public $init;

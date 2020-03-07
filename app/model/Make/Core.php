@@ -6,7 +6,6 @@
  * @author hiro <@hiro0218>
  */
 
-require_once HELPER_PATH.'/message/success.php';
 require_once PRESENTER_PATH.'/HtmlMap.php';
 require_once PRESENTER_PATH.'/HtmlMapJS.php';
 

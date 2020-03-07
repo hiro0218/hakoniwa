@@ -1,5 +1,4 @@
 <?php
-require_once HELPER_PATH.'/message/success.php';
 require_once MODEL_PATH.'/Make/Core.php';
 require_once PRESENTER_PATH.'/HtmlMapJS.php';
 

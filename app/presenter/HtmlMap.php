@@ -1,6 +1,5 @@
 <?php
 require_once MODEL_PATH. '/Log/Core.php';
-require_once HELPER_PATH.'/message/error.php';
 require_once PRESENTER_PATH.'/HTML.php';
 
 class HtmlMap extends HTML {

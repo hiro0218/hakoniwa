@@ -1,4 +1,12 @@
 {
+  "autoload": {
+    "files": [
+      "init.php"
+    ],
+    "classmap": [
+      "app/helper/"
+    ]
+  },
   "scripts": {
     "phpstan": [
       "phpstan analyse **/*php"
