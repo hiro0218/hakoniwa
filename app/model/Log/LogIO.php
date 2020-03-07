@@ -91,19 +91,22 @@ class LogIO {
 			return;
 		}
 
+        $render = '';
 		$fp = fopen($fileName, "r");
 		$history = [];
 		$k = 0;
 		while($line = chop(fgets($fp, READ_LINE))) {
 			array_push($history, $line);
 			$k++;
-		}
+        }
+        fclose($fp);
 
 		for($i = 0; $i < $k; $i++) {
 			list($turn, $his) = explode(",", array_pop($history), 2);
-			echo "<li>{$this->init->tagNumber_}ターン{$turn}{$this->init->_tagNumber}：$his</li>\n";
+			$render .= "<li>{$this->init->tagNumber_}ターン{$turn}{$this->init->_tagNumber}：$his</li>\n";
 		}
 
+        return $render;
 	}
 	//---------------------------------------------------
 	// 発見の記録を保存

@@ -6,7 +6,11 @@ require_once PRESENTER_PATH.'/HTML.php';
 
 class History extends \HTML {
 
-	private $data = [];
+    private $data = [];
+
+    function __construct() {
+        $this->log = new \Log();
+    }
 
 	public function setData($key, $value) {
 		$this->data[$key] = $value;
@@ -14,32 +18,47 @@ class History extends \HTML {
 
 	public function getData($key) {
 		return $this->data[$key] ?? '';
-	}
+    }
+
+    /**
+     * renderPage
+     */
+    function renderPage() {
+        $this->setRecentData();
+        $this->setHistoryData();
+
+        echo $this->render(VIEWS_PATH.'/history/index.php');
+    }
 
     /**
      * 最近の出来事
      * @return void
      */
-    function render_recent() {
-        // ログデータを取得
-        $logData = $this->getLog();
-        $this->setData('log', $logData);
-
-        echo $this->render(VIEWS_PATH.'/log/recent.php');
+    function setRecentData() {
+        $logData = $this->getRecentLog();
+        $this->setData('recent', $logData);
     }
 
     /**
-     * getLog
+     * 歴史
+     * @return void
+     */
+    function setHistoryData() {
+        $historyData = $this->log->historyPrint();
+        $this->setData('history', $historyData);
+    }
+
+    /**
+     * getRecentLog
      * @return String
      */
-    function getLog() {
+    function getRecentLog() {
         global $init;
 
         $logData = '';
-        $log = new \Log();
 
         for($i = 0; $i < $init->logTopTurn; $i++) {
-            $logData .= $log->logFilePrint($i, 0, 0);
+            $logData .= $this->log->logFilePrint($i, 0, 0);
         }
 
         return $logData;

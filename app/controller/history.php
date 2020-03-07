@@ -14,7 +14,7 @@ class History {
     function view() {
         $html = new \Presenter\History();
         $html->header();
-        $html->render_recent();
+        $html->renderPage();
         $html->footer();
     }
 }
