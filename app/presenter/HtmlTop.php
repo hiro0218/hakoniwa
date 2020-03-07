@@ -333,15 +333,6 @@ END;
 	}
 
 	/**
-	 * 最近の出来事
-	 */
-	function log() {
-        global $init;
-
-		require_once(VIEWS_PATH.'/log/recent.php');
-	}
-
-	/**
 	 * お知らせ
 	 */
 	function infoPrint() {

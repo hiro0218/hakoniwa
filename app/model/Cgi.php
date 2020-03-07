@@ -33,9 +33,7 @@ class Cgi {
 		if($getMode == "conf") {
 			$this->mode = "conf";
 		}
-		if($getMode == "log") {
-			$this->mode = "log";
-		}
+
 		$init->adminMode = 0;
 		if(empty($_GET['AdminButton'])) {
 			$_password = $this->dataSet['PASSWORD'] ?? "";
