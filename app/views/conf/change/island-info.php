@@ -2,14 +2,14 @@
 	<h2>島の名前とパスワードの変更</h2>
 
 	<p class="alert alert-info" role="alert">
-		(注意) 名前の変更には<?= $init->costChangeName ?><?= $init->unitMoney ?>かかります。
+		(注意) 名前の変更には<?= $this->init->costChangeName ?><?= $this->init->unitMoney ?>かかります。
 	</p>
 
 	<form action="<?= $this->this_file ?>" method="post">
 		<div class="form-group">
 			<label>どの島ですか？</label>
 			<select NAME="ISLANDID" class="form-control">
-				<?= $islandList ?>
+				<?= $this->islandList ?>
 			</select>
 		</div>
 
@@ -17,7 +17,7 @@
 			<label>どんな名前に変えますか？(変更する場合のみ)</label>
 			<div class="input-group">
 				<input type="text" class="form-control" name="ISLANDNAME" size="32" maxlength="32">
-				<span class="input-group-addon"><?= $init->nameSuffix; ?></span>
+				<span class="input-group-addon"><?= $this->init->nameSuffix; ?></span>
 			</div>
 		</div>
 

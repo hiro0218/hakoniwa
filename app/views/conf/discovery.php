@@ -1,7 +1,7 @@
 <div id="NewIsland">
 	<h2>新しい島を探す</h2>
-	<?php if($number < $init->maxIsland): ?>
-		<?php if($init->registerMode == 1 && $init->adminMode == 0): ?>
+	<?php if($this->hako->islandNumber < $this->init->maxIsland): ?>
+		<?php if($this->init->registerMode == 1 && $this->init->adminMode == 0): ?>
 		<div class="alert alet-info">
 		当箱庭では不適当な島名などの事前チェックを行っています。<BR>
 		参加希望の方は、管理者に「島名」と「パスワード」を送信してください。
@@ -12,7 +12,7 @@
 				<label>どんな名前をつける予定？</label>
 				<div class="input-group">
 					<input type="text" class="form-control" name="ISLANDNAME" size="32" maxlength="32" required>
-					<span class="input-group-addon"><?= $init->nameSuffix; ?></span>
+					<span class="input-group-addon"><?= $this->init->nameSuffix; ?></span>
 				</div>
 			</div>
 

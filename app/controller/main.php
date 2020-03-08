@@ -100,13 +100,6 @@ class Main {
 				$html->footer();
 				break;
 
-			case "conf":
-				$html = new HtmlTop();
-				$html->header();
-				$html->register($hako, $cgi->dataSet);
-				$html->footer();
-				break;
-
 			default:
 				$html = new HtmlTop();
 				$html->header();

@@ -294,42 +294,6 @@ END;
 	}
 
 	/**
-	 * 島の登録と設定
-	 * @param type $hako
-	 * @param type $data
-	 */
-	function register(&$hako, $data = "") {
-		require_once(VIEWS_PATH.'/conf/register.php');
-	}
-
-	/**
-	 * 新しい島を探す
-	 * @param  [type] $number [description]
-	 * @return [type]         [description]
-	 */
-	function discovery($number) {
-		global $init;
-
-		require_once(VIEWS_PATH.'/conf/discovery.php');
-	}
-
-	/**
-	 * 島の名前とパスワードの変更
-	 */
-	function changeIslandInfo($islandList = "") {
-		global $init;
-
-		require_once(VIEWS_PATH.'/conf/change/island-info.php');
-	}
-
-	/**
-	 * オーナー名の変更
-	 */
-	function changeOwnerName($islandList = "") {
-		require_once(VIEWS_PATH.'/conf/change/owner-name.php');
-	}
-
-	/**
 	 * お知らせ
 	 */
 	function infoPrint() {

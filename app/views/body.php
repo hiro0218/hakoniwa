@@ -7,7 +7,7 @@
 					<a href="<?= $init->baseDir ?>/hako-main.php" class="navbar-brand"><?= $init->title ?></a>
 				</div>
 				<ul class="nav navbar-nav">
-					<li><a href="<?= $init->baseDir ?>/hako-main.php?mode=conf">島の登録・設定変更</a></li>
+					<li><a href="<?= $init->baseDir ?>/hako-config.php">島の登録・設定変更</a></li>
 					<li><a href="<?= $init->baseDir ?>/hako-ally.php">同盟管理</a></li>
 					<li><a href="<?= $init->baseDir ?>/history.php">最近の出来事</a></li>
 				</ul>

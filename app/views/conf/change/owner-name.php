@@ -4,7 +4,7 @@
 		<div class="form-group">
 			<label>どの島ですか？</label>
 			<select name="ISLANDID" class="form-control">
-				<?= $islandList ?>
+				<?= $this->islandList ?>
 			</select>
 		</div>
 		<div class="form-group">
