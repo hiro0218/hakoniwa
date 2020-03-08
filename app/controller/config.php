@@ -2,13 +2,9 @@
 
 namespace Controller;
 
-require_once MODEL_PATH.'/Turn.php';
 require_once PRESENTER_PATH.'/Config.php';
-
-require_once PRESENTER_PATH.'/HtmlTop.php';
 require_once MODEL_PATH.'/File/Hako.php';
 require_once MODEL_PATH.'/Cgi.php';
-require_once MODEL_PATH.'/Make/Core.php';
 
 class Config {
 
