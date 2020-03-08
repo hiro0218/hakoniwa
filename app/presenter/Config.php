@@ -50,7 +50,7 @@ class Config extends \HTML
      */
     function changeIslandInfo()
     {
-        echo $this->render(VIEWS_PATH . '/conf/change/island-info.php');
+        echo $this->render(VIEWS_PATH . '/conf/island-info.php');
     }
 
     /**
@@ -58,6 +58,6 @@ class Config extends \HTML
      */
     function changeOwnerName()
     {
-        echo $this->render(VIEWS_PATH . '/conf/change/owner-name.php');
+        echo $this->render(VIEWS_PATH . '/conf/owner-name.php');
     }
 }
