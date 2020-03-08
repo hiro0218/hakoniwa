@@ -40,9 +40,6 @@ class HtmlTop extends HTML {
 		// Battle Fieldの状況
 		require_once(VIEWS_PATH.'/top/bf-list.php');
 
-		// 歴史
-		require_once(VIEWS_PATH.'/log/history.php');
-
 		// 管理者登録モード
 		if($init->registerMode) {
 			require_once(VIEWS_PATH.'/top/register-mode.php');
@@ -330,15 +327,6 @@ END;
 	 */
 	function changeOwnerName($islandList = "") {
 		require_once(VIEWS_PATH.'/conf/change/owner-name.php');
-	}
-
-	/**
-	 * 最近の出来事
-	 */
-	function log() {
-        global $init;
-
-		require_once(VIEWS_PATH.'/log/recent.php');
 	}
 
 	/**

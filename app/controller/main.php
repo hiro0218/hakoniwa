@@ -107,13 +107,6 @@ class Main {
 				$html->footer();
 				break;
 
-			case "log":
-				$html = new HtmlTop();
-				$html->header();
-				$html->log();
-				$html->footer();
-				break;
-
 			default:
 				$html = new HtmlTop();
 				$html->header();

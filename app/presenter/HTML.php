@@ -7,6 +7,13 @@
  */
 
 class HTML {
+
+	public function render($file) {
+		ob_start();
+		include $file;
+		return ob_get_clean();
+	}
+
 	/**
 	 * HTML <head>
 	 * @return [type] [description]

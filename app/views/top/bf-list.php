@@ -8,7 +8,5 @@ if ($hako->islandNumberNoBF < $hako->islandNumber): ?>
     <div class="table-responsive">
         <?php $this->islandTable($hako, $hako->islandNumberNoBF, $hako->islandNumber); ?>
     </div>
-
-    <hr>
 </div>
 <?php endif; ?>
