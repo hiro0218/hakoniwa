@@ -64,12 +64,6 @@ class Main {
 				$html->footer();
 				break;
 
-			case "new":
-				$html->header();
-				$com->newIsland($hako, $cgi->dataSet);
-				$html->footer();
-				break;
-
 			case "comment":
 				$html->header();
 				$com->commentMain($hako, $cgi->dataSet);
@@ -86,18 +80,6 @@ class Main {
 				$html->head();
 				$html->printTarget($hako, $cgi->dataSet);
 				//$html->footer();
-				break;
-
-			case "change":
-				$html->header();
-				$com->changeMain($hako, $cgi->dataSet);
-				$html->footer();
-				break;
-
-			case "ChangeOwnerName":
-				$html->header();
-				$com->changeOwnerName($hako, $cgi->dataSet);
-				$html->footer();
 				break;
 
 			default:

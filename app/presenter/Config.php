@@ -13,7 +13,7 @@ class Config extends \HTML
         global $init;
 
         $this->init = $init;
-        $this->this_file = $init->baseDir . "/hako-main.php";
+        $this->this_file = $init->baseDir . "/hako-config.php";
         $this->hako = $hako;
         $this->islandList = $hako->islandList;
         $this->dataSet = $dataSet;
