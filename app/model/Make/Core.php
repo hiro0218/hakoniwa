@@ -6,6 +6,7 @@
  * @author hiro <@hiro0218>
  */
 
+require_once MODEL_PATH.'/Turn.php';
 require_once PRESENTER_PATH.'/HtmlMap.php';
 require_once PRESENTER_PATH.'/HtmlMapJS.php';
 
@@ -392,8 +393,10 @@ class Make {
 		$name = $island['name'];
 		$flag = 0;
 
-		// パスワードチェック
-		if(Util::checkSpecialPassword($data['OLDPASS'])) {
+        // パスワードチェック
+        $isSpecialPassword = Util::checkSpecialPassword($data['OLDPASS']);
+
+		if($isSpecialPassword) {
 			// 特殊パスワード
 			if(preg_match("/^無人$/", $data['ISLANDNAME'])) {
 				// 島の強制削除
@@ -433,7 +436,7 @@ class Make {
 				return;
 			}
 			// 代金
-			if(!Util::checkSpecialPassword($data['OLDPASS'])) {
+			if(!$isSpecialPassword) {
 				$island['money'] -= $init->costChangeName;
 			}
 			// 名前を変更
