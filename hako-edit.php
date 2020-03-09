@@ -572,9 +572,7 @@ class EditMain {
 		$cgi->parseInputData();
 		$cgi->getCookies();
 		if(!$hako->readIslands($cgi)) {
-			HTML::header();
-			ErrorHandler::noDataFile();
-			HTML::footer();
+			Util::renderErrorPage();
 			exit();
 		}
 		$cgi->setCookies();

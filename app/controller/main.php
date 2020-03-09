@@ -23,9 +23,7 @@ class Main {
 		$cgi->getCookies();
 
 		if(!$hako->readIslands($cgi)) {
-			HTML::header();
-			ErrorHandler::noDataFile();
-			HTML::footer();
+            Util::renderErrorPage();
 			exit();
 		}
 		$lock = Util::lock();

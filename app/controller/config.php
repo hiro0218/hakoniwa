@@ -26,9 +26,7 @@ class Config
 
         $result = $hako->readIslands($cgi);
         if (!$result) {
-            HTML::header();
-            ErrorHandler::noDataFile();
-            HTML::footer();
+            \Util::renderErrorPage();
             exit();
         }
 

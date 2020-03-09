@@ -990,9 +990,7 @@ class Main {
 		$cgi->getCookies();
 
 		if(!$ally->readIslands($cgi)) {
-			HTML::header();
-			ErrorHandler::noDataFile();
-			HTML::footer();
+            Util::renderErrorPage();
 			exit();
 		}
 		$cgi->setCookies();

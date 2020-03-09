@@ -6,6 +6,8 @@
  * @author hiro <@hiro0218>
  */
 
+require_once PRESENTER_PATH . '/HTML.php';
+
 class Util {
 
     /**
@@ -27,6 +29,22 @@ class Util {
         }
 
         return $data;
+    }
+
+    static function renderErrorPage($mode = 'noDataFile') {
+        HTML::header();
+
+        // hakojima.datがない
+        if ($mode === 'noDataFile') {
+			ErrorHandler::noDataFile();
+        }
+
+        // 問題が発生
+        if ($mode === 'problem') {
+			ErrorHandler::problem();
+        }
+
+        HTML::footer();
     }
 
 	//---------------------------------------------------

@@ -128,8 +128,7 @@ class File {
 			}
 
 			if ($fp_i === false) {
-				HTML::header();
-				ErrorHandler::problem();
+                Util::renderErrorPage('problem');
 			}
 
 
