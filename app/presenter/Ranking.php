@@ -27,7 +27,7 @@ class Ranking extends \HTML
     }
 
     function renderPage() {
-        echo $this->render(VIEWS_PATH.'/top/category-rank.php');
+        echo $this->render(VIEWS_PATH.'/category/index.php');
     }
 
 }
