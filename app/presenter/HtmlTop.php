@@ -26,9 +26,6 @@ class HtmlTop extends HTML {
 		// 読み込み
 		require_once(VIEWS_PATH.'/top/main.php');
 
-		// 各部門ランキング
-		require_once(VIEWS_PATH.'/top/category-rank.php');
-
 		// 同盟の状況
 		if($hako->allyNumber) {
 			require_once(VIEWS_PATH.'/top/ally-list.php');
