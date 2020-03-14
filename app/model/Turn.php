@@ -901,7 +901,7 @@ class Turn {
 					(($landKind == $init->landSoukoM || $landKind == $init->landSoukoF) && ($kind == $init->comHikidasi)) ||
 					(($landKind == $init->landMonument) && ($kind == $init->comMonument)) ||
 					(($landKind == $init->landFarm) && ($kind == $init->comFarm)) ||
-					(($landKind == $init->landlandSea) && ($lv == 1) && ($kind == $init->comNursery)) ||
+					(($landKind == $init->landSea) && ($lv == 1) && ($kind == $init->comNursery)) ||
 					(($landKind == $init->landNursery) && ($kind == $init->comNursery)) ||
 					(($landKind == $init->landFactory) && ($kind == $init->comFactory)) ||
 					(($landKind == $init->landHatuden) && ($kind == $init->comHatuden)) ||
@@ -3714,7 +3714,8 @@ class Turn {
 							$land[$x][$y] = $init->landMonster;
 							$landValue[$x][$y] = $lv;
 							// 怪獣情報
-							$monsSpec = Util::monsterSpec($lv);
+                            $monsSpec = Util::monsterSpec($lv);
+					        $mName = $monsSpec['name'];
 							// メッセージ
 							$this->log->EggBomb($id, $name, $mName, "($x,$y)", $lName);
 							break;
