@@ -290,13 +290,4 @@ END;
 		echo "</table>";
 	}
 
-	/**
-	 * お知らせ
-	 */
-	function infoPrint() {
-        global $init;
-
-		require_once(VIEWS_PATH.'/log/info.php');
-	}
-
 }
