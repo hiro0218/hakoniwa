@@ -52,7 +52,7 @@ class Init {
 	// プログラムファイルに関する設定
 	//---------------------------------------------------
 	// プログラムを置くディレクトリ
-	public $baseDir = "http://localhost:8888/hakoniwa";
+	public $baseDir = "http://localhost:8888/";
 
 	// 画像を置くディレクトリ
 	public $imgDir  = "public/assets/img";
@@ -84,9 +84,9 @@ class Init {
 	// ゲーム全般に関する設定
 	//---------------------------------------------------
 	// ゲームタイトル
-	public $title        = "hako";
+	public $title        = "hakoniwa";
 	public $adminName    = "hiro";
-	public $urlTopPage   = "http://b.0218.jp/";
+	public $urlTopPage   = "https://b.0218.jp/";
 	public $twitterID    = "hiro0218";
 
 	// 1ターンが何秒か
