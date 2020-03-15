@@ -479,17 +479,16 @@ class Ally extends AllyIO {
 		global $init;
 
         $m = $this->readIslandsFile();
+        $defaultID = $cgi->dataSet['defaultID'] ?? 0;
 
-        if (!empty($cgi->dataSet)) {
-            $this->islandList = $this->getIslandList($cgi->dataSet['defaultID']);
+        $this->islandList = $this->getIslandList($defaultID);
 
-            if($init->targetIsland == 1) {
-                // 目標の島 所有の島が選択されたリスト
-                $this->targetList = $this->islandList;
-            } else {
-                // 順位がTOPの島が選択された状態のリスト
-                $this->targetList = $this->getIslandList($cgi->dataSet['defaultTarget']);
-            }
+        if($init->targetIsland == 1) {
+            // 目標の島 所有の島が選択されたリスト
+            $this->targetList = $this->islandList;
+        } else {
+            // 順位がTOPの島が選択された状態のリスト
+            $this->targetList = $this->getIslandList($cgi->dataSet['defaultTarget']);
         }
 
 		return $m;
