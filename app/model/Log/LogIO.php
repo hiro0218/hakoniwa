@@ -200,26 +200,4 @@ class LogIO {
 		// chmod($fileName, 0666);
 	}
 
-	/**
-	 * お知らせを出力
-	 * @return [type] [description]
-	 */
-	function infoPrint() {
-		if($this->init->noticeFile == "") {
-			return;
-		}
-
-		$fileName = "{$this->init->noticeFile}";
-		if(!is_file($fileName)) {
-			return;
-		}
-
-		$fp = fopen($fileName, "r");
-		while($line = fgets($fp, READ_LINE)) {
-			$line = chop($line);
-			echo "{$line}<br>\n";
-		}
-		fclose($fp);
-
-	}
 }

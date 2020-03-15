@@ -18,10 +18,6 @@ if (DEBUG === true) {
 		}
 	?>
 	</div>
-
-	<div class="col-xs-6">
-	<?php $this->infoPrint(); // 「お知らせ」を表示 ?>
-	</div>
 </div>
 
 <hr>

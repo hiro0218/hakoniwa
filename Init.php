@@ -152,11 +152,6 @@ class Init {
 	// 発見ログ保持行数
 	public $historyMax = 10;
 
-	// お知らせ
-	public $noticeFile   = "notice.txt";
-	// 記事表示部の最大の高さ。
-	public $divHeight  = 150;
-
 	// 放棄コマンド自動入力ターン数
 	public $giveupTurn = 30;
 
