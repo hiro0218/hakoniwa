@@ -827,6 +827,7 @@ END;
 </div>
 
 <div class="text-center">
+<div class="table-responsive">
 <table class="table table-bordered">
 <tr valign="top">
 <td $init->bgInputCell>
@@ -1016,6 +1017,7 @@ END;
 </td>
 </tr>
 </table>
+</div>
 
 <hr>
 

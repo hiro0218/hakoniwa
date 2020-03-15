@@ -2,7 +2,7 @@
     <?= $init->tagName_ ?><?= $name ?><?= $init->_tagName ?>開発計画
 </h1>
 <?php $this->islandInfo($island, $number, 1); ?>
-
+<div class="table-responsive">
 <table class="table table-bordered">
     <tr>
         <td <?= $init->bgInputCell ?>>
@@ -146,7 +146,7 @@
         <td <?= $init->bgMapCell ?>>
             <?php $this->islandMap($hako, $island, 1); // 島の地図、所有者モード ?>
         </td>
-        
+
         <td <?= $init->bgCommandCell ?>>
         <?php
             $command = $island['command'];
@@ -158,6 +158,7 @@
         </td>
     </tr>
 </table>
+</div>
 
 <hr>
 
